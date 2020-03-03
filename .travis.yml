@@ -1,0 +1,14 @@
+language: node_js
+node_js:
+  - "10"
+
+install:
+  - npm install
+
+script:
+  - npm test -- --coverage
+  - npm run lint
+  - npm run build
+
+after_script:
+  - "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
