@@ -1,12 +1,12 @@
-import { getMerkur, createMerkur, removeMerkur } from "../merkur";
-import { createCustomWidget } from "../index";
+import { getMerkur, createMerkur, removeMerkur } from '../merkur';
+import { createCustomWidget } from '../index';
 
-describe("merkur shell", () => {
+describe('merkur shell', () => {
   beforeEach(() => {
     removeMerkur();
   });
 
-  it("should create merkur shell", () => {
+  it('should create merkur shell', () => {
     const merkur = createMerkur();
 
     expect(merkur).toMatchInlineSnapshot(`
@@ -25,14 +25,14 @@ describe("merkur shell", () => {
     `);
   });
 
-  it("should return merkur instance", () => {
+  it('should return merkur instance', () => {
     const merkur = createMerkur();
     const sameMerkur = getMerkur();
 
     expect(sameMerkur).toEqual(merkur);
   });
 
-  it("should connect merkur widget", () => {
+  it('should connect merkur widget', () => {
     const merkur = createMerkur();
     const widget = createCustomWidget();
 
@@ -41,7 +41,7 @@ describe("merkur shell", () => {
     expect(merkur.$in.widgets.length).toEqual(1);
   });
 
-  it("should disconnect merkur widget", () => {
+  it('should disconnect merkur widget', () => {
     const merkur = createMerkur();
     const widget = createCustomWidget();
 
@@ -51,11 +51,11 @@ describe("merkur shell", () => {
     expect(merkur.$in.widgets.length).toEqual(0);
   });
 
-  it("should register merkur widget", () => {
+  it('should register merkur widget', () => {
     const merkur = createMerkur();
     const widgetProperties = {
-      name: "package",
-      version: "1.0.0"
+      name: 'package',
+      version: '1.0.0'
     };
     const widgetFactory = () => createCustomWidget(widgetProperties);
 
@@ -70,11 +70,11 @@ describe("merkur shell", () => {
     ).toEqual(widgetFactory);
   });
 
-  it("should create merkur widget", async () => {
+  it('should create merkur widget', async () => {
     const merkur = createMerkur();
     const widgetProperties = {
-      name: "package",
-      version: "1.0.0"
+      name: 'package',
+      version: '1.0.0'
     };
     const widgetFactory = () => createCustomWidget(widgetProperties);
 
