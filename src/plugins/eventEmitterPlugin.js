@@ -1,4 +1,4 @@
-export default function eventEmitter() {
+export function eventEmitterPlugin() {
   return {
     async setup(widget) {
       widget = {

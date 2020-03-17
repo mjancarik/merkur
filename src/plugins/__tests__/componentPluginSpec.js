@@ -1,5 +1,5 @@
 import { createCustomWidget } from '../../index';
-import componentPlugin from '../component';
+import { componentPlugin } from '../componentPlugin';
 
 describe('createWidget method with component plugin', () => {
   it('should create empty widget', async () => {
@@ -41,7 +41,6 @@ describe('createWidget method with component plugin', () => {
             "setup": [Function],
           },
         ],
-        "$setEmptyObjectForUndefined": [Function],
         "assets": Array [
           Object {
             "source": "http://www.example.com/static/1.0.0/widget.js",

@@ -6,8 +6,11 @@ describe('merkur module', () => {
       Object {
         "componentPlugin": [Function],
         "createCustomWidget": [Function],
+        "createMerkur": [Function],
         "createWidget": [Function],
         "eventEmitterPlugin": [Function],
+        "getMerkur": [Function],
+        "removeMerkur": [Function],
       }
     `);
   });

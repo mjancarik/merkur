@@ -1,4 +1,6 @@
-export function bindWidgetToFunctions(widget) {
+import { setDefaultValueForUndefined } from './utils';
+
+function bindWidgetToFunctions(widget) {
   Object.keys(widget).forEach(key => {
     if (typeof widget[key] === 'function') {
       let originalFunction = widget[key];
@@ -10,13 +12,7 @@ export function bindWidgetToFunctions(widget) {
   });
 }
 
-export function setEmptyObjectForUndefined(object, keys) {
-  keys.forEach(key => {
-    object[key] = object[key] || {};
-  });
-}
-
-export async function callPluginMethod(widget, method, args) {
+async function callPluginMethod(widget, method, args) {
   for (const plugin of widget.$plugins) {
     if (typeof plugin[method] === 'function') {
       const newWidget = await plugin[method](widget, ...args);
@@ -31,7 +27,7 @@ export async function callPluginMethod(widget, method, args) {
 }
 
 export async function createCustomWidget(widgetDefinition = {}) {
-  setEmptyObjectForUndefined(widgetDefinition, ['$dependencies', '$external']);
+  setDefaultValueForUndefined(widgetDefinition, ['$dependencies', '$external']);
 
   let widget = {
     async setup(widget, ...rest) {
@@ -45,12 +41,13 @@ export async function createCustomWidget(widgetDefinition = {}) {
     )
   };
 
-  widget.$setEmptyObjectForUndefined = setEmptyObjectForUndefined;
-
+  // TODO refactoring
   widget.$dependencies = widgetDefinition.$dependencies;
+  widget.$external = widgetDefinition.$external;
   widget.$in = {};
 
   delete widgetDefinition.$dependencies;
+  delete widgetDefinition.$external;
   delete widgetDefinition.$plugins;
 
   widget = await widget.setup(widget, widgetDefinition);

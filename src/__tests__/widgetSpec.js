@@ -7,9 +7,9 @@ describe('createCustomWidget method', () => {
     expect(widget).toMatchInlineSnapshot(`
       Object {
         "$dependencies": Object {},
+        "$external": Object {},
         "$in": Object {},
         "$plugins": Array [],
-        "$setEmptyObjectForUndefined": [Function],
         "create": [Function],
         "setup": [Function],
       }

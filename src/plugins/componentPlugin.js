@@ -1,4 +1,6 @@
-export default function component() {
+import { setDefaultValueForUndefined } from '../utils';
+
+export function componentPlugin() {
   return {
     async setup(widget, widgetDefinition) {
       let {
@@ -31,7 +33,7 @@ export default function component() {
         ...widget
       };
 
-      widget.$setEmptyObjectForUndefined(widget, ['props', 'state']);
+      setDefaultValueForUndefined(widget, ['props', 'state']);
 
       return widget;
     },

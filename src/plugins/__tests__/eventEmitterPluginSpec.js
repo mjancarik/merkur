@@ -1,5 +1,5 @@
 import { createCustomWidget } from '../../index';
-import eventEmitterPlugin from '../eventEmitter';
+import { eventEmitterPlugin } from '../eventEmitterPlugin';
 
 describe('createWidget method with component plugin', () => {
   it('should create empty widget', async () => {
@@ -21,6 +21,7 @@ describe('createWidget method with component plugin', () => {
     expect(widget).toMatchInlineSnapshot(`
       Object {
         "$dependencies": Object {},
+        "$external": Object {},
         "$in": Object {
           "eventEmitter": Object {
             "event": Object {},
@@ -31,7 +32,6 @@ describe('createWidget method with component plugin', () => {
             "setup": [Function],
           },
         ],
-        "$setEmptyObjectForUndefined": [Function],
         "create": [Function],
         "emit": [Function],
         "off": [Function],
