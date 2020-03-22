@@ -4,11 +4,23 @@ node_js:
 
 install:
   - npm install
+  - npx lerna bootstrap
 
-script:
-  - npm test -- --coverage
-  - npm run lint
-  - npm run build
-
-after_script:
-  - "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
+jobs:
+  include:
+    - name: "Unit Tests"
+      script: npm test -- --coverage
+      after_script:
+        - "cat ./packages/merkur/coverage/lcov.info | ./node_modules/.bin/coveralls"
+    - name: "Lint"
+      script: npm run lint
+    - name: "Stylelint"
+      script: npm run stylelint
+    - name: "Build"
+      script: npm run build
+    - if: tag =~ ^v # Run only for tags
+      stage: "deploy"
+      script:
+        - echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" >> $HOME/.npmrc 2> /dev/null
+        - npm run release:publish
+      skip_cleanup: true

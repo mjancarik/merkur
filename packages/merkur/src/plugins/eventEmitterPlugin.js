@@ -3,15 +3,15 @@ export function eventEmitterPlugin() {
     async setup(widget) {
       widget = {
         ...eventEmitterAPI(),
-        ...widget
+        ...widget,
       };
 
       widget.$in.eventEmitter = {
-        event: {}
+        event: {},
       };
 
       return widget;
-    }
+    },
   };
 }
 
@@ -20,8 +20,8 @@ function eventEmitterAPI() {
     on(widget, eventName, callback) {
       const {
         $in: {
-          eventEmitter: { event }
-        }
+          eventEmitter: { event },
+        },
       } = widget;
 
       if (!event[eventName]) {
@@ -35,8 +35,8 @@ function eventEmitterAPI() {
     off(widget, eventName, callback) {
       const {
         $in: {
-          eventEmitter: { event }
-        }
+          eventEmitter: { event },
+        },
       } = widget;
 
       if (!event[eventName] || event[eventName].indexOf(callback) === -1) {
@@ -51,19 +51,19 @@ function eventEmitterAPI() {
     emit(widget, eventName, ...rest) {
       const {
         $in: {
-          eventEmitter: { event }
-        }
+          eventEmitter: { event },
+        },
       } = widget;
 
       if (!event[eventName]) {
         return;
       }
 
-      event[eventName].forEach(callback => {
+      event[eventName].forEach((callback) => {
         callback(widget, ...rest);
       });
 
       return widget;
-    }
+    },
   };
 }

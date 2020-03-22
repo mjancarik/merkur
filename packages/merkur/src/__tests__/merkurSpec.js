@@ -55,7 +55,7 @@ describe('merkur shell', () => {
     const merkur = createMerkur();
     const widgetProperties = {
       name: 'package',
-      version: '1.0.0'
+      version: '1.0.0',
     };
     const widgetFactory = () => createCustomWidget(widgetProperties);
 
@@ -74,7 +74,7 @@ describe('merkur shell', () => {
     const merkur = createMerkur();
     const widgetProperties = {
       name: 'package',
-      version: '1.0.0'
+      version: '1.0.0',
     };
     const widgetFactory = () => createCustomWidget(widgetProperties);
 

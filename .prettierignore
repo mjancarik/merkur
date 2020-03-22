@@ -1,4 +1,7 @@
-/es
-/lib
-/coverage
+/docs
 /doc
+/node_modules
+/packages/*/dist
+/packages/*/lib
+/packages/*/coverage
+/packages/*/node_modules

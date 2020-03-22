@@ -8,14 +8,14 @@ describe('createWidget method with component plugin', () => {
       name: 'my-widget',
       version: '1.0.0',
       props: {
-        param: 1
+        param: 1,
       },
       assets: [
         {
           type: 'script',
-          source: 'http://www.example.com/static/1.0.0/widget.js'
-        }
-      ]
+          source: 'http://www.example.com/static/1.0.0/widget.js',
+        },
+      ],
     });
 
     expect(widget).toMatchInlineSnapshot(`
@@ -73,14 +73,14 @@ describe('createWidget method with component plugin', () => {
       name: 'my-widget',
       version: '1.0.0',
       props: {
-        param: 1
+        param: 1,
       },
       assets: [
         {
           type: 'script',
-          source: 'http://www.example.com/static/1.0.0/widget.js'
-        }
-      ]
+          source: 'http://www.example.com/static/1.0.0/widget.js',
+        },
+      ],
     });
 
     const info = await widget.info();
@@ -112,7 +112,7 @@ describe('component plugin API', () => {
     mocks = {
       bootstrap: jest.fn(),
       unmount: jest.fn(),
-      update: jest.fn()
+      update: jest.fn(),
     };
 
     widget = await createCustomWidget({
@@ -120,12 +120,12 @@ describe('component plugin API', () => {
       $plugins: [componentPlugin],
       load(widget) {
         return {
-          name: widget.props.name || 'unkonwn'
+          name: widget.props.name || 'unkonwn',
         };
       },
       mount(widget) {
         return `<div>Hello ${widget.state.name}</div>`;
-      }
+      },
     });
   });
 
@@ -185,7 +185,7 @@ describe('component plugin API', () => {
     it('should not call load method for defined state', async () => {
       widget.$in.component.lifeCycle.load = jest.fn();
       widget.state = {
-        key: 'value'
+        key: 'value',
       };
 
       await widget.load();

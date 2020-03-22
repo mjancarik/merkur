@@ -1,0 +1,57 @@
+{
+  "name": "merkur",
+  "version": "0.0.1",
+  "description": "",
+  "main": "lib/merkur",
+  "module": "lib/merkur",
+  "scripts": {
+    "preversion": "npm test",
+    "test": "../../node_modules/.bin/jest --no-watchman -c ../../jest.conf.js",
+    "build": "node_modules/.bin/rollup -c",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "micro frontends",
+    "microservices",
+    "widget",
+    "SSR"
+  ],
+  "author": "Miroslav Jancarik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "homepage": "https://github.com/mjancarik/merkur#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.6",
+    "@babel/plugin-transform-modules-commonjs": "^7.8.3",
+    "rollup": "^1.32.0",
+    "rollup-plugin-terser": "^5.2.0"
+  },
+  "jest": {
+    "bail": false,
+    "verbose": true,
+    "testEnvironment": "node",
+    "coverageThreshold": {
+      "global": {
+        "functions": 50,
+        "lines": 50,
+        "statements": 50
+      }
+    },
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.{js,jsx}"
+    ],
+    "modulePaths": [
+      "<rootDir>/"
+    ]
+  },
+  "dependencies": {}
+}

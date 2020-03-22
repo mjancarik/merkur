@@ -16,5 +16,5 @@ export {
   removeMerkur,
   getMerkur,
   componentPlugin,
-  eventEmitterPlugin
+  eventEmitterPlugin,
 };

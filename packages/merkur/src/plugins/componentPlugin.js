@@ -19,18 +19,18 @@ export function componentPlugin() {
         load,
         mount,
         unmount,
-        update
+        update,
       };
 
       widget.$in.component = {
         lifeCycle,
-        isMounted: false
+        isMounted: false,
       };
 
       widget = {
         ...widgetProperties,
         ...componentAPI(),
-        ...widget
+        ...widget,
       };
 
       setDefaultValueForUndefined(widget, ['props', 'state']);
@@ -39,7 +39,7 @@ export function componentPlugin() {
     },
     create() {
       // @TODO bind events
-    }
+    },
   };
 }
 
@@ -98,6 +98,6 @@ function componentAPI() {
       widget.props = { ...widget.props, ...props };
 
       return widget.update();
-    }
+    },
   };
 }

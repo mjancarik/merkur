@@ -1,5 +1,5 @@
 module.exports = {
-    'extends': ['eslint:recommended', 'prettier'],
+    'extends': ['eslint:recommended', 'plugin:react/recommended', 'prettier', 'prettier/react'],
     'rules': {
         'prettier/prettier': [
             'error', {
@@ -10,15 +10,24 @@ module.exports = {
 
         'no-console': ['error', {
             allow: ['warn', 'error']
-        }]
+        }],
 
+        'react/prop-types': 0,
+        'react/wrap-multilines': 0,
+        'react/no-deprecated': 0
     },
     'plugins': [
         'prettier',
-        'jest'
+        'jest',
+        'react',
+        'jasmine'
     ],
     'settings': {
-        'ecmascript': 2020
+        'ecmascript': 2020,
+        'jsx': true,
+        'react': {
+            'version': '16'
+        }
     },
     'parserOptions': {
         'sourceType': 'module',

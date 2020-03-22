@@ -8,14 +8,14 @@ describe('createWidget method with component plugin', () => {
       name: 'my-widget',
       version: '1.0.0',
       props: {
-        param: 1
+        param: 1,
       },
       assets: [
         {
           type: 'script',
-          source: 'http://www.example.com/static/1.0.0/widget.js'
-        }
-      ]
+          source: 'http://www.example.com/static/1.0.0/widget.js',
+        },
+      ],
     });
 
     expect(widget).toMatchInlineSnapshot(`
@@ -49,7 +49,7 @@ describe('event emitter plugin API', () => {
   beforeEach(async () => {
     widget = await createCustomWidget({
       ...mocks,
-      $plugins: [eventEmitterPlugin]
+      $plugins: [eventEmitterPlugin],
     });
   });
 

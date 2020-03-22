@@ -10,8 +10,9 @@ function create(name, version, props = {}) {
 
   if (typeof factory !== 'function') {
     throw new Error(
-      `The widget with defined name and version "${name +
-        version}" is not defined.`
+      `The widget with defined name and version "${
+        name + version
+      }" is not defined.`
     );
   }
 
@@ -36,7 +37,7 @@ function disconnect(widget) {
 export function createMerkur(plugins = []) {
   const merkur = getMerkur();
 
-  plugins.forEach(plugin => {
+  plugins.forEach((plugin) => {
     if (plugin && typeof plugin.setup === 'function') {
       plugin.setup(merkur);
     }
@@ -58,14 +59,14 @@ export function getMerkur() {
     globalContext.__merkur__ = {
       $in: {
         widgets: [],
-        widgetFactory: {}
+        widgetFactory: {},
       },
       $external: {},
       $dependencies: {},
       register,
       create,
       connect,
-      disconnect
+      disconnect,
     };
   }
 

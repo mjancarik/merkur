@@ -1,7 +1,7 @@
 import { setDefaultValueForUndefined } from './utils';
 
 function bindWidgetToFunctions(widget) {
-  Object.keys(widget).forEach(key => {
+  Object.keys(widget).forEach((key) => {
     if (typeof widget[key] === 'function') {
       let originalFunction = widget[key];
 
@@ -36,9 +36,9 @@ export async function createCustomWidget(widgetDefinition = {}) {
     async create(widget, ...rest) {
       return callPluginMethod(widget, 'create', rest);
     },
-    $plugins: (widgetDefinition.$plugins || []).map(pluginFactory =>
+    $plugins: (widgetDefinition.$plugins || []).map((pluginFactory) =>
       pluginFactory()
-    )
+    ),
   };
 
   // TODO refactoring
