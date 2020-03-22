@@ -9,7 +9,7 @@ install:
 jobs:
   include:
     - name: "Unit Tests"
-      script: npm test -- --coverage
+      script: npm test -- -- --coverage
       after_script:
         - "cat ./packages/merkur/coverage/lcov.info | ./node_modules/.bin/coveralls"
     - name: "Lint"
