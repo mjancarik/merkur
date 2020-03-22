@@ -11,7 +11,7 @@ jobs:
     - name: "Unit Tests"
       script: npm test -- -- -- --coverage
       after_script:
-        - "cat ./packages/merkur/coverage/lcov.info | ./node_modules/.bin/coveralls"
+        - "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
     - name: "Lint"
       script: npm run lint
     - name: "Build"
