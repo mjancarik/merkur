@@ -14,8 +14,6 @@ jobs:
         - "cat ./packages/merkur/coverage/lcov.info | ./node_modules/.bin/coveralls"
     - name: "Lint"
       script: npm run lint
-    - name: "Stylelint"
-      script: npm run stylelint
     - name: "Build"
       script: npm run build
     - if: tag =~ ^v # Run only for tags
