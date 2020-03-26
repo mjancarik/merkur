@@ -1,15 +1,15 @@
-  {
-    "command": {
-      "version": {
-        "message": "chore(release): publish"
-      },
-      "publish": {
-        "conventionalCommits": true,
-        "preid": "rc"
-      }
+{
+  "command": {
+    "version": {
+      "message": "chore(release): publish"
     },
-    "packages": [
-      "packages/*"
-    ],
-    "version": "0.0.1"
-  }
+    "publish": {
+      "conventionalCommits": true,
+      "preid": "rc"
+    }
+  },
+  "packages": [
+    "packages/*"
+  ],
+  "version": "0.1.0"
+}

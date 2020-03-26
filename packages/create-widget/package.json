@@ -1,6 +1,6 @@
 {
   "name": "@merkur/create-widget",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Create a MERKUR widget easily.",
   "bin": {
     "@merkur/create-widget": "./bin/create-widget.js"
@@ -36,7 +36,5 @@
     "fs-extra": "^8.1.0",
     "inquirer": "^7.0.0",
     "yargs": "^15.0.2"
-  },
-  "devDependencies": {
   }
 }
