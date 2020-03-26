@@ -14,7 +14,7 @@
     "express": "^4.17.1",
     "got": "^10.6.0",
     "helmet": "^3.21.3",
-    "merkur": "0.0.1"
+    "@merkur/core": "^0.0.1"
   },
   "devDependencies": {
     "css-loader": "^3.4.2",
