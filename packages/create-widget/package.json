@@ -1,6 +1,6 @@
 {
   "name": "@merkur/create-widget",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Create a MERKUR widget easily.",
   "bin": {
     "@merkur/create-widget": "./bin/create-widget.js"
