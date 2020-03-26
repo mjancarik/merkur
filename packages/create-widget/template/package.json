@@ -1,0 +1,30 @@
+{
+  "name": "merker-template",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "dev": "NODE_ENV=development nodemon server.js",
+    "start": "NODE_ENV=production server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "compression": "^1.7.4",
+    "ejs": "^3.0.1",
+    "express": "^4.17.1",
+    "got": "^10.6.0",
+    "helmet": "^3.21.3",
+    "merkur": "0.0.1"
+  },
+  "devDependencies": {
+    "css-loader": "^3.4.2",
+    "json-loader": "^0.5.7",
+    "mini-css-extract-plugin": "^0.9.0",
+    "nodemon": "^1.18.10",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10",
+    "webpack-modules": "^1.0.0",
+    "webpack-node-externals": "^1.7.2",
+    "webpack-shell-plugin": "^0.5.0"
+  }
+}

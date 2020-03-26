@@ -1,0 +1,42 @@
+{
+  "name": "@merkur/create-widget",
+  "version": "0.0.1",
+  "description": "Create a MERKUR widget easily.",
+  "bin": {
+    "@merkur/create-widget": "./bin/create-widget.js"
+  },
+  "scripts": {
+    "test": "echo 'Tests pass.'",
+    "build": "echo 'Build pass.'"
+  },
+  "keywords": [
+    "MERKUR",
+    "Isomorphic",
+    "JavaScript",
+    "cli"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "author": "Miroslav Jancarik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "dependencies": {
+    "chalk": "^3.0.0",
+    "execa": "^3.4.0",
+    "fs-extra": "^8.1.0",
+    "inquirer": "^7.0.0",
+    "yargs": "^15.0.2"
+  },
+  "devDependencies": {
+  }
+}

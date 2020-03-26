@@ -1,0 +1,42 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+
+button {
+  padding: 12px;
+  background-color: #d19a66;
+  border-radius: 6px;
+}
+
+.merkur__icon {
+  width: 125px;
+  margin: 0 auto;
+}
+
+.merkur__page {
+}
+
+.merkur__headline {
+  background-color: #282c34;
+  padding: 60px 0;
+  color: #a2a8b6;
+  text-align: center;
+}
+
+.merkur__headline a {
+  color: #2f6834;
+}
+
+.merkur__headline h1 {
+  margin: 40px 0 16px 0;
+}
+
+.merkur__view {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+.merkur__icon img {
+  max-width: 100%;
+}

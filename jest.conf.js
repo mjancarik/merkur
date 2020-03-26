@@ -9,6 +9,6 @@ exports = {
       statements: 50,
     },
   },
-  modulePaths: ['<rootDir>/'],
+  modulePaths: ['<rootDir>/', '<rootDir>/packages/'],
   testRegex: '(/__tests__/).*Spec\\.jsx?$',
 };

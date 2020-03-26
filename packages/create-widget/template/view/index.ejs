@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <% widgetProperties.assets.forEach((asset) => { %>
+      <%if (asset.type === 'stylesheet') { %>
+        <link rel='stylesheet' href='<%= asset.source %>' />
+      <% } %>
+      <%if (asset.type === 'script') { %>
+        <script src='<%= asset.source %>' defer='true'></script>
+      <% } %>
+    <% }); %>
+    <title>MERKUR - widget</title>
+  </head>
+  <body>
+    <div id="container"><%- html %></div>
+    <script>
+      window.addEventListener('load', () => {
+        __merkur__.create('<%= widgetProperties.name %>', '<%= widgetProperties.version %>', <%- JSON.stringify(widgetProperties) %>)
+          .then((widget) => {
+            widget.mount();
+          });
+      });
+    </script>
+  </body>
+</html>

@@ -1,5 +1,5 @@
 {
-  "name": "merkur",
+  "name": "@merkur/core",
   "version": "0.0.1",
   "description": "",
   "main": "lib/merkur",
@@ -26,7 +26,8 @@
     "url": "https://github.com/mjancarik/merkur/issues"
   },
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "homepage": "https://github.com/mjancarik/merkur#readme",
   "devDependencies": {
