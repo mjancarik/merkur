@@ -31,7 +31,8 @@
     "lint": "npm run lint:cmd -- './**/*.{js,jsx}'",
     "lint:fix": "npm run lint -- --fix",
     "stylelint:fix": "npm run stylelint -- --fix",
-    "commit": "git-cz"
+    "commit": "git-cz",
+    "version": "node utils/bumpVersion.js && git add packages/create-widget/template/package.json"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "license": "MIT",

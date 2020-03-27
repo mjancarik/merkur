@@ -120,10 +120,8 @@ From there you can run several commands:
     To start development server.
   ${chalk.cyan('npm run build')}
     To build the application.
-  ${chalk.cyan('npm run build:spa')}
-    To build SPA version of the application.
   ${chalk.cyan('npm run start')}
-    To start IMA.js server.
+    To start express server.
 We suggest that you start with:
   ${chalk.cyan('cd')} ${dirName}
   ${chalk.cyan('npm run dev')}

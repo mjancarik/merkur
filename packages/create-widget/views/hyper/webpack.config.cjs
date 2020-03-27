@@ -6,30 +6,32 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const nodePlugins = [
   new WebpackShellPlugin({
-    onBuildEnd: ['npm run dev']
+    onBuildEnd: ['npm run dev'],
   }),
-  new WebpackModules()
+  new WebpackModules(),
 ];
+
+const environment = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
 
 module.exports = [
   {
     target: 'web',
-    mode: 'production',
+    mode: environment,
     resolve: {
       extensions: ['.mjs', '.js', '.jsx', '.json'],
-      alias: {}
+      alias: {},
     },
     entry: {
-      hyper: ['./src/client.js']
+      merkur: ['./src/client.js'],
     },
     output: {
       path: path.resolve(__dirname, './static'),
-      filename: 'widget-client.js'
+      filename: 'widget-client.js',
     },
     plugins: [
       new MiniCssExtractPlugin({
-        filename: 'widget-client.css'
-      })
+        filename: 'widget-client.css',
+      }),
     ],
     module: {
       rules: [
@@ -37,30 +39,30 @@ module.exports = [
           test: /\.css$/,
           use: [
             {
-              loader: MiniCssExtractPlugin.loader
+              loader: MiniCssExtractPlugin.loader,
             },
-            'css-loader'
-          ]
-        }
-      ]
-    }
+            'css-loader',
+          ],
+        },
+      ],
+    },
   },
   {
     target: 'node',
     externals: [nodeExternals()],
     plugins: nodePlugins,
-    mode: 'production',
+    mode: environment,
     resolve: {
       extensions: ['.mjs', '.js', '.jsx', '.json'],
-      alias: {}
+      alias: {},
     },
     entry: {
-      hyper: ['./src/server.js']
+      merkur: ['./src/server.js'],
     },
     output: {
       libraryTarget: 'commonjs2',
       path: path.resolve(__dirname, './lib'),
-      filename: 'widget-server.cjs'
-    }
-  }
+      filename: 'widget-server.cjs',
+    },
+  },
 ];

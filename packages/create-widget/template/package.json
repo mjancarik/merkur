@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "dev": "NODE_ENV=development nodemon server.js",
-    "start": "NODE_ENV=production server.js"
+    "dev": "node_modules/.bin/webpack --config ./webpack.config.cjs  --watch",
+    "build": "NODE_ENV=production node_modules/.bin/webpack --config ./webpack.config.cjs",
+    "start": "NODE_ENV=production node server.js"
   },
   "author": "",
   "license": "ISC",
