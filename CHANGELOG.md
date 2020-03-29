@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/mjancarik/merkur/compare/v0.1.2...v0.2.0) (2020-03-29)
+
+
+### Features
+
+* 🎸 added eslint and jest configuration ([b7123fa](https://github.com/mjancarik/merkur/commit/b7123fa1b7d5d94a97b3574318769c4937f89c39))
+
+
+
+
+
 ## [0.1.2](https://github.com/mjancarik/merkur/compare/v0.1.1...v0.1.2) (2020-03-27)
 
 **Note:** Version bump only for package merkur-monorepor

@@ -18,7 +18,7 @@
     "express": "^4.17.1",
     "got": "^10.6.0",
     "helmet": "^3.21.3",
-    "@merkur/core": "0.1.1",
+    "@merkur/core": "0.2.0",
     "hyperhtml": "^2.32.2",
     "viperhtml": "^2.17.1"
   },
