@@ -4,14 +4,18 @@ const nodeExternals = require('webpack-node-externals');
 const WebpackModules = require('webpack-modules');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const nodePlugins = [
-  new WebpackShellPlugin({
-    onBuildEnd: ['npm run dev:server'],
-  }),
-  new WebpackModules(),
-];
+const nodePlugins = [new WebpackModules()];
+const DEVELOPMENT = 'development';
 
-const environment = process.env.NODE_ENV ? process.env.NODE_ENV : 'development';
+const environment = process.env.NODE_ENV ? process.env.NODE_ENV : DEVELOPMENT;
+
+if (environment === DEVELOPMENT) {
+  nodePlugins.push(
+    new WebpackShellPlugin({
+      onBuildEnd: ['npm run dev:server'],
+    })
+  );
+}
 
 module.exports = [
   {

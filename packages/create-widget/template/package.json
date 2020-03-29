@@ -6,7 +6,7 @@
     "dev:server": "nodemon server.js",
     "test": "jest -c ./jest.config.js --forceExit",
     "lint": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore './**/*.{js,jsx}'",
-    "dev": "webpack --config ./webpack.config.js  --watch",
+    "dev": "cross-env NODE_ENV=development webpack --config ./webpack.config.js  --watch",
     "build": "cross-env NODE_ENV=production webpack --config ./webpack.config.js",
     "start": " cross-env NODE_ENV=production node server.js"
   },
@@ -40,6 +40,7 @@
     "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^0.9.0",
     "nodemon": "^1.18.10",
+    "prettier": "^2.0.2",
     "supertest": "^4.0.2",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
