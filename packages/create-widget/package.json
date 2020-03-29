@@ -3,7 +3,7 @@
   "version": "0.1.2",
   "description": "Create a MERKUR widget easily.",
   "bin": {
-    "@merkur/create-widget": "./bin/createWidget.js"
+    "merkur-create-widget": "./bin/createWidget.js"
   },
   "scripts": {
     "test": "echo 'Tests pass.'",

@@ -1,0 +1,8 @@
+/docs
+/doc
+/node_modules
+/node_modules/*
+/dist
+/lib
+/static
+/coverage

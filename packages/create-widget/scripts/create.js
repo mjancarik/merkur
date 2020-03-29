@@ -39,7 +39,7 @@ exampleResolver.then(({ view }) => {
 
 function createMerkurApp(dirName, view) {
   info(
-    `Creating new MERKUR app inside ${chalk.green(
+    `Creating new MERKUR widget inside ${chalk.green(
       dirName
     )} directory for ${view}...`
   );
@@ -96,7 +96,7 @@ function createMerkurApp(dirName, view) {
   info(
     `Running ${chalk.cyan(
       'npm install'
-    )} inside app directory, this might take a while...`
+    )} inside widget directory, this might take a while...`
   );
   // eslint-disable-next-line no-console
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));

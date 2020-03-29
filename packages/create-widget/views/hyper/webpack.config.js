@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const nodePlugins = [
   new WebpackShellPlugin({
-    onBuildEnd: ['npm run dev'],
+    onBuildEnd: ['npm run dev:server'],
   }),
   new WebpackModules(),
 ];
