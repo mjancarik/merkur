@@ -24,8 +24,8 @@ export const widgetProperties = {
   },
   load(widget) {
     return {
-      ...widget.props,
       counter: 0,
+      ...widget.props,
     };
   },
 };

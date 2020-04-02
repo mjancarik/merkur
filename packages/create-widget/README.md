@@ -1,4 +1,4 @@
-# create-merkur-app
+# @merkur/create-widget
 
 [![Build Status](https://travis-ci.org/mjancarik/create-merkur-app.svg?branch=master)](https://travis-ci.org/mjancarik/create-merkur-app) [![dependencies Status](https://david-dm.org/mjancarik/create-merkur-app/status.svg)](https://david-dm.org/mjancarik/create-merkur-app)
 [![Coverage Status](https://coveralls.io/repos/github/mjancarik/create-merkur-app/badge.svg?branch=master)](https://coveralls.io/github/mjancarik/create-merkur-app?branch=master)
@@ -8,7 +8,7 @@
 ## Installation
 
 ```bash
-npm i create-merkur-app --save
+npm i @merkur/create-widget --save
 ```
 
 ## Usage

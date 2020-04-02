@@ -1,4 +1,5 @@
 module.exports = {
+    'root': true,
     'extends': ['eslint:recommended', 'plugin:react/recommended', 'prettier', 'prettier/react'],
     'rules': {
         'prettier/prettier': [
@@ -12,6 +13,7 @@ module.exports = {
             allow: ['warn', 'error']
         }],
 
+        'react/react-in-jsx-scope': 0,
         'react/prop-types': 0,
         'react/wrap-multilines': 0,
         'react/no-deprecated': 0
@@ -26,7 +28,7 @@ module.exports = {
         'ecmascript': 2020,
         'jsx': true,
         'react': {
-            'version': '16'
+            'version': '16',
         }
     },
     'parserOptions': {

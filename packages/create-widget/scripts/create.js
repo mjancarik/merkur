@@ -25,6 +25,12 @@ let exampleResolver = argv.example
           },
           {
             name: `${chalk.bold.blue(
+              'Preact'
+            )} - The basic counter example with preact.`,
+            value: 'preact',
+          },
+          {
+            name: `${chalk.bold.blue(
               'React'
             )} - The basic counter example with react.`,
             value: 'react',
@@ -52,6 +58,18 @@ function createMerkurApp(dirName, view) {
     hyper: {
       hyperhtml: '^2.32.2',
       viperhtml: '^2.17.1',
+    },
+    preact: {
+      preact: '^10.3.4',
+      'preact-render-to-string': '^5.1.4',
+      'babel-loader': '^8.1.0',
+      '@babel/preset-react': '^7.9.4',
+    },
+    react: {
+      react: '^16.13.1',
+      'react-dom': '^16.13.1',
+      'babel-loader': '^8.1.0',
+      '@babel/preset-react': '^7.9.4',
     },
   };
 

@@ -4,9 +4,10 @@
   "description": "",
   "scripts": {
     "dev:server": "nodemon server.js",
-    "test": "jest -c ./jest.config.js --forceExit",
+    "test": "jest -c ./jest.config.js",
+    "test:watch": "jest -c ./jest.config.js --watch",
     "lint": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore './**/*.{js,jsx}'",
-    "dev": "cross-env NODE_ENV=development webpack --config ./webpack.config.js  --watch",
+    "dev": "cross-env NODE_ENV=development webpack --config ./webpack.config.js",
     "build": "cross-env NODE_ENV=production webpack --config ./webpack.config.js",
     "start": " cross-env NODE_ENV=production node server.js"
   },
@@ -18,9 +19,7 @@
     "express": "^4.17.1",
     "got": "^10.6.0",
     "helmet": "^3.21.3",
-    "@merkur/core": "0.2.0",
-    "hyperhtml": "^2.32.2",
-    "viperhtml": "^2.17.1"
+    "@merkur/core": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
@@ -35,7 +34,6 @@
     "eslint-plugin-jasmine": "4.1.0",
     "eslint-plugin-jest": "23.8.2",
     "eslint-plugin-prettier": "3.1.2",
-    "eslint-plugin-react": "7.19.0",
     "jest": "^25.2.3",
     "json-loader": "^0.5.7",
     "mini-css-extract-plugin": "^0.9.0",
