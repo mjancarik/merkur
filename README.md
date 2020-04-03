@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="babel" src="https://raw.githubusercontent.com/mjancarik/merkur/master/packages/create-widget/template/static/merkur-icon.png" width="133">
+  <img alt="Merkur" src="https://raw.githubusercontent.com/mjancarik/merkur/master/packages/create-widget/template/static/merkur-icon.png" width="133">
 </p>
 
 [![Build Status](https://travis-ci.org/mjancarik/merkur.svg?branch=master)](https://travis-ci.org/mjancarik/merkur)
@@ -21,7 +21,7 @@ cd name
 npm run dev // Point your browser at http://localhost:4444/
 ```
 <p align="center">
-  <img alt="babel" src="https://raw.githubusercontent.com/mjancarik/merkur/master/images/hello-widget.jpg" />
+  <img alt="Merkur example, hello widget" src="https://raw.githubusercontent.com/mjancarik/merkur/master/images/hello-widget.png" />
 </p>
 
 ## API
