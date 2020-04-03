@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.3.0](https://github.com/mjancarik/merkur/compare/v0.2.2...v0.3.0) (2020-04-03)
+
+
+### Features
+
+* 🎸 simplify merkur interface ([e681679](https://github.com/mjancarik/merkur/commit/e6816796e552c6014ca5177879eaa8c28d8cb8ca))
+
+
+
+
+
 ## [0.2.2](https://github.com/mjancarik/merkur/compare/v0.2.1...v0.2.2) (2020-04-02)
 
 **Note:** Version bump only for package merkur-monorepor

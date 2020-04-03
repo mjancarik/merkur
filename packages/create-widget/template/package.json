@@ -19,7 +19,7 @@
     "express": "^4.17.1",
     "got": "^10.6.0",
     "helmet": "^3.21.3",
-    "@merkur/core": "0.2.0"
+    "@merkur/core": "0.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
