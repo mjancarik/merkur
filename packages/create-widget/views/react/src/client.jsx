@@ -27,4 +27,7 @@ function createWidget(widgetParams) {
 }
 
 const merkur = createMerkur();
-merkur.register(widgetProperties.name, widgetProperties.version, createWidget);
+merkur.register({
+  ...widgetProperties,
+  createWidget,
+});

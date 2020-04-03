@@ -17,9 +17,7 @@ describe('merkur shell', () => {
           "widgetFactory": Object {},
           "widgets": Array [],
         },
-        "connect": [Function],
         "create": [Function],
-        "disconnect": [Function],
         "register": [Function],
       }
     `);
@@ -32,42 +30,22 @@ describe('merkur shell', () => {
     expect(sameMerkur).toEqual(merkur);
   });
 
-  it('should connect merkur widget', () => {
-    const merkur = createMerkur();
-    const widget = createCustomWidget();
-
-    merkur.connect(widget);
-
-    expect(merkur.$in.widgets.length).toEqual(1);
-  });
-
-  it('should disconnect merkur widget', () => {
-    const merkur = createMerkur();
-    const widget = createCustomWidget();
-
-    merkur.connect(widget);
-    merkur.disconnect(widget);
-
-    expect(merkur.$in.widgets.length).toEqual(0);
-  });
-
   it('should register merkur widget', () => {
     const merkur = createMerkur();
     const widgetProperties = {
       name: 'package',
       version: '1.0.0',
     };
-    const widgetFactory = () => createCustomWidget(widgetProperties);
+    const createWidget = () => createCustomWidget(widgetProperties);
 
-    merkur.register(
-      widgetProperties.name,
-      widgetProperties.version,
-      widgetFactory
-    );
+    merkur.register({
+      ...widgetProperties,
+      createWidget,
+    });
 
     expect(
       merkur.$in.widgetFactory[widgetProperties.name + widgetProperties.version]
-    ).toEqual(widgetFactory);
+    ).toEqual(createWidget);
   });
 
   it('should create merkur widget', async () => {
@@ -76,19 +54,14 @@ describe('merkur shell', () => {
       name: 'package',
       version: '1.0.0',
     };
-    const widgetFactory = () => createCustomWidget(widgetProperties);
+    const createWidget = () => createCustomWidget(widgetProperties);
 
-    merkur.register(
-      widgetProperties.name,
-      widgetProperties.version,
-      widgetFactory
-    );
+    merkur.register({
+      ...widgetProperties,
+      createWidget,
+    });
 
-    const widget = await merkur.create(
-      widgetProperties.name,
-      widgetProperties.version,
-      widgetProperties
-    );
+    const widget = await merkur.create(widgetProperties);
 
     expect(widget).toMatchInlineSnapshot(`
 Object {

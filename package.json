@@ -16,10 +16,10 @@
     "eslint-plugin-react": "7.19.0",
     "git-cz": "4.3.1",
     "husky": "4.2.3",
-    "jest": "25.1.0",
+    "jest": "25.2.7",
     "lerna": "3.20.2",
-    "lint-staged": "10.0.8",
-    "prettier": "2.0.1",
+    "lint-staged": "10.1.1",
+    "prettier": "2.0.2",
     "to-mock": "1.6.2"
   },
   "scripts": {
@@ -32,7 +32,7 @@
     "lint:fix": "npm run lint -- --fix",
     "stylelint:fix": "npm run stylelint -- --fix",
     "commit": "git-cz",
-    "version": "node utils/bumpVersion.js && git add packages/create-widget/template/package.json"
+    "version": "node utils/bumpVersion.js && node utils/copyReadme.js && git add packages/create-widget/template/package.json && git add packages/**/README.md"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "license": "MIT",

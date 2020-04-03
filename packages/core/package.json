@@ -1,7 +1,7 @@
 {
   "name": "@merkur/core",
   "version": "0.2.0",
-  "description": "",
+  "description": "Library for creating front-end microservices.",
   "main": "lib/merkur",
   "module": "lib/merkur",
   "scripts": {
@@ -15,10 +15,15 @@
     "url": "git+https://github.com/mjancarik/merkur.git"
   },
   "keywords": [
-    "micro frontends",
     "microservices",
+    "microfrontends",
+    "SSR",
+    "merkur",
     "widget",
-    "SSR"
+    "react",
+    "preact",
+    "hyperhtml",
+    "library"
   ],
   "author": "Miroslav Jancarik",
   "license": "ISC",

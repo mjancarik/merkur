@@ -1,7 +1,7 @@
 {
   "name": "@merkur/create-widget",
   "version": "0.2.2",
-  "description": "Create a MERKUR widget easily.",
+  "description": "CLI for creating merkur widget easily.",
   "bin": {
     "merkur-create-widget": "./bin/createWidget.js"
   },
@@ -10,8 +10,7 @@
     "build": "echo 'Build pass.'"
   },
   "keywords": [
-    "MERKUR",
-    "Isomorphic",
+    "merkur",
     "JavaScript",
     "cli"
   ],

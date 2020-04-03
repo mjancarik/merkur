@@ -1,11 +1,12 @@
-function register(name, version, factory) {
+function register({ name, version, createWidget }) {
   const merkur = getMerkur();
 
-  merkur.$in.widgetFactory[name + version] = factory;
+  merkur.$in.widgetFactory[name + version] = createWidget;
 }
 
-function create(name, version, props = {}) {
+function create(widgetProperties = {}) {
   const merkur = getMerkur();
+  const { name, version } = widgetProperties;
   const factory = merkur.$in.widgetFactory[name + version];
 
   if (typeof factory !== 'function') {
@@ -16,22 +17,7 @@ function create(name, version, props = {}) {
     );
   }
 
-  return factory(props);
-}
-
-function connect(widget) {
-  const merkur = getMerkur();
-
-  merkur.$in.widgets.push(widget);
-}
-
-function disconnect(widget) {
-  const merkur = getMerkur();
-  const widgetIndex = merkur.$in.widgets.indexOf(widget);
-
-  if (widgetIndex !== -1) {
-    merkur.$in.widgets.splice(widgetIndex, 1);
-  }
+  return factory(widgetProperties);
 }
 
 export function createMerkur(plugins = []) {
@@ -65,8 +51,6 @@ export function getMerkur() {
       $dependencies: {},
       register,
       create,
-      connect,
-      disconnect,
     };
   }
 
