@@ -15,7 +15,7 @@
 
       <div class="navbar__menu">
         {% for item in site.data.menu %}
-        <a class="navbar__item{% if page.url == item.url %} navbar__item--active{% endif %}" href="{{ item.url }}"
+        <a class="navbar__item{% if page.url == item.url %} navbar__item--active{% endif %}" href="{{ item.url | relative_url }}"
           {% if item.title and item.title != empty %} title="{{ item.title }}" {% endif %}>
           {{ item.text }}
         </a>
