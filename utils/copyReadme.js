@@ -7,6 +7,10 @@ const README = path.resolve(process.cwd(), 'README.md');
 const PACKAGES = fs.readdirSync(PACKAGES_DIR);
 
 PACKAGES.forEach((packageName) => {
+  if (packageName[0] === '.') {
+    return;
+  }
+
   let modulePath = path.resolve(PACKAGES_DIR, packageName);
 
   fs.copyFileSync(README, modulePath + '/README.md');
