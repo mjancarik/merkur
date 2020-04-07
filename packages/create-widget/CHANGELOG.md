@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/mjancarik/merkur/compare/v0.3.0...v0.3.1) (2020-04-07)
+
+
+### Bug Fixes
+
+* 🐛 creating widget on client side ([7470462](https://github.com/mjancarik/merkur/commit/7470462d72eb2ce4d1ee77b6c49ea588350bed11))
+
+
+
+
+
 # [0.3.0](https://github.com/mjancarik/merkur/compare/v0.2.2...v0.3.0) (2020-04-03)
 
 
