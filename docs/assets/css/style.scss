@@ -1,0 +1,44 @@
+---
+---
+
+$red: #e43126;
+$gray: #2d2d2d;
+$backgroundColor: #f2f2f2;
+
+@import "jekyll-theme-slate";
+@import "navigation";
+@import "why";
+@import "header";
+@import "footer";
+
+.view {
+  max-width: 1152px;
+  margin: 0 auto;
+}
+
+.button {
+    background-color: #fff;
+    border-color: #dbdbdb;
+    border-width: 1px;
+    color: #363636;
+    cursor: pointer;
+    justify-content: center;
+    padding-bottom: calc(0.5em - 1px);
+    padding-left: 1em;
+    padding-right: 1em;
+    padding-top: calc(0.5em - 1px);
+    text-align: center;
+    white-space: nowrap;
+    border-radius: 4px;
+
+  &--{
+    &medium {
+      font-size: 1.25rem;
+    }
+
+    &primary {
+      background-color: $red;
+      color: $backgroundColor;
+    }
+  }
+}

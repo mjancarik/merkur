@@ -1,0 +1,61 @@
+.navbar {
+  background-color: white;
+
+  &__ {
+    &container {
+      display: flex;
+      @media screen and (max-width: 800px) {
+        padding: 0 16px;
+      }
+    }
+
+    &brand {
+      flex: 1 auto;
+
+      .navbar__item {
+        display: flex;
+      }
+    }
+
+    &logo {
+      padding: 7px 0;
+      margin: 0;
+      border: 0;
+      box-shadow: none;
+      position: initial;
+    }
+
+    &menu {
+      flex: 6 auto;
+      display: flex;
+      flex-direction: row;
+      align-self: center;
+
+      .navbar__item {
+        margin-right: 1rem;
+      }
+    }
+
+    &item {
+      display: inline-block;
+      color: $gray;
+
+      &:hover {
+        color: $red;
+      }
+
+      &--active {
+        color: $red;
+      }
+    }
+
+    &info {
+      flex: 1 auto;
+      display: flex;
+      flex-direction: row;
+      align-self: center;
+      text-align: right;
+      place-content: flex-end;
+    }
+  }
+}

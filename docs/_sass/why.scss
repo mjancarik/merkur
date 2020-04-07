@@ -1,0 +1,47 @@
+.why {
+  background-color: $backgroundColor;
+
+  &__ {
+    &container {
+      padding: 80px 0;
+
+      @media screen and (max-width: 800px) {
+        padding: 60px 0;
+      }
+    }
+
+    &items {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+
+      @media screen and (max-width: 800px) {
+        flex-direction: column;
+      }
+    }
+
+    &item {
+      flex: 1 auto;
+      width: 33.33333%;
+      padding-right: 2rem;
+      box-sizing: border-box;
+
+      @media screen and (max-width: 800px) {
+        width: 100%;
+        padding: 0 16px;
+      }
+
+      h3 {
+        font-size: 28px;
+        font-weight: 100;
+      }
+
+      p {
+      }
+    }
+
+    &item:last-child {
+      padding-right: 0;
+    }
+  }
+}

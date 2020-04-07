@@ -1,0 +1,12 @@
+<div class="why">
+  <div class="why__container view">
+    <div class="why__items">
+      {% for item in site.data.why %}
+        <div class="why__item">
+          <h3>{{ item.title }}</h3>
+          <p>{{ item.text }}</p>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
