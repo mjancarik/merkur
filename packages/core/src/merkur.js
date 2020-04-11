@@ -20,10 +20,10 @@ function create(widgetProperties = {}) {
   return factory(widgetProperties);
 }
 
-export function createMerkur(plugins = []) {
+export function createMerkur({ $plugins = [] } = {}) {
   const merkur = getMerkur();
 
-  plugins.forEach((plugin) => {
+  $plugins.forEach((plugin) => {
     if (plugin && typeof plugin.setup === 'function') {
       plugin.setup(merkur);
     }
