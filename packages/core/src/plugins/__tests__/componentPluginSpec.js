@@ -24,6 +24,7 @@ describe('createWidget method with component plugin', () => {
         "$external": Object {},
         "$in": Object {
           "component": Object {
+            "isHydrated": false,
             "isMounted": false,
             "lifeCycle": Object {
               "bootstrap": undefined,
@@ -227,6 +228,15 @@ describe('component plugin API', () => {
       await widget.setProps({ name: 'black' });
 
       expect(widget.update).toHaveBeenCalled();
+    });
+
+    it('should call life cycle load method', async () => {
+      widget.load = jest.fn();
+
+      await widget.mount();
+      await widget.setProps({ name: 'black' });
+
+      expect(widget.load).toHaveBeenCalled();
     });
   });
 

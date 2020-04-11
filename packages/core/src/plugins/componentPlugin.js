@@ -25,6 +25,7 @@ export function componentPlugin() {
       widget.$in.component = {
         lifeCycle,
         isMounted: false,
+        isHydrated: false,
       };
 
       widget = {
@@ -76,7 +77,14 @@ function componentAPI() {
       return callLifeCycleMethod(widget, 'bootstrap', args);
     },
     async load(widget, ...args) {
-      if (widget.state && Object.keys(widget.state).length !== 0) {
+      const { $in, state } = widget;
+
+      if (
+        $in.component.isHydrated === false &&
+        state &&
+        Object.keys(state).length !== 0
+      ) {
+        $in.component.isHydrated = true;
         return;
       }
 
@@ -97,6 +105,11 @@ function componentAPI() {
     async setProps(widget, props) {
       widget.props = { ...widget.props, ...props };
 
+      if (!widget.$in.component.isMounted) {
+        return;
+      }
+
+      await widget.load();
       return widget.update();
     },
   };
