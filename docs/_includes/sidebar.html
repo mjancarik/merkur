@@ -1,0 +1,19 @@
+{% assign pageUrl = page.url | remove: ".html" %}
+<div class="sidebar">
+  <div class="sidebar__container">
+      <aside class="sidebar__menu">
+        {% for curMenu in site.data.docs.menu %}
+        <a href="{{ curMenu.url | relative_url }}" class="sidebar__menu__link sidebar__menu__link--primary {% if curMenu.url == pageUrl %}sidebar__menu__link--active{% endif %}">{{ curMenu.title }}</a>
+            {% if curMenu.submenu and curMenu.url == pageUrl %}
+              <ul class="sidebar__menu__list">
+                {% for item in curMenu.submenu %}
+                  <li>
+                    <a href="{{ item.url | relative_url }}" class="sidebar__menu__link">{{ item.title }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          {% endfor %}
+      </aside>
+    </div>
+</div>

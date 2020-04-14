@@ -2,6 +2,7 @@
 ---
 
 $red: #e43126;
+$blue: #0F79D0;
 $gray: #2d2d2d;
 $backgroundColor: #f2f2f2;
 
@@ -10,10 +11,20 @@ $backgroundColor: #f2f2f2;
 @import "why";
 @import "header";
 @import "footer";
+@import "sidebar";
 
 .view {
   max-width: 1152px;
   margin: 0 auto;
+}
+
+.responsive {
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+a {
+  color: $red;
 }
 
 .button {
@@ -40,5 +51,33 @@ $backgroundColor: #f2f2f2;
       background-color: $red;
       color: $backgroundColor;
     }
+  }
+}
+
+.float--left {
+  float:left;
+}
+
+.float--right {
+  float:right;
+}
+
+@media screen and (max-width: 1152px) {
+  .page__docs .inner{
+    margin: 0 6px 0 236px;
+    max-width: 100%;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .page__docs .inner{
+    margin: 0 6px 0 6px;
+    max-width: 100%;
+  }
+}
+
+.page__docs {
+  .page__docs__navigation {
+    padding: 24px 0 32px 0;
   }
 }

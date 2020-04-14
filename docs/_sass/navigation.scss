@@ -4,7 +4,8 @@
   &__ {
     &container {
       display: flex;
-      @media screen and (max-width: 800px) {
+
+      @media screen and (max-width: 1152px) {
         padding: 0 16px;
       }
     }

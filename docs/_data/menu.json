@@ -1,7 +1,12 @@
 [
   {
     "text": "Home",
-    "title": "",
+    "title": "Merkur library",
     "url": "/"
+  },
+  {
+    "text": "Docs",
+    "title": "Merkur documentation",
+    "url": "/docs"
   }
 ]

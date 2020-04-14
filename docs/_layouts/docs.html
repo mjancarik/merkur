@@ -1,0 +1,48 @@
+{% include head.html %}
+
+<body class="page__docs">
+  {% include navigation.html %}
+
+  {% include sidebar.html %}
+
+  <!-- MAIN CONTENT -->
+  <div id="main_content_wrap" class="outer">
+    <section id="main_content" class="inner">
+      {{ content }}
+
+      {% assign pageUrl = page.url | remove: ".html" %}
+      {% for item in site.data.docs.menu %}
+      {% if item.url == pageUrl %}
+      {% assign activeItem = item %}
+      
+      {% assign prevIndex = forloop.index0 | minus: 1 %}
+      {% assign nextIndex = forloop.index0 | plus: 1 %}
+      
+      {% if prevIndex >= 0 %}
+      {% assign previousItem = site.data.docs.menu[prevIndex] %}
+      {% else %}
+      {% assign previousItem = false %}
+      {% endif %}
+      {% assign nextItem = site.data.docs.menu[nextIndex] %}
+      {% endif %}
+      {% endfor %}
+
+      <div class="page__docs__navigation">
+        {% if previousItem %}
+        <div class="float--left">
+          <a href="{{ previousItem.url | relative_url }}">&#8592; {{ previousItem.title }}</a>
+        </div>
+        {% endif %}
+        {% if nextItem %}
+        <div class="float--right">
+          <a href="{{ nextItem.url | relative_url }}">{{ nextItem.title }} &#8594;</a>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+  </div>
+
+  {% include footer.html %}
+</body>
+
+</html>

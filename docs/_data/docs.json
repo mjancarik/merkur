@@ -1,0 +1,63 @@
+{
+  "title": "Documentation",
+  "menu": [
+    {
+      "title": "Merkur concept",
+      "url": "/docs"
+    },
+    {
+      "title": "Getting started",
+      "url": "/docs/getting-started",
+      "submenu": [
+        {
+          "title": "Installation",
+          "url": "/docs/getting-started#installation"
+        },
+        {
+          "title": "Widget structure",
+          "url": "/docs/getting-started#widget-structure"
+        }
+      ]
+    },
+    {
+      "title": "Widget API",
+      "url": "/docs/merkur-widget-api"
+    },
+    {
+      "title": "Merkur API",
+      "url": "/docs/merkur-api",
+      "submenu": [
+        {
+          "title": "Module",
+          "url": "/docs/merkur-api#module"
+        },
+        {
+          "title": "Merkur Instance",
+          "url": "/docs/merkur-api#merkur-instance"
+        }
+      ]
+    },
+    {
+      "title": "Integration with app",
+      "url": "/docs/integration-with-app",
+      "submenu": [
+        {
+          "title": "API call for widget",
+          "url": "/docs/integration-with-app#api-call-for-widget-properties"
+        },
+        {
+          "title": "Alive widget for SPA",
+          "url": "/docs/integration-with-app#alive-merkur-widget-in-browser-spa"
+        },
+        {
+          "title": "Hydrate widget for SSR",
+          "url": "/docs/integration-with-app#hydrate-server-side-rendering-widget-mpa"
+        }
+      ]
+    },
+    {
+      "title": "Plugins",
+      "url": "/docs/plugins"
+    }
+  ]
+}
