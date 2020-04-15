@@ -11,7 +11,11 @@ The `setup` method is for creating new widget interface and base widget properti
 We are creating custom debug plugin.
 
 ```javascript
-import { createCustomWidget, componentPlugin, eventEmitterPlugin } from '@merkur/core';
+import {
+  createCustomWidget,
+  componentPlugin,
+  eventEmitterPlugin
+} from '@merkur/core';
 
 export function debugPlugin() {
   return {
