@@ -23,7 +23,7 @@ email: your-email@example.com
 description: >- 
   The Merkur is tiny extensible javascript library for front-end microservices. 
   It allows by default server side rendering for loading performance boost.
-baseurl: "/merkur" # the subpath of your site, e.g. /blog
+baseurl: "/" # the subpath of your site, e.g. /blog
 
 # Build settings
 theme: minima
