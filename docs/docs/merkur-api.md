@@ -6,7 +6,7 @@ layout: docs
 
 ## Module
 
-The Merkur is tiny extensible library and has got few base methods by default.
+Merkur is tiny extensible library and has got few base methods by default.
 
 - createMerkur - create new instance of merkur to global context in variable `__merkur__`
 - removeMerkur - remove merkur variable from global context
@@ -43,7 +43,7 @@ const merkur = createMerkur({
 
 ## Merkur instance
 
-The Merkur instance contains three predefined properties `$in`, `$external` and `$dependencies`. The property `$in` is for internals usage of merkur plugins or merkur itself. Other properties are for your own usage. The properties `$external` and `$dependencies` are for storing values and sharing dependencies. 
+Merkur instance contains three predefined properties `$in`, `$external` and `$dependencies`. The property `$in` is for internals usage of merkur plugins or merkur itself. Other properties are for your own usage. The properties `$external` and `$dependencies` are for storing values and sharing dependencies. 
 
 ```javascript
 import { getMerkur } from '@merkur/core';

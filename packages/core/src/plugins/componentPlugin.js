@@ -38,7 +38,8 @@ export function componentPlugin() {
 
       return widget;
     },
-    create() {
+    create(widget) {
+      return widget;
       // @TODO bind events
     },
   };

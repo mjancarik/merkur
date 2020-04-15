@@ -4,7 +4,7 @@ layout: docs
 
 # Integration with your app
 
-The Merkur widget can be connected with any framework or library but we can use it with other languages like PHP, Python or Java of course. It use REST/GRAPHQL API which has got predefined and extensible response body.
+Merkur widget can be connected with any framework or library but we can use it with other languages like PHP, Python or Java of course. It use REST/GRAPHQL API which has got predefined and extensible response body.
 
 ## API call for widget properties
 

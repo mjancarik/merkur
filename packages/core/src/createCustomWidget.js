@@ -15,11 +15,7 @@ function bindWidgetToFunctions(widget) {
 async function callPluginMethod(widget, method, args) {
   for (const plugin of widget.$plugins) {
     if (typeof plugin[method] === 'function') {
-      const newWidget = await plugin[method](widget, ...args);
-
-      if (newWidget) {
-        widget = newWidget;
-      }
+      widget = await plugin[method](widget, ...args);
     }
   }
 
