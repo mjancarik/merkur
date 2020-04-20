@@ -1,9 +1,12 @@
+import { componentPlugin } from '@merkur/plugin-component';
+import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 import { name, version } from '../package.json';
 import View from './component/View';
 
 export const widgetProperties = {
   name,
   version,
+  $plugins: [componentPlugin, eventEmitterPlugin],
   container: 'container',
   View,
   assets: [

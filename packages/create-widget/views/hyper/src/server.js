@@ -1,5 +1,5 @@
 import viper from 'viperhtml';
-import { createWidget as createMerkuWidget } from '@merkur/core';
+import { createMerkuWidget } from '@merkur/core';
 import { widgetProperties } from './widget';
 
 export function createWidget(widgetParams) {

@@ -1,10 +1,10 @@
 import { render, hydrate } from 'react-dom';
-import { createWidget as createMerkuWidget, createMerkur } from '@merkur/core';
+import { createMerkurWidget, createMerkur } from '@merkur/core';
 import { widgetProperties } from './widget';
 import style from './style.css'; // eslint-disable-line no-unused-vars
 
 function createWidget(widgetParams) {
-  return createMerkuWidget({
+  return createMerkurWidget({
     ...widgetParams,
     ...widgetProperties,
     $dependencies: {
