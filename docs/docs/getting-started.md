@@ -16,7 +16,7 @@ cd name
 npm run dev // Point your browser at http://localhost:4444/
 ```
 
-This will scaffold a new project in the `name` directory and start a server on [localhost:4444](http://localhost:4444/). Try editing the files to get a feel for how everything works.
+This will scaffold a new project in the `name` directory and start a server on [localhost:4444](http://localhost:4444/). Try editing the files to get a feel for how everything works.
 
 <img class="responsive" src="{{ '/assets/images/hello-widget.png?v=' | append: site.github.build_revision | relative_url }}" alt="Merkur - hello widget" />
 
