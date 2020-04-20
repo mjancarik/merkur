@@ -1,9 +1,9 @@
-import { createCustomWidget } from '../../index';
-import { eventEmitterPlugin } from '../eventEmitterPlugin';
+import { createWidget } from '@merkur/core';
+import { eventEmitterPlugin } from '../index';
 
 describe('createWidget method with component plugin', () => {
   it('should create empty widget', async () => {
-    const widget = await createCustomWidget({
+    const widget = await createWidget({
       $plugins: [eventEmitterPlugin],
       name: 'my-widget',
       version: '1.0.0',
@@ -47,7 +47,7 @@ describe('event emitter plugin API', () => {
   let mocks = null;
 
   beforeEach(async () => {
-    widget = await createCustomWidget({
+    widget = await createWidget({
       ...mocks,
       $plugins: [eventEmitterPlugin],
     });

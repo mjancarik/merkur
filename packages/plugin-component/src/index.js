@@ -1,4 +1,4 @@
-import { setDefaultValueForUndefined } from '../utils';
+import { setDefaultValueForUndefined } from '@merkur/core';
 
 export function componentPlugin() {
   return {
