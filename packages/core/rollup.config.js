@@ -3,7 +3,7 @@ import { terser } from 'rollup-plugin-terser';
 const config = {
   input: 'src/index.js',
   treeshake: {
-    pureExternalModules: true,
+    moduleSideEffects: 'no-external',
   },
   output: [
     {

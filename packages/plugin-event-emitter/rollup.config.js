@@ -4,7 +4,7 @@ import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 const config = {
   input: 'src/index.js',
   treeshake: {
-    pureExternalModules: true,
+    moduleSideEffects: 'no-external',
   },
   plugins: [peerDepsExternal()],
   output: [
