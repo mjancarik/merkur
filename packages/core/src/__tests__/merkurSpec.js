@@ -1,5 +1,5 @@
 import { getMerkur, createMerkur, removeMerkur } from '../merkur';
-import { createCustomWidget } from '../index';
+import { createMerkurWidget } from '../index';
 
 describe('merkur shell', () => {
   beforeEach(() => {
@@ -36,7 +36,7 @@ describe('merkur shell', () => {
       name: 'package',
       version: '1.0.0',
     };
-    const createWidget = () => createCustomWidget(widgetProperties);
+    const createWidget = () => createMerkurWidget(widgetProperties);
 
     merkur.register({
       ...widgetProperties,
@@ -54,7 +54,7 @@ describe('merkur shell', () => {
       name: 'package',
       version: '1.0.0',
     };
-    const createWidget = () => createCustomWidget(widgetProperties);
+    const createWidget = () => createMerkurWidget(widgetProperties);
 
     merkur.register({
       ...widgetProperties,

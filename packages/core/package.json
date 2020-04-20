@@ -1,7 +1,7 @@
 {
   "name": "@merkur/core",
   "version": "0.3.0",
-  "description": "Library for creating front-end microservices.",
+  "description": "Merkur is tiny and extensible library for creating front-end microservices.",
   "main": "lib/merkur",
   "module": "lib/merkur",
   "scripts": {
@@ -34,29 +34,11 @@
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "homepage": "https://github.com/mjancarik/merkur#readme",
+  "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@babel/core": "^7.8.6",
     "@babel/plugin-transform-modules-commonjs": "^7.8.3",
     "rollup": "^1.32.0",
     "rollup-plugin-terser": "^5.2.0"
-  },
-  "jest": {
-    "bail": false,
-    "verbose": true,
-    "testEnvironment": "node",
-    "coverageThreshold": {
-      "global": {
-        "functions": 50,
-        "lines": 50,
-        "statements": 50
-      }
-    },
-    "collectCoverageFrom": [
-      "<rootDir>/src/**/*.{js,jsx}"
-    ],
-    "modulePaths": [
-      "<rootDir>/"
-    ]
   }
 }

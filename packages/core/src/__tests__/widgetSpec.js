@@ -1,8 +1,8 @@
-import { createCustomWidget } from '../index';
+import { createMerkurWidget } from '../index';
 
 describe('createCustomWidget method', () => {
   fit('should create empty widget', async () => {
-    const widget = await createCustomWidget();
+    const widget = await createMerkurWidget();
 
     expect(widget).toMatchInlineSnapshot(`
       Object {
