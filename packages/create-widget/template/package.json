@@ -19,9 +19,9 @@
     "express": "^4.17.1",
     "got": "^10.6.0",
     "helmet": "^3.21.3",
-    "@merkur/core": "0.3.0",
-    "@merkur/plugin-component": "0.3.0",
-    "@merkur/plugin-event-emitter": "0.3.0"
+    "@merkur/core": "0.4.0",
+    "@merkur/plugin-component": "0.4.0",
+    "@merkur/plugin-event-emitter": "0.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
