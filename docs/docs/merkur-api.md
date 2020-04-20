@@ -11,10 +11,7 @@ Merkur is tiny extensible library and has got few base methods by default.
 - createMerkur - create new instance of merkur to global context in variable `__merkur__`
 - removeMerkur - remove merkur variable from global context
 - getMerkur - return merkur instance
-- createWidget - factory function for your widget with predefined plugins
-- createCustomWidget - factory function for your widget
-- componentPlugin - component plugin
-- eventEmitterPlugin - event emitter plugin
+- createMerkurWidget - factory function for your widget
 
 ### createMerkur
 
@@ -51,7 +48,6 @@ import { getMerkur } from '@merkur/core';
 console.log(getMerkur());
 // {
 //   $in: {
-//     widgets: [],
 //     widgetFactory: {},
 //   },
 //   $external: {},

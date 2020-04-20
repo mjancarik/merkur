@@ -13,7 +13,9 @@ The widget also contains two methods for plugins `seutp` and `create`. For more 
 The widget instance is sealed after creating so you can't add properties or functions to widget directly. But for rare use case you can use property `$external`. The Merkur automaticaly bind widget functions to recieve widget as a frist argument. You can see it in easy counter example widget.
 
 ```javascript
-import { createWidget as createMerkuWidget, createMerkur } from '@merkur/core';
+import { createMerkurWidget, createMerkur } from '@merkur/core';
+import { componentPlugin } from '@merkur/plugin-component';
+import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 import { render } from 'preact';
 import View from './component/View';
 import { name, version } from '../package.json';
@@ -25,8 +27,9 @@ export const widgetProperties = {
   $dependencies: {
     render, // specific render method for client side and server side
   },
+  $plugins: [componentPlugin, eventEmitterPlugin]
 
-  // properties and methods which adding component plugin
+  // properties and methods which adding componentplugin
   assets: [
     {
       type: 'script',
@@ -71,7 +74,7 @@ export const widgetProperties = {
 // widgetParams are params from API call for widget, 
 // we will explain in next section
 function createWidget(widgetParams) {
-  return createMerkuWidget({
+  return createMerkurWidget({
     ...widgetParams,
     ...widgetProperties,
   });

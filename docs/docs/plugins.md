@@ -11,11 +11,9 @@ The `setup` method is for creating new widget interface and base widget properti
 We are creating custom debug plugin.
 
 ```javascript
-import {
-  createCustomWidget,
-  componentPlugin,
-  eventEmitterPlugin
-} from '@merkur/core';
+import { createMerkurWidget } from '@merkur/core';
+import { componentPlugin } from '@merkur/plugin-component';
+import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 
 export function debugPlugin() {
   return {
@@ -58,9 +56,9 @@ export const widgetProperties = {
   // ... other properties
 };
 
-const widget = createCustomWidget(widgetProperties);
+const widget = createMerkurWidget(widgetProperties);
 ```
 
-We created `debugPlugin` which add `debug` method in `setup` lifecycle method and add tracking calling all widget methods in `create` lifecycle method. We defined using plugins in `$plugin` property.
+We created `debugPlugin` which add `debug` method in `setup` lifecycle method and add tracking calling all widget methods in `create` lifecycle method. We defined using plugins in `$plugins` property.
 
-Merkur has got only two default plugins `ComponentPlugin` and `EventEmitterPlugin`.
+Merkur has got only two plugins `componentPlugin` and `eventEmitterPlugin`.
