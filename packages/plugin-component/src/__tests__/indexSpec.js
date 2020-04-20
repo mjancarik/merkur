@@ -1,9 +1,9 @@
-import { createWidget } from '@merkur/core';
+import { createMerkurWidget } from '@merkur/core';
 import { componentPlugin } from '../index';
 
 describe('createWidget method with component plugin', () => {
   it('should create empty widget', async () => {
-    const widget = await createWidget({
+    const widget = await createMerkurWidget({
       $plugins: [componentPlugin],
       name: 'my-widget',
       version: '1.0.0',
@@ -69,7 +69,7 @@ describe('createWidget method with component plugin', () => {
   });
 
   it('should defined base information about component', async () => {
-    const widget = await createWidget({
+    const widget = await createMerkurWidget({
       $plugins: [componentPlugin],
       name: 'my-widget',
       version: '1.0.0',
@@ -116,7 +116,7 @@ describe('component plugin API', () => {
       update: jest.fn(),
     };
 
-    widget = await createWidget({
+    widget = await createMerkurWidget({
       ...mocks,
       $plugins: [componentPlugin],
       load(widget) {
