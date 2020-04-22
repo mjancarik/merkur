@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.1](https://github.com/mjancarik/merkur/compare/v0.4.0...v0.4.1) (2020-04-22)
+
+
+### Bug Fixes
+
+* 🐛 files from template folder must be in module ([8899bd3](https://github.com/mjancarik/merkur/commit/8899bd36c95920c2fe7d344eed5d2281085b1673))
+
+
+
+
+
 # [0.4.0](https://github.com/mjancarik/merkur/compare/v0.3.1...v0.4.0) (2020-04-20)
 
 **Note:** Version bump only for package @merkur/create-widget
