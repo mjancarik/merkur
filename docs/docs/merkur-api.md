@@ -27,7 +27,7 @@ const myDummyMerkurPlugin = {
     }
 
     merkur.dummy = () => {
-      console.log('My dummy function');
+      console.log('My dummy function');
     };
   }
 }
@@ -40,7 +40,7 @@ const merkur = createMerkur({
 
 ## Merkur instance
 
-Merkur instance contains three predefined properties `$in`, `$external` and `$dependencies`. The property `$in` is for internals usage of merkur plugins or merkur itself. Other properties are for your own usage. The properties `$external` and `$dependencies` are for storing values and sharing dependencies. 
+Merkur instance contains three predefined properties `$in`, `$external` and `$dependencies`. The property `$in` is for internals usage of merkur plugins or merkur itself. Other properties are for your own usage. The properties `$external` and `$dependencies` are for storing values and sharing dependencies. 
 
 ```javascript
 import { getMerkur } from '@merkur/core';
@@ -57,7 +57,7 @@ console.log(getMerkur());
 // };
 ```
 
-Other important part of Merkur instance is methods `register` and `create`. The `register` method register widget to merkur with name, version and createWidget properties. The `create` method return new instace of registered widget with defined properties. 
+Other important part of Merkur instance is methods `register` and `create`. The `register` method register widget to merkur with name, version and createWidget properties. The `create` method return new instace of registered widget with defined properties. 
 
 ```javascript
 import { getMerkur } from '@merkur/core';

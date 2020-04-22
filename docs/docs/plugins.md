@@ -4,9 +4,9 @@ layout: docs
 
 # Plugins
 
-Merkur is tiny and extensible library how we said and allow you define custom widget plugins as well. Widget plugin has got two lifecycle methods `setup` and `create`. Both methods are called during creating widget. The order is `setup` and then `create`. Both methods receive `widget` and `widgetProperties` and must return extended widget.
+Merkur is tiny and extensible library how we said and allow you define custom widget plugins as well. Widget plugin has got two lifecycle methods `setup` and `create`. Both methods are called during creating widget. The order is `setup` and then `create`. Both methods receive `widget` and `widgetProperties` and must return extended widget.
 
-The `setup` method is for creating new widget interface and base widget properties in `widget.$in` property. The `create` method is for connection more plugins or reusing some plugin methods from another plugin. 
+The `setup` method is for creating new widget interface and base widget properties in `widget.$in` property. The `create` method is for connection more plugins or reusing some plugin methods from another plugin. 
 
 We are creating custom debug plugin.
 
