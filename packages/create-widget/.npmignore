@@ -14,3 +14,4 @@ commitlint.config.js
 rollup.config.js
 babel.config.js
 setupJest.js
+!/template/
