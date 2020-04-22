@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.4.2](https://github.com/mjancarik/merkur/compare/v0.4.1...v0.4.2) (2020-04-22)
+
+
+### Bug Fixes
+
+* 🐛 all template and views files must be in module ([a737891](https://github.com/mjancarik/merkur/commit/a7378910c38f0d5862b4a1c6c254b68c8a4f68e2))
+
+
+
+
+
 ## [0.4.1](https://github.com/mjancarik/merkur/compare/v0.4.0...v0.4.1) (2020-04-22)
 
 
