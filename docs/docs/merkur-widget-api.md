@@ -8,9 +8,9 @@ Merkur widget contains four predefined properties `$in`, `$external`, `$dependen
 
 Other properties are for your own usage. The property `$external` is for storing variables. The property `$dependencies` is for defined widget dependencies and specific features of environment where widget works. The last one property `$plugins` is for defined specific widget plugin.
 
-The widget also contains two methods for plugins `seutp` and `create`. For more details continue to [plugins]({{ '/docs/plugins' | relative_url }}) section.
+The widget also contains two methods for plugins `setup` and `create`. For more details continue to [plugins]({{ '/docs/plugins' | relative_url }}) section.
 
-The widget instance is sealed after creating so you can't add properties or functions to widget directly. But for rare use case you can use property `$external`. The Merkur automaticaly bind widget functions to recieve widget as a frist argument. You can see it in easy counter example widget.
+The widget instance is sealed after creating so you can't add properties or functions to widget directly. But for rare use cases you can use property `$external`. The Merkur automatically bind widget functions to recieve widget as a first argument. You can see it in easy counter example widget.
 
 ```javascript
 import { createMerkurWidget, createMerkur } from '@merkur/core';
