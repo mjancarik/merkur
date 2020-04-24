@@ -54,22 +54,34 @@ function createMerkurApp(dirName, view) {
   const appRoot = path.resolve(dirName.toString());
   const tplRoot = path.join(__dirname, '../template');
   const viewRoot = path.resolve(__dirname, `../views/${view}`);
-  const dependencies = {
+  const packageTemplate = {
     hyper: {
-      hyperhtml: '^2.32.2',
-      viperhtml: '^2.17.1',
+      dependencies: {
+        hyperhtml: '^2.32.2',
+        viperhtml: '^2.17.1',
+      },
     },
     preact: {
-      preact: '^10.3.4',
-      'preact-render-to-string': '^5.1.4',
-      'babel-loader': '^8.1.0',
-      '@babel/preset-react': '^7.9.4',
+      dependencies: {
+        preact: '^10.3.4',
+        'preact-render-to-string': '^5.1.4',
+      },
+      devDependencies: {
+        '@babel/preset-react': '^7.9.4',
+        'babel-loader': '^8.1.0',
+        'eslint-plugin-react': '7.19.0',
+      },
     },
     react: {
-      react: '^16.13.1',
-      'react-dom': '^16.13.1',
-      'babel-loader': '^8.1.0',
-      '@babel/preset-react': '^7.9.4',
+      dependencies: {
+        react: '^16.13.1',
+        'react-dom': '^16.13.1',
+      },
+      devDependencies: {
+        '@babel/preset-react': '^7.9.4',
+        'babel-loader': '^8.1.0',
+        'eslint-plugin-react': '7.19.0',
+      },
     },
   };
 
@@ -101,8 +113,12 @@ function createMerkurApp(dirName, view) {
 
   pkgJson.name = projName;
 
-  Object.entries(dependencies[view]).forEach(([module, version]) => {
-    pkgJson.dependencies[module] = version;
+  Object.keys(packageTemplate[view]).forEach((packageProperty) => {
+    Object.entries(packageTemplate[view][packageProperty]).forEach(
+      ([module, version]) => {
+        pkgJson[packageProperty][module] = version;
+      }
+    );
   });
 
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
