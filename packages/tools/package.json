@@ -1,0 +1,43 @@
+{
+  "name": "@merkur/tools",
+  "version": "0.4.0",
+  "description": "Merkur tools.",
+  "main": "index",
+  "scripts": {
+    "test": "echo 'Tests pass.'",
+    "build": "echo 'Build pass.'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "merkur",
+    "tools"
+  ],
+  "author": "Miroslav Jancarik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "dependencies": {
+    "@babel/core": "7.9.0",
+    "@babel/preset-env": "7.9.0",
+    "babel-eslint": "10.1.0",
+    "babel-jest": "25.2.3",
+    "eslint": "6.8.0",
+    "eslint-config-last": "0.0.5",
+    "eslint-config-prettier": "6.10.1",
+    "eslint-plugin-jasmine": "4.1.0",
+    "eslint-plugin-jest": "23.8.2",
+    "eslint-plugin-prettier": "3.1.2",
+    "jest": "25.2.3",
+    "prettier": "2.0.2",
+    "supertest": "4.0.2"
+  }
+}
