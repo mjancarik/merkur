@@ -14,9 +14,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@merkur/core": "^0.4.0",
-    "@merkur/plugin-component": "^0.4.0",
-    "@merkur/plugin-event-emitter": "^0.4.0",
+    "@merkur/core": "0.5.0",
+    "@merkur/plugin-component": "0.5.0",
+    "@merkur/plugin-event-emitter": "0.5.0",
     "compression": "^1.7.4",
     "ejs": "^3.0.1",
     "express": "^4.17.1",
