@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.1](https://github.com/mjancarik/merkur/compare/v0.5.0...v0.5.1) (2020-04-25)
+
+
+### Bug Fixes
+
+* 🐛 @merkur/tools version ([34940d1](https://github.com/mjancarik/merkur/commit/34940d1151c4af1dcba8d219d513be2fbfeae4d6))
+* 🐛 ignoring linting generated files ([0a96443](https://github.com/mjancarik/merkur/commit/0a9644334a9a6d384a76ae321a99b161407b6abf))
+* 🐛 serving static files ([45a519e](https://github.com/mjancarik/merkur/commit/45a519e6d20e63e58219af32a41850bfd25e3045))
+* 🐛 typo ([d86e7d1](https://github.com/mjancarik/merkur/commit/d86e7d1679f024e79ec1c44d7c391ee4c378abb9))
+* 🐛 typo ([18839ad](https://github.com/mjancarik/merkur/commit/18839ad2c33c5c5523bf1eec11911ff22fd4df2b))
+
+
+
+
+
 # [0.5.0](https://github.com/mjancarik/merkur/compare/v0.4.2...v0.5.0) (2020-04-25)
 
 
