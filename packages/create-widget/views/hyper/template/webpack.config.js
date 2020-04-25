@@ -29,7 +29,7 @@ module.exports = [
       merkur: ['./src/client.js'],
     },
     output: {
-      path: path.resolve(__dirname, './static'),
+      path: path.resolve(__dirname, './server/static'),
       filename: 'widget-client.js',
     },
     plugins: [
