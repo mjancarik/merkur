@@ -1,9 +1,9 @@
 import viper from 'viperhtml';
-import { createMerkuWidget } from '@merkur/core';
+import { createMerkurWidget } from '@merkur/core';
 import { widgetProperties } from './widget';
 
 export function createWidget(widgetParams) {
-  return createMerkuWidget({
+  return createMerkurWidget({
     ...widgetParams,
     ...widgetProperties,
     $dependencies: {
