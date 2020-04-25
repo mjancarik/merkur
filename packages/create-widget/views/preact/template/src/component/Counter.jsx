@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import { h } from 'preact'; // eslint-disable-line no-unused-vars
 import { useContext } from 'preact/hooks';
 import WidgetContext from './WidgetContext';
 

@@ -9,9 +9,9 @@ if (argv._.length === 0) {
   // eslint-disable-next-line no-console
   console.log(`
 Please specify your new project directory: 
-  ${chalk.blue('create-ima-app')} ${chalk.green('<project-directory>')}
+  ${chalk.blue('@merkur/create-widget')} ${chalk.green('<project-directory>')}
 For example:
-  ${chalk.blue('create-ima-app')} ${chalk.green('my-ima-application')}`);
+  ${chalk.blue('@merkur/create-widget')} ${chalk.green('my-widget')}`);
 
   process.exit(0);
 }

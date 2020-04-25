@@ -27,7 +27,7 @@
     "build": "lerna run build",
     "release": "lerna version --force-publish create-widget",
     "release:publish": "lerna publish from-git --yes",
-    "lint:cmd": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore",
+    "lint:cmd": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore  --no-eslintrc",
     "lint": "npm run lint:cmd -- './**/*.{js,jsx}'",
     "lint:fix": "npm run lint -- --fix",
     "stylelint:fix": "npm run stylelint -- --fix",

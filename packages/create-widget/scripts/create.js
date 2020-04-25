@@ -54,36 +54,6 @@ function createMerkurApp(dirName, view) {
   const appRoot = path.resolve(dirName.toString());
   const tplRoot = path.join(__dirname, '../template');
   const viewRoot = path.resolve(__dirname, `../views/${view}`);
-  const packageTemplate = {
-    hyper: {
-      dependencies: {
-        hyperhtml: '^2.32.2',
-        viperhtml: '^2.17.1',
-      },
-    },
-    preact: {
-      dependencies: {
-        preact: '^10.3.4',
-        'preact-render-to-string': '^5.1.4',
-      },
-      devDependencies: {
-        '@babel/preset-react': '^7.9.4',
-        'babel-loader': '^8.1.0',
-        'eslint-plugin-react': '7.19.0',
-      },
-    },
-    react: {
-      dependencies: {
-        react: '^16.13.1',
-        'react-dom': '^16.13.1',
-      },
-      devDependencies: {
-        '@babel/preset-react': '^7.9.4',
-        'babel-loader': '^8.1.0',
-        'eslint-plugin-react': '7.19.0',
-      },
-    },
-  };
 
   if (!fs.existsSync(viewRoot)) {
     error(`Example '${viewRoot}' is not defiend.`);
@@ -107,14 +77,17 @@ function createMerkurApp(dirName, view) {
     process.exit(0);
   }
 
-  // Overwrite package.json with new name
+  // Overwrite package.json with template
   const pkgJsonPath = path.join(appRoot, 'package.json');
   const pkgJson = require(pkgJsonPath);
 
+  const packageTemplatePath = path.join(viewRoot, 'template.json');
+  const packageTemplate = require(packageTemplatePath);
+
   pkgJson.name = projName;
 
-  Object.keys(packageTemplate[view]).forEach((packageProperty) => {
-    Object.entries(packageTemplate[view][packageProperty]).forEach(
+  Object.keys(packageTemplate).forEach((packageProperty) => {
+    Object.entries(packageTemplate[packageProperty]).forEach(
       ([module, version]) => {
         pkgJson[packageProperty][module] = version;
       }
@@ -124,7 +97,7 @@ function createMerkurApp(dirName, view) {
   fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
 
   info(`Creating ${chalk.cyan(view)} merkur files...`);
-  fsx.copySync(viewRoot, appRoot);
+  fsx.copySync(path.join(viewRoot, 'template'), appRoot);
 
   // Run npm install
   info(

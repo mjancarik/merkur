@@ -7,7 +7,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 const ejs = require('ejs');
 
-const merkurModule = require('./lib/widget-server.cjs');
+const merkurModule = require('../lib/widget-server.cjs');
 
 const indexTemplate = ejs.compile(
   fs.readFileSync(path.join(__dirname, '/view/index.ejs'), 'utf8')

@@ -26,14 +26,15 @@ If you take a look inside the created widget, you'll see some files:
 
 ```shell
 <name>
-│   app.js
 │   package.json
-│   server.js
 │   webpack.config.js
-└───view
-|   |   index.ejs
-└───static
-|   |   // static files for serving from server
+└───server
+│   │   app.js
+│   │   server.js
+│   └───view
+│   │    index.ejs
+│   └───static
+│   │   // static files for serving from server
 └───src
 │   │   style.css
 │   │   widget.js

@@ -1,4 +1,4 @@
-import { h } from 'preact';
+import { h } from 'preact'; // eslint-disable-line no-unused-vars
 
 export default function ViewDescription({ name, version }) {
   return (
