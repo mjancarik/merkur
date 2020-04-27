@@ -62,7 +62,11 @@ The package.json contains predefined dependencies and defines some of scripts:
 
 ### src
 
-This contains the two entry points for your widget — src/client.js and src/server.js.
+This contains the two entry points for your widget — src/client.js and src/server.js. Of course you can add other files and folders.
+
+### server
+
+The server folder contains assets, predefined `index.html` as index.ejs view and the most important `app.js` file.
 
 ### app.js
 
