@@ -39,6 +39,10 @@
     "eslint-plugin-react": "7.19.0",
     "jest": "25.2.3",
     "prettier": "2.0.2",
-    "supertest": "4.0.2"
+    "supertest": "4.0.2",
+    "ws": "7.2.5"
+  },
+  "peerDependencies": {
+    "express": "*"
   }
 }

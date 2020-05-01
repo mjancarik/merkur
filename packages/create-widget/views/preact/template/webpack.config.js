@@ -2,9 +2,20 @@ const path = require('path');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const nodeExternals = require('webpack-node-externals');
 const WebpackModules = require('webpack-modules');
+
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const nodePlugins = [new WebpackModules()];
+const WebSocket = require('@merkur/tools/websocket.js');
+
+const sharedPlugins = [];
+
+const webPlugins = [
+  new MiniCssExtractPlugin({
+    filename: 'widget-client.css',
+  }),
+  ...sharedPlugins,
+];
+const nodePlugins = [new WebpackModules(), ...sharedPlugins];
 const DEVELOPMENT = 'development';
 
 const environment = process.env.NODE_ENV ? process.env.NODE_ENV : DEVELOPMENT;
@@ -15,6 +26,8 @@ if (environment === DEVELOPMENT) {
       onBuildEnd: ['npm run dev:server'],
     })
   );
+
+  WebSocket.createServer();
 }
 
 module.exports = [
@@ -32,11 +45,7 @@ module.exports = [
       path: path.resolve(__dirname, './server/static'),
       filename: 'widget-client.js',
     },
-    plugins: [
-      new MiniCssExtractPlugin({
-        filename: 'widget-client.css',
-      }),
-    ],
+    plugins: webPlugins,
     module: {
       rules: [
         {
