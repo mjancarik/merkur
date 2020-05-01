@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.3](https://github.com/mjancarik/merkur/compare/v0.5.2...v0.5.3) (2020-05-01)
+
+
+### Features
+
+* 🎸 added livereloading for dev ([fde5d8c](https://github.com/mjancarik/merkur/commit/fde5d8c2cae2145a1d0af4efd5177c88b16d4f1d))
+
+
+
+
+
 ## [0.5.1](https://github.com/mjancarik/merkur/compare/v0.5.0...v0.5.1) (2020-04-25)
 
 
