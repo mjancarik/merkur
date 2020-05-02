@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "dev:server": "nodemon server/server.js",
+    "dev:server": "nodemon server/server.js --config nodemon.json",
     "test": "jest -c ./jest.config.js",
     "test:watch": "jest -c ./jest.config.js --watchAll",
     "lint": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore './**/*.{js,jsx}'",

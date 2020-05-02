@@ -1,0 +1,11 @@
+{
+  "delay": "100ms",
+  "watch": [
+    "server/*",
+    "build/*"
+  ],
+  "ignore": [
+    "*Spec.js", "*Spec.jsx"
+  ],
+  "ext": "cjs,ejs"
+}

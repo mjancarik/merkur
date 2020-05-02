@@ -42,7 +42,7 @@ module.exports = [
       merkur: ['./src/client.js'],
     },
     output: {
-      path: path.resolve(__dirname, './server/static'),
+      path: path.resolve(__dirname, './build/static'),
       filename: 'widget-client.js',
     },
     plugins: webPlugins,
@@ -74,7 +74,7 @@ module.exports = [
     },
     output: {
       libraryTarget: 'commonjs2',
-      path: path.resolve(__dirname, './lib'),
+      path: path.resolve(__dirname, './build'),
       filename: 'widget-server.cjs',
     },
   },

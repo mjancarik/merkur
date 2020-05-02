@@ -9,7 +9,7 @@ const ejs = require('ejs');
 
 const WebSocket = require('@merkur/tools/websocket.js');
 
-const merkurModule = require('../lib/widget-server.cjs');
+const merkurModule = require('../build/widget-server.cjs');
 
 const indexTemplate = ejs.compile(
   fs.readFileSync(path.join(__dirname, '/view/index.ejs'), 'utf8')
@@ -29,6 +29,7 @@ app
   .use(helmet())
   .use(compression())
   .use('/static', express.static(path.join(__dirname, 'static')))
+  .use('/static', express.static(path.join(__dirname, '../build/static')))
   .get(
     '/widget',
     asyncMiddleware(async (req, res) => {
