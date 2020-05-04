@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/mjancarik/merkur/compare/v0.6.0...v0.6.1) (2020-05-04)
+
+
+### Bug Fixes
+
+* 🐛 missing babel.config.js file in module for preact ([82bcf54](https://github.com/mjancarik/merkur/commit/82bcf547826aa501f9e156bc138dd11556ca4f51))
+
+
+
+
+
 # [0.6.0](https://github.com/mjancarik/merkur/compare/v0.5.7...v0.6.0) (2020-05-04)
 
 

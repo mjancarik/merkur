@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="Merkur" src="https://raw.githubusercontent.com/mjancarik/merkur/master/packages/create-widget/template/static/merkur-icon.png" width="133">
+  <img alt="Merkur" src="https://raw.githubusercontent.com/mjancarik/merkur/master/packages/create-widget/template/server/static/merkur-icon.png" width="133">
 </p>
 
 [![Build Status](https://travis-ci.org/mjancarik/merkur.svg?branch=master)](https://travis-ci.org/mjancarik/merkur)
