@@ -7,8 +7,6 @@ const compression = require('compression');
 const helmet = require('helmet');
 const ejs = require('ejs');
 
-const WebSocket = require('@merkur/tools/websocket.js');
-
 const merkurModule = require('../build/widget-server.cjs');
 
 const indexTemplate = ejs.compile(
@@ -23,13 +21,15 @@ const app = express();
 
 app.set('view engine', 'ejs');
 
-WebSocket.liveReloadFactory(app);
-
 app
   .use(helmet())
   .use(compression())
   .use('/static', express.static(path.join(__dirname, 'static')))
   .use('/static', express.static(path.join(__dirname, '../build/static')))
+  .use(
+    '/@merkur/tools/static/',
+    express.static(path.join(__dirname, '../node_modules/@merkur/tools/static'))
+  )
   .get(
     '/widget',
     asyncMiddleware(async (req, res) => {

@@ -1,9 +1,6 @@
 'use strict';
 
 const WebSocket = require('ws');
-const path = require('path');
-
-const express = require('express');
 
 const DEFAULT_OPTIONS = {
   port: 4321,
@@ -47,30 +44,8 @@ function createClient(options) {
   return client;
 }
 
-function liveReloadFactory(app, options) {
-  options = Object.assign({}, DEFAULT_OPTIONS, options);
-
-  const client = createClient(options);
-  client.on('error', () => {
-    console.info('Livereload is disabled.'); //eslint-disable-line no-console
-  });
-
-  app.use(
-    '/@merkur/tools/static/',
-    express.static(path.join(__dirname, '../node_modules/@merkur/tools/static'))
-  );
-
-  client.on('open', function open() {
-    client.send(JSON.stringify({ to: 'browser', command: 'reload' }));
-  });
-
-  return {
-    client,
-  };
-}
-
 module.exports = {
-  liveReloadFactory,
+  DEFAULT_OPTIONS,
   createServer,
   createClient,
 };

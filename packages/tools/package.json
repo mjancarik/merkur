@@ -2,6 +2,9 @@
   "name": "@merkur/tools",
   "version": "0.5.7",
   "description": "Merkur tools.",
+  "bin": {
+    "merkur-tools": "./bin/merkurTools.js"
+  },
   "main": "index",
   "scripts": {
     "test": "echo 'Tests pass.'",
@@ -26,21 +29,22 @@
   },
   "homepage": "https://merkur.js.org/",
   "dependencies": {
-    "@babel/core": "7.9.0",
-    "@babel/preset-env": "7.9.0",
+    "@babel/core": "7.9.6",
+    "@babel/preset-env": "7.9.6",
     "babel-eslint": "10.1.0",
-    "babel-jest": "25.2.3",
+    "babel-jest": "26.0.0",
     "eslint": "6.8.0",
     "eslint-config-last": "0.0.5",
-    "eslint-config-prettier": "6.10.1",
-    "eslint-plugin-jasmine": "4.1.0",
-    "eslint-plugin-jest": "23.8.2",
-    "eslint-plugin-prettier": "3.1.2",
+    "eslint-config-prettier": "6.11.0",
+    "eslint-plugin-jasmine": "4.1.1",
+    "eslint-plugin-jest": "23.9.0",
+    "eslint-plugin-prettier": "3.1.3",
     "eslint-plugin-react": "7.19.0",
-    "jest": "25.2.3",
-    "prettier": "2.0.2",
+    "jest": "26.0.0",
+    "prettier": "2.0.5",
     "supertest": "4.0.2",
-    "ws": "7.2.5"
+    "ws": "7.2.5",
+    "yargs": "15.3.1"
   },
   "peerDependencies": {
     "express": "*"
