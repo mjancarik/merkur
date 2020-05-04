@@ -1,5 +1,4 @@
 {
-  "delay": "100ms",
   "watch": [
     "server/*",
     "build/*"
