@@ -1,3 +1,5 @@
+import { isUndefined, isFunction } from './utils';
+
 function register({ name, version, createWidget }) {
   const merkur = getMerkur();
 
@@ -9,7 +11,7 @@ function create(widgetProperties = {}) {
   const { name, version } = widgetProperties;
   const factory = merkur.$in.widgetFactory[name + version];
 
-  if (typeof factory !== 'function') {
+  if (!isFunction(factory)) {
     throw new Error(
       `The widget with defined name and version "${
         name + version
@@ -24,7 +26,7 @@ export function createMerkur({ $plugins = [] } = {}) {
   const merkur = getMerkur();
 
   $plugins.forEach((plugin) => {
-    if (plugin && typeof plugin.setup === 'function') {
+    if (plugin && isFunction(plugin.setup)) {
       plugin.setup(merkur);
     }
   });
@@ -58,13 +60,13 @@ export function getMerkur() {
 }
 
 function getGlobalContext() {
-  if (typeof self !== 'undefined') {
+  if (!isUndefined(self)) {
     return self;
   }
-  if (typeof window !== 'undefined') {
+  if (!isUndefined(window)) {
     return window;
   }
-  if (typeof global !== 'undefined') {
+  if (!isUndefined(global)) {
     return global;
   }
 

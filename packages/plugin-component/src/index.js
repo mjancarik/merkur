@@ -34,7 +34,7 @@ export function componentPlugin() {
         ...widget,
       };
 
-      setDefaultValueForUndefined(widget, ['props', 'state']);
+      widget = setDefaultValueForUndefined(widget, ['props', 'state']);
 
       return widget;
     },
