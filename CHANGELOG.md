@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.7](https://github.com/mjancarik/merkur/compare/v0.5.6...v0.5.7) (2020-05-04)
+
+
+### Bug Fixes
+
+* 🐛 running integration tests ([50662d6](https://github.com/mjancarik/merkur/commit/50662d649fa1c301ecbdb29ba596cc04662ccbca))
+
+
+
+
+
 ## [0.5.6](https://github.com/mjancarik/merkur/compare/v0.5.5...v0.5.6) (2020-05-02)
 
 **Note:** Version bump only for package merkur-monorepor

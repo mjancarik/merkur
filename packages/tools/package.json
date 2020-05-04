@@ -1,6 +1,6 @@
 {
   "name": "@merkur/tools",
-  "version": "0.5.4",
+  "version": "0.5.7",
   "description": "Merkur tools.",
   "main": "index",
   "scripts": {
