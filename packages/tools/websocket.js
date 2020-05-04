@@ -51,10 +51,13 @@ function liveReloadFactory(app, options) {
   options = Object.assign({}, DEFAULT_OPTIONS, options);
 
   const client = createClient(options);
+  client.on('error', () => {
+    console.info('Livereload is disabled.'); //eslint-disable-line no-console
+  });
 
   app.use(
     '/@merkur/tools/static/',
-    express.static(path.join(__dirname, 'static'))
+    express.static(path.join(__dirname, '../node_modules/@merkur/tools/static'))
   );
 
   client.on('open', function open() {
