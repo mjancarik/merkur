@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/mjancarik/merkur/compare/v0.5.7...v0.6.0) (2020-05-04)
+
+
+### Features
+
+* 🎸 liveroload without modifing app.js file ([5c51173](https://github.com/mjancarik/merkur/commit/5c511739efa3edab3981f0fdee17303a311df7db))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 ## [0.5.7](https://github.com/mjancarik/merkur/compare/v0.5.6...v0.5.7) (2020-05-04)
 
 
