@@ -5,6 +5,7 @@ const got = require('got');
 const express = require('express');
 const compression = require('compression');
 const helmet = require('helmet');
+const cors = require('cors');
 const ejs = require('ejs');
 
 const merkurModule = require('../build/widget-server.cjs');
@@ -24,6 +25,7 @@ app.set('view engine', 'ejs');
 app
   .use(helmet())
   .use(compression())
+  .use(cors())
   .use('/static', express.static(path.join(__dirname, 'static')))
   .use('/static', express.static(path.join(__dirname, '../build/static')))
   .use(
