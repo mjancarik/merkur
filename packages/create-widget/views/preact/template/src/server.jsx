@@ -4,8 +4,8 @@ import { widgetProperties } from './widget';
 
 export function createWidget(widgetParams) {
   return createMerkurWidget({
-    ...widgetParams,
     ...widgetProperties,
+    ...widgetParams,
     $dependencies: {
       render,
     },

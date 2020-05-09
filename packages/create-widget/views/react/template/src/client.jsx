@@ -5,21 +5,21 @@ import style from './style.css'; // eslint-disable-line no-unused-vars
 
 function createWidget(widgetParams) {
   return createMerkurWidget({
-    ...widgetParams,
     ...widgetProperties,
+    ...widgetParams,
     $dependencies: {
       hydrate,
       render,
     },
     mount(widget) {
       const View = widget.View();
-      const container = document.getElementById(widget.container);
+      const container = document.querySelector(widget.container);
 
       return widget.$dependencies.hydrate(View, container);
     },
     update(widget) {
       const View = widget.View();
-      const container = document.getElementById(widget.container);
+      const container = document.querySelector(widget.container);
 
       return widget.$dependencies.render(View, container);
     },

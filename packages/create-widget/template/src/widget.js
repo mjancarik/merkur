@@ -7,7 +7,7 @@ export const widgetProperties = {
   name,
   version,
   $plugins: [componentPlugin, eventEmitterPlugin],
-  container: 'container',
+  container: '#container',
   View,
   assets: [
     {

@@ -5,15 +5,15 @@ import style from './style.css'; // eslint-disable-line no-unused-vars
 
 function createWidget(widgetParams) {
   return createMerkurWidget({
-    ...widgetParams,
     ...widgetProperties,
+    ...widgetParams,
     $dependencies: {
       bind: hyper.bind,
       wire: hyper.wire,
     },
     mount(widget) {
       widget.$external.render = widget.$dependencies.bind(
-        document.getElementById(widget.container)
+        document.querySelector(widget.container)
       );
       return widget.View(widget.$external.render);
     },
