@@ -52,6 +52,10 @@
         {
           "title": "Hydrate widget for SSR",
           "url": "/docs/integration-with-app#hydrate-server-side-rendering-widget-mpa"
+        },
+        {
+          "title": "Integration with React",
+          "url": "/docs/integration-with-app#integration-with-react"
         }
       ]
     },

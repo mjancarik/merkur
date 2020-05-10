@@ -114,3 +114,30 @@ The last one step is hydrate our widget in your app after page is loaded.
 </script>
 ```
 
+## Integration with React
+
+For easy integration with React library we created `@merkur/integration-react` module. The module is designed for client side and also for server side. You can use your own application stack for making API call for receiving `widgetProperties`. You only pass `widgetProperties` from API call to `MerkurComponent`. The component make hard work for you.
+
+```jsx
+
+import React from 'react';
+import { MerkurComponent } from '@merkur/integration-react';
+
+// example in browser
+let widgetProperties = await fetch('http://localhost:4000/widget')
+  .then((response) => response.json())
+  .then(({ body }) => {
+    return body;
+  })
+
+React.render(
+  <div className="container">
+    <MerkurComponent widgetProperties = {widgetProperties}>
+      <div>
+        Fallback for undefined widgetProperties
+      </div>
+    </MerkurComponent>
+  </div>,
+  document.body
+);
+```
