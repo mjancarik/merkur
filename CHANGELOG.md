@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.2](https://github.com/mjancarik/merkur/compare/v0.6.1...v0.6.2) (2020-05-10)
+
+
+### Features
+
+* 🎸 added cors middleware ([6d18601](https://github.com/mjancarik/merkur/commit/6d186010274f18bd154649fa78b3ae5dfc8cfe72))
+* 🎸 added enzyme testing to react template ([f8c3f84](https://github.com/mjancarik/merkur/commit/f8c3f8411b5b3f384754f1fdcf53a3f80441ca05))
+* 🎸 added new module for integration with react ([8455f28](https://github.com/mjancarik/merkur/commit/8455f2826486132c9a5b16cd22f9f0ed94f399ab))
+* 🎸 select container through querySelector ([8c6f322](https://github.com/mjancarik/merkur/commit/8c6f322ba59ff61c3ba277cc373c8e330a7917d4))
+
+
+
+
+
 ## [0.6.1](https://github.com/mjancarik/merkur/compare/v0.6.0...v0.6.1) (2020-05-04)
 
 
