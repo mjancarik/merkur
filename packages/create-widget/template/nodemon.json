@@ -10,5 +10,5 @@
   "events": {
     "restart": "merkur-tools livereload"
   },
-  "ext": "cjs,ejs"
+  "ext": "cjs,ejs,json,mjs,js,jsx"
 }
