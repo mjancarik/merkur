@@ -1,5 +1,25 @@
+const cluster = require('cluster');
+const os = require('os');
+
+const config = require('config');
+
 const { app } = require('./app');
 
-app.listen(4444, () => {
-  console.log('listen on localhost:4444'); // eslint-disable-line no-console
-});
+const serverConfig = config.get('server');
+
+if (!serverConfig.clusters || !cluster.isMaster) {
+  app.listen(config.get('server.port'), () => {
+    console.log(`listen on localhost:${config.get('server.port')}`); // eslint-disable-line no-console
+  });
+} else {
+  let cpuCount = serverConfig.clusters || os.cpus().length;
+
+  for (let i = 0; i < cpuCount; i += 1) {
+    cluster.fork();
+  }
+
+  cluster.on('exit', (worker) => {
+    console.warn(`Worker ${worker.id} died :(`);
+    cluster.fork();
+  });
+}

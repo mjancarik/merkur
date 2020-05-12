@@ -1,0 +1,6 @@
+{
+  "environment": "production",
+  "server": {
+    "clusters": 3
+  }
+}
