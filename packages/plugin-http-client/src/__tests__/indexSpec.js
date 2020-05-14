@@ -1,7 +1,7 @@
 import { createMerkurWidget } from '@merkur/core';
 import { httpClientPlugin } from '../index';
 
-describe('createWidget method with component plugin', () => {
+describe('createWidget method with http client plugin', () => {
   it('should create empty widget', async () => {
     const widget = await createMerkurWidget({
       $plugins: [httpClientPlugin],
@@ -45,8 +45,10 @@ describe('createWidget method with component plugin', () => {
           },
         ],
         "create": [Function],
+        "name": "my-widget",
         "request": [Function],
         "setup": [Function],
+        "version": "1.0.0",
       }
     `);
   });

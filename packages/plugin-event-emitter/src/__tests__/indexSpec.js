@@ -1,7 +1,7 @@
 import { createMerkurWidget } from '@merkur/core';
 import { eventEmitterPlugin } from '../index';
 
-describe('createWidget method with component plugin', () => {
+describe('createWidget method with event emitter plugin', () => {
   it('should create empty widget', async () => {
     const widget = await createMerkurWidget({
       $plugins: [eventEmitterPlugin],
@@ -34,9 +34,11 @@ describe('createWidget method with component plugin', () => {
         ],
         "create": [Function],
         "emit": [Function],
+        "name": "my-widget",
         "off": [Function],
         "on": [Function],
         "setup": [Function],
+        "version": "1.0.0",
       }
     `);
   });
