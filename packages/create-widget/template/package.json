@@ -14,9 +14,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@merkur/core": "0.7.0",
-    "@merkur/plugin-component": "0.7.0",
-    "@merkur/plugin-event-emitter": "0.7.0",
+    "@merkur/core": "0.7.1",
+    "@merkur/plugin-component": "0.7.1",
+    "@merkur/plugin-event-emitter": "0.7.1",
     "compression": "^1.7.4",
     "config": "^3.3.1",
     "cors": "^2.8.5",
@@ -26,7 +26,7 @@
     "helmet": "^3.22.0"
   },
   "devDependencies": {
-    "@merkur/tools": "0.7.0",
+    "@merkur/tools": "0.7.1",
     "cross-env": "^7.0.2",
     "css-loader": "^3.5.3",
     "json-loader": "^0.5.7",
