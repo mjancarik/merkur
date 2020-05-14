@@ -64,14 +64,16 @@ describe('merkur shell', () => {
     const widget = await merkur.create(widgetProperties);
 
     expect(widget).toMatchInlineSnapshot(`
-Object {
-  "$dependencies": Object {},
-  "$external": Object {},
-  "$in": Object {},
-  "$plugins": Array [],
-  "create": [Function],
-  "setup": [Function],
-}
-`);
+      Object {
+        "$dependencies": Object {},
+        "$external": Object {},
+        "$in": Object {},
+        "$plugins": Array [],
+        "create": [Function],
+        "name": "package",
+        "setup": [Function],
+        "version": "1.0.0",
+      }
+    `);
   });
 });

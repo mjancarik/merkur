@@ -4,7 +4,7 @@ layout: docs
 
 # Merkur widget API
 
-Merkur widget contains four predefined properties `$in`, `$external`, `$dependencies` and `$plugins`. The property `$in` is for internals usage of merkur widget plugins or merkur itself. 
+Merkur widget contains six predefined properties `name`, `version`, `$in`, `$external`, `$dependencies` and `$plugins`. The property `$in` is for internals usage of merkur widget plugins or merkur itself. 
 
 Other properties are for your own usage. The property `$external` is for storing variables. The property `$dependencies` is for defined widget dependencies and specific features of environment where widget works. The last one property `$plugins` is for defined specific widget plugin.
 
@@ -30,6 +30,7 @@ export const widgetProperties = {
   $plugins: [componentPlugin, eventEmitterPlugin]
 
   // properties and methods which adding componentplugin
+  container: '.container',
   assets: [
     {
       type: 'script',
@@ -60,7 +61,6 @@ export const widgetProperties = {
   },
 
   // your own defined properties and methods
-  container: 'container',
   View,
   onClick(widget) {
     widget.setState({ counter: widget.state.counter + 1 });

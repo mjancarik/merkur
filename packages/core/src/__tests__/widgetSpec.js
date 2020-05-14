@@ -11,7 +11,9 @@ describe('createCustomWidget method', () => {
         "$in": Object {},
         "$plugins": Array [],
         "create": [Function],
+        "name": undefined,
         "setup": [Function],
+        "version": undefined,
       }
     `);
   });

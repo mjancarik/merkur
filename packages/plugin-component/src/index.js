@@ -35,6 +35,7 @@ export function componentPlugin() {
       };
 
       widget = setDefaultValueForUndefined(widget, ['props', 'state']);
+      widget = setDefaultValueForUndefined(widget, ['assets'], []);
 
       return widget;
     },
@@ -56,11 +57,19 @@ async function callLifeCycleMethod(widget, methodName, args) {
 function componentAPI() {
   return {
     async info(widget, ...args) {
-      const { name, version, props, state, assets } = widget;
+      const { name, version, props, state, assets, container } = widget;
       const componentInfo =
         (await callLifeCycleMethod(widget, 'info', args)) || {};
 
-      return { name, version, props, state, assets, ...componentInfo };
+      return {
+        name,
+        version,
+        props,
+        state,
+        assets,
+        container,
+        ...componentInfo,
+      };
     },
     async mount(widget, ...args) {
       await widget.bootstrap(...args);

@@ -41,10 +41,14 @@ export async function createMerkurWidget(widgetDefinition = {}) {
   };
 
   // TODO refactoring
+  widget.name = widgetDefinition.name;
+  widget.version = widgetDefinition.version;
   widget.$dependencies = widgetDefinition.$dependencies;
   widget.$external = widgetDefinition.$external;
   widget.$in = {};
 
+  delete widgetDefinition.name;
+  delete widgetDefinition.version;
   delete widgetDefinition.$dependencies;
   delete widgetDefinition.$external;
   delete widgetDefinition.$plugins;
