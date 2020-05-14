@@ -71,7 +71,7 @@ async function runTransformers(transformers, method, ...rest) {
 }
 
 function getFetchAPI() {
-  if (typeof window === 'undefined') {
+  if (typeof window === 'undefined' || !window.fetch) {
     return fetch;
   }
 

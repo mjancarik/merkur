@@ -10,6 +10,7 @@ describe('createWidget method with component plugin', () => {
       props: {
         param: 1,
       },
+      container: '.container',
       assets: [
         {
           type: 'script',
@@ -49,6 +50,7 @@ describe('createWidget method with component plugin', () => {
           },
         ],
         "bootstrap": [Function],
+        "container": ".container",
         "create": [Function],
         "info": [Function],
         "load": [Function],
@@ -76,6 +78,7 @@ describe('createWidget method with component plugin', () => {
       props: {
         param: 1,
       },
+      container: '.container',
       assets: [
         {
           type: 'script',
@@ -94,6 +97,7 @@ describe('createWidget method with component plugin', () => {
             "type": "script",
           },
         ],
+        "container": ".container",
         "name": "my-widget",
         "props": Object {
           "param": 1,

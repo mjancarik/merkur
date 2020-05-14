@@ -10,6 +10,7 @@ describe('createWidget method with component plugin', () => {
       props: {
         param: 1,
       },
+      container: '.container',
       assets: [
         {
           type: 'script',
@@ -18,6 +19,35 @@ describe('createWidget method with component plugin', () => {
       ],
     });
 
-    expect(widget).toMatchInlineSnapshot();
+    expect(widget).toMatchInlineSnapshot(`
+      Object {
+        "$dependencies": Object {
+          "fetch": [Function],
+        },
+        "$external": Object {
+          "fetch": [Function],
+        },
+        "$in": Object {
+          "httpClient": Object {
+            "defaultConfig": Object {
+              "method": "GET",
+              "transformers": Array [
+                Object {
+                  "transformResponse": [Function],
+                },
+              ],
+            },
+          },
+        },
+        "$plugins": Array [
+          Object {
+            "setup": [Function],
+          },
+        ],
+        "create": [Function],
+        "request": [Function],
+        "setup": [Function],
+      }
+    `);
   });
 });
