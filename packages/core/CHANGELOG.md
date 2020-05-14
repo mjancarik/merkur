@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/mjancarik/merkur/compare/v0.6.2...v0.7.0) (2020-05-14)
+
+
+### Features
+
+* 🎸 assign properties name,version,container to merkur ([699ccb2](https://github.com/mjancarik/merkur/commit/699ccb2c94e02d7e997dd793288e764ed2d3bf4c))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 # [0.6.0](https://github.com/mjancarik/merkur/compare/v0.5.7...v0.6.0) (2020-05-04)
 
 

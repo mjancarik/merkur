@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.7.0](https://github.com/mjancarik/merkur/compare/v0.6.2...v0.7.0) (2020-05-14)
+
+
+### Bug Fixes
+
+* 🐛 restart server after changing json, jsx and mjs files ([6f0fb06](https://github.com/mjancarik/merkur/commit/6f0fb06419be184db68e07c792dd0106ea025a80))
+
+
+### Features
+
+* 🎸 added config module for environment configuration ([2ecacee](https://github.com/mjancarik/merkur/commit/2ecacee5accc59463cf75d218b248603f602db30))
+* 🎸 added new http client plugin ([66dbb2e](https://github.com/mjancarik/merkur/commit/66dbb2e7a99ea66143d5713e6bbd0e63cffc83fa))
+* 🎸 assign properties name,version,container to merkur ([699ccb2](https://github.com/mjancarik/merkur/commit/699ccb2c94e02d7e997dd793288e764ed2d3bf4c))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 ## [0.6.2](https://github.com/mjancarik/merkur/compare/v0.6.1...v0.6.2) (2020-05-10)
 
 
