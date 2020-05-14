@@ -61,4 +61,4 @@ const widget = createMerkurWidget(widgetProperties);
 
 We created `debugPlugin` which add `debug` method in `setup` lifecycle method and add tracking calling all widget methods in `create` lifecycle method. We defined using plugins in `$plugins` property.
 
-Merkur has got only two plugins `componentPlugin` and `eventEmitterPlugin`.
+Merkur has got only three plugins `componentPlugin`, `eventEmitterPlugin` and `httpClientPlugin`.

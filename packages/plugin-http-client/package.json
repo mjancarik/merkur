@@ -1,0 +1,47 @@
+{
+  "name": "@merkur/plugin-http-client",
+  "version": "0.6.0",
+  "description": "Merkur event emitter plugin.",
+  "main": "lib/index",
+  "module": "lib/index",
+  "scripts": {
+    "preversion": "npm test",
+    "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
+    "build": "node_modules/.bin/rollup -c",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "merkur",
+    "plugin",
+    "microservices",
+    "microfrontends"
+  ],
+  "author": "Miroslav Jancarik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "devDependencies": {
+    "@babel/core": "^7.9.6",
+    "@babel/plugin-transform-modules-commonjs": "^7.9.6",
+    "@merkur/core": "^0.6.0",
+    "rollup": "^2.10.0",
+    "rollup-plugin-peer-deps-external": "^2.2.2",
+    "rollup-plugin-terser": "^5.3.0"
+  },
+  "peerDependencies": {
+    "@merkur/core": "^0.6.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
+  }
+}
