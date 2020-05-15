@@ -13,7 +13,7 @@ function createWidget(widgetParams) {
     },
     mount(widget) {
       widget.$external.render = widget.$dependencies.bind(
-        document.querySelector(widget.container)
+        document.querySelector(widget.props.containerSelector)
       );
       return widget.View(widget.$external.render);
     },

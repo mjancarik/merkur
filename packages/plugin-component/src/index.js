@@ -57,7 +57,7 @@ async function callLifeCycleMethod(widget, methodName, args) {
 function componentAPI() {
   return {
     async info(widget, ...args) {
-      const { name, version, props, state, assets, container } = widget;
+      const { name, version, props, state, assets } = widget;
       const componentInfo =
         (await callLifeCycleMethod(widget, 'info', args)) || {};
 
@@ -67,7 +67,6 @@ function componentAPI() {
         props,
         state,
         assets,
-        container,
         ...componentInfo,
       };
     },

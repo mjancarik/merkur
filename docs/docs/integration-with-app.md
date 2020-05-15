@@ -12,19 +12,23 @@ At first we must make API call with your favorite framework. Because there are t
 
 ```javascript
 // browser
-fetch('http://localhost:4000/widget')
+const widgetClassName = 'widget__container';
+fetch(
+  `http://localhost:4000/widget?containerSelector=${encodeURIComponent(`.${widgetClassName}`)}`
+  )
   .then((response) => response.json())
   .then(({ body }) => {
     console.log(body);
   })
-
 ```
 
 ```json
 {
   "name":"my-widget",
   "version":"0.0.1",
-  "props":{},
+  "props":{
+    "containerSelector": ".widget__container"
+  },
   "state":{
     "counter":0
   },
@@ -44,7 +48,14 @@ fetch('http://localhost:4000/widget')
 
 ## Alive merkur widget in browser (SPA)
 
-After we recieve response body we must download widget assets.
+After we recieve response body we must create widget container at first.
+
+```javascript
+let widgetContainer = document.createElement('div');
+widgetContainer.innerHTML = body.html;
+```
+
+After that we must download widget assets and insert widget container to DOM.
 
 ```javascript
 body.assets.forEach((asset) => {
@@ -58,6 +69,8 @@ body.assets.forEach((asset) => {
     // insert to page simalar as script
   }
 });
+
+document.body.appendChild(widgetContainer);
 ```
 
 The last one step is alive our widget in your app. We add onload method for script asset.
@@ -98,7 +111,7 @@ After we recieve response body we must update html which is sent to the browser.
 Then we add widget html to our page.
 
 ```html
-<div id="container"><%- body.html %></div>
+<div class="<%= widgetClassName %>"><%- body.html %></div>
 ```
 
 The last one step is hydrate our widget in your app after page is loaded.
@@ -116,7 +129,7 @@ The last one step is hydrate our widget in your app after page is loaded.
 
 ## Integration with React
 
-For easy integration with React library we created `@merkur/integration-react` module. The module is designed for client side and also for server side. You can use your own application stack for making API call for receiving `widgetProperties`. You only pass `widgetProperties` from API call to `MerkurComponent`. The component make hard work for you.
+For easy integration with React library we created `@merkur/integration-react` module. The module is designed for client side and also for server side. You can use your own application stack for making API call for receiving `widgetProperties`. You only pass `widgetProperties` and `widgetClassName` from API call to `MerkurComponent`. The component make hard work for you.
 
 ```jsx
 
@@ -124,15 +137,20 @@ import React from 'react';
 import { MerkurComponent } from '@merkur/integration-react';
 
 // example in browser
-let widgetProperties = await fetch('http://localhost:4000/widget')
+const widgetClassName = 'widget__container';
+let widgetProperties = await fetch(
+  `http://localhost:4000/widget?containerSelector=${encodeURIComponent(`.${widgetClassName}`)}`
+  )
   .then((response) => response.json())
   .then(({ body }) => {
     return body;
   })
 
 React.render(
-  <div className="container">
-    <MerkurComponent widgetProperties = {widgetProperties}>
+  <div className="app">
+    <MerkurComponent 
+        widgetProperties = {widgetProperties}
+        widgetClassName = {widgetClassName}>
       <div>
         Fallback for undefined widgetProperties
       </div>

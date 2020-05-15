@@ -15,7 +15,7 @@
     <title>MERKUR - widget</title>
   </head>
   <body>
-    <div id="container"><%- html %></div>
+    <div class="<%= container %>"><%- html %></div>
     <script>
       window.addEventListener('load', () => {
         __merkur__.create(<%- JSON.stringify(widgetProperties) %>)

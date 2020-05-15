@@ -38,6 +38,7 @@ app
       const widget = await merkurModule.createWidget({
         props: {
           name: req.query.name,
+          containerSelector: req.query.containerSelector,
         },
       });
 
@@ -50,15 +51,20 @@ app
   .get(
     '/',
     asyncMiddleware(async (req, res) => {
+      const container = 'container';
       const response = await got(
-        'http://localhost:4444/widget?name=merkur&counter=0'
+        `http://localhost:4444/widget?name=merkur&counter=0&containerSelector=${encodeURIComponent(
+          `.${container}`
+        )}`
       );
       const widgetProperties = JSON.parse(response.body);
       const { html } = widgetProperties;
 
       delete widgetProperties.html;
 
-      res.status(200).send(indexTemplate({ widgetProperties, html }));
+      res
+        .status(200)
+        .send(indexTemplate({ widgetProperties, html, container }));
     })
   )
   .use((req, res) => {

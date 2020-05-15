@@ -1,8 +1,6 @@
 import { getMerkur } from '@merkur/core';
 import React from 'react';
 
-const DEFAULT_MERKUR_CONTAINER_CLASS = 'merkur__container';
-
 export default class MerkurComponent extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -74,10 +72,7 @@ export default class MerkurComponent extends React.Component {
       <>
         {this._renderAssets()}
         <div
-          className={
-            this.props.widgetProperties.container ||
-            DEFAULT_MERKUR_CONTAINER_CLASS
-          }
+          className={this.props.widgetClassName}
           dangerouslySetInnerHTML={{ __html: html }}></div>
       </>
     );
@@ -88,16 +83,11 @@ export default class MerkurComponent extends React.Component {
       return;
     }
 
-    const widgetProperties = Object.assign(
-      { container: `.${DEFAULT_MERKUR_CONTAINER_CLASS}` },
-      this.props.widgetProperties
-    );
-
     this._loadAssets(() => {
       const merkur = getMerkur();
 
       try {
-        merkur.create(widgetProperties).then((widget) => {
+        merkur.create(this.props.widgetProperties).then((widget) => {
           this._widget = widget;
           widget.mount();
         });
@@ -118,8 +108,7 @@ export default class MerkurComponent extends React.Component {
 
     if (typeof document !== 'undefined') {
       const container = document.querySelector(
-        this.props.widgetProperties.container ||
-          `.${DEFAULT_MERKUR_CONTAINER_CLASS}`
+        this.props.widgetProperties.props.containerSelector
       );
 
       if (container && container.children && container.children[0]) {

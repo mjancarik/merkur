@@ -5,15 +5,19 @@ import MerkurComponet from '../MerkurComponent';
 
 describe('Merkur component', () => {
   let widgetProperties = null;
+  let widgetClassName = null;
   let wrapper = null;
 
   beforeEach(() => {
     createMerkur();
 
+    widgetClassName = 'container';
     widgetProperties = {
       name: 'my-widget',
       version: '0.0.1',
-      props: {},
+      props: {
+        containerSelector: `.${widgetClassName}`,
+      },
       state: {
         counter: 0,
       },
@@ -53,7 +57,9 @@ describe('Merkur component', () => {
     spyOn(MerkurComponet.prototype, '_loadAssets').and.stub();
 
     wrapper = shallow(
-      <MerkurComponet widgetProperties={widgetProperties}>
+      <MerkurComponet
+        widgetProperties={widgetProperties}
+        widgetClassName={widgetClassName}>
         <span>Fallback</span>
       </MerkurComponet>
     );
@@ -66,7 +72,7 @@ describe('Merkur component', () => {
           rel="stylesheet"
         />
         <div
-          className="merkur__container"
+          className="container"
           dangerouslySetInnerHTML={
             Object {
               "__html": "<div class=\\"merkur__page\\"></div>",

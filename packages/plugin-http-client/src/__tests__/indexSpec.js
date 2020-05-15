@@ -9,8 +9,8 @@ describe('createWidget method with http client plugin', () => {
       version: '1.0.0',
       props: {
         param: 1,
+        containerSelector: '.container',
       },
-      container: '.container',
       assets: [
         {
           type: 'script',

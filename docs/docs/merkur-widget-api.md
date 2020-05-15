@@ -30,7 +30,6 @@ export const widgetProperties = {
   $plugins: [componentPlugin, eventEmitterPlugin]
 
   // properties and methods which adding componentplugin
-  container: '.container',
   assets: [
     {
       type: 'script',
@@ -49,13 +48,13 @@ export const widgetProperties = {
   },
   mount(widget) {
     const View = widget.View();
-    const container = document.getElementById(widget.container);
+    const container = document.getElementById(widget.props.containerSelector);
 
     return widget.$dependencies.render(View, container);
   },
   update(widget) {
     const View = widget.View();
-    const container = document.getElementById(widget.container);
+    const container = document.getElementById(widget.props.containerSelector);
 
     return widget.$dependencies.render(View, container);
   },
@@ -70,8 +69,10 @@ export const widgetProperties = {
   },
 };
 
+
 // factory function
 // widgetParams are params from API call for widget, 
+// widgetParams.props = { containerSelector: '.container' };
 // we will explain in next section
 function createWidget(widgetParams) {
   return createMerkurWidget({

@@ -12,13 +12,13 @@ function createWidget(widgetParams) {
     },
     mount(widget) {
       const View = widget.View();
-      const container = document.querySelector(widget.container);
+      const container = document.querySelector(widget.props.containerSelector);
 
       return widget.$dependencies.render(View, container);
     },
     update(widget) {
       const View = widget.View();
-      const container = document.querySelector(widget.container);
+      const container = document.querySelector(widget.props.containerSelector);
 
       return widget.$dependencies.render(View, container);
     },
