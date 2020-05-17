@@ -14,8 +14,9 @@ At first we must make API call with your favorite framework. Because there are t
 // browser
 const widgetClassName = 'widget__container';
 fetch(
-  `http://localhost:4000/widget?containerSelector=${encodeURIComponent(`.${widgetClassName}`)}`
-  )
+  `http://localhost:4000/widget?containerSelector=${
+    encodeURIComponent(`.${widgetClassName}`)
+  }`)
   .then((response) => response.json())
   .then(({ body }) => {
     console.log(body);
@@ -139,8 +140,9 @@ import { MerkurComponent } from '@merkur/integration-react';
 // example in browser
 const widgetClassName = 'widget__container';
 let widgetProperties = await fetch(
-  `http://localhost:4000/widget?containerSelector=${encodeURIComponent(`.${widgetClassName}`)}`
-  )
+  `http://localhost:4000/widget?containerSelector=${
+    encodeURIComponent(`.${widgetClassName}`)
+  }`)
   .then((response) => response.json())
   .then(({ body }) => {
     return body;
