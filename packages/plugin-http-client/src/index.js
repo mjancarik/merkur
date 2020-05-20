@@ -18,7 +18,11 @@ export function httpClientPlugin() {
       widget.$in.httpClient = {
         defaultConfig: {
           method: 'GET',
-          transformers: [transformBody()],
+          transformers: [transformBody(), transformQuery()],
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          query: {},
         },
       };
 
@@ -43,10 +47,7 @@ function httpClientAPI() {
         'transformRequest',
         request
       );
-      let response = await widget.$dependencies.fetch(
-        request.url || request.baseUrl + request.path,
-        request
-      );
+      let response = await widget.$dependencies.fetch(request.url, request);
 
       [request, response] = await runTransformers(
         transformers,
@@ -78,6 +79,30 @@ function getFetchAPI() {
   return window.fetch.bind(window);
 }
 
+function transformQuery() {
+  return {
+    async transformRequest(request) {
+      let newRequest = { ...request };
+      newRequest.url = request.url || request.baseUrl + request.path;
+
+      const queryString = Object.keys(request.query)
+        .map((key) =>
+          [key, request.query[key]].map(encodeURIComponent).join('=')
+        )
+        .join('&');
+      const hasQuestionMark = newRequest.url.indexOf('?') !== -1;
+
+      if (hasQuestionMark) {
+        newRequest.url += `&${queryString}`;
+      } else {
+        newRequest.url += `?${queryString}`;
+      }
+
+      return [newRequest];
+    },
+  };
+}
+
 function transformBody() {
   return {
     async transformResponse(request, response) {
@@ -94,6 +119,19 @@ function transformBody() {
 
       let newResponse = { ...response, body };
       return [request, newResponse];
+    },
+    async transformRequest(request) {
+      if (
+        request.body &&
+        request.headers['Content-Type'] === 'application/json' &&
+        !['GET', 'HEAD'].includes(request.method)
+      ) {
+        let newRequest = { ...request, body: JSON.stringify(request.body) };
+
+        return [newRequest];
+      }
+
+      return [request];
     },
   };
 }
