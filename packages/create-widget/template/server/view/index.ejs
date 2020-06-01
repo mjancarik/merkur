@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <script src="http://localhost:4444/@merkur/tools/static/livereload.js"></script>
+    <script src="http://localhost:<%= config.server.port %>/@merkur/tools/static/livereload.js"></script>
     <% widgetProperties.assets.forEach((asset) => { %>
       <%if (asset.type === 'stylesheet') { %>
         <link rel='stylesheet' href='<%= asset.source %>' />

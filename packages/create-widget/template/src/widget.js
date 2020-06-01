@@ -11,11 +11,11 @@ export const widgetProperties = {
   assets: [
     {
       type: 'script',
-      source: 'http://localhost:4444/static/widget-client.js',
+      source: `http://localhost:${CONFIG.server.port}/static/widget-client.js`,
     },
     {
       type: 'stylesheet',
-      source: 'http://localhost:4444/static/widget-client.css',
+      source: `http://localhost:${CONFIG.server.port}/static/widget-client.css`,
     },
   ],
   onClick(widget) {

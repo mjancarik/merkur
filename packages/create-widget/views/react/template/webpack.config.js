@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const nodeExternals = require('webpack-node-externals');
 const WebpackModules = require('webpack-modules');
@@ -7,7 +8,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const WebSocket = require('@merkur/tools/websocket.js');
 
-const sharedPlugins = [];
+const sharedPlugins = [
+  new webpack.DefinePlugin({ CONFIG: JSON.stringify(require('config')) }),
+];
 
 const webPlugins = [
   new MiniCssExtractPlugin({

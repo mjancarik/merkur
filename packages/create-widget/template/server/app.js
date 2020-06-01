@@ -7,6 +7,7 @@ const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 const ejs = require('ejs');
+const config = require('config');
 
 const merkurModule = require('../build/widget-server.cjs');
 
@@ -53,7 +54,9 @@ app
     asyncMiddleware(async (req, res) => {
       const container = 'container';
       const response = await got(
-        `http://localhost:4444/widget?name=merkur&counter=0&containerSelector=${encodeURIComponent(
+        `http://localhost:${
+          config.server.port
+        }/widget?name=merkur&counter=0&containerSelector=${encodeURIComponent(
           `.${container}`
         )}`
       );
@@ -64,7 +67,7 @@ app
 
       res
         .status(200)
-        .send(indexTemplate({ widgetProperties, html, container }));
+        .send(indexTemplate({ widgetProperties, html, container, config }));
     })
   )
   .use((req, res) => {
