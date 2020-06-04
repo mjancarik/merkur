@@ -1,3 +1,5 @@
+import { bindWidgetToFunctions } from '@merkur/core';
+
 import fetch from 'node-fetch';
 
 export function setDefaultConfig(widget, newDefaultConfig) {
@@ -28,6 +30,8 @@ export function httpClientPlugin() {
 
       widget.$dependencies.fetch = getFetchAPI();
 
+      bindWidgetToFunctions(widget, widget.http);
+
       return widget;
     },
   };
@@ -35,28 +39,30 @@ export function httpClientPlugin() {
 
 function httpClientAPI() {
   return {
-    async request(widget, requestConfig) {
-      let request = {
-        ...widget.$in.httpClient.defaultConfig,
-        ...requestConfig,
-      };
-      const transformers = request.transformers;
+    http: {
+      async request(widget, requestConfig) {
+        let request = {
+          ...widget.$in.httpClient.defaultConfig,
+          ...requestConfig,
+        };
+        const transformers = request.transformers;
 
-      [request] = await runTransformers(
-        transformers,
-        'transformRequest',
-        request
-      );
-      let response = await widget.$dependencies.fetch(request.url, request);
+        [request] = await runTransformers(
+          transformers,
+          'transformRequest',
+          request
+        );
+        let response = await widget.$dependencies.fetch(request.url, request);
 
-      [request, response] = await runTransformers(
-        transformers,
-        'transformResponse',
-        request,
-        response
-      );
+        [request, response] = await runTransformers(
+          transformers,
+          'transformResponse',
+          request,
+          response
+        );
 
-      return { request, response };
+        return { request, response };
+      },
     },
   };
 }

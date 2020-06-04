@@ -76,8 +76,10 @@ describe('createWidget method with http client plugin', () => {
           },
         ],
         "create": [Function],
+        "http": Object {
+          "request": [Function],
+        },
         "name": "my-widget",
-        "request": [Function],
         "setup": [Function],
         "version": "1.0.0",
       }
@@ -90,7 +92,7 @@ describe('createWidget method with http client plugin', () => {
     });
 
     it('should generate absolute url', async () => {
-      const { request } = await widget.request({
+      const { request } = await widget.http.request({
         path: '/path',
       });
 
@@ -100,7 +102,7 @@ describe('createWidget method with http client plugin', () => {
     });
 
     it('should generate new query string', async () => {
-      const { request } = await widget.request({
+      const { request } = await widget.http.request({
         path: '/path',
         query: { a: 'b' },
       });
@@ -111,7 +113,7 @@ describe('createWidget method with http client plugin', () => {
     });
 
     it('should generate add query string to existing one', async () => {
-      const { request } = await widget.request({
+      const { request } = await widget.http.request({
         path: '/path?c=d',
         query: { a: 'b' },
       });
@@ -122,7 +124,7 @@ describe('createWidget method with http client plugin', () => {
     });
 
     it('should send body', async () => {
-      const { request } = await widget.request({
+      const { request } = await widget.http.request({
         method: 'POST',
         path: '/path?c=d',
         body: { a: 'b' },
@@ -136,7 +138,7 @@ describe('createWidget method with http client plugin', () => {
     it('should add parsed body to response', async () => {
       widget.$dependencies.fetch = jest.fn(() => Promise.resolve(Response));
 
-      const { response } = await widget.request({
+      const { response } = await widget.http.request({
         path: '/path',
       });
 
