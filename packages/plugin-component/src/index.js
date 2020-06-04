@@ -74,7 +74,7 @@ function componentAPI() {
       await widget.bootstrap(...args);
       await widget.load(...args);
 
-      const html = callLifeCycleMethod(widget, 'mount', args);
+      const html = await callLifeCycleMethod(widget, 'mount', args);
       widget.$in.component.isMounted = true;
 
       return html;
