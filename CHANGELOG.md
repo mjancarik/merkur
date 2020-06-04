@@ -3,6 +3,75 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.2](https://github.com/mjancarik/merkur/compare/v0.8.1...v0.9.2) (2020-06-04)
+
+
+### Code Refactoring
+
+* 💡 request method is in widget.http ([2619120](https://github.com/mjancarik/merkur/commit/26191201ea66c7bdf6c19d1e395c66625bd48be9))
+
+
+### Features
+
+* 🎸 added plugin-router ([323d36f](https://github.com/mjancarik/merkur/commit/323d36ff1aefa8c6e86bc3e70e9ea29e5828fcb1))
+* 🎸 allow mount method to be async ([1056090](https://github.com/mjancarik/merkur/commit/105609091dbf6519b02c47e90f1937f73370d27b))
+* 🎸 export bindWidgetToFunctions from module for plugins ([1b5425f](https://github.com/mjancarik/merkur/commit/1b5425f8c04edc75c50d10b735ee8269e9239023))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
+## [0.9.1](https://github.com/mjancarik/merkur/compare/v0.8.1...v0.9.1) (2020-06-04)
+
+
+### Code Refactoring
+
+* 💡 request method is in widget.http ([2619120](https://github.com/mjancarik/merkur/commit/26191201ea66c7bdf6c19d1e395c66625bd48be9))
+
+
+### Features
+
+* 🎸 added plugin-router ([323d36f](https://github.com/mjancarik/merkur/commit/323d36ff1aefa8c6e86bc3e70e9ea29e5828fcb1))
+* 🎸 allow mount method to be async ([1056090](https://github.com/mjancarik/merkur/commit/105609091dbf6519b02c47e90f1937f73370d27b))
+* 🎸 export bindWidgetToFunctions from module for plugins ([1b5425f](https://github.com/mjancarik/merkur/commit/1b5425f8c04edc75c50d10b735ee8269e9239023))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
+# [0.9.0](https://github.com/mjancarik/merkur/compare/v0.8.1...v0.9.0) (2020-06-04)
+
+
+### Code Refactoring
+
+* 💡 request method is in widget.http ([2619120](https://github.com/mjancarik/merkur/commit/26191201ea66c7bdf6c19d1e395c66625bd48be9))
+
+
+### Features
+
+* 🎸 added plugin-router ([323d36f](https://github.com/mjancarik/merkur/commit/323d36ff1aefa8c6e86bc3e70e9ea29e5828fcb1))
+* 🎸 allow mount method to be async ([1056090](https://github.com/mjancarik/merkur/commit/105609091dbf6519b02c47e90f1937f73370d27b))
+* 🎸 export bindWidgetToFunctions from module for plugins ([1b5425f](https://github.com/mjancarik/merkur/commit/1b5425f8c04edc75c50d10b735ee8269e9239023))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 ## [0.8.1](https://github.com/mjancarik/merkur/compare/v0.8.0...v0.8.1) (2020-05-20)
 
 

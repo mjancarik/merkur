@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.2](https://github.com/mjancarik/merkur/compare/v0.8.1...v0.9.2) (2020-06-04)
+
+
+### Features
+
+* 🎸 export bindWidgetToFunctions from module for plugins ([1b5425f](https://github.com/mjancarik/merkur/commit/1b5425f8c04edc75c50d10b735ee8269e9239023))
+
+
+
+
+
+## [0.9.1](https://github.com/mjancarik/merkur/compare/v0.8.1...v0.9.1) (2020-06-04)
+
+
+### Features
+
+* 🎸 export bindWidgetToFunctions from module for plugins ([1b5425f](https://github.com/mjancarik/merkur/commit/1b5425f8c04edc75c50d10b735ee8269e9239023))
+
+
+
+
+
+# [0.9.0](https://github.com/mjancarik/merkur/compare/v0.8.1...v0.9.0) (2020-06-04)
+
+
+### Features
+
+* 🎸 export bindWidgetToFunctions from module for plugins ([1b5425f](https://github.com/mjancarik/merkur/commit/1b5425f8c04edc75c50d10b735ee8269e9239023))
+
+
+
+
+
 # [0.8.0](https://github.com/mjancarik/merkur/compare/v0.7.1...v0.8.0) (2020-05-15)
 
 **Note:** Version bump only for package @merkur/core
