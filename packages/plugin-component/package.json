@@ -31,14 +31,14 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/plugin-transform-modules-commonjs": "^7.9.6",
+    "@babel/core": "^7.10.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.10.1",
     "@merkur/core": "^0.8.0",
-    "rollup": "^2.7.6",
+    "rollup": "^2.13.1",
     "rollup-plugin-peer-deps-external": "^2.2.2",
-    "rollup-plugin-terser": "^5.3.0"
+    "rollup-plugin-terser": "^6.1.0"
   },
   "peerDependencies": {
-    "@merkur/core": "^0.5.0"
+    "@merkur/core": "^0.8.0"
   }
 }

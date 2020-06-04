@@ -30,20 +30,20 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@babel/core": "^7.9.6",
-    "@babel/plugin-transform-modules-commonjs": "^7.9.6",
-    "@babel/preset-react": "^7.9.4",
+    "@babel/core": "^7.10.2",
+    "@babel/plugin-transform-modules-commonjs": "^7.10.1",
+    "@babel/preset-react": "^7.10.1",
     "@merkur/core": "^0.8.0",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
-    "enzyme-to-json": "^3.4.4",
+    "enzyme-to-json": "^3.5.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "rollup": "^2.7.6",
+    "rollup": "^2.13.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.2",
-    "rollup-plugin-terser": "^5.3.0"
+    "rollup-plugin-terser": "^6.1.0"
   },
   "peerDependencies": {
     "@merkur/core": "*",
