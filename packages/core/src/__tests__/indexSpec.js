@@ -4,6 +4,7 @@ describe('merkur module', () => {
   it('should keep module interace', () => {
     expect(merkur).toMatchInlineSnapshot(`
       Object {
+        "bindWidgetToFunctions": [Function],
         "createMerkur": [Function],
         "createMerkurWidget": [Function],
         "getMerkur": [Function],

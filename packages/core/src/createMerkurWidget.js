@@ -1,17 +1,5 @@
 import { setDefaultValueForUndefined, isFunction } from './utils';
 
-function bindWidgetToFunctions(widget) {
-  Object.keys(widget).forEach((key) => {
-    if (isFunction(widget[key])) {
-      let originalFunction = widget[key];
-
-      widget[key] = (...rest) => {
-        return originalFunction(widget, ...rest);
-      };
-    }
-  });
-}
-
 async function callPluginMethod(widget, method, args) {
   for (const plugin of widget.$plugins) {
     if (isFunction(plugin[method])) {
@@ -20,6 +8,19 @@ async function callPluginMethod(widget, method, args) {
   }
 
   return widget;
+}
+
+export function bindWidgetToFunctions(widget, target) {
+  target = target || widget;
+  Object.keys(target).forEach((key) => {
+    if (isFunction(target[key])) {
+      let originalFunction = target[key];
+
+      target[key] = (...rest) => {
+        return originalFunction(widget, ...rest);
+      };
+    }
+  });
 }
 
 export async function createMerkurWidget(widgetDefinition = {}) {
