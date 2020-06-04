@@ -1,6 +1,7 @@
 /docs
 /doc
 /node_modules
+/my-widget
 /packages/*/dist
 /packages/*/lib
 /packages/*/coverage
