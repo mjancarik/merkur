@@ -9,7 +9,7 @@
 
 # Merkur
 
-The [Merkur](https://merkur.js.org/) is tiny extensible javascript library for front-end microservices. It allows by default server side rendering for loading performance boost. You can connect it with other frameworks or languages because merkur defines easy API. You can use one of three predefined template's library [react](https://reactjs.org/), [preact](https://preactjs.com/) and [hyperhtml](https://viperhtml.js.org/hyper.html) but you can easily extend for others.
+The [Merkur](https://merkur.js.org/) is tiny extensible javascript library for front-end microservices. It allows by default server side rendering for loading performance boost. You can connect it with other frameworks or languages because merkur defines easy API. You can use one of three predefined template's library [React](https://reactjs.org/), [Preact](https://preactjs.com/) and [hyperHTML](https://viperhtml.js.org/hyper.html) but you can easily extend for others.
 
 ## Getting started
 

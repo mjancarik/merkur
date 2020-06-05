@@ -6,7 +6,7 @@ layout: docs
 
 ## Installation
 
-We recommend creating a new [Mekur](site.homeUrl) widget using `@merkur/create-widget`, which sets up everything automatically for you. You can use one of three predefined template's library [react](https://reactjs.org/), [preact](https://preactjs.com/) and [hyperhtml](https://viperhtml.js.org/hyper.html) but you can easily add others.
+We recommend creating a new [Mekur](site.homeUrl) widget using `@merkur/create-widget`, which sets up everything automatically for you. You can use one of three predefined template's library [React](https://reactjs.org/), [Preact](https://preactjs.com/) and [hyperHTML](https://viperhtml.js.org/hyper.html) but you can easily add others.
 
 ```shell
 npx @merkur/create-widget <name>
@@ -49,7 +49,7 @@ If you take a look inside the created widget, you'll see some files:
 │       │   WidgetDescription.jsx
 ```
 
-You'll notice a few extra files for linter, babel and jest config.
+You'll notice a few extra files for [ESLint](https://eslint.org/), [Babel](https://babeljs.io/) and [Jest](https://jestjs.io/) config.
 
 ### package.json
 
