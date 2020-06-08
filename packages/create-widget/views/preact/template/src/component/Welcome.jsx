@@ -2,9 +2,11 @@ import { h } from 'preact'; // eslint-disable-line no-unused-vars
 
 export default function Welcome() {
   return (
-    <h1>
-      Welcome to <a href="https://github.com/mjancarik/merkur">MERKUR</a>,<br />{' '}
-      a javascript library for front-end microservices.
-    </h1>
+    <div>
+      <h1>
+        <a href="https://github.com/mjancarik/merkur">MERKUR</a>
+      </h1>
+      <h2>a tiny extensible javascript library for front-end microservices</h2>
+    </div>
   );
 }

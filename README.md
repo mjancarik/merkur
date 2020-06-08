@@ -1,6 +1,6 @@
-<p align="center">
-  <img alt="Merkur" src="https://raw.githubusercontent.com/mjancarik/merkur/master/packages/create-widget/template/server/static/merkur-icon.png" width="133">
-</p>
+<center>
+  <h1 style="font-family: Helvetica, Arial, sans-serif; font-size:60px;">Merkur</h1>
+</center>
 
 [![Build Status](https://travis-ci.com/mjancarik/merkur.svg?branch=master)](https://travis-ci.com/mjancarik/merkur)
 [![NPM package version](https://img.shields.io/npm/v/@merkur/core/latest.svg)](https://www.npmjs.com/package/@merkur/core)

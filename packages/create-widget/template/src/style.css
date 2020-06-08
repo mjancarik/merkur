@@ -1,6 +1,7 @@
 body {
   margin: 0;
   padding: 0;
+  font-family: 'Lucida Grande', 'Calibri', Helvetica, Arial, sans-serif;
 }
 
 button {
@@ -19,16 +20,27 @@ button {
 
 .merkur__headline {
   background-color: #282c34;
-  padding: 60px 0;
+  padding: 120px 10px 80px 10px;
   color: #a2a8b6;
   text-align: center;
 }
 
 .merkur__headline a {
-  color: #2f6834;
+  color: white;
+  text-decoration: none;
 }
 
 .merkur__headline h1 {
+  font-size: 60px;
+  margin: 0 0 20px 0;
+}
+
+.merkur__headline h2 {
+  margin: 0;
+  line-height: 1.3;
+}
+
+.merkur__headline h3 {
   margin: 40px 0 16px 0;
   line-height: 1.3;
 }

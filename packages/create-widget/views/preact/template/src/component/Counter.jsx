@@ -7,7 +7,7 @@ export default function Counter({ counter }) {
 
   return (
     <div>
-      <h2>Counter widget:</h2>
+      <h3>Counter widget:</h3>
       <p>Count: {counter}</p>
       <button onClick={widget.onClick}>increase counter</button>
       <button onClick={widget.onReset}>reset counter</button>

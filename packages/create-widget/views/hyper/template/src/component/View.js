@@ -1,5 +1,4 @@
 import Welcome from './Welcome';
-import MerkurIcon from './MerkurIcon';
 import Counter from './Counter';
 import WidgetDescription from './WidgetDescription';
 
@@ -8,7 +7,6 @@ export default function View(widget, render) {
       <div class='merkur__page'>
         <div class='merkur__headline'>
           <div class='merkur__view'>
-            ${MerkurIcon(widget)}
             ${Welcome(widget)}
             ${WidgetDescription(widget)}
           </div>
