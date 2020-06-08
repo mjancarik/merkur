@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.9.3](https://github.com/mjancarik/merkur/compare/v0.9.2...v0.9.3) (2020-06-08)
+
+
+### Bug Fixes
+
+* 🐛 preact template ([b59294b](https://github.com/mjancarik/merkur/commit/b59294b6936d2f085e92f568e4812f45dbd17e93))
+* 🐛 Skeleton template fixes, added widget environment ([d64f35d](https://github.com/mjancarik/merkur/commit/d64f35ddeb3fb855bff1a3281673c53687d1765b))
+
+
+
+
+
 ## [0.9.2](https://github.com/mjancarik/merkur/compare/v0.8.1...v0.9.2) (2020-06-04)
 
 
