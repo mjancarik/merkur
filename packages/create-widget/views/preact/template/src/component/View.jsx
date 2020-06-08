@@ -1,6 +1,5 @@
 import { h } from 'preact'; // eslint-disable-line no-unused-vars
 import WidgetContext from './WidgetContext';
-import MerkurIcon from './MerkurIcon';
 import Welcome from './Welcome';
 import WidgetDescription from './WidgetDescription';
 import Counter from './Counter';
@@ -11,7 +10,6 @@ export default function View(widget) {
       <div className="merkur__page">
         <div className="merkur__headline">
           <div className="merkur__view">
-            <MerkurIcon />
             <Welcome />
             <WidgetDescription name={widget.name} version={widget.version} />
           </div>
