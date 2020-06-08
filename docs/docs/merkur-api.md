@@ -1,8 +1,9 @@
 ---
 layout: docs
+title: Merkur Top-Level API
 ---
 
-# Merkur API
+# Merkur Top-Level API
 
 ## Module
 

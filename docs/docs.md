@@ -1,6 +1,6 @@
 ---
-layout: "docs"
-title: "Docs"
+layout: docs
+title: Merkur documentation
 ---
 
 # Merkur

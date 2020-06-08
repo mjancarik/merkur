@@ -62,6 +62,60 @@
     {
       "title": "Plugins",
       "url": "/docs/plugins"
+    },
+    {
+      "title": "Component plugin",
+      "url": "/docs/component-plugin",
+      "submenu": [
+        {
+          "title": "Instalation",
+          "url": "/docs/component-plugin#instalation"
+        },
+        {
+          "title": "props property",
+          "url": "/docs/component-plugin#props"
+        },
+        {
+          "title": "state property",
+          "url": "/docs/component-plugin#state"
+        },
+        {
+          "title": "assets property",
+          "url": "/docs/component-plugin#assets"
+        },
+        {
+          "title": "info method",
+          "url": "/docs/component-plugin#info"
+        },
+        {
+          "title": "bootstrap method",
+          "url": "/docs/component-plugin#bootstrap"
+        },
+        {
+          "title": "load method",
+          "url": "/docs/component-plugin#load"
+        },
+        {
+          "title": "mount method",
+          "url": "/docs/component-plugin#mount"
+        },
+        {
+          "title": "unmount method",
+          "url": "/docs/component-plugin#unmount"
+        },
+        {
+          "title": "Update method",
+          "url": "/docs/component-plugin#update"
+        },
+        {
+          "title": "SetState method",
+          "url": "/docs/component-plugin#setState"
+        },
+        {
+          "title": "setProps method",
+          "url": "/docs/component-plugin#setProps"
+        }
+      ]
     }
   ]
 }

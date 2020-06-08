@@ -1,5 +1,6 @@
 ---
 layout: docs
+title: Widget API - Merkur
 ---
 
 # Merkur widget API

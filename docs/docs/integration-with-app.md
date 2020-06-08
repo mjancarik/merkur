@@ -1,5 +1,6 @@
 ---
 layout: docs
+title: Integrating Merkur widget to application
 ---
 
 # Integration with your app

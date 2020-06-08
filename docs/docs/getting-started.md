@@ -1,12 +1,13 @@
 ---
 layout: docs
+title: Getting started - Merkur 
 ---
 
 # Getting started
 
 ## Installation
 
-We recommend creating a new [Mekur](site.homeUrl) widget using `@merkur/create-widget`, which sets up everything automatically for you. You can use one of three predefined template's library [React](https://reactjs.org/), [Preact](https://preactjs.com/) and [hyperHTML](https://viperhtml.js.org/hyper.html) but you can easily add others.
+We recommend creating a new  [Mekur]({{ '/' | relative_url }}) widget using `@merkur/create-widget`, which sets up everything automatically for you. You can use one of three predefined template's library [React](https://reactjs.org/), [Preact](https://preactjs.com/) and [hyperHTML](https://viperhtml.js.org/hyper.html) but you can easily add others.
 
 ```shell
 npx @merkur/create-widget <name>
