@@ -7,7 +7,7 @@ title: Component plugin - Merkur
 
 The component plugin is one of base [Mekur]({{ '/' | relative_url }}) plugin which add base life cycle methods and properties to your widget. Other [Merkur plugins]({{ '/docs/plugins' | relative_url }}) can depends on it. 
 
-## Instalation
+## installation
 
 We must add imported `componentPlugin` to widget property `$plugins`.
 
