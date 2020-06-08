@@ -7,6 +7,9 @@ const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 const ejs = require('ejs');
+const config = require('config');
+
+const widgetEnvironment = config.get('widget');
 
 const merkurModule = require('../build/widget-server.cjs');
 
@@ -16,6 +19,10 @@ const indexTemplate = ejs.compile(
 
 const asyncMiddleware = (fn) => (req, res, next) => {
   Promise.resolve(fn(req, res, next)).catch(next);
+};
+
+const getServerUrl = (req) => {
+  return (req.secure ? 'https' : 'http') + '://' + req.headers.host;
 };
 
 const app = express();
@@ -39,11 +46,17 @@ app
         props: {
           name: req.query.name,
           containerSelector: req.query.containerSelector,
+          environment: widgetEnvironment,
         },
       });
 
       const html = await widget.mount();
       const info = await widget.info();
+
+      info.props = {
+        ...info.props,
+        environment: widgetEnvironment,
+      };
 
       res.json({ ...info, html });
     })
@@ -53,7 +66,9 @@ app
     asyncMiddleware(async (req, res) => {
       const container = 'container';
       const response = await got(
-        `http://localhost:4444/widget?name=merkur&counter=0&containerSelector=${encodeURIComponent(
+        `${getServerUrl(
+          req
+        )}/widget?name=merkur&counter=0&containerSelector=${encodeURIComponent(
           `.${container}`
         )}`
       );

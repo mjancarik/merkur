@@ -3,5 +3,8 @@
   "server": {
     "port": 4444,
     "clusters": 0
+  },
+  "widget": {
+    "apiUrl": "https://api.github.dev/"
   }
 }
