@@ -104,16 +104,38 @@
           "url": "/docs/component-plugin#unmount"
         },
         {
-          "title": "Update method",
+          "title": "update method",
           "url": "/docs/component-plugin#update"
         },
         {
-          "title": "SetState method",
+          "title": "setState method",
           "url": "/docs/component-plugin#setState"
         },
         {
           "title": "setProps method",
           "url": "/docs/component-plugin#setProps"
+        }
+      ]
+    },
+    {
+      "title": "Event emitter plugin",
+      "url": "/docs/event-emitter-plugin",
+      "submenu": [
+        {
+          "title": "Instalation",
+          "url": "/docs/event-emitter-plugin#instalation"
+        },
+        {
+          "title": "on method",
+          "url": "/docs/event-emitter-plugin#on"
+        },
+        {
+          "title": "of method",
+          "url": "/docs/event-emitter-plugin#of"
+        },
+        {
+          "title": "emit method",
+          "url": "/docs/event-emitter-plugin#emit"
         }
       ]
     }
