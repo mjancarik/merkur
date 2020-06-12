@@ -48,6 +48,10 @@ All new available methods are asynchronous and we define returning value in widg
 
 The `info` method returns information about widget as name, version, props, state, assets, etc. It's primary usefull for server side where we need collect important values for hydrating widget on client side.
 
+```javascript
+const { name, version, props, state, assets } = await widget.info();
+```
+
 ### bootstrap
 
 The `bootstrap` method is called only once before widget is loaded widget state and mounted. We can connect other third party code (services, listeners, etc) with widget here.
@@ -68,5 +72,17 @@ The `udpate` method is called after changing widget state and must udpate DOM.
 ### setState
 The `setState` method is for changing widget state. The method makes shallow copy.
 
+```javascript
+console.log(widget.state); // { primitive: 1, object: { key: 'value'} };
+await widget.setState({ object: { key: 'value2'} });
+console.log(widget.state); // { primitive: 1, object: { key: 'value2'} };
+```
+
 ### setProps
 The `setProps` method is for changing widget props. The method makes shallow copy.
+
+```javascript
+console.log(widget.props); // { pathname: '/'};
+await widget.setProps({ pathname: '/detail/1'});
+console.log(widget.props); // { pathname: '/detail/1' };
+```
