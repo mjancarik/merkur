@@ -85,7 +85,7 @@ function getFetchAPI() {
   return window.fetch.bind(window);
 }
 
-function transformQuery() {
+export function transformQuery() {
   return {
     async transformRequest(request) {
       let newRequest = { ...request };
@@ -109,7 +109,7 @@ function transformQuery() {
   };
 }
 
-function transformBody() {
+export function transformBody() {
   return {
     async transformResponse(request, response) {
       const contentType = response.headers.get('content-type');
