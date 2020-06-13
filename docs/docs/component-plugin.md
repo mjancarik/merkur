@@ -5,9 +5,9 @@ title: Component plugin - Merkur
 
 # Component plugin
 
-The component plugin is one of base [Merkur]({{ '/' | relative_url }}) plugin which add base life cycle methods and properties to your widget. Other [Merkur plugins]({{ '/docs/plugins' | relative_url }}) can depends on it. 
+The component plugin is one of base [Merkur]({{ '/' | relative_url }}) plugin which adds base life cycle methods and properties to your widget. Other [Merkur plugins]({{ '/docs/plugins' | relative_url }}) can depends on it. 
 
-## installation
+## Installation
 
 We must add imported `componentPlugin` to widget property `$plugins`.
 
@@ -24,7 +24,7 @@ export const widgetProperties = {
 
 ```
 
-After that we have available `info`, `load`, `bootstrap`,`mount`, `unmount`, `update`, `setState`, `setProps` async methodsand `props`, `state`, `assets` properties on widget.
+After that we have got available `info`, `load`, `bootstrap`,`mount`, `unmount`, `update`, `setState`, `setProps` async methodsand `props`, `state`, `assets` properties on widget.
 
 ## Properties
 

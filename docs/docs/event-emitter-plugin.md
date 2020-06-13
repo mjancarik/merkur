@@ -5,9 +5,9 @@ title: Event emitter plugin - Merkur
 
 # Event emitter plugin
 
-The event emitter plugin is one of base [Merkur]({{ '/' | relative_url }}) plugin which add event methods to your widget. Other [Merkur plugins]({{ '/docs/plugins' | relative_url }}) can depends on it. 
+The event emitter plugin is one of base [Merkur]({{ '/' | relative_url }}) plugin which adds event methods to your widget. Other [Merkur plugins]({{ '/docs/plugins' | relative_url }}) can depends on it. 
 
-## installation
+## Installation
 
 We must add imported `eventEmitterPlugin` to widget property `$plugins`.
 
@@ -24,7 +24,7 @@ export const widgetProperties = {
 
 ```
 
-After that we have available `on`, `off` and `emit`methodson widget.
+After that we have got available `on`, `off` and `emit`methodson widget.
 
 ## Methods
 
