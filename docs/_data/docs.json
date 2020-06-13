@@ -68,7 +68,7 @@
       "url": "/docs/component-plugin",
       "submenu": [
         {
-          "title": "Instalation",
+          "title": "Installation",
           "url": "/docs/component-plugin#installation"
         },
         {
@@ -122,7 +122,7 @@
       "url": "/docs/event-emitter-plugin",
       "submenu": [
         {
-          "title": "Instalation",
+          "title": "Installation",
           "url": "/docs/event-emitter-plugin#installation"
         },
         {
@@ -144,7 +144,7 @@
       "url": "/docs/http-client-plugin",
       "submenu": [
         {
-          "title": "Instalation",
+          "title": "Installation",
           "url": "/docs/http-client-plugin#installation"
         },
         {
