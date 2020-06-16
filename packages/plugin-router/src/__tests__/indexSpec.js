@@ -84,6 +84,7 @@ describe('createWidget method with router plugin', () => {
           "pathName": "/my-route",
         },
         "router": Object {
+          "getCurrentRoute": [Function],
           "link": [Function],
           "redirect": [Function],
         },
