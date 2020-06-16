@@ -78,6 +78,9 @@ function routerAPI() {
       link(widget, routeName, data = {}) {
         return widget.$dependencies.link(routeName, data);
       },
+      getCurrentRoute(widget) {
+        return widget.$in.router.route;
+      },
     },
   };
 }
