@@ -53,11 +53,6 @@ app
       const html = await widget.mount();
       const info = await widget.info();
 
-      info.props = {
-        ...info.props,
-        environment: widgetEnvironment,
-      };
-
       res.json({ ...info, html });
     })
   )
