@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/mjancarik/merkur/compare/v0.9.4...v0.10.0) (2020-06-17)
+
+
+### Features
+
+* 🎸 export default http client transformers ([1f1f4d3](https://github.com/mjancarik/merkur/commit/1f1f4d374215fc31e71e2015572d106811f1b5d7))
+
+
+
+
+
 ## [0.9.4](https://github.com/mjancarik/merkur/compare/v0.9.3...v0.9.4) (2020-06-08)
 
 **Note:** Version bump only for package @merkur/plugin-http-client

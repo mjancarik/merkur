@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.10.0](https://github.com/mjancarik/merkur/compare/v0.9.4...v0.10.0) (2020-06-17)
+
+
+### Bug Fixes
+
+* 🐛 Removed duplicate setting of widgetEnvironment ([bc87bc6](https://github.com/mjancarik/merkur/commit/bc87bc60dce1c34fbe30d7dba97e12836765dd7a))
+
+
+
+
+
 ## [0.9.4](https://github.com/mjancarik/merkur/compare/v0.9.3...v0.9.4) (2020-06-08)
 
 **Note:** Version bump only for package @merkur/create-widget
