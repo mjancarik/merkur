@@ -53,9 +53,7 @@ describe('createWidget method with http client plugin', () => {
           "httpClient": Object {
             "defaultConfig": Object {
               "baseUrl": "http://localhost:4444",
-              "headers": Object {
-                "Content-Type": "application/json",
-              },
+              "headers": Object {},
               "method": "GET",
               "query": Object {},
               "transformers": Array [
@@ -93,11 +91,21 @@ describe('createWidget method with http client plugin', () => {
 
     it('should generate absolute url', async () => {
       const { request } = await widget.http.request({
-        path: '/path',
+        path: '/path/to/url',
       });
 
       expect(request.url).toMatchInlineSnapshot(
-        `"http://localhost:4444/path?"`
+        `"http://localhost:4444/path/to/url"`
+      );
+    });
+
+    it('should generate absolute url with query', async () => {
+      const { request } = await widget.http.request({
+        path: '/path?c=d',
+      });
+
+      expect(request.url).toMatchInlineSnapshot(
+        `"http://localhost:4444/path?c=d"`
       );
     });
 
@@ -128,6 +136,9 @@ describe('createWidget method with http client plugin', () => {
         method: 'POST',
         path: '/path?c=d',
         body: { a: 'b' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       expect(request.body).toMatchInlineSnapshot(`"{\\"a\\":\\"b\\"}"`);

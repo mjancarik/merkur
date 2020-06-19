@@ -97,9 +97,9 @@ export function transformQuery() {
       const hasQuestionMark = newRequest.url.indexOf('?') !== -1;
 
       if (hasQuestionMark) {
-        newRequest.url += `&${queryString}`;
+        newRequest.url += queryString ? `&${queryString}` : '';
       } else {
-        newRequest.url += `?${queryString}`;
+        newRequest.url += queryString ? `?${queryString}` : '';
       }
 
       return [newRequest];
