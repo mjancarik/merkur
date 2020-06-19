@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/mjancarik/merkur/compare/v0.10.0...v0.11.0) (2020-06-19)
+
+
+### Features
+
+* 🎸 allow define setup, create methods in widgetProperties ([5a1b918](https://github.com/mjancarik/merkur/commit/5a1b9181ea59e2592dedb45004bc7e58fa2f091e))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 # [0.10.0](https://github.com/mjancarik/merkur/compare/v0.9.4...v0.10.0) (2020-06-17)
 
 **Note:** Version bump only for package @merkur/core

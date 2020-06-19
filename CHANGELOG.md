@@ -3,6 +3,29 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.11.0](https://github.com/mjancarik/merkur/compare/v0.10.0...v0.11.0) (2020-06-19)
+
+
+### Bug Fixes
+
+* 🐛 removed content-type header from default config ([8570964](https://github.com/mjancarik/merkur/commit/8570964ddc004d90a8ac01093b07f8cd69ed37db))
+* 🐛 removed trailing ? and & from request url ([8b60298](https://github.com/mjancarik/merkur/commit/8b602982841cfbe2b00a105a6eea0cb4282bbd0a))
+
+
+### Features
+
+* 🎸 allow define setup, create methods in widgetProperties ([5a1b918](https://github.com/mjancarik/merkur/commit/5a1b9181ea59e2592dedb45004bc7e58fa2f091e))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+* 🧨 yes
+
+
+
+
+
 # [0.10.0](https://github.com/mjancarik/merkur/compare/v0.9.4...v0.10.0) (2020-06-17)
 
 
