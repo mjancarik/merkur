@@ -21,9 +21,7 @@ export function httpClientPlugin() {
         defaultConfig: {
           method: 'GET',
           transformers: [transformBody(), transformQuery()],
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: {},
           query: {},
         },
       };
