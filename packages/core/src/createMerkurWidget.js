@@ -28,13 +28,24 @@ export async function createMerkurWidget(widgetDefinition = {}) {
     '$dependencies',
     '$external',
   ]);
+  widgetDefinition = setDefaultValueForUndefined(
+    widgetDefinition,
+    ['setup', 'create'],
+    (widget) => widget
+  );
+
+  const { setup, create } = widgetDefinition;
 
   let widget = {
     async setup(widget, ...rest) {
-      return callPluginMethod(widget, 'setup', rest);
+      widget = await callPluginMethod(widget, 'setup', rest);
+
+      return setup(widget, ...rest);
     },
     async create(widget, ...rest) {
-      return callPluginMethod(widget, 'create', rest);
+      widget = await callPluginMethod(widget, 'create', rest);
+
+      return create(widget, ...rest);
     },
     $plugins: (widgetDefinition.$plugins || []).map((pluginFactory) =>
       pluginFactory()
@@ -53,6 +64,9 @@ export async function createMerkurWidget(widgetDefinition = {}) {
   delete widgetDefinition.$dependencies;
   delete widgetDefinition.$external;
   delete widgetDefinition.$plugins;
+
+  delete widgetDefinition.setup;
+  delete widgetDefinition.create;
 
   widget = await widget.setup(widget, widgetDefinition);
   widget = await widget.create(widget, widgetDefinition);
