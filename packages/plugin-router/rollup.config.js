@@ -7,6 +7,7 @@ const config = {
     moduleSideEffects: 'no-external',
   },
   plugins: [peerDepsExternal()],
+  external: ['universal-router', 'universal-router/generateUrls'],
   output: [
     {
       file: `./lib/index.js`,
