@@ -89,6 +89,7 @@ function componentAPI() {
       const { $in, state } = widget;
 
       if (
+        $in.component.isMounted === false &&
         $in.component.isHydrated === false &&
         state &&
         Object.keys(state).length !== 0
