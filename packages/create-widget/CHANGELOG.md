@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.11.2](https://github.com/mjancarik/merkur/compare/v0.11.1...v0.11.2) (2020-06-21)
+
+
+### Features
+
+* 🎸 added µhtml template engine ([5d5cd9a](https://github.com/mjancarik/merkur/commit/5d5cd9a7be8629843e701a965a03162432b2521a))
+
+
+
+
+
 ## [0.11.1](https://github.com/mjancarik/merkur/compare/v0.11.0...v0.11.1) (2020-06-21)
 
 **Note:** Version bump only for package @merkur/create-widget
