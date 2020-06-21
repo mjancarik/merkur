@@ -11,7 +11,7 @@ describe('createWidget method with router plugin', () => {
       version: '1.0.0',
       props: {
         param: 1,
-        pathName: '/my-route',
+        pathname: '/my-route',
       },
       assets: [
         {
@@ -81,7 +81,7 @@ describe('createWidget method with router plugin', () => {
         "on": [Function],
         "props": Object {
           "param": 1,
-          "pathName": "/my-route",
+          "pathname": "/my-route",
         },
         "router": Object {
           "getCurrentRoute": [Function],
@@ -101,13 +101,32 @@ describe('createWidget method with router plugin', () => {
 
   describe('router plugin API', () => {
     let widget = null;
+    let homeRoute = {
+      init: jest.fn(),
+      load: jest.fn(() => ({ page: 'home' })),
+      destroy: jest.fn(),
+      activate: jest.fn(),
+      deactivate: jest.fn(),
+    };
+    let otherRoute = {
+      init: jest.fn(),
+      load: jest.fn(() => ({ page: 'other' })),
+      destroy: jest.fn(),
+      activate: jest.fn(),
+      deactivate: jest.fn(),
+    };
+
     const routes = [
       {
-        path: '/my-route',
-        name: 'my-route',
-        action: () => 'My route',
+        path: '/',
+        name: 'home',
+        action: () => homeRoute,
       },
-      { path: '/other-route', name: 'other-route', action: () => 'Page Two' },
+      {
+        path: '/other',
+        name: 'other',
+        action: () => otherRoute,
+      },
     ];
 
     beforeEach(async () => {
@@ -116,16 +135,78 @@ describe('createWidget method with router plugin', () => {
         version: '1.0.0',
         $plugins: [componentPlugin, eventEmitterPlugin, routerPlugin],
         props: {
-          pathName: '/my-route',
+          pathname: '/',
         },
       });
 
       createRouter(widget, routes);
     });
 
-    it('should be', async () => {
-      // widget.mount();
-      //
+    it('should resolve route to home', async () => {
+      await widget.mount();
+
+      expect(widget.router.getCurrentRoute()).toEqual(homeRoute);
+    });
+
+    it('should call init method on home route', async () => {
+      await widget.mount();
+
+      expect(homeRoute.init).toHaveBeenCalled();
+    });
+
+    it('should call load method on home route', async () => {
+      await widget.mount();
+
+      //expect(widget.state.page).toEqual('home');
+      expect(homeRoute.load).toHaveBeenCalled();
+    });
+
+    it('should call activate method on home route', async () => {
+      await widget.mount();
+
+      expect(homeRoute.activate).toHaveBeenCalled();
+    });
+
+    it('should call deactivate method on home route', async () => {
+      await widget.mount();
+      await widget.setProps({ pathname: '/other' });
+
+      expect(homeRoute.deactivate).toHaveBeenCalled();
+    });
+
+    it('should call destroy method on home route', async () => {
+      await widget.mount();
+      await widget.setProps({ pathname: '/other' });
+
+      expect(homeRoute.destroy).toHaveBeenCalled();
+    });
+
+    it('should call destroy method on home route', async () => {
+      await widget.mount();
+      await widget.setProps({ pathname: '/other' });
+
+      expect(homeRoute.destroy).toHaveBeenCalled();
+    });
+
+    it('should call init method on other route', async () => {
+      await widget.mount();
+      await widget.setProps({ pathname: '/other' });
+
+      expect(otherRoute.init).toHaveBeenCalled();
+    });
+
+    it('should call load method on other route', async () => {
+      await widget.mount();
+      await widget.setProps({ pathname: '/other' });
+
+      expect(otherRoute.load).toHaveBeenCalled();
+    });
+
+    it('should call activate method on other route', async () => {
+      await widget.mount();
+      await widget.setProps({ pathname: '/other' });
+
+      expect(otherRoute.activate).toHaveBeenCalled();
     });
   });
 });
