@@ -25,6 +25,12 @@ let exampleResolver = argv.example
           },
           {
             name: `${chalk.bold.blue(
+              'µhtml'
+            )} - The basic counter example with µhtml.`,
+            value: 'uhtml',
+          },
+          {
+            name: `${chalk.bold.blue(
               'Preact'
             )} - The basic counter example with preact.`,
             value: 'preact',
