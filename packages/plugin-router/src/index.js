@@ -102,15 +102,21 @@ async function loadHook(widget, ...rest) {
 
 // hook Component
 async function mountHook(widget, ...rest) {
+  const plugin = widget.$in.router;
+  let initRoute = false;
+
+  if (!plugin.route) {
+    plugin.route = await resolveRoute(widget);
+    initRoute = true;
+  }
+
   const result = await widget.$in.router.originalFunctions.mount(
     widget,
     ...rest
   );
 
-  const plugin = widget.$in.router;
-
-  if (!plugin.route) {
-    await setupRouterCycle(widget, ...rest);
+  if (initRoute && isFunction(plugin.route.init)) {
+    await plugin.route.init(widget, { route: plugin.route, args: rest });
   }
 
   if (
@@ -166,7 +172,7 @@ async function resolveRoute(widget) {
 
     if (!widget.$dependencies.router) {
       throw new Error(
-        'You must add calling createRouter(widget, routes, options) to widget.bootstrap method.'
+        'You must add calling of createRouter(widget, routes, options) to widget.setup method.'
       );
     }
   }

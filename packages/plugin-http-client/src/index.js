@@ -87,7 +87,17 @@ export function transformQuery() {
   return {
     async transformRequest(request) {
       let newRequest = { ...request };
-      newRequest.url = request.url || request.baseUrl + request.path;
+      let { baseUrl = '', path = '/' } = request;
+
+      if (!request.url) {
+        newRequest.url = `${
+          baseUrl.endsWith('/')
+            ? baseUrl.substring(0, baseUrl.length - 1)
+            : baseUrl
+        }/${path.startsWith('/') ? path.substring(1) : path}`;
+      } else {
+        newRequest.url = request.url;
+      }
 
       const queryString = Object.keys(request.query)
         .map((key) =>
