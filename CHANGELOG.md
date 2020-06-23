@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.11.3](https://github.com/mjancarik/merkur/compare/v0.11.2...v0.11.3) (2020-06-23)
+
+
+### Bug Fixes
+
+* 🐛 Fixed duplicate call to init and unintentional destroy ([b3bf3d9](https://github.com/mjancarik/merkur/commit/b3bf3d93ecb570ca14d69dbe32f8071d445e441a))
+* 🐛 Fixed query transformer, route is resolved before mount ([c5d5109](https://github.com/mjancarik/merkur/commit/c5d510947db9c42e4dee602028ec77eabf287d91))
+
+
+
+
+
 ## [0.11.2](https://github.com/mjancarik/merkur/compare/v0.11.1...v0.11.2) (2020-06-21)
 
 
