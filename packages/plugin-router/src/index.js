@@ -28,6 +28,7 @@ export function routerPlugin() {
 
       widget.$in.router = {
         route: null,
+        isMounting: false,
         isRouteActivated: false,
         originalFunctions: {},
       };
@@ -89,9 +90,11 @@ function routerAPI() {
 async function loadHook(widget, ...rest) {
   const plugin = widget.$in.router;
 
-  await tearDownRouterCycle(widget, ...rest);
+  if (!plugin.isMounting) {
+    await tearDownRouterCycle(widget, ...rest);
 
-  await setupRouterCycle(widget, ...rest);
+    await setupRouterCycle(widget, ...rest);
+  }
 
   if (!isFunction(plugin.route.load)) {
     throw new Error('The load method is mandatory.');
@@ -103,11 +106,10 @@ async function loadHook(widget, ...rest) {
 // hook Component
 async function mountHook(widget, ...rest) {
   const plugin = widget.$in.router;
-  let initRoute = false;
 
   if (!plugin.route) {
     plugin.route = await resolveRoute(widget);
-    initRoute = true;
+    plugin.isMounting = true;
   }
 
   const result = await widget.$in.router.originalFunctions.mount(
@@ -115,7 +117,7 @@ async function mountHook(widget, ...rest) {
     ...rest
   );
 
-  if (initRoute && isFunction(plugin.route.init)) {
+  if (plugin.isMounting && isFunction(plugin.route.init)) {
     await plugin.route.init(widget, { route: plugin.route, args: rest });
   }
 
@@ -127,6 +129,8 @@ async function mountHook(widget, ...rest) {
     plugin.isRouteActivated = true;
     plugin.route.activate(widget, { route: plugin.route, args: rest });
   }
+
+  plugin.isMounting = false;
 
   return result;
 }

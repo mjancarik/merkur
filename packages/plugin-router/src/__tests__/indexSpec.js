@@ -42,6 +42,7 @@ describe('createWidget method with router plugin', () => {
             "event": Object {},
           },
           "router": Object {
+            "isMounting": false,
             "isRouteActivated": false,
             "originalFunctions": Object {
               "mount": [Function],
