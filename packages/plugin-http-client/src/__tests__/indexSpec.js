@@ -99,6 +99,36 @@ describe('createWidget method with http client plugin', () => {
       );
     });
 
+    it('should always generate valid absolute url', async () => {
+      let requests = [
+        {
+          baseUrl: 'http://base.com/',
+          path: '/route/id',
+        },
+        {
+          baseUrl: 'http://base.com',
+          path: '/route/id',
+        },
+        {
+          baseUrl: 'http://base.com',
+          path: 'route/id',
+        },
+        {
+          baseUrl: 'http://base.com/',
+          path: 'route/id',
+        },
+      ];
+
+      await requests.forEach(async (request) => {
+        const { request: newRequest } = await widget.http.request({
+          baseUrl: request.baseUrl,
+          path: request.path,
+        });
+
+        expect(newRequest.url).toEqual('http://base.com/route/id');
+      });
+    });
+
     it('should generate absolute url with query', async () => {
       const { request } = await widget.http.request({
         path: '/path?c=d',

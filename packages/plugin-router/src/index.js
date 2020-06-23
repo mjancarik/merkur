@@ -28,6 +28,7 @@ export function routerPlugin() {
 
       widget.$in.router = {
         route: null,
+        isMounting: false,
         isRouteActivated: false,
         originalFunctions: {},
       };
@@ -89,9 +90,11 @@ function routerAPI() {
 async function loadHook(widget, ...rest) {
   const plugin = widget.$in.router;
 
-  await tearDownRouterCycle(widget, ...rest);
+  if (!plugin.isMounting) {
+    await tearDownRouterCycle(widget, ...rest);
 
-  await setupRouterCycle(widget, ...rest);
+    await setupRouterCycle(widget, ...rest);
+  }
 
   if (!isFunction(plugin.route.load)) {
     throw new Error('The load method is mandatory.');
@@ -102,15 +105,20 @@ async function loadHook(widget, ...rest) {
 
 // hook Component
 async function mountHook(widget, ...rest) {
+  const plugin = widget.$in.router;
+
+  if (!plugin.route) {
+    plugin.route = await resolveRoute(widget);
+    plugin.isMounting = true;
+  }
+
   const result = await widget.$in.router.originalFunctions.mount(
     widget,
     ...rest
   );
 
-  const plugin = widget.$in.router;
-
-  if (!plugin.route) {
-    await setupRouterCycle(widget, ...rest);
+  if (plugin.isMounting && isFunction(plugin.route.init)) {
+    await plugin.route.init(widget, { route: plugin.route, args: rest });
   }
 
   if (
@@ -121,6 +129,8 @@ async function mountHook(widget, ...rest) {
     plugin.isRouteActivated = true;
     plugin.route.activate(widget, { route: plugin.route, args: rest });
   }
+
+  plugin.isMounting = false;
 
   return result;
 }
@@ -166,7 +176,7 @@ async function resolveRoute(widget) {
 
     if (!widget.$dependencies.router) {
       throw new Error(
-        'You must add calling createRouter(widget, routes, options) to widget.bootstrap method.'
+        'You must add calling of createRouter(widget, routes, options) to widget.setup method.'
       );
     }
   }
