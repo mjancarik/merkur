@@ -141,6 +141,7 @@ describe('createWidget method with router plugin', () => {
       });
 
       createRouter(widget, routes);
+      jest.resetAllMocks();
     });
 
     it('should resolve route to home', async () => {
@@ -152,62 +153,74 @@ describe('createWidget method with router plugin', () => {
     it('should call init method on home route', async () => {
       await widget.mount();
 
-      expect(homeRoute.init).toHaveBeenCalled();
+      expect(homeRoute.init).toHaveBeenCalledTimes(1);
     });
 
     it('should call load method on home route', async () => {
       await widget.mount();
 
       //expect(widget.state.page).toEqual('home');
-      expect(homeRoute.load).toHaveBeenCalled();
+      expect(homeRoute.load).toHaveBeenCalledTimes(1);
     });
 
     it('should call activate method on home route', async () => {
       await widget.mount();
 
-      expect(homeRoute.activate).toHaveBeenCalled();
+      expect(homeRoute.activate).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not call deactivate method on initial route', async () => {
+      await widget.mount();
+
+      expect(homeRoute.deactivate).not.toHaveBeenCalled();
+    });
+
+    it('should not call destroy method on initial route', async () => {
+      await widget.mount();
+
+      expect(homeRoute.destroy).not.toHaveBeenCalled();
     });
 
     it('should call deactivate method on home route', async () => {
       await widget.mount();
       await widget.setProps({ pathname: '/other' });
 
-      expect(homeRoute.deactivate).toHaveBeenCalled();
+      expect(homeRoute.deactivate).toHaveBeenCalledTimes(1);
     });
 
     it('should call destroy method on home route', async () => {
       await widget.mount();
       await widget.setProps({ pathname: '/other' });
 
-      expect(homeRoute.destroy).toHaveBeenCalled();
+      expect(homeRoute.destroy).toHaveBeenCalledTimes(1);
     });
 
     it('should call destroy method on home route', async () => {
       await widget.mount();
       await widget.setProps({ pathname: '/other' });
 
-      expect(homeRoute.destroy).toHaveBeenCalled();
+      expect(homeRoute.destroy).toHaveBeenCalledTimes(1);
     });
 
     it('should call init method on other route', async () => {
       await widget.mount();
       await widget.setProps({ pathname: '/other' });
 
-      expect(otherRoute.init).toHaveBeenCalled();
+      expect(otherRoute.init).toHaveBeenCalledTimes(1);
     });
 
     it('should call load method on other route', async () => {
       await widget.mount();
       await widget.setProps({ pathname: '/other' });
 
-      expect(otherRoute.load).toHaveBeenCalled();
+      expect(otherRoute.load).toHaveBeenCalledTimes(1);
     });
 
     it('should call activate method on other route', async () => {
       await widget.mount();
       await widget.setProps({ pathname: '/other' });
 
-      expect(otherRoute.activate).toHaveBeenCalled();
+      expect(otherRoute.activate).toHaveBeenCalledTimes(1);
     });
   });
 });
