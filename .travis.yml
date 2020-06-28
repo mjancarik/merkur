@@ -9,18 +9,14 @@ install:
 jobs:
   include:
     - name: "Unit Tests"
-      stage: "test: before build"
       script: npm test -- -- -- --coverage
       after_script:
         - "cat ./coverage/lcov.info | ./node_modules/.bin/coveralls"
     - name: "Lint"
-      stage: "test: before build"
       script: npm run lint
     - name: "Build"
-      stage: "build"
       script: npm run build
     - name: "Check es versions"
-      stage: "test: after build"
       script: npm run test:es:version
     - if: tag =~ ^v # Run only for tags
       stage: "deploy"
