@@ -1,4 +1,4 @@
-import createRollupConfig from '../../rollup';
+import createRollupConfig from '../../createRollupConfig';
 
 let config = createRollupConfig();
 

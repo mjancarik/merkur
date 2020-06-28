@@ -1,3 +1,3 @@
-import createRollupConfig from '../../rollup';
+import createRollupConfig from '../../createRollupConfig';
 
 export default createRollupConfig();

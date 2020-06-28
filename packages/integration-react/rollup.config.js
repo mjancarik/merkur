@@ -1,4 +1,4 @@
-import createRollupConfig from '../../rollup';
+import createRollupConfig from '../../createRollupConfig';
 import resolve from 'rollup-plugin-node-resolve';
 import babel from 'rollup-plugin-babel';
 
