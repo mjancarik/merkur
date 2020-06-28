@@ -2,11 +2,12 @@
   "name": "@merkur/core",
   "version": "0.11.0",
   "description": "Merkur is tiny and extensible library for creating front-end microservices.",
-  "main": "lib/merkur",
-  "module": "lib/merkur",
+  "main": "lib/index",
+  "module": "lib/index",
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check es9 ./lib/index.js",
     "build": "node_modules/.bin/rollup -c",
     "prepare": "npm run build"
   },
@@ -36,9 +37,6 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@babel/core": "^7.10.2",
-    "@babel/plugin-transform-modules-commonjs": "^7.10.1",
-    "rollup": "^2.17.1",
-    "rollup-plugin-terser": "^6.1.0"
+    "rollup": "^2.17.1"
   }
 }

@@ -1,34 +1,3 @@
-import { terser } from 'rollup-plugin-terser';
+import createRollupConfig from '../../rollup';
 
-const config = {
-  input: 'src/index.js',
-  treeshake: {
-    moduleSideEffects: 'no-external',
-  },
-  output: [
-    {
-      file: `./lib/merkur.js`,
-      format: 'cjs',
-      exports: 'named',
-    },
-    {
-      file: `./lib/merkur.min.js`,
-      format: 'cjs',
-      exports: 'named',
-      plugins: [terser()],
-    },
-    {
-      file: `./lib/merkur.mjs`,
-      format: 'esm',
-      exports: 'named',
-    },
-    {
-      file: `./lib/merkur.min.mjs`,
-      format: 'esm',
-      exports: 'named',
-      plugins: [terser()],
-    },
-  ],
-};
-
-export default config;
+export default createRollupConfig();

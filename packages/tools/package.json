@@ -8,6 +8,7 @@
   "main": "index",
   "scripts": {
     "test": "echo 'Tests pass.'",
+    "test:es:version": "echo 'Tests pass.'",
     "build": "echo 'Build pass.'"
   },
   "repository": {
