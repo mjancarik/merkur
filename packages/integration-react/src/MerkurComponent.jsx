@@ -52,13 +52,12 @@ export default class MerkurComponent extends React.Component {
   }
 
   componentDidUpdate() {
+    this._removeWidget();
     this._tryCreateWidget();
   }
 
   componentWillUnMount() {
-    this._mounted = false;
-
-    this._widget.unmount();
+    this._removeWidget();
   }
 
   render() {
@@ -166,6 +165,17 @@ export default class MerkurComponent extends React.Component {
     script.src = asset.source;
 
     document.head.appendChild(script);
+  }
+
+  _removeWidget() {
+    if (!this._widget) {
+      return;
+    }
+
+    this._mounted = false;
+
+    this._widget.unmount();
+    this._widget = null;
   }
 
   _tryCreateWidget() {
