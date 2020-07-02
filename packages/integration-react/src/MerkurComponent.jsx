@@ -78,23 +78,21 @@ export default class MerkurComponent extends React.Component {
     );
   }
 
-  _tryCreateWidget() {
-    if (!this.props.widgetProperties || this._widget) {
-      return;
+  _renderAssets() {
+    if (
+      !this.props.widgetProperties ||
+      !Array.isArray(this.props.widgetProperties.assets)
+    ) {
+      return null;
     }
 
-    this._loadAssets(() => {
-      const merkur = getMerkur();
+    return this.props.widgetProperties.assets.map((asset, key) => {
+      if (asset.type === 'stylesheet') {
+        return <link rel="stylesheet" href={asset.source} key={key} />;
+      }
 
-      try {
-        merkur.create(this.props.widgetProperties).then((widget) => {
-          this._widget = widget;
-          widget.mount();
-        });
-      } catch (_) {
-        if (this.props.debug) {
-          console.warn(_);
-        }
+      if (asset.type === 'inlineStyle') {
+        return <style key={key}>{asset.source}</style>;
       }
     });
   }
@@ -117,25 +115,6 @@ export default class MerkurComponent extends React.Component {
     }
 
     return this._html;
-  }
-
-  _renderAssets() {
-    if (
-      !this.props.widgetProperties ||
-      !Array.isArray(this.props.widgetProperties.assets)
-    ) {
-      return null;
-    }
-
-    return this.props.widgetProperties.assets.map((asset, key) => {
-      if (asset.type === 'stylesheet') {
-        return <link rel="stylesheet" href={asset.source} key={key} />;
-      }
-
-      if (asset.type === 'inlineStyle') {
-        return <style key={key}>{asset.source}</style>;
-      }
-    });
   }
 
   //TODO refactoring
@@ -181,9 +160,32 @@ export default class MerkurComponent extends React.Component {
 
   _loadScript(asset, callback) {
     let script = document.createElement('script');
+
     script.defer = true;
     script.onload = callback;
     script.src = asset.source;
+
     document.head.appendChild(script);
+  }
+
+  _tryCreateWidget() {
+    if (!this.props.widgetProperties || this._widget) {
+      return;
+    }
+
+    this._loadAssets(() => {
+      const merkur = getMerkur();
+
+      try {
+        merkur.create(this.props.widgetProperties).then((widget) => {
+          this._widget = widget;
+          widget.mount();
+        });
+      } catch (_) {
+        if (this.props.debug) {
+          console.warn(_);
+        }
+      }
+    });
   }
 }
