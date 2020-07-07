@@ -5,7 +5,6 @@ export default class MerkurComponent extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this._mounted = false;
     this._html = null;
     this._widget = null;
   }
@@ -49,9 +48,14 @@ export default class MerkurComponent extends React.Component {
     this._tryCreateWidget();
   }
 
-  componentDidUpdate() {
-    this._removeWidget();
-    this._tryCreateWidget();
+  componentDidUpdate(prevProps) {
+    const { name: prevName, version: prevVersion } = prevProps.widgetProperties;
+    const { name, version } = this.props.widgetProperties;
+
+    if (prevName !== name || prevVersion !== version) {
+      this._removeWidget();
+      this._tryCreateWidget();
+    }
   }
 
   componentWillUnMount() {
@@ -130,7 +134,7 @@ export default class MerkurComponent extends React.Component {
     const scriptLoadedCallback = () => {
       scripts.pending -= 1;
 
-      if (scripts.pending === 0 && this._mounted) {
+      if (scripts.pending === 0) {
         scripts.pending = -1;
         callback();
       }
@@ -149,7 +153,7 @@ export default class MerkurComponent extends React.Component {
       this._loadScript(asset, scriptLoadedCallback);
     });
 
-    if (scripts.pending === 0 && this._mounted) {
+    if (scripts.pending === 0) {
       scripts.pending = -1;
       callback();
     }
@@ -170,8 +174,6 @@ export default class MerkurComponent extends React.Component {
       return;
     }
 
-    this._mounted = false;
-
     this._widget.unmount();
     this._widget = null;
   }
@@ -188,7 +190,6 @@ export default class MerkurComponent extends React.Component {
         merkur.create(this.props.widgetProperties).then((widget) => {
           this._widget = widget;
           widget.mount();
-          this._mounted = true;
         });
       } catch (_) {
         if (this.props.debug) {
