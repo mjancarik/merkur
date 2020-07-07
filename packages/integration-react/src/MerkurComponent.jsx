@@ -46,8 +46,6 @@ export default class MerkurComponent extends React.Component {
   }
 
   componentDidMount() {
-    this._mounted = true;
-
     this._tryCreateWidget();
   }
 
@@ -190,6 +188,7 @@ export default class MerkurComponent extends React.Component {
         merkur.create(this.props.widgetProperties).then((widget) => {
           this._widget = widget;
           widget.mount();
+          this._mounted = true;
         });
       } catch (_) {
         if (this.props.debug) {
