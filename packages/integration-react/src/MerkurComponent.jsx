@@ -49,8 +49,23 @@ export default class MerkurComponent extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { name: prevName, version: prevVersion } = prevProps.widgetProperties;
-    const { name, version } = this.props.widgetProperties;
+    const { widgetProperties: currentWidgetProperties } = this.props;
+    const { widgetProperties: prevWidgetProperties } = prevProps;
+
+    if (!currentWidgetProperties && prevWidgetProperties) {
+      return this._removeWidget();
+    }
+
+    if (currentWidgetProperties && !prevWidgetProperties) {
+      return this._tryCreateWidget();
+    }
+
+    if (!currentWidgetProperties && !prevWidgetProperties) {
+      return;
+    }
+
+    const { name: prevName, version: prevVersion } = prevWidgetProperties;
+    const { name, version } = currentWidgetProperties;
 
     if (prevName !== name || prevVersion !== version) {
       this._removeWidget();
@@ -58,7 +73,7 @@ export default class MerkurComponent extends React.Component {
     }
   }
 
-  componentWillUnMount() {
+  componentWillUnmount() {
     this._removeWidget();
   }
 
