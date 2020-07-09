@@ -41,6 +41,12 @@ let exampleResolver = argv.example
             )} - The basic counter example with react.`,
             value: 'react',
           },
+          {
+            name: `${chalk.bold.blue(
+              'Vanilla'
+            )} - The basic counter example with vanilla js.`,
+            value: 'vanilla',
+          },
         ],
       },
     ]);
