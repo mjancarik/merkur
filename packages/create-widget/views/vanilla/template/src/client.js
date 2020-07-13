@@ -7,8 +7,18 @@ function createWidget(widgetParams) {
     ...widgetProperties,
     ...widgetParams,
     $dependencies: {},
-    mount() {},
-    update() {},
+    mount(widget) {
+      document.getElementById('increase').addEventListener('click', () => {
+        widget.onClick();
+      });
+
+      document.getElementById('reset').addEventListener('click', () => {
+        widget.onReset();
+      });
+    },
+    update(widget) {
+      document.getElementById('counter').innerText = widget.state.counter;
+    },
   });
 }
 
