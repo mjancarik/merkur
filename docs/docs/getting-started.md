@@ -1,29 +1,29 @@
 ---
 layout: docs
-title: Getting started - Merkur 
+title: Getting started - Merkur
 ---
 
 # Getting started
 
 ## Installation
 
-We recommend creating a new  [Mekur]({{ '/' | relative_url }}) widget using `@merkur/create-widget`, which sets up everything automatically for you. You can use one of four predefined template's library [React](https://reactjs.org/), [Preact](https://preactjs.com/), [hyperHTML](https://viperhtml.js.org/hyper.html) and [µhtml](https://github.com/WebReflection/uhtml#readme) but you can easily add others.
+We recommend creating a new  [Mekur]({{ '/' | relative_url }}) widget using `@merkur/create-widget`, which sets up everything automatically for you. You can use one of four predefined template libraries [React](https://reactjs.org/), [Preact](https://preactjs.com/), [hyperHTML](https://viperhtml.js.org/hyper.html) and [µhtml](https://github.com/WebReflection/uhtml#readme) but you can easily add others.
 
 ```shell
 npx @merkur/create-widget <name>
- 
+
 cd name
- 
+
 npm run dev // Point your browser at http://localhost:4444/
 ```
 
-This will scaffold a new project in the `name` directory and start a server on [localhost:4444](http://localhost:4444/). Try editing the files to get a feel for how everything works.
+This will scaffold a new project in the `name` directory and start a server on [localhost:4444](http://localhost:4444/). Try editing a few files to get a feel for how everything works.
 
 <img class="responsive" src="{{ '/assets/images/hello-widget.png?v=' | append: site.github.build_revision | relative_url }}" alt="Merkur - hello widget" />
 
 ## Widget structure
 
-If you take a look inside the created widget, you'll see some files:
+If you take a look inside the created widget, you'll see this file structure:
 
 ```shell
 <name>
@@ -54,7 +54,7 @@ You'll notice a few extra files for [ESLint](https://eslint.org/), [Babel](https
 
 ### package.json
 
-The package.json contains predefined dependencies and defines some of scripts:
+The package.json contains predefined dependencies and defines some scripts:
 
 - `npm run dev` - start the widget in development mode, and watch source files for changes
 - `npm run build` - build the widget in production mode

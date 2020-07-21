@@ -5,11 +5,11 @@ title: HTTP client plugin - Merkur
 
 # HTTP client plugin
 
-The HTTP client plugin adds `http` property to your widget with `request` method. The plugin use under the hood browser native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API and for server side [node-fetch](https://www.npmjs.com/package/node-fetch) polyfill.
+The HTTP client plugin adds `http` property to your widget with `request` method. Under the hood this plugin uses browser native [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API and for server side [node-fetch](https://www.npmjs.com/package/node-fetch) polyfill.
 
 ## Installation
 
-We must add imported `httpClientPlugin` to widget property `$plugins`.
+We must add import for `httpClientPlugin` and register it to `$plugins` property of the widget.
 
 ```javascript
 // ./src/widget.js
@@ -24,7 +24,7 @@ export const widgetProperties = {
 
 ```
 
-After that we have got available `http.request`methodon widget.
+After that we have `http.request` method available on the widget.
 
 We can override default request config with `setDefaultConfig` method from `@merkur/plugin-http-client`. We can set all [fetch options](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Supplying_request_options), `baseUrl` and `transformers`.
 
@@ -66,7 +66,7 @@ export const widgetProperties = {
 
 - requestConfig - object - same as default config
 
-The `request` method makes API call to your service throught native browser fetch.
+The `request` method makes API call to your service throught native browser fetch.
 
 ```javascript
 const { response } = await widget.http.request({ path: '/detail/1' });
