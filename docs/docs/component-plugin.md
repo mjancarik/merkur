@@ -30,11 +30,11 @@ After that we have `info`, `load`, `bootstrap`,`mount`, `unmount`, `update`, `s
 
 ### props
 
-The `props` property defines interface between Merkur widget and you application. It contains data from the application or server which are input for the widget. The data must be stringify-able. We can't directly mutate `props` instead of use [setProps]({{ '/docs/component-plugin#setprops' | relative_url }}) method.
+The `props` property defines interface between Merkur widget and you application. It contains data from the application or server which are input for the widget. The data must be stringify-able. You can't directly mutate `props` use [setProps]({{ '/docs/component-plugin#setprops' | relative_url }}) method insted.
 
 ### state
 
-The `state` property contains current internal state of Merkur widget. The data must be stringify-able. We can't directly mutate `state` instead of use [setState]({{ '/docs/component-plugin#setstate' | relative_url }}) method.
+The `state` property contains current internal state of Merkur widget. The data must be stringify-able. You can't directly mutate `state` use [setState]({{ '/docs/component-plugin#setstate' | relative_url }}) method instead.
 
 ### assets
 
@@ -42,11 +42,11 @@ The `assets` property contains important widget assets(css, js and others). The 
 
 ## Methods
 
-All new available methods are asynchronous and we their define returning value in widget's code.
+All new available methods are asynchronous and we define their returning value in widget's code.
 
 ### info
 
-The `info` method returns information about widget as name, version, props, state, assets, etc. It's primary usefull for server side where we need to collect important values for hydrating widget on the client side.
+The `info` method returns information about widget as name, version, props, state, assets, etc. It's primary usefull for server side where we need to collect important values for hydrating widget on the client side.
 
 ```javascript
 const { name, version, props, state, assets } = await widget.info();
