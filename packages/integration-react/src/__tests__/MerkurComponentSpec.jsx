@@ -1,7 +1,8 @@
 import { shallow } from 'enzyme';
-import { createMerkur, removeMerkur } from '@merkur/core';
+import { createMerkur, createMerkurWidget, removeMerkur } from '@merkur/core';
+import { componentPlugin } from '@merkur/plugin-component';
 import React from 'react';
-import MerkurComponet from '../MerkurComponent';
+import MerkurComponent from '../MerkurComponent';
 
 describe('Merkur component', () => {
   let widgetProperties = null;
@@ -9,17 +10,15 @@ describe('Merkur component', () => {
   let wrapper = null;
 
   beforeEach(() => {
-    createMerkur();
+    const merkur = createMerkur();
 
     widgetClassName = 'container';
+
     widgetProperties = {
       name: 'my-widget',
       version: '0.0.1',
       props: {
-        containerSelector: `.${widgetClassName}`,
-      },
-      state: {
-        counter: 0,
+        containerSelector: '.container',
       },
       assets: [
         {
@@ -33,6 +32,34 @@ describe('Merkur component', () => {
       ],
       html: '<div class="merkur__page"></div>',
     };
+
+    const widgetDefinition = {
+      name: 'my-widget',
+      version: '0.0.1',
+      $dependencies: {
+        shallow,
+      },
+      $plugins: [componentPlugin],
+      assets: widgetProperties.assets,
+      mount(widget) {
+        return widget.$dependencies.shallow(<span />);
+      },
+      update(widget) {
+        return widget.$dependencies.shallow(<span />);
+      },
+    };
+
+    function createWidget(widgetParams) {
+      return createMerkurWidget({
+        ...widgetParams,
+        ...widgetDefinition,
+      });
+    }
+
+    merkur.register({
+      ...widgetDefinition,
+      createWidget,
+    });
   });
 
   afterEach(() => {
@@ -41,9 +68,9 @@ describe('Merkur component', () => {
 
   it('should render fallback view for not defined widgetProperties', () => {
     wrapper = shallow(
-      <MerkurComponet>
+      <MerkurComponent>
         <span>Fallback</span>
-      </MerkurComponet>
+      </MerkurComponent>
     );
 
     expect(wrapper).toMatchInlineSnapshot(`
@@ -54,14 +81,14 @@ describe('Merkur component', () => {
   });
 
   it('should render merkur component for defined widgetProperties', () => {
-    spyOn(MerkurComponet.prototype, '_loadAssets').and.stub();
+    spyOn(MerkurComponent.prototype, '_loadScriptAssets').and.stub();
 
     wrapper = shallow(
-      <MerkurComponet
+      <MerkurComponent
         widgetProperties={widgetProperties}
         widgetClassName={widgetClassName}>
         <span>Fallback</span>
-      </MerkurComponet>
+      </MerkurComponent>
     );
 
     expect(wrapper).toMatchInlineSnapshot(`
@@ -81,5 +108,53 @@ describe('Merkur component', () => {
         />
       </Fragment>
     `);
+  });
+
+  it('should load script assets prior to mounting the widget', () => {
+    spyOn(MerkurComponent.prototype, '_loadScript').and.stub();
+
+    wrapper = shallow(
+      <MerkurComponent
+        widgetProperties={widgetProperties}
+        widgetClassName={widgetClassName}>
+        <span>Fallback</span>
+      </MerkurComponent>
+    );
+
+    expect(MerkurComponent.prototype._loadScript).toHaveBeenCalledWith(
+      expect.objectContaining({
+        type: 'script',
+        source: 'http://localhost:4444/static/widget-client.js',
+      })
+    );
+  });
+
+  it('should call onWidgetMounted callback', (done) => {
+    spyOn(MerkurComponent.prototype, '_loadScriptAssets').and.returnValue(
+      Promise.resolve()
+    );
+    const onWidgetMounted = jest.fn();
+    const onWidgetUnmounted = jest.fn();
+
+    wrapper = shallow(
+      <MerkurComponent
+        widgetProperties={widgetProperties}
+        widgetClassName={widgetClassName}
+        onWidgetMounted={onWidgetMounted}
+        onWidgetUnmounted={onWidgetUnmounted}>
+        <span>Fallback</span>
+      </MerkurComponent>
+    );
+
+    setImmediate(() => {
+      expect(onWidgetMounted).toHaveBeenCalled();
+
+      wrapper.unmount();
+
+      setImmediate(() => {
+        expect(onWidgetUnmounted).toHaveBeenCalled();
+        done();
+      });
+    });
   });
 });
