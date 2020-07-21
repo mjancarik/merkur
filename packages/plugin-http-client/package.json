@@ -33,10 +33,10 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@merkur/core": "^0.13.0",
-    "rollup": "^2.17.1"
+    "rollup": "^2.22.1"
   },
   "peerDependencies": {
-    "@merkur/core": "^0.10.0"
+    "@merkur/core": "^0.13.0"
   },
   "dependencies": {
     "node-fetch": "^2.6.0"

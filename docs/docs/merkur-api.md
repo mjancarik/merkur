@@ -7,16 +7,16 @@ title: Merkur Top-Level API
 
 ## Module
 
-Merkur is tiny extensible library and has got few base methods by default.
+Merkur is tiny extensible library and has got a few base methods by default.
 
-- createMerkur - create new instance of merkur to global context in variable `__merkur__`
-- removeMerkur - remove merkur variable from global context
-- getMerkur - return merkur instance
-- createMerkurWidget - factory function for your widget
+- **createMerkur** - creates new instance of merkur in the global context under `__merkur__` variable
+- **removeMerkur** - removes merkur variable from global context
+- **getMerkur** - returns merkur instance
+- **createMerkurWidget** - factory function for your widget
 
 ### createMerkur
 
-The method recieve object with property `$plugins` which can extend merkur interface. The plugin `setup` method can be called more times than once.
+The method accepts an object with property `$plugins` which can extend merkur interface. The plugin `setup` method can be called more times than once. Therefore you need to make an extra check so you won't redefine the plugin.
 
 ```javascript
 import { createMerkur } from '@merkur/core';
@@ -41,7 +41,7 @@ const merkur = createMerkur({
 
 ## Merkur instance
 
-Merkur instance contains three predefined properties `$in`, `$external` and `$dependencies`. The property `$in` is for internals usage of merkur plugins or merkur itself. Other properties are for your own usage. The properties `$external` and `$dependencies` are for storing values and sharing dependencies. 
+Merkur instance contains three predefined properties `$in`, `$external` and `$dependencies`. The property `$in` is for internal usage of merkur plugins or merkur itself. Other properties are for your own usage. The properties `$external` and `$dependencies` are for storing values and sharing dependencies.
 
 ```javascript
 import { getMerkur } from '@merkur/core';
@@ -58,7 +58,7 @@ console.log(getMerkur());
 // };
 ```
 
-Other important part of Merkur instance is methods `register` and `create`. The `register` method register widget to merkur with name, version and createWidget properties. The `create` method return new instace of registered widget with defined properties. 
+Other important part of Merkur instance are methods `register` and `create`. The `register` method register widget to merkur with name, version and createWidget properties. The `create` method returns a new instace of the registered widget with defined properties.
 
 ```javascript
 import { getMerkur } from '@merkur/core';
