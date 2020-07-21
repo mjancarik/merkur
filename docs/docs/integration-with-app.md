@@ -5,11 +5,11 @@ title: Integrating Merkur widget to application
 
 # Integration with your app
 
-Merkur widget can be connected with any framework or library but we can use it with other languages like PHP, Python or Java of course. It use REST/GRAPHQL API which has got predefined and extensible response body.
+Merkur widget can be connected with any framework or library and we can use it with other languages like PHP, Python or Java of course. It uses REST/GRAPHQL API which has got predefined and extensible response body.
 
 ## API call for widget properties
 
-At first we must make API call with your favorite framework. Because there are tons of frameworks or libraries so we use direct browser fetch API for example. 
+At first we must make API call with your framework of choice. In this example we will use built-in browser fetch API. Feel free to choose yours.
 
 ```javascript
 // browser
@@ -50,7 +50,7 @@ fetch(
 
 ## Alive merkur widget in browser (SPA)
 
-After we recieve response body we must create widget container at first.
+After we recieve response body we must first create widget container.
 
 ```javascript
 let widgetContainer = document.createElement('div');
@@ -75,7 +75,7 @@ body.assets.forEach((asset) => {
 document.body.appendChild(widgetContainer);
 ```
 
-The last one step is alive our widget in your app. We add onload method for script asset.
+The last step is to make the widget alive in your app. We add `onload` method for script asset.
 
 ```javascript
 if (asset.type === 'script') {
@@ -92,7 +92,7 @@ if (asset.type === 'script') {
 
 ## Hydrate server side rendering widget (MPA)
 
-After we recieve response body we must update html which is sent to the browser. We add assets.
+After we recieve response from the widget API call we must update the final html which is sent to the browser. First we add assets.
 
 ```html
 <head>
@@ -116,7 +116,7 @@ Then we add widget html to our page.
 <div class="<%= widgetClassName %>"><%- body.html %></div>
 ```
 
-The last one step is hydrate our widget in your app after page is loaded.
+The last step is to hydrate the widget in your app after the page is loaded.
 
 ```html
 <script>
@@ -131,7 +131,7 @@ The last one step is hydrate our widget in your app after page is loaded.
 
 ## Integration with React
 
-For easy integration with React library we created `@merkur/integration-react` module. The module is designed for client side and also for server side. You can use your own application stack for making API call for receiving `widgetProperties`. You only pass `widgetProperties` and `widgetClassName` from API call to `MerkurComponent`. The component make hard work for you.
+For easy integration with React library we created `@merkur/integration-react` module. The module is designed for client side and also for server side. You can use your own application stack for making API call for receiving `widgetProperties`. You only pass `widgetProperties` and `widgetClassName` from API call result to `MerkurComponent`. The component makes the hard work for you.
 
 ```jsx
 
@@ -151,7 +151,7 @@ let widgetProperties = await fetch(
 
 React.render(
   <div className="app">
-    <MerkurComponent 
+    <MerkurComponent
         widgetProperties = {widgetProperties}
         widgetClassName = {widgetClassName}>
       <div>

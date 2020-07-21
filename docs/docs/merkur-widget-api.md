@@ -5,13 +5,13 @@ title: Widget API - Merkur
 
 # Merkur widget API
 
-Merkur widget contains six predefined properties `name`, `version`, `$in`, `$external`, `$dependencies` and `$plugins`. The property `$in` is for internals usage of merkur widget plugins or merkur itself. 
+Merkur widget contains six predefined properties `name`, `version`, `$in`, `$external`, `$dependencies` and `$plugins`. The property `$in` is for internals usage of merkur widget plugins or merkur itself.
 
-Other properties are for your own usage. The property `$external` is for storing variables. The property `$dependencies` is for defined widget dependencies and specific features of environment where widget works. The last one property `$plugins` is for defined specific widget plugin.
+Other properties are for your own usage. The property `$external` is for storing variables. The property `$dependencies` is for defining widget dependencies and specific features of environment where widget works. The last one property `$plugins` is for defining specific widget plugins.
 
-The widget also contains two methods for plugins `setup` and `create`. For more details continue to [plugins]({{ '/docs/plugins' | relative_url }}) section. You can use these methods also in widgetProperties.
+The widget also contains two methods for plugins; `setup` and `create`. For more details continue to [plugins]({{ '/docs/plugins' | relative_url }}) section. You can use these methods also in widgetProperties.
 
-The widget instance is sealed after creating so you can't add properties or functions to widget directly. But for rare use cases you can use property `$external`. The Merkur automatically bind widget functions to recieve widget as a first argument. You can see it in easy counter example widget.
+The widget instance is sealed after creating so you can't add properties or functions to widget directly. But for rare use cases you can use property `$external`. The Merkur automatically binds widget functions to recieve widget as a first argument. You can see it in easy counter example widget.
 
 ```javascript
 import { createMerkurWidget, createMerkur } from '@merkur/core';
@@ -77,7 +77,7 @@ export const widgetProperties = {
 
 
 // factory function
-// widgetParams are params from API call for widget, 
+// widgetParams are params from API call for widget,
 // widgetParams.props = { containerSelector: '.container' };
 // we will explain in next section
 function createWidget(widgetParams) {
