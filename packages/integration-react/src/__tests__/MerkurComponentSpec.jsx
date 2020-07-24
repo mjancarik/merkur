@@ -157,4 +157,32 @@ describe('Merkur component', () => {
       });
     });
   });
+
+  it('should call onError callback and render fallback when script loading fails.', (done) => {
+    spyOn(MerkurComponent.prototype, '_loadScript').and.returnValue(
+      Promise.reject()
+    );
+    const onError = jest.fn();
+
+    wrapper = shallow(
+      <MerkurComponent
+        widgetProperties={widgetProperties}
+        widgetClassName={widgetClassName}
+        onError={onError}>
+        <span>Fallback</span>
+      </MerkurComponent>
+    );
+
+    setImmediate(() => {
+      expect(onError).toHaveBeenCalled();
+
+      expect(wrapper).toMatchInlineSnapshot(`
+        <span>
+          Fallback
+        </span>
+      `);
+
+      done();
+    });
+  });
 });

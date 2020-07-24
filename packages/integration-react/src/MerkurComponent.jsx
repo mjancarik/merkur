@@ -7,6 +7,10 @@ export default class MerkurComponent extends React.Component {
 
     this._html = null;
     this._widget = null;
+
+    this.state = {
+      encounteredError: false,
+    };
   }
 
   shouldComponentUpdate(nextProps) {
@@ -78,7 +82,7 @@ export default class MerkurComponent extends React.Component {
   }
 
   render() {
-    if (!this.props.widgetProperties) {
+    if (!this.props.widgetProperties || this.state.encounteredError) {
       return this.props.children || null;
     }
 
@@ -147,7 +151,7 @@ export default class MerkurComponent extends React.Component {
             !document.querySelector(`script[src='${asset.source}']`)
         )
         .map((asset) => this._loadScript(asset))
-    );
+    ).catch((error) => this._handleError(error));
   }
 
   _loadScript(asset) {
@@ -197,5 +201,13 @@ export default class MerkurComponent extends React.Component {
         console.warn(_);
       }
     }
+  }
+
+  _handleError(error) {
+    if (typeof this.props.onError === 'function') {
+      this.props.onError(error);
+    }
+
+    this.setState({ encounteredError: true });
   }
 }
