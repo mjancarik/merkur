@@ -7,6 +7,10 @@ export default class MerkurComponent extends React.Component {
 
     this._html = null;
     this._widget = null;
+
+    this.state = {
+      encounteredError: false,
+    };
   }
 
   shouldComponentUpdate(nextProps) {
@@ -78,7 +82,7 @@ export default class MerkurComponent extends React.Component {
   }
 
   render() {
-    if (!this.props.widgetProperties) {
+    if (!this.props.widgetProperties || this.state.encounteredError) {
       return this.props.children || null;
     }
 
@@ -86,7 +90,7 @@ export default class MerkurComponent extends React.Component {
 
     return (
       <>
-        {this._renderAssets()}
+        {this._renderStyleAssets()}
         <div
           className={this.props.widgetClassName}
           dangerouslySetInnerHTML={{ __html: html }}></div>
@@ -94,15 +98,14 @@ export default class MerkurComponent extends React.Component {
     );
   }
 
-  _renderAssets() {
-    if (
-      !this.props.widgetProperties ||
-      !Array.isArray(this.props.widgetProperties.assets)
-    ) {
+  _renderStyleAssets() {
+    const { widgetProperties } = this.props;
+
+    if (!widgetProperties || !Array.isArray(widgetProperties.assets)) {
       return null;
     }
 
-    return this.props.widgetProperties.assets.map((asset, key) => {
+    return widgetProperties.assets.map((asset, key) => {
       if (asset.type === 'stylesheet') {
         return <link rel="stylesheet" href={asset.source} key={key} />;
       }
@@ -133,55 +136,35 @@ export default class MerkurComponent extends React.Component {
     return this._html;
   }
 
-  //TODO refactoring
-  _loadAssets(callback) {
-    if (
-      !this.props.widgetProperties ||
-      !Array.isArray(this.props.widgetProperties.assets)
-    ) {
-      return null;
+  _loadScriptAssets() {
+    const { widgetProperties } = this.props;
+
+    if (!widgetProperties || !Array.isArray(widgetProperties.assets)) {
+      return Promise.resolve();
     }
 
-    let scripts = {
-      pending: 0,
-    };
-
-    const scriptLoadedCallback = () => {
-      scripts.pending -= 1;
-
-      if (scripts.pending === 0) {
-        scripts.pending = -1;
-        callback();
-      }
-    };
-
-    this.props.widgetProperties.assets.forEach((asset) => {
-      if (asset.type !== 'script') {
-        return;
-      }
-
-      if (document.querySelector(`script[src='${asset.source}']`)) {
-        return;
-      }
-
-      scripts.pending += 1;
-      this._loadScript(asset, scriptLoadedCallback);
-    });
-
-    if (scripts.pending === 0) {
-      scripts.pending = -1;
-      callback();
-    }
+    return Promise.all(
+      widgetProperties.assets
+        .filter(
+          (asset) =>
+            asset.type === 'script' &&
+            !document.querySelector(`script[src='${asset.source}']`)
+        )
+        .map((asset) => this._loadScript(asset))
+    ).catch((error) => this._handleError(error));
   }
 
-  _loadScript(asset, callback) {
-    let script = document.createElement('script');
+  _loadScript(asset) {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
 
-    script.defer = true;
-    script.onload = callback;
-    script.src = asset.source;
+      script.defer = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      script.src = asset.source;
 
-    document.head.appendChild(script);
+      document.head.appendChild(script);
+    });
   }
 
   _removeWidget() {
@@ -189,28 +172,42 @@ export default class MerkurComponent extends React.Component {
       return;
     }
 
+    if (this.props.onWidgetUnmounting) {
+      this.props.onWidgetUnmounting(this._widget);
+    }
+
     this._widget.unmount();
     this._widget = null;
   }
 
-  _tryCreateWidget() {
+  async _tryCreateWidget() {
     if (!this.props.widgetProperties || this._widget) {
       return;
     }
 
-    this._loadAssets(() => {
-      const merkur = getMerkur();
+    await this._loadScriptAssets();
 
-      try {
-        merkur.create(this.props.widgetProperties).then((widget) => {
-          this._widget = widget;
-          widget.mount();
-        });
-      } catch (_) {
-        if (this.props.debug) {
-          console.warn(_);
-        }
+    const merkur = getMerkur();
+
+    try {
+      this._widget = await merkur.create(this.props.widgetProperties);
+      await this._widget.mount();
+
+      if (typeof this.props.onWidgetMounted === 'function') {
+        this.props.onWidgetMounted(this._widget);
       }
-    });
+    } catch (_) {
+      if (this.props.debug) {
+        console.warn(_);
+      }
+    }
+  }
+
+  _handleError(error) {
+    if (typeof this.props.onError === 'function') {
+      this.props.onError(error);
+    }
+
+    this.setState({ encounteredError: true });
   }
 }

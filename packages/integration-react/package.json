@@ -33,6 +33,7 @@
   "devDependencies": {
     "@babel/preset-react": "^7.10.4",
     "@merkur/core": "^0.13.0",
+    "@merkur/plugin-component": "^0.13.0",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.2",
     "enzyme-to-json": "^3.5.0",
