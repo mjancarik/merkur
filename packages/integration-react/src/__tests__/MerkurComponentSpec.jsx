@@ -129,30 +129,31 @@ describe('Merkur component', () => {
     );
   });
 
-  it('should call onWidgetMounted callback', (done) => {
+  it('should call onWidgetMounted and onWidgetUnmouting callback', (done) => {
     spyOn(MerkurComponent.prototype, '_loadScriptAssets').and.returnValue(
       Promise.resolve()
     );
     const onWidgetMounted = jest.fn();
-    const onWidgetUnmounted = jest.fn();
+    const onWidgetUnmounting = jest.fn();
 
     wrapper = shallow(
       <MerkurComponent
         widgetProperties={widgetProperties}
         widgetClassName={widgetClassName}
         onWidgetMounted={onWidgetMounted}
-        onWidgetUnmounted={onWidgetUnmounted}>
+        onWidgetUnmounting={onWidgetUnmounting}>
         <span>Fallback</span>
       </MerkurComponent>
     );
 
     setImmediate(() => {
-      expect(onWidgetMounted).toHaveBeenCalled();
+      const widget = wrapper.instance()._widget;
+      expect(onWidgetMounted).toHaveBeenCalledWith(widget);
 
       wrapper.unmount();
 
       setImmediate(() => {
-        expect(onWidgetUnmounted).toHaveBeenCalled();
+        expect(onWidgetUnmounting).toHaveBeenCalledWith(widget);
         done();
       });
     });

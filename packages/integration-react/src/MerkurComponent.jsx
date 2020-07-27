@@ -172,12 +172,12 @@ export default class MerkurComponent extends React.Component {
       return;
     }
 
+    if (this.props.onWidgetUnmounting) {
+      this.props.onWidgetUnmounting(this._widget);
+    }
+
     this._widget.unmount();
     this._widget = null;
-
-    if (this.props.onWidgetUnmounted) {
-      this.props.onWidgetUnmounted();
-    }
   }
 
   async _tryCreateWidget() {
@@ -191,10 +191,10 @@ export default class MerkurComponent extends React.Component {
 
     try {
       this._widget = await merkur.create(this.props.widgetProperties);
-      this._widget.mount();
+      await this._widget.mount();
 
       if (typeof this.props.onWidgetMounted === 'function') {
-        this.props.onWidgetMounted();
+        this.props.onWidgetMounted(this._widget);
       }
     } catch (_) {
       if (this.props.debug) {
