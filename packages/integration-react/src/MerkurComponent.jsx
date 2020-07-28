@@ -161,7 +161,8 @@ export default class MerkurComponent extends React.Component {
       script.defer = true;
       script.onload = resolve;
       script.onerror = reject;
-      script.src = asset.source;
+      script.src =
+        typeof asset.source === 'string' ? asset.source : asset.source.es9;
 
       document.head.appendChild(script);
     });

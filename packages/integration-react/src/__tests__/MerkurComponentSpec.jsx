@@ -22,12 +22,20 @@ describe('Merkur component', () => {
       },
       assets: [
         {
+          name: 'widget.js',
           type: 'script',
-          source: 'http://localhost:4444/static/widget-client.js',
+          source: {
+            es9:
+              'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js',
+            es5:
+              'http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js',
+          },
         },
         {
+          name: 'widget.css',
           type: 'stylesheet',
-          source: 'http://localhost:4444/static/widget-client.css',
+          source:
+            'http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css',
         },
       ],
       html: '<div class="merkur__page"></div>',
@@ -94,7 +102,7 @@ describe('Merkur component', () => {
     expect(wrapper).toMatchInlineSnapshot(`
       <Fragment>
         <link
-          href="http://localhost:4444/static/widget-client.css"
+          href="http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css"
           key="1"
           rel="stylesheet"
         />
@@ -123,8 +131,14 @@ describe('Merkur component', () => {
 
     expect(MerkurComponent.prototype._loadScript).toHaveBeenCalledWith(
       expect.objectContaining({
+        name: 'widget.js',
         type: 'script',
-        source: 'http://localhost:4444/static/widget-client.js',
+        source: {
+          es9:
+            'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js',
+          es5:
+            'http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js',
+        },
       })
     );
   });
