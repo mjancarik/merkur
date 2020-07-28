@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.14.1](https://github.com/mjancarik/merkur/compare/v0.14.0...v0.14.1) (2020-07-28)
+
+
+### Bug Fixes
+
+* 🐛 added missing clean-webpack-plugin dependency ([1cb754d](https://github.com/mjancarik/merkur/commit/1cb754d70ada2d98eb813d4d8d7c6012bfd1f135))
+* 🐛 fixed typo in template for playground page ([5ff6493](https://github.com/mjancarik/merkur/commit/5ff6493743f23e325db3261d565a475ed30bd110))
+
+
+
+
+
 # [0.14.0](https://github.com/mjancarik/merkur/compare/v0.13.1...v0.14.0) (2020-07-28)
 
 
