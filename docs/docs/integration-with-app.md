@@ -172,3 +172,23 @@ React.render(
   document.body
 );
 ```
+
+You can also react to component events through callbacks.
+- When widget is mounted a function passed through `onWidgetMounted` prop is called with the widget instance.
+- Before the widget is unmounted `onWidgetUnmounting` is called.
+- Whenever error occurs during the widget lifetime an `onError` function prop is called.
+
+```jsx
+return (
+  <MerkurComponent
+      widgetProperties = {widgetProperties}
+      widgetClassName = {widgetClassName}
+      onWidgetMounted = {widget => this._widgetMounted()}
+      onWidgetUnmouting = {widget => this._widgetUnmounting()}
+      onError = {error => this._handleError(error)}>
+    <div>
+      Fallback for undefined widgetProperties
+    </div>
+  </MerkurComponent>
+);
+```
