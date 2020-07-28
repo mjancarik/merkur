@@ -25,7 +25,7 @@
   <div class="<%= container %>"><%- html %></div>
   <script>
     window.addEventListener('load', function () {
-      __merkur__.create(<% - JSON.stringify(widgetProperties) %>)
+      __merkur__.create(<%- JSON.stringify(widgetProperties) %>)
         .then(function (widget) {
           widget.mount();
         });
