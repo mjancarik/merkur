@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.14.0](https://github.com/mjancarik/merkur/compare/v0.13.1...v0.14.0) (2020-07-28)
+
+
+### Features
+
+* 🎸 added support for new assets structure ([dfbce3f](https://github.com/mjancarik/merkur/commit/dfbce3f5a26dc3fa42eb805ae637ae619a65346b))
+
+
+
+
+
 # [0.13.0](https://github.com/mjancarik/merkur/compare/v0.12.0...v0.13.0) (2020-07-09)
 
 **Note:** Version bump only for package @merkur/integration-react

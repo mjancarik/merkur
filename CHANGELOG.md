@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.14.0](https://github.com/mjancarik/merkur/compare/v0.13.1...v0.14.0) (2020-07-28)
+
+
+### Features
+
+* 🎸 added new base integration module ([6b4328a](https://github.com/mjancarik/merkur/commit/6b4328a213e5796c362438060c900f7ce40c0f27))
+* 🎸 added support for new assets structure ([dfbce3f](https://github.com/mjancarik/merkur/commit/dfbce3f5a26dc3fa42eb805ae637ae619a65346b))
+* 🎸 new assets structure for es5 and es9 scripts ([54d7dce](https://github.com/mjancarik/merkur/commit/54d7dceb9d01630dbcfb7a18615360c0ceae3ab9))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 ## [0.13.1](https://github.com/mjancarik/merkur/compare/v0.13.0...v0.13.1) (2020-07-13)
 
 

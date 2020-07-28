@@ -35,8 +35,19 @@ Point your browser at `http://localhost:4444/widget`.
   "props":{},
   "state":{"counter":0},
   "assets":[
-    {"type":"script","source":"http://localhost:4444/static/widget-client.js"},
-    {"type":"stylesheet","source":"http://localhost:4444/static/widget-client.css"}
+    {
+      "name": "widget.js",
+      "type": "script",
+      "source": {
+        "es9": "http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js",
+        "es5": "http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js"
+      }
+    },
+    {
+      "name": "widget.css",
+      "type": "stylesheet",
+      "source": "http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css"
+    }
   ],
   "html":"\n      <div class=\"merkur__page\">\n        <div class=\"merkur__headline\">\n          <div class=\"merkur__view\">\n            \n    <div class=\"merkur__icon\">\n      <img src=\"http://localhost:4444/static/merkur-icon.png\" alt=\"Merkur\">\n    </div>\n  \n            \n    <h1>Welcome to <a href=\"https://github.com/mjancarik/merkur\">MERKUR</a>,<br> a javascript library for front-end microservices.</h1>\n  \n            \n    <p>The widget's name is <strong>my-widget@0.0.1</strong>.</p>\n  \n          </div>\n        </div>\n        <div class=\"merkur__view\">\n          \n    <div>\n      <h2>Counter widget:</h2>\n      <p>Count: 0</p>\n      <button onclick=\"return ((...rest) =&gt; {\n        return originalFunction(widget, ...rest);\n      }).call(this, event)\">\n        increase counter\n      </button>\n      <button onclick=\"return ((...rest) =&gt; {\n        return originalFunction(widget, ...rest);\n      }).call(this, event)\">\n        reset counter\n      </button>\n    </div>\n  \n        </div>\n      </div>\n  "
 }
