@@ -153,7 +153,18 @@ export function transformBody() {
 }
 
 function copyResponse(response) {
-  const { body, headers, ok, redirected, status, statusText, trailers, type, url, useFinalURL } = response;
+  const {
+    body,
+    headers,
+    ok,
+    redirected,
+    status,
+    statusText,
+    trailers,
+    type,
+    url,
+    useFinalURL,
+  } = response;
 
   return {
     body,
@@ -166,5 +177,5 @@ function copyResponse(response) {
     type,
     url,
     useFinalURL,
-  }
+  };
 }
