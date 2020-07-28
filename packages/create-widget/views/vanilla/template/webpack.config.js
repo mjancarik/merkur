@@ -3,12 +3,13 @@ const {
   createWebConfig,
   createNodeConfig,
   applyES5Transformation,
-} = require('@merkur/tools/webpack.js');
+  pipe,
+} = require('@merkur/tools/webpack.cjs');
 
 createLiveReloadServer();
 
 module.exports = [
-  createWebConfig(),
-  applyES5Transformation(createWebConfig()),
-  createNodeConfig(),
+  pipe(createWebConfig)(),
+  pipe(createWebConfig, applyES5Transformation)(),
+  pipe(createNodeConfig)(),
 ];

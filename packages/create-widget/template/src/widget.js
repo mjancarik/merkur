@@ -10,12 +10,12 @@ export const widgetProperties = {
   View,
   assets: [
     {
+      name: 'widget.js',
       type: 'script',
-      source: 'http://localhost:4444/static/widget-client.js',
     },
     {
+      name: 'widget.css',
       type: 'stylesheet',
-      source: 'http://localhost:4444/static/widget-client.css',
     },
   ],
   onClick(widget) {

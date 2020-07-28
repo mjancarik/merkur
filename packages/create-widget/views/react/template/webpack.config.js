@@ -3,7 +3,8 @@ const {
   createWebConfig,
   createNodeConfig,
   applyES5Transformation,
-} = require('@merkur/tools/webpack.js');
+  pipe,
+} = require('@merkur/tools/webpack.cjs');
 
 createLiveReloadServer();
 
@@ -23,7 +24,7 @@ function applyBabelLoader(config) {
 }
 
 module.exports = [
-  applyBabelLoader(createWebConfig()),
-  applyES5Transformation(applyBabelLoader(createWebConfig())),
-  applyBabelLoader(createNodeConfig()),
+  pipe(createWebConfig, applyBabelLoader)(),
+  pipe(createWebConfig, applyBabelLoader, applyES5Transformation)(),
+  pipe(createNodeConfig, applyBabelLoader)(),
 ];

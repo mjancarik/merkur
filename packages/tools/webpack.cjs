@@ -2,35 +2,19 @@ const path = require('path');
 const WebpackShellPlugin = require('webpack-shell-plugin');
 const nodeExternals = require('webpack-node-externals');
 const WebpackModules = require('webpack-modules');
-
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
+const ManifestPlugin = require('webpack-manifest-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const WebSocket = require('./websocket.js');
-
-const sharedPlugins = [];
-
-const webPlugins = [
-  new MiniCssExtractPlugin({
-    filename: 'widget-client.css',
-  }),
-  ...sharedPlugins,
-];
-const nodePlugins = [new WebpackModules(), ...sharedPlugins];
+const WebSocket = require('./websocket.cjs');
 
 const DIR = process.cwd();
-
 const DEVELOPMENT = 'development';
 const PRODUCTION = 'production';
 const environment = process.env.NODE_ENV ? process.env.NODE_ENV : DEVELOPMENT;
 const webpackMode = environment === PRODUCTION ? PRODUCTION : DEVELOPMENT;
-
-if (environment === DEVELOPMENT) {
-  nodePlugins.push(
-    new WebpackShellPlugin({
-      onBuildEnd: ['npm run dev:server'],
-    })
-  );
-}
 
 const resolve = {
   extensions: ['.mjs', '.js', '.jsx', '.json'],
@@ -38,13 +22,42 @@ const resolve = {
   modules: [path.resolve(DIR, 'node_modules')],
 };
 
+function getPlugins(options = {}) {
+  const sharedPlugins = [];
+
+  const webPlugins = [
+    new CleanWebpackPlugin(options.cleanWebpackPlugin),
+    new MiniCssExtractPlugin({
+      filename: 'widget.[contenthash].css',
+      ...options.miniCSSExtractPlugin,
+    }),
+    new ManifestPlugin(options.manifestPlugin),
+    ...sharedPlugins,
+  ];
+  const nodePlugins = [
+    new WebpackModules(options.webpackModules),
+    ...sharedPlugins,
+  ];
+
+  if (environment === DEVELOPMENT) {
+    nodePlugins.push(
+      new WebpackShellPlugin({
+        onBuildEnd: ['npm run dev:server'],
+        ...options.webpackShellPlugin,
+      })
+    );
+  }
+
+  return { webPlugins, nodePlugins };
+}
+
 function createLiveReloadServer() {
   if (environment === DEVELOPMENT) {
     WebSocket.createServer();
   }
 }
 
-function createWebConfig() {
+function createWebConfig(options = {}) {
   return {
     target: 'web',
     mode: webpackMode,
@@ -54,10 +67,10 @@ function createWebConfig() {
       widget: './src/client.js',
     },
     output: {
-      path: path.resolve(DIR, './build/static'),
-      filename: 'widget-client.js',
+      path: path.resolve(DIR, './build/static/es9/'),
+      filename: '[name].[contenthash].js',
     },
-    plugins: [...webPlugins],
+    plugins: getPlugins(options.plugins).webPlugins,
     module: {
       rules: [
         {
@@ -79,7 +92,7 @@ function createWebConfig() {
   };
 }
 
-function createNodeConfig() {
+function createNodeConfig(options = {}) {
   return {
     target: 'node',
     externals: [nodeExternals()],
@@ -92,9 +105,9 @@ function createNodeConfig() {
     output: {
       libraryTarget: 'commonjs2',
       path: path.resolve(DIR, './build'),
-      filename: 'widget-server.cjs',
+      filename: '[name].cjs',
     },
-    plugins: [...nodePlugins],
+    plugins: getPlugins(options.plugins).nodePlugins,
     module: {
       rules: [],
     },
@@ -119,6 +132,12 @@ function findLoaders(rules = [], loader) {
   }
 
   return babelLoaders;
+}
+
+function applyBundleAnalyzer(config, options = {}) {
+  config.plugins.push(new BundleAnalyzerPlugin(options));
+
+  return config;
 }
 
 function applyES5Transformation(config, options = {}) {
@@ -172,10 +191,23 @@ function applyES5Transformation(config, options = {}) {
     });
   }
 
-  // TODO add es5 to existing name
-  config.output.filename = 'widget-client.es5.js';
+  try {
+    require.resolve('@merkur/plugin-http-client');
+    config.entry['fetch'] = require.resolve('whatwg-fetch');
+    // eslint-disable-next-line no-empty
+  } catch (_) {}
+
+  config.output.path = path.resolve(config.output.path, '../es5/');
 
   return config;
+}
+
+function _pipe(a, b) {
+  return (arg) => b(a(arg));
+}
+
+function pipe(...ops) {
+  return ops.reduce(_pipe);
 }
 
 module.exports = {
@@ -183,5 +215,7 @@ module.exports = {
   createWebConfig,
   createNodeConfig,
   applyES5Transformation,
+  applyBundleAnalyzer,
   findLoaders,
+  pipe,
 };

@@ -9,9 +9,12 @@ const cors = require('cors');
 const ejs = require('ejs');
 const config = require('config');
 
+const { createAssets, memo } = require('@merkur/integration/server/');
+const memoCraeteAssets = memo(createAssets);
+
 const widgetEnvironment = config.get('widget');
 
-const merkurModule = require('../build/widget-server.cjs');
+const merkurModule = require('../build/widget.cjs');
 
 const indexTemplate = ejs.compile(
   fs.readFileSync(path.join(__dirname, '/view/index.ejs'), 'utf8')
@@ -52,6 +55,16 @@ app
 
       const html = await widget.mount();
       const info = await widget.info();
+
+      const staticFolder = `${__dirname}/../build/static`;
+      const staticBaseUrl = `${getServerUrl(req)}/static`;
+
+      info.assets = await memoCraeteAssets({
+        assets: info.assets,
+        staticFolder,
+        staticBaseUrl,
+        ecmaversions: ['es9', 'es5'],
+      });
 
       res.json({ ...info, html });
     })

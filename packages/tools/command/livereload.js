@@ -1,4 +1,4 @@
-const { createClient } = require('../websocket.js');
+const { createClient } = require('../websocket.cjs');
 
 function livereload(options) {
   new Promise((resolve) => {
