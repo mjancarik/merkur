@@ -131,7 +131,9 @@ export function transformBody() {
         }
       }
 
-      let newResponse = { ...response, body };
+      let newResponse = copyResponse(response);
+      newResponse.body = body;
+
       return [request, newResponse];
     },
     async transformRequest(request) {
@@ -148,4 +150,21 @@ export function transformBody() {
       return [request];
     },
   };
+}
+
+function copyResponse(response) {
+  const { body, headers, ok, redirected, status, statusText, trailers, type, url, useFinalURL } = response;
+
+  return {
+    body,
+    headers,
+    ok,
+    redirected,
+    status,
+    statusText,
+    trailers,
+    type,
+    url,
+    useFinalURL,
+  }
 }
