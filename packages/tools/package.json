@@ -46,6 +46,7 @@
     "eslint-plugin-prettier": "3.1.4",
     "eslint-plugin-react": "7.20.3",
     "jest": "26.1.0",
+    "jest-watch-typeahead": "^0.6.0",
     "json-loader": "0.5.7",
     "mini-css-extract-plugin": "0.9.0",
     "prettier": "2.0.5",
