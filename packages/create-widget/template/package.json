@@ -6,7 +6,7 @@
     "dev:server": "cross-env NODE_CONFIG_DIR='./server/config' NODE_ENV=development nodemon server/server.js --config nodemon.json",
     "test": "npm run test:all",
     "test:unit": "cross-env TEST_GROUP='unit' jest -c ./jest.config.js",
-    "test:integration": "npm run build; cross-env TEST_GROUP='integration' jest -c ./jest.config.js",
+    "test:integration": "npm run build; cross-env TEST_GROUP='integration' NODE_CONFIG_DIR='./server/config' jest -c ./jest.config.js",
     "test:all": "npm run build; cross-env TEST_GROUP='integration' jest -c ./jest.config.js",
     "test:watch": "cross-env TEST_GROUP='unit' jest -c ./jest.config.js --watchAll",
     "lint": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore './**/*.{js,jsx}'",
@@ -17,10 +17,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@merkur/core": "0.14.0",
-    "@merkur/integration": "0.14.0",
-    "@merkur/plugin-component": "0.14.0",
-    "@merkur/plugin-event-emitter": "0.14.0",
+    "@merkur/core": "^0.14.0",
+    "@merkur/integration": "^0.14.0",
+    "@merkur/plugin-component": "^0.14.0",
+    "@merkur/plugin-event-emitter": "^0.14.0",
     "compression": "^1.7.4",
     "config": "^3.3.1",
     "cors": "^2.8.5",
@@ -30,7 +30,7 @@
     "helmet": "^3.23.3"
   },
   "devDependencies": {
-    "@merkur/tools": "0.14.1",
+    "@merkur/tools": "^0.14.1",
     "cross-env": "^7.0.2",
     "nodemon": "^2.0.4",
     "webpack": "^4.43.0",
