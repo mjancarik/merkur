@@ -4,6 +4,7 @@
   "description": "Merkur is tiny and extensible library for creating front-end microservices.",
   "main": "lib/index",
   "module": "lib/index",
+  "sideEffects": false,
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",

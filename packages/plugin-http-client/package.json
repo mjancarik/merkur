@@ -4,6 +4,7 @@
   "description": "Merkur event emitter plugin.",
   "main": "lib/index",
   "module": "lib/index",
+  "sideEffects": false,
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
