@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.15.1](https://github.com/mjancarik/merkur/compare/v0.15.0...v0.15.1) (2020-08-06)
+
+
+### Bug Fixes
+
+* 🐛 resolving @merkur/* modules to es5 version ([802a952](https://github.com/mjancarik/merkur/commit/802a952995499f18d803414b26c0ac4356d7d881))
+
+
+
+
+
 # [0.15.0](https://github.com/mjancarik/merkur/compare/v0.14.1...v0.15.0) (2020-08-06)
 
 

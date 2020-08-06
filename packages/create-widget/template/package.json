@@ -30,7 +30,7 @@
     "helmet": "^3.23.3"
   },
   "devDependencies": {
-    "@merkur/tools": "0.15.0",
+    "@merkur/tools": "0.15.1",
     "cross-env": "^7.0.2",
     "nodemon": "^2.0.4",
     "webpack": "^4.44.1",
