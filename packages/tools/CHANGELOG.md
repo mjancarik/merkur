@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.15.0](https://github.com/mjancarik/merkur/compare/v0.14.1...v0.15.0) (2020-08-06)
+
+
+### chore
+
+* 🤖 update dependencies ([9d5f3eb](https://github.com/mjancarik/merkur/commit/9d5f3eb1b0b1e6845fa2ae5e2714cefd53e6782e))
+
+
+### Features
+
+* 🎸 Ability to override node_modules dir in ES5 transformer ([#14](https://github.com/mjancarik/merkur/issues/14)) ([253a443](https://github.com/mjancarik/merkur/commit/253a44346e324d98ed4408775ddbb9e3e769d9c7))
+* 🎸 added jest-watch-typeahead plugin ([f0de4e7](https://github.com/mjancarik/merkur/commit/f0de4e726e41239676cce956e7374a7ca64dcd64))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 ## [0.14.1](https://github.com/mjancarik/merkur/compare/v0.14.0...v0.14.1) (2020-07-28)
 
 
