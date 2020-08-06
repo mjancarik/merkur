@@ -2,6 +2,24 @@ import { getMerkur } from '@merkur/core';
 import React from 'react';
 
 export default class MerkurComponent extends React.Component {
+  static get isES9Supported() {
+    if (MerkurComponent._isES9Supported !== undefined) {
+      return MerkurComponent._isES9Supported;
+    }
+
+    function checkAsyncAwait() {
+      try {
+        new Function('(async () => ({}))()');
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    return (MerkurComponent._isES9Supported =
+      Object.values && checkAsyncAwait());
+  }
+
   constructor(props, context) {
     super(props, context);
 
@@ -116,6 +134,14 @@ export default class MerkurComponent extends React.Component {
     });
   }
 
+  _determineAssetSource(assetSource) {
+    if (assetSource === 'string') {
+      return assetSource;
+    }
+
+    return MerkurComponent.isES9Supported ? assetSource.es9 : assetSource.es5;
+  }
+
   _getWidgetHTML() {
     if (this._html !== null) {
       return this._html;
@@ -136,6 +162,27 @@ export default class MerkurComponent extends React.Component {
     return this._html;
   }
 
+  _handleError(error) {
+    if (typeof this.props.onError === 'function') {
+      this.props.onError(error);
+    }
+
+    this.setState({ encounteredError: true });
+  }
+
+  _loadScript(assetSource) {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+
+      script.defer = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      script.src = assetSource;
+
+      document.head.appendChild(script);
+    });
+  }
+
   _loadScriptAssets() {
     const { widgetProperties } = this.props;
 
@@ -143,29 +190,22 @@ export default class MerkurComponent extends React.Component {
       return Promise.resolve();
     }
 
+    const scriptsToRender = widgetProperties.assets
+      .map((asset) => {
+        const assetSource = this._determineAssetSource(asset.source);
+
+        if (
+          asset.type === 'script' &&
+          !document.querySelector(`script[src='${assetSource}']`)
+        ) {
+          return assetSource;
+        }
+      })
+      .filter((assetSource) => assetSource);
+
     return Promise.all(
-      widgetProperties.assets
-        .filter(
-          (asset) =>
-            asset.type === 'script' &&
-            !document.querySelector(`script[src='${asset.source}']`)
-        )
-        .map((asset) => this._loadScript(asset))
+      scriptsToRender.map((asset) => this._loadScript(asset))
     ).catch((error) => this._handleError(error));
-  }
-
-  _loadScript(asset) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-
-      script.defer = true;
-      script.onload = resolve;
-      script.onerror = reject;
-      script.src =
-        typeof asset.source === 'string' ? asset.source : asset.source.es9;
-
-      document.head.appendChild(script);
-    });
   }
 
   _removeWidget() {
@@ -202,13 +242,5 @@ export default class MerkurComponent extends React.Component {
         console.warn(_);
       }
     }
-  }
-
-  _handleError(error) {
-    if (typeof this.props.onError === 'function') {
-      this.props.onError(error);
-    }
-
-    this.setState({ encounteredError: true });
   }
 }
