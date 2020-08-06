@@ -143,7 +143,7 @@ function applyBundleAnalyzer(config, options = {}) {
 function applyES5Transformation(config, options = {}) {
   const nodeModulesDir = options.nodeModulesDir
     ? options.nodeModulesDir
-    : path.resolve(DIR, '/node_modules');
+    : path.resolve(DIR, 'node_modules');
 
   config.resolve.alias = {
     ...config.resolve.alias,
