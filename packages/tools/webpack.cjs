@@ -141,25 +141,32 @@ function applyBundleAnalyzer(config, options = {}) {
 }
 
 function applyES5Transformation(config, options = {}) {
-  const nodeModulesDir = options.nodeModulesDir ? options.nodeModulesDir : path.resolve(DIR, '/node_modules');
+  const nodeModulesDir = options.nodeModulesDir
+    ? options.nodeModulesDir
+    : path.resolve(DIR, '/node_modules');
 
   config.resolve.alias = {
     ...config.resolve.alias,
     ...{
       '@merkur/core': path.resolve(
-        nodeModulesDir, '@merkur/core/lib/index.es5'
+        nodeModulesDir,
+        '@merkur/core/lib/index.es5'
       ),
       '@merkur/plugin-component': path.resolve(
-        nodeModulesDir, '@merkur/plugin-component/lib/index.es5'
+        nodeModulesDir,
+        '@merkur/plugin-component/lib/index.es5'
       ),
       '@merkur/plugin-event-emitter': path.resolve(
-        nodeModulesDir, '@merkur/plugin-event-emitter/lib/index.es5'
+        nodeModulesDir,
+        '@merkur/plugin-event-emitter/lib/index.es5'
       ),
       '@merkur/plugin-http-client': path.resolve(
-        nodeModulesDir, '@merkur/plugin-http-client/lib/index.es5'
+        nodeModulesDir,
+        '@merkur/plugin-http-client/lib/index.es5'
       ),
       '@merkur/plugin-router': path.resolve(
-        nodeModulesDir, '@merkur/plugin-router/lib/index.es5'
+        nodeModulesDir,
+        '@merkur/plugin-router/lib/index.es5'
       ),
     },
   };
