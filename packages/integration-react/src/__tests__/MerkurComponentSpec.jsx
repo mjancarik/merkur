@@ -118,7 +118,7 @@ describe('Merkur component', () => {
     `);
   });
 
-  it('should load script assets prior to mounting the widget', () => {
+  it('should load ES9 script assets prior to mounting the widget', () => {
     spyOn(MerkurComponent.prototype, '_loadScript').and.stub();
 
     wrapper = shallow(
@@ -130,16 +130,24 @@ describe('Merkur component', () => {
     );
 
     expect(MerkurComponent.prototype._loadScript).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: 'widget.js',
-        type: 'script',
-        source: {
-          es9:
-            'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js',
-          es5:
-            'http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js',
-        },
-      })
+      'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js'
+    );
+  });
+
+  it('should load ES5 script assets when ES9 is not supported', () => {
+    spyOn(MerkurComponent.prototype, '_loadScript').and.stub();
+    spyOn(MerkurComponent, 'isES9Supported', 'get').and.returnValue(false);
+
+    wrapper = shallow(
+      <MerkurComponent
+        widgetProperties={widgetProperties}
+        widgetClassName={widgetClassName}>
+        <span>Fallback</span>
+      </MerkurComponent>
+    );
+
+    expect(MerkurComponent.prototype._loadScript).toHaveBeenCalledWith(
+      'http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js'
     );
   });
 
