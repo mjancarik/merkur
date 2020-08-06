@@ -40,7 +40,7 @@
     "enzyme-to-json": "^3.5.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "rollup": "^2.22.1"
+    "rollup": "^2.23.0"
   },
   "peerDependencies": {
     "@merkur/core": "*",
