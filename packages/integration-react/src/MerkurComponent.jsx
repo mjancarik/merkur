@@ -135,7 +135,7 @@ export default class MerkurComponent extends React.Component {
   }
 
   _determineAssetSource(assetSource) {
-    if (assetSource === 'string') {
+    if (typeof assetSource === 'string') {
       return assetSource;
     }
 
