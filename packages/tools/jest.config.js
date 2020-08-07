@@ -19,4 +19,8 @@ module.exports = {
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest',
   },
+  watchPlugins: [
+    require.resolve('jest-watch-typeahead/filename'),
+    require.resolve('jest-watch-typeahead/testname'),
+  ],
 };

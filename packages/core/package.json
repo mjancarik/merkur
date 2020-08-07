@@ -1,9 +1,10 @@
 {
   "name": "@merkur/core",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Merkur is tiny and extensible library for creating front-end microservices.",
   "main": "lib/index",
   "module": "lib/index",
+  "sideEffects": false,
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
@@ -37,6 +38,6 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "rollup": "^2.22.1"
+    "rollup": "^2.23.0"
   }
 }

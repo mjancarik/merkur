@@ -1,9 +1,10 @@
 {
   "name": "@merkur/plugin-event-emitter",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Merkur event emitter plugin.",
   "main": "lib/index",
   "module": "lib/index",
+  "sideEffects": false,
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
@@ -32,10 +33,10 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.14.0",
-    "rollup": "^2.22.1"
+    "@merkur/core": "^0.15.0",
+    "rollup": "^2.23.0"
   },
   "peerDependencies": {
-    "@merkur/core": "^0.13.0"
+    "@merkur/core": "^0.14.0"
   }
 }

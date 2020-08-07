@@ -1,9 +1,10 @@
 {
   "name": "@merkur/integration",
-  "version": "0.14.0",
+  "version": "0.15.0",
   "description": "Merkur module for easy integration with other apps.",
   "main": "lib/index",
   "module": "lib/index",
+  "sideEffects": false,
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
@@ -30,8 +31,8 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.14.0",
-    "rollup": "^2.22.1"
+    "@merkur/core": "^0.15.0",
+    "rollup": "^2.23.0"
   },
   "peerDependencies": {
     "@merkur/core": "*"

@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.15.1](https://github.com/mjancarik/merkur/compare/v0.15.0...v0.15.1) (2020-08-06)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+# [0.15.0](https://github.com/mjancarik/merkur/compare/v0.14.1...v0.15.0) (2020-08-06)
+
+
+### Bug Fixes
+
+* 🐛 running integration tests ([c2cfb3c](https://github.com/mjancarik/merkur/commit/c2cfb3cf5b8ae05d7ec91d04e9af29790f73a711))
+
+
+### chore
+
+* 🤖 update dependencies ([9d5f3eb](https://github.com/mjancarik/merkur/commit/9d5f3eb1b0b1e6845fa2ae5e2714cefd53e6782e))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 ## [0.14.1](https://github.com/mjancarik/merkur/compare/v0.14.0...v0.14.1) (2020-07-28)
 
 
