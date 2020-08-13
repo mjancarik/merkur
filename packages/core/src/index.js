@@ -1,15 +1,19 @@
-import {
-  createMerkurWidget,
-  bindWidgetToFunctions,
-} from './createMerkurWidget';
+import { createMerkurWidget } from './createMerkurWidget';
 import { createMerkur, removeMerkur, getMerkur } from './merkur';
-import { setDefaultValueForUndefined } from './utils';
-
-export {
-  createMerkurWidget,
-  createMerkur,
-  removeMerkur,
-  getMerkur,
+import {
   setDefaultValueForUndefined,
   bindWidgetToFunctions,
+  hook,
+  isFunction,
+} from './utils';
+
+export {
+  bindWidgetToFunctions,
+  createMerkurWidget,
+  createMerkur,
+  getMerkur,
+  hook,
+  isFunction,
+  removeMerkur,
+  setDefaultValueForUndefined,
 };
