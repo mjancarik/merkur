@@ -15,7 +15,7 @@ export function createRouter(widget, routes, options) {
 }
 
 export const ROUTER_EVENTS = {
-  REDIRECT: '@mekur/plugin-router.redirect',
+  REDIRECT: '@merkur/plugin-router.redirect',
 };
 
 export function routerPlugin() {
