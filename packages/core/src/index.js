@@ -3,7 +3,7 @@ import { createMerkur, removeMerkur, getMerkur } from './merkur';
 import {
   setDefaultValueForUndefined,
   bindWidgetToFunctions,
-  hook,
+  hookMethod,
   isFunction,
 } from './utils';
 
@@ -12,7 +12,7 @@ export {
   createMerkurWidget,
   createMerkur,
   getMerkur,
-  hook,
+  hookMethod,
   isFunction,
   removeMerkur,
   setDefaultValueForUndefined,

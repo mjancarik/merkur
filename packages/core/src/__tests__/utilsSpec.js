@@ -3,7 +3,7 @@ import {
   isUndefined,
   setDefaultValueForUndefined,
   bindWidgetToFunctions,
-  hook,
+  hookMethod,
 } from '../utils';
 
 describe('utils function', () => {
@@ -68,7 +68,7 @@ describe('utils function', () => {
     });
   });
 
-  describe('hook', () => {
+  describe('hookMethod', () => {
     let widget = null;
 
     beforeEach(() => {
@@ -85,7 +85,7 @@ describe('utils function', () => {
     });
 
     it('hook defined method on widget', () => {
-      hook(
+      hookMethod(
         widget,
         'a',
         (widget, originalMethod, ...rest) => 'a' + originalMethod(...rest)
@@ -98,12 +98,12 @@ describe('utils function', () => {
     });
 
     it('hook defined method on widget multiple times', () => {
-      hook(
+      hookMethod(
         widget,
         'a',
         (widget, originalMethod, ...rest) => 'a' + originalMethod(...rest)
       );
-      hook(
+      hookMethod(
         widget,
         'a',
         (widget, originalMethod, ...rest) => 'b' + originalMethod(...rest)

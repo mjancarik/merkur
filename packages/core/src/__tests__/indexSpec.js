@@ -8,7 +8,7 @@ describe('merkur module', () => {
         "createMerkur": [Function],
         "createMerkurWidget": [Function],
         "getMerkur": [Function],
-        "hook": [Function],
+        "hookMethod": [Function],
         "isFunction": [Function],
         "removeMerkur": [Function],
         "setDefaultValueForUndefined": [Function],

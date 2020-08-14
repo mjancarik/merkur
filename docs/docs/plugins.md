@@ -12,7 +12,7 @@ The `setup` method is for creating a new widget interface and a base widget prop
 We are creating custom debug plugin.
 
 ```javascript
-import { createMerkurWidget } from '@merkur/core';
+import { createMerkurWidget, hookMethod, isFunction } from '@merkur/core';
 import { componentPlugin } from '@merkur/plugin-component';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 
@@ -32,10 +32,17 @@ export function debugPlugin() {
       return widget;
     },
     async create(widget, widgetProperties) {
-      Object.keyes(widget).forEach((key) => {
-        if (typeof widget[key] !== 'function') {
+      Object.keys(widget).forEach((methodName) => {
+        if (!isFunction(widget, methodName) {
           return;
         }
+
+        hookMethod(widget, methodName, (widget, originalMethod, ...args) => {
+           console.info(`call ${key} method with `, ...args);
+
+           // originalMethod has auto bind widget to first parameter
+           return originalMethod(...args);
+        });
 
         originalMethod = widget[key];
         widget[key] = (widget, ...args) => {

@@ -25,7 +25,7 @@ export function bindWidgetToFunctions(widget, target) {
   });
 }
 
-export function hook(widget, methodName, handler) {
+export function hookMethod(widget, methodName, handler) {
   const originalFunction = createBoundedFunction(widget, widget[methodName]);
 
   widget[methodName] = function (widget, ...rest) {
