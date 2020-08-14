@@ -1,6 +1,6 @@
 {
   "name": "@merkur/integration",
-  "version": "0.15.0",
+  "version": "0.16.0",
   "description": "Merkur module for easy integration with other apps.",
   "main": "lib/index",
   "module": "lib/index",
@@ -31,7 +31,7 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.15.0",
+    "@merkur/core": "^0.16.0",
     "rollup": "^2.25.0"
   },
   "peerDependencies": {

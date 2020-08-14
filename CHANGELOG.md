@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.16.0](https://github.com/mjancarik/merkur/compare/v0.15.2...v0.16.0) (2020-08-14)
+
+
+### Bug Fixes
+
+* 🐛 typo ([cfee48f](https://github.com/mjancarik/merkur/commit/cfee48f38bcd3d8437cbf823f9887c62376baad1))
+
+
+### Features
+
+* 🎸 added hook method to module base ([66d122c](https://github.com/mjancarik/merkur/commit/66d122c0a1679a4a77a86407b59ddd225d8fc682))
+* 🎸 using hookMethod and isFunction in plugin ([b1b08e5](https://github.com/mjancarik/merkur/commit/b1b08e56b087bb30ea3dbda7e70e64729c83287e))
+
+
+
+
+
 ## [0.15.2](https://github.com/mjancarik/merkur/compare/v0.15.1...v0.15.2) (2020-08-07)
 
 
