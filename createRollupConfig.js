@@ -136,7 +136,7 @@ function createRollupUMDConfig() {
     },
   ];
 
-  config.plugins.push(getBabelOutputPlugin(babelUMDConfig));
+  config.plugins.push(getBabelOutputPlugin(babelUMDConfig), terser());
 
   return config;
 }
