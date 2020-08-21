@@ -16,18 +16,13 @@ function memo(fn, options = { generateKey: () => {} }) {
   };
 }
 
-async function createAssets({
-  assets,
-  staticFolder,
-  ecmaversions,
-  staticBaseUrl,
-}) {
-  return ecmaversions.reduce(async (assets, ecmaversion) => {
+async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
+  return folders.reduce(async (assets, folder) => {
     assets = await assets;
-    const folder = path.join(staticFolder, ecmaversion);
+    const folderPath = path.join(staticFolder, folder);
 
     const manifestFile = await fsp.readFile(
-      path.join(folder, 'manifest.json'),
+      path.join(folderPath, 'manifest.json'),
       { encoding: 'utf-8' }
     );
     const manifest = JSON.parse(manifestFile);
@@ -44,7 +39,7 @@ async function createAssets({
 
         if (asset.type.includes('inline')) {
           asset.source = await fsp.readFile(
-            path.join(folder, manifest[asset.name]),
+            path.join(folderPath, manifest[asset.name]),
             { encoding: 'utf-8' }
           );
 
@@ -52,15 +47,13 @@ async function createAssets({
         }
 
         if (asset.type === 'stylesheet') {
-          asset.source = `${staticBaseUrl}/${ecmaversion}/${
-            manifest[asset.name]
-          }`;
+          asset.source = `${staticBaseUrl}/${folder}/${manifest[asset.name]}`;
 
           return asset;
         }
 
         asset.source = asset.source || {};
-        asset.source[ecmaversion] = `${staticBaseUrl}/${ecmaversion}/${
+        asset.source[folder] = `${staticBaseUrl}/${folder}/${
           manifest[asset.name]
         }`;
 
