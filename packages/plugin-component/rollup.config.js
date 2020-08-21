@@ -1,3 +1,6 @@
-import createRollupConfig from '../../createRollupConfig';
+import {
+  createRollupConfig,
+  createRollupUMDConfig,
+} from '../../createRollupConfig';
 
-export default createRollupConfig();
+export default [createRollupConfig(), createRollupUMDConfig()];

@@ -25,14 +25,44 @@ const babelUMDConfig = {
     [
       '@babel/env',
       {
-        modules: false,
+        modules: 'umd',
+        useBuiltIns: 'entry',
+        corejs: { version: 3, proposals: false },
+        exclude: ['@babel/plugin-transform-regenerator'],
       },
     ],
   ],
+  plugins: [
+    [
+      '@babel/plugin-transform-modules-umd',
+      {
+        globals: {
+          '@merkur/core': getGlobalName('@merkur/core'),
+          '@merkur/plugin-component': getGlobalName('@merkur/plugin-component'),
+          '@merkur/plugin-event': getGlobalName('@merkur/plugin-event'),
+          '@merkur/plugin-http-client': getGlobalName(
+            '@merkur/plugin-http-client'
+          ),
+          'node-fetch': 'fetch',
+        },
+        exactGlobals: true,
+      },
+    ],
+  ],
+  moduleId: name,
 };
 
 function getGlobalName(name) {
-  return `__${name.replace(/[@\-/]/g, '')}__`;
+  return `Merkur.${name
+    .replace(/(@merkur\/)/g, '')
+    .replace(/(plugin-)/g, 'Plugin.')
+    .replace(/[-]/g, '')
+    .replace(
+      /([^.]*)$/,
+      (merkurPackage) =>
+        merkurPackage[0].toUpperCase() +
+        merkurPackage.slice(1, merkurPackage.length)
+    )}`;
 }
 
 function createRollupConfig() {
@@ -89,25 +119,28 @@ function createRollupConfig() {
         exports: 'named',
         plugins: [getBabelOutputPlugin(babelBaseConfig), terser()],
       },
-      {
-        file: `./lib/index.umd.js`,
-        format: 'umd',
-        name: getGlobalName(name),
-        plugins: [getBabelOutputPlugin(babelUMDConfig), terser()],
-        globals: {
-          '@merkur/core': getGlobalName('@merkur/core'),
-          '@merkur/plugin-component': getGlobalName('@merkur/plugin-component'),
-          '@merkur/plugin-event': getGlobalName('@merkur/plugin-event'),
-          '@merkur/plugin-http-client': getGlobalName(
-            '@merkur/plugin-http-client'
-          ),
-          'node-fetch': 'fetch',
-        },
-      },
     ],
   };
 
   return config;
 }
 
+function createRollupUMDConfig() {
+  let config = createRollupConfig();
+
+  config.output = [
+    {
+      file: `./lib/index.umd.js`,
+      format: 'esm',
+      plugins: [],
+    },
+  ];
+
+  config.plugins.push(getBabelOutputPlugin(babelUMDConfig));
+
+  return config;
+}
+
 export default createRollupConfig;
+
+export { createRollupConfig, createRollupUMDConfig };
