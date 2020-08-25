@@ -46,5 +46,8 @@
     "@merkur/core": "*",
     "react": "16.*",
     "react-dom": "16.*"
+  },
+  "dependencies": {
+    "@merkur/integration": "^0.16.2"
   }
 }
