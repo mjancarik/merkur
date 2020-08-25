@@ -195,12 +195,6 @@ function applyES5Transformation(config, options = {}) {
     });
   }
 
-  try {
-    require.resolve('@merkur/plugin-http-client');
-    config.entry['fetch'] = require.resolve('whatwg-fetch');
-    // eslint-disable-next-line no-empty
-  } catch (_) {}
-
   config.output.path = path.resolve(config.output.path, '../es5/');
 
   return config;
