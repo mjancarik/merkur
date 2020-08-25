@@ -41,6 +41,7 @@
     "@merkur/core": "^0.15.0"
   },
   "dependencies": {
+    "abort-controller": "^3.0.0",
     "node-fetch": "^2.6.0",
     "whatwg-fetch": "^3.4.0"
   }

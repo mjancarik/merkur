@@ -26,20 +26,20 @@ export const widgetProperties = {
 
 After that we have `http.request` method available on the widget.
 
-We can override default request config with `setDefaultConfig` method from `@merkur/plugin-http-client`. We can set all [fetch options](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Supplying_request_options), `baseUrl` and `transformers`.
+We can override default request config with `setDefaultConfig` method from `@merkur/plugin-http-client`. We can set all [fetch options](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Supplying_request_options), `baseUrl`, `timeout` and `transformers`.
 
 ```javascript
 // ./src/widget.js
-import { setDefaultConfig, transformBody, transformQuery } from '@merkur/plugin-http-client';
+import { setDefaultConfig, getDefaultTransformers} from '@merkur/plugin-http-client';
 
 // own debug transform
 function transformDebug() {
   return {
-    async transformResponse(request, response) {
+    async transformResponse(widget, request, response) {
       console.log(response);
       return [request, response];
     },
-    async transformRequest(request) {
+    async transformRequest(widget, request) {
       console.log(request);
 
       return [request];
@@ -51,10 +51,12 @@ function transformDebug() {
 export const widgetProperties = {
   name,
   version,
-  bootstrap() {
-    setDefaultConfig({
+  bootstrap(widget) {
+    setDefaultConfig(widget,
+    {
+      transformers: [...getDefaultTransformers(widget), transformDebug()],
       baseUrl: 'http://www.example.com',
-      transformers: [transformBody(), transformQuery(), transformDebug()],
+      timeout: 5000, // 5s
     });
   }
 };
