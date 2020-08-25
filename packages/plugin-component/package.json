@@ -1,9 +1,10 @@
 {
   "name": "@merkur/plugin-component",
-  "version": "0.15.0",
+  "version": "0.16.1",
   "description": "Merkur component plugin.",
   "main": "lib/index",
   "module": "lib/index",
+  "unpkg": "lib/index.umd.js",
   "sideEffects": false,
   "scripts": {
     "preversion": "npm test",
@@ -33,10 +34,10 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.15.0",
-    "rollup": "^2.23.0"
+    "@merkur/core": "^0.16.1",
+    "rollup": "^2.25.0"
   },
   "peerDependencies": {
-    "@merkur/core": "^0.14.0"
+    "@merkur/core": "^0.15.0"
   }
 }

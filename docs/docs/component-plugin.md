@@ -5,7 +5,7 @@ title: Component plugin - Merkur
 
 # Component plugin
 
-The component plugin is one of the base [Merkur]({{ '/' | relative_url }}) plugins which adds base life cycle methods and properties to your widget. Other [Merkur plugins]({{ '/docs/plugins' | relative_url }}) can depend on it.
+The component plugin is one of the base [Merkur]({{ '/' | relative_url }}) plugins which adds base life cycle methods and properties to your widget. Other [Merkur plugins]({{ '/docs/plugins' | relative_url }}) can depend on it.
 
 ## Installation
 
@@ -30,7 +30,7 @@ After that we have `info`, `load`, `bootstrap`,`mount`, `unmount`, `update`, `s
 
 ### props
 
-The `props` property defines interface between Merkur widget and you application. It contains data from the application or server which are input for the widget. The data must be stringify-able. You can't directly mutate `props` use [setProps]({{ '/docs/component-plugin#setprops' | relative_url }}) method insted.
+The `props` property defines interface between Merkur widget and you application. It contains data from the application or server which are input for the widget. The data must be stringify-able. You can't directly mutate `props` use [setProps]({{ '/docs/component-plugin#setprops' | relative_url }}) method instead.
 
 ### state
 
@@ -46,7 +46,7 @@ All new available methods are asynchronous and we define their returning value i
 
 ### info
 
-The `info` method returns information about widget as name, version, props, state, assets, etc. It's primary usefull for server side where we need to collect important values for hydrating widget on the client side.
+The `info` method returns information about widget as name, version, props, state, assets, etc. It's primary useful for server side where we need to collect important values for hydrating widget on the client side.
 
 ```javascript
 const { name, version, props, state, assets } = await widget.info();
@@ -64,10 +64,10 @@ The `load` method is **mandatory** and returns current state of widget. The load
 The `mount` method is used for client and server environments. On server side it has to return a string. On client side it has to mount the widget to HTML and return promise that resolves after mounting the widget to DOM is completed.
 
 ### unmount
-The `unmount` method is opposite for `mount` method. On server side is not usefull but on client side it has to unmount the widget from HTML and return a promise that resolves after unmounting the widget from DOM is completed.
+The `unmount` method is opposite for `mount` method. On server side is not useful but on client side it has to unmount the widget from HTML and return a promise that resolves after unmounting the widget from DOM is completed.
 
 ### update
-The `udpate` method is called after changing widget state and it has to udpate DOM.
+The `udpate` method is called after changing widget state and it has to update DOM.
 
 ### setState
 The `setState` method is for changing widget state. The method makes shallow copy of the state.

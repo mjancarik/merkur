@@ -1,4 +1,4 @@
-import { bindWidgetToFunctions } from '@merkur/core';
+import { bindWidgetToFunctions, hookMethod, isFunction } from '@merkur/core';
 
 import UniversalRouter from 'universal-router';
 import generateUrls from 'universal-router/generateUrls';
@@ -15,7 +15,7 @@ export function createRouter(widget, routes, options) {
 }
 
 export const ROUTER_EVENTS = {
-  REDIRECT: '@mekur/plugin-router.redirect',
+  REDIRECT: '@merkur/plugin-router.redirect',
 };
 
 export function routerPlugin() {
@@ -30,7 +30,6 @@ export function routerPlugin() {
         route: null,
         isMounting: false,
         isRouteActivated: false,
-        originalFunctions: {},
       };
 
       bindWidgetToFunctions(widget, widget.router);
@@ -53,17 +52,10 @@ export function routerPlugin() {
       }
 
       widget.$in.component.lifeCycle.load = loadHook;
-      const { mount, unmount, update } = widget;
 
-      widget.$in.router.originalFunctions = {
-        mount,
-        unmount,
-        update,
-      };
-
-      widget.mount = mountHook;
-      widget.unmount = unmountHook;
-      widget.update = updateHook;
+      hookMethod(widget, 'mount', mountHook);
+      hookMethod(widget, 'unmount', unmountHook);
+      hookMethod(widget, 'update', updateHook);
 
       return widget;
     },
@@ -104,7 +96,7 @@ async function loadHook(widget, ...rest) {
 }
 
 // hook Component
-async function mountHook(widget, ...rest) {
+async function mountHook(widget, originalMount, ...rest) {
   const plugin = widget.$in.router;
 
   if (!plugin.route) {
@@ -112,10 +104,7 @@ async function mountHook(widget, ...rest) {
     plugin.isMounting = true;
   }
 
-  const result = await widget.$in.router.originalFunctions.mount(
-    widget,
-    ...rest
-  );
+  const result = await originalMount(...rest);
 
   if (plugin.isMounting && isFunction(plugin.route.init)) {
     await plugin.route.init(widget, { route: plugin.route, args: rest });
@@ -136,11 +125,8 @@ async function mountHook(widget, ...rest) {
 }
 
 // hook Component
-async function updateHook(widget, ...rest) {
-  const result = await widget.$in.router.originalFunctions.update(
-    widget,
-    ...rest
-  );
+async function updateHook(widget, originalUpdate, ...rest) {
+  const result = await originalUpdate(...rest);
 
   const plugin = widget.$in.router;
 
@@ -157,11 +143,8 @@ async function updateHook(widget, ...rest) {
 }
 
 // hook Component
-async function unmountHook(widget, ...rest) {
-  const result = await widget.$in.router.originalFunctions.unmount(
-    widget,
-    ...rest
-  );
+async function unmountHook(widget, originalUnmount, ...rest) {
+  const result = await originalUnmount(...rest);
 
   await tearDownRouterCycle(widget, ...rest);
 
@@ -213,10 +196,6 @@ async function tearDownRouterCycle(widget, ...rest) {
   }
 
   plugin.isRouteActivated = false;
-}
-
-function isFunction(value) {
-  return typeof value === 'function';
 }
 
 function isClient() {
