@@ -58,6 +58,7 @@ function createLiveReloadServer() {
 }
 
 function createWebConfig(options = {}) {
+  console.log('create web config');
   return {
     target: 'web',
     mode: webpackMode,
@@ -203,7 +204,7 @@ function applyES5Transformation(config, options = {}) {
 }
 
 function _pipe(a, b) {
-  return (arg) => b(a(arg));
+  return async (arg) => b(await a(arg));
 }
 
 function pipe(...ops) {

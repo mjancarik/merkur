@@ -23,8 +23,8 @@ function applyBabelLoader(config) {
   return config;
 }
 
-module.exports = [
+module.exports = Promise.all([
   pipe(createWebConfig, applyBabelLoader)(),
   pipe(createWebConfig, applyBabelLoader, applyES5Transformation)(),
   pipe(createNodeConfig, applyBabelLoader)(),
-];
+]);

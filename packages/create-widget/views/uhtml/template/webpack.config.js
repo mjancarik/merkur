@@ -8,8 +8,8 @@ const {
 
 createLiveReloadServer();
 
-module.exports = [
+module.exports = Promise.all([
   pipe(createWebConfig)(),
   pipe(createWebConfig, applyES5Transformation)(),
   pipe(createNodeConfig)(),
-];
+]);
