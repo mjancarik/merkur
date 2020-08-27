@@ -1,25 +1,8 @@
 import { getMerkur } from '@merkur/core';
+import { loadScriptAssets } from '@merkur/integration';
 import React from 'react';
 
 export default class MerkurComponent extends React.Component {
-  static get isES9Supported() {
-    if (MerkurComponent._isES9Supported !== undefined) {
-      return MerkurComponent._isES9Supported;
-    }
-
-    function checkAsyncAwait() {
-      try {
-        new Function('(async () => ({}))()');
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
-
-    return (MerkurComponent._isES9Supported =
-      Object.values && checkAsyncAwait());
-  }
-
   constructor(props, context) {
     super(props, context);
 
@@ -134,14 +117,6 @@ export default class MerkurComponent extends React.Component {
     });
   }
 
-  _determineAssetSource(assetSource) {
-    if (typeof assetSource === 'string') {
-      return assetSource;
-    }
-
-    return MerkurComponent.isES9Supported ? assetSource.es9 : assetSource.es5;
-  }
-
   _getWidgetHTML() {
     if (this._html !== null) {
       return this._html;
@@ -170,44 +145,6 @@ export default class MerkurComponent extends React.Component {
     this.setState({ encounteredError: true });
   }
 
-  _loadScript(assetSource) {
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-
-      script.defer = true;
-      script.onload = resolve;
-      script.onerror = reject;
-      script.src = assetSource;
-
-      document.head.appendChild(script);
-    });
-  }
-
-  _loadScriptAssets() {
-    const { widgetProperties } = this.props;
-
-    if (!widgetProperties || !Array.isArray(widgetProperties.assets)) {
-      return Promise.resolve();
-    }
-
-    const scriptsToRender = widgetProperties.assets
-      .map((asset) => {
-        const assetSource = this._determineAssetSource(asset.source);
-
-        if (
-          asset.type === 'script' &&
-          !document.querySelector(`script[src='${assetSource}']`)
-        ) {
-          return assetSource;
-        }
-      })
-      .filter((assetSource) => assetSource);
-
-    return Promise.all(
-      scriptsToRender.map((asset) => this._loadScript(asset))
-    ).catch((error) => this._handleError(error));
-  }
-
   _removeWidget() {
     if (!this._widget) {
       return;
@@ -222,23 +159,30 @@ export default class MerkurComponent extends React.Component {
   }
 
   async _tryCreateWidget() {
-    if (!this.props.widgetProperties || this._widget) {
+    const { widgetProperties, onWidgetMounted, debug } = this.props;
+
+    if (!widgetProperties || this._widget) {
       return;
     }
 
-    await this._loadScriptAssets();
+    try {
+      await loadScriptAssets(widgetProperties.assets);
+    } catch (error) {
+      this._handleError(error);
+      return;
+    }
 
     const merkur = getMerkur();
 
     try {
-      this._widget = await merkur.create(this.props.widgetProperties);
+      this._widget = await merkur.create(widgetProperties);
       await this._widget.mount();
 
-      if (typeof this.props.onWidgetMounted === 'function') {
-        this.props.onWidgetMounted(this._widget);
+      if (typeof onWidgetMounted === 'function') {
+        onWidgetMounted(this._widget);
       }
     } catch (_) {
-      if (this.props.debug) {
+      if (debug) {
         console.warn(_);
       }
     }
