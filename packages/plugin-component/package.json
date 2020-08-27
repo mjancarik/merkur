@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-component",
-  "version": "0.16.1",
+  "version": "0.17.0",
   "description": "Merkur component plugin.",
   "main": "lib/index",
   "module": "lib/index",
@@ -34,7 +34,7 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.16.1",
+    "@merkur/core": "^0.17.0",
     "rollup": "^2.25.0"
   },
   "peerDependencies": {
