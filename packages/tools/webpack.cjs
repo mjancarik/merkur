@@ -145,6 +145,8 @@ function applyES5Transformation(config, options = {}) {
     ? options.nodeModulesDir
     : path.resolve(DIR, 'node_modules');
 
+  config.entry.polyfill = './src/polyfill.js';
+
   config.resolve.alias = {
     ...config.resolve.alias,
     ...{

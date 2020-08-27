@@ -22,6 +22,9 @@ export const widgetProperties = {
   // ... other properties
 };
 
+// ./src/polyfill.js
+import 'whatwg-fetch';
+import 'abort-controller/polyfill';
 ```
 
 After that we have `http.request` method available on the widget.

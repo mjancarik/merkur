@@ -38,6 +38,10 @@ export const widgetProperties = {
   // properties and methods which adding componentplugin
   assets: [
     {
+      name: 'polyfill.js',
+      type: 'script',
+    },
+    {
       name: 'widget.js',
       type: 'script',
     },

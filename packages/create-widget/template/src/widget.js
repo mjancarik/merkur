@@ -10,6 +10,10 @@ export const widgetProperties = {
   View,
   assets: [
     {
+      name: 'polyfill.js',
+      type: 'script',
+    },
+    {
       name: 'widget.js',
       type: 'script',
     },

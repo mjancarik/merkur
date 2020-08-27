@@ -36,6 +36,13 @@ fetch(
   },
   "assets":[
     {
+      "name": "polyfill.js",
+      "type": "script",
+      "source": {
+        "es5": "http://localhost:4444/static/es5/polyfill.31c5090d8c961e43fade.js"
+      }
+    },
+    {
       "name": "widget.js",
       "type": "script",
       "source": {
