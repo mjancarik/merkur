@@ -1,7 +1,14 @@
-import createRollupConfig from '../../createRollupConfig';
+import {
+  createRollupESConfig,
+  createRollupES5Config,
+} from '../../createRollupConfig';
 
-let config = createRollupConfig();
+let esConfig = createRollupESConfig();
+let es5Config = createRollupES5Config();
 
-config.external = ['universal-router', 'universal-router/generateUrls'];
+let extendedExternal = ['universal-router', 'universal-router/generateUrls'];
 
-export default config;
+esConfig.external = [...esConfig.external, ...extendedExternal];
+es5Config.external = [...es5Config.external, ...extendedExternal];
+
+export default [esConfig, es5Config];

@@ -1,3 +1,11 @@
-import createRollupConfig from '../../createRollupConfig';
+import {
+  createRollupESConfig,
+  createRollupES5Config,
+  createRollupUMDConfig,
+} from '../../createRollupConfig';
 
-export default createRollupConfig();
+let esConfig = createRollupESConfig();
+let es5Config = createRollupES5Config();
+let umdConfig = createRollupUMDConfig();
+
+export default [esConfig, es5Config, umdConfig];

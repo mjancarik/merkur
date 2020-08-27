@@ -1,8 +1,12 @@
 import { terser } from 'rollup-plugin-terser';
-import peerDepsExternal from 'rollup-plugin-peer-deps-external';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 
-const { name } = require(__dirname + '/package.json');
+const { name, dependencies, peerDependencies } = require(__dirname +
+  '/package.json');
+const external = [
+  ...Object.keys(dependencies || {}),
+  ...Object.keys(peerDependencies || {}),
+];
 
 const babelBaseConfig = {
   babelrc: false,
@@ -71,56 +75,73 @@ function createRollupConfig() {
     treeshake: {
       moduleSideEffects: 'no-external',
     },
-    plugins: [peerDepsExternal()],
-    output: [
-      {
-        file: `./lib/index.js`,
-        format: 'cjs',
-        exports: 'named',
-      },
-      {
-        file: `./lib/index.min.js`,
-        format: 'cjs',
-        exports: 'named',
-        plugins: [terser()],
-      },
-      {
-        file: `./lib/index.mjs`,
-        format: 'esm',
-        exports: 'named',
-      },
-      {
-        file: `./lib/index.min.mjs`,
-        format: 'esm',
-        exports: 'named',
-        plugins: [terser()],
-      },
-      {
-        file: `./lib/index.es5.js`,
-        format: 'cjs',
-        exports: 'named',
-        plugins: [getBabelOutputPlugin(babelBaseConfig)],
-      },
-      {
-        file: `./lib/index.es5.min.js`,
-        format: 'cjs',
-        exports: 'named',
-        plugins: [getBabelOutputPlugin(babelBaseConfig), terser()],
-      },
-      {
-        file: `./lib/index.es5.mjs`,
-        format: 'esm',
-        exports: 'named',
-        plugins: [getBabelOutputPlugin(babelBaseConfig)],
-      },
-      {
-        file: `./lib/index.es5.min.mjs`,
-        format: 'esm',
-        exports: 'named',
-        plugins: [getBabelOutputPlugin(babelBaseConfig), terser()],
-      },
-    ],
+    plugins: [],
+    external,
   };
+
+  return config;
+}
+
+function createRollupESConfig() {
+  let config = createRollupConfig();
+
+  config.output = [
+    {
+      file: `./lib/index.js`,
+      format: 'cjs',
+      exports: 'named',
+    },
+    {
+      file: `./lib/index.min.js`,
+      format: 'cjs',
+      exports: 'named',
+      plugins: [terser()],
+    },
+    {
+      file: `./lib/index.mjs`,
+      format: 'esm',
+      exports: 'named',
+    },
+    {
+      file: `./lib/index.min.mjs`,
+      format: 'esm',
+      exports: 'named',
+      plugins: [terser()],
+    },
+  ];
+
+  return config;
+}
+
+function createRollupES5Config() {
+  let config = createRollupConfig();
+
+  config.output = [
+    {
+      file: `./lib/index.es5.js`,
+      format: 'cjs',
+      exports: 'named',
+      plugins: [getBabelOutputPlugin(babelBaseConfig)],
+    },
+    {
+      file: `./lib/index.es5.min.js`,
+      format: 'cjs',
+      exports: 'named',
+      plugins: [getBabelOutputPlugin(babelBaseConfig), terser()],
+    },
+    {
+      file: `./lib/index.es5.mjs`,
+      format: 'esm',
+      exports: 'named',
+      plugins: [getBabelOutputPlugin(babelBaseConfig)],
+    },
+    {
+      file: `./lib/index.es5.min.mjs`,
+      format: 'esm',
+      exports: 'named',
+      plugins: [getBabelOutputPlugin(babelBaseConfig), terser()],
+    },
+  ];
 
   return config;
 }
@@ -143,4 +164,9 @@ function createRollupUMDConfig() {
 
 export default createRollupConfig;
 
-export { createRollupConfig, createRollupUMDConfig };
+export {
+  createRollupConfig,
+  createRollupESConfig,
+  createRollupES5Config,
+  createRollupUMDConfig,
+};

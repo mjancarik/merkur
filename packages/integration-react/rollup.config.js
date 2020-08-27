@@ -1,19 +1,24 @@
-import createRollupConfig from '../../createRollupConfig';
+import {
+  createRollupESConfig,
+  createRollupES5Config,
+} from '../../createRollupConfig';
 import resolve from '@rollup/plugin-node-resolve';
 import babel from '@rollup/plugin-babel';
 
-let config = createRollupConfig();
+let esConfig = createRollupESConfig();
+let es5Config = createRollupES5Config();
 
-config.plugins.push(
-  ...[
-    resolve({
-      extensions: ['.mjs', '.js', '.jsx', '.json'],
-    }),
-    babel({
-      configFile: false,
-      presets: ['@babel/preset-react'],
-    }),
-  ]
-);
+let extendedPlugins = [
+  resolve({
+    extensions: ['.mjs', '.js', '.jsx', '.json'],
+  }),
+  babel({
+    configFile: false,
+    presets: ['@babel/preset-react'],
+  }),
+];
 
-export default config;
+esConfig.plugins.push(...extendedPlugins);
+es5Config.plugins.push(...extendedPlugins);
+
+export default [esConfig, es5Config];

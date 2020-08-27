@@ -35,7 +35,8 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@merkur/core": "^0.16.1",
-    "rollup": "^2.25.0"
+    "rollup": "^2.25.0",
+    "rollup-plugin-polyfill": "^3.0.0"
   },
   "peerDependencies": {
     "@merkur/core": "^0.15.0"

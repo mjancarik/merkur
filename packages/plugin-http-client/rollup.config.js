@@ -1,9 +1,11 @@
 import {
-  createRollupConfig,
+  createRollupESConfig,
+  createRollupES5Config,
   createRollupUMDConfig,
 } from '../../createRollupConfig';
 
-let config = createRollupConfig();
-config.external = ['node-fetch'];
+let esConfig = createRollupESConfig();
+let es5Config = createRollupES5Config();
+let umdConfig = createRollupUMDConfig();
 
-export default [config, createRollupUMDConfig()];
+export default [esConfig, es5Config, umdConfig];
