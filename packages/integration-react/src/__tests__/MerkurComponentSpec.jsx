@@ -168,7 +168,7 @@ describe('Merkur component', () => {
     );
 
     setImmediate(() => {
-      //expect(onError).toHaveBeenCalled();
+      expect(onError).toHaveBeenCalled();
 
       expect(wrapper).toMatchInlineSnapshot(`
         <span>
