@@ -42,6 +42,7 @@ describe('createWidget method with router plugin', () => {
             "event": Object {},
           },
           "router": Object {
+            "isBootstrapCalled": false,
             "isMounting": false,
             "isRouteActivated": false,
             "pathname": null,
@@ -98,6 +99,7 @@ describe('createWidget method with router plugin', () => {
 
   describe('router plugin API', () => {
     let widget = null;
+    let bootstrap = jest.fn();
     let homeRoute = {
       init: jest.fn(),
       load: jest.fn(() => ({ page: 'home' })),
@@ -134,6 +136,7 @@ describe('createWidget method with router plugin', () => {
         props: {
           pathname: '/',
         },
+        bootstrap,
       });
 
       createRouter(widget, routes);
@@ -144,6 +147,13 @@ describe('createWidget method with router plugin', () => {
       await widget.mount();
 
       expect(widget.router.getCurrentRoute()).toEqual(homeRoute);
+    });
+
+    it('should call widget bootstrap method once', async () => {
+      await widget.mount();
+      await widget.mount();
+
+      expect(bootstrap).toHaveBeenCalledTimes(1);
     });
 
     it('should call init method on home route', async () => {

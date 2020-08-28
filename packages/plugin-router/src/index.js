@@ -31,6 +31,7 @@ export function routerPlugin() {
         pathname: null,
         isMounting: false,
         isRouteActivated: false,
+        isBootstrapCalled: false,
       };
 
       bindWidgetToFunctions(widget, widget.router);
@@ -54,6 +55,7 @@ export function routerPlugin() {
 
       widget.$in.component.lifeCycle.load = loadHook;
 
+      hookMethod(widget, 'bootstrap', bootstrapHook);
       hookMethod(widget, 'mount', mountHook);
       hookMethod(widget, 'unmount', unmountHook);
       hookMethod(widget, 'update', updateHook);
@@ -77,6 +79,16 @@ function routerAPI() {
       },
     },
   };
+}
+
+async function bootstrapHook(widget, originalBootstrap, ...rest) {
+  if (widget.$in.router.isBootstrapCalled) {
+    return;
+  }
+
+  widget.$in.router.isBootstrapCalled = true;
+
+  return originalBootstrap(...rest);
 }
 
 // hook Component
