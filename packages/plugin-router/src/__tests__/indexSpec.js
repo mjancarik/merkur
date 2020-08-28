@@ -44,6 +44,7 @@ describe('createWidget method with router plugin', () => {
           "router": Object {
             "isMounting": false,
             "isRouteActivated": false,
+            "pathname": null,
             "route": null,
           },
         },
@@ -174,6 +175,13 @@ describe('createWidget method with router plugin', () => {
       await widget.mount();
 
       expect(homeRoute.destroy).not.toHaveBeenCalled();
+    });
+
+    it('should not call deactivate method on home route for same pathname', async () => {
+      await widget.mount();
+      await widget.setProps({ pathname: '/', key: 1 });
+
+      expect(homeRoute.deactivate).not.toHaveBeenCalled();
     });
 
     it('should call deactivate method on home route', async () => {

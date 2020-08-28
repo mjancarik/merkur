@@ -28,6 +28,7 @@ export function routerPlugin() {
 
       widget.$in.router = {
         route: null,
+        pathname: null,
         isMounting: false,
         isRouteActivated: false,
       };
@@ -82,7 +83,7 @@ function routerAPI() {
 async function loadHook(widget, ...rest) {
   const plugin = widget.$in.router;
 
-  if (!plugin.isMounting) {
+  if (!plugin.isMounting && widget.props.pathname !== plugin.pathname) {
     await tearDownRouterCycle(widget, ...rest);
 
     await setupRouterCycle(widget, ...rest);
@@ -97,10 +98,11 @@ async function loadHook(widget, ...rest) {
 
 // hook Component
 async function mountHook(widget, originalMount, ...rest) {
-  const plugin = widget.$in.router;
+  await widget.bootstrap(...rest);
 
+  const plugin = widget.$in.router;
   if (!plugin.route) {
-    plugin.route = await resolveRoute(widget);
+    await resolveRoute(widget);
     plugin.isMounting = true;
   }
 
@@ -164,10 +166,15 @@ async function resolveRoute(widget) {
     }
   }
 
-  return widget.$dependencies.router.resolve({
+  const route = await widget.$dependencies.router.resolve({
     pathname: widget.props.pathname,
     widget,
   });
+
+  widget.$in.router.route = route;
+  widget.$in.router.pathname = widget.props.pathname;
+
+  return route;
 }
 
 async function setupRouterCycle(widget, ...rest) {
@@ -176,8 +183,6 @@ async function setupRouterCycle(widget, ...rest) {
   if (isFunction(route.init)) {
     await route.init(widget, { route, args: rest });
   }
-
-  widget.$in.router.route = route;
 }
 
 async function tearDownRouterCycle(widget, ...rest) {
