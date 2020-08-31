@@ -66,7 +66,7 @@ export function loadScriptAssets(assets) {
       let assetSource = asset.source;
 
       if (typeof assetSource !== 'string') {
-        isES9Supported() ? assetSource.es9 : assetSource.es5;
+        assetSource = isES9Supported() ? assetSource.es9 : assetSource.es5;
       }
 
       if (
