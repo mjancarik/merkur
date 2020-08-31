@@ -40,74 +40,7 @@ Array [
 ]
 `;
 
-exports[`Merkur component loadScriptAssets() function should return promise that resolves after the scripts are loaded 1`] = `
-Array [
-  Object {
-    "defer": true,
-    "onerror": [Function],
-    "onload": [Function],
-    "src": Object {
-      "name": "widget.js",
-      "source": "http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js",
-      "type": "script",
-    },
-  },
-  Object {
-    "defer": true,
-    "onerror": [Function],
-    "onload": [Function],
-    "src": Object {
-      "name": "polyfill.js",
-      "source": "http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js",
-      "type": "script",
-    },
-  },
-  Object {
-    "innerHTML": "alert();",
-    "onerror": [MockFunction],
-    "onload": [MockFunction] {
-      "calls": Array [
-        Array [],
-      ],
-      "results": Array [
-        Object {
-          "type": "return",
-          "value": undefined,
-        },
-      ],
-    },
-  },
-]
-`;
-
 exports[`Merkur component loadStyleAssets() function should create style elements for style assets 1`] = `
-Array [
-  Object {
-    "onerror": [Function],
-    "onload": [Function],
-    "src": "http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css",
-    "type": "text/css",
-  },
-  Object {
-    "innerHTML": ".cssClass { margin-top: 5px; }",
-    "onerror": [MockFunction],
-    "onload": [MockFunction] {
-      "calls": Array [
-        Array [],
-      ],
-      "results": Array [
-        Object {
-          "type": "return",
-          "value": undefined,
-        },
-      ],
-    },
-    "type": "text/css",
-  },
-]
-`;
-
-exports[`Merkur component loadStyleAssets() function should return promise that resolves after the styles are loaded 1`] = `
 Array [
   Object {
     "onerror": [Function],

@@ -36,7 +36,6 @@ describe('Merkur component', () => {
           'http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js',
       },
       {
-        name: 'inline.js',
         type: 'inlineScript',
         source: 'alert();',
       },
@@ -91,8 +90,6 @@ describe('Merkur component', () => {
       });
 
       resolveFakeAssets();
-
-      expect(fakeAssetObjects).toMatchSnapshot();
     });
   });
 
@@ -128,8 +125,6 @@ describe('Merkur component', () => {
       });
 
       resolveFakeAssets();
-
-      expect(fakeAssetObjects).toMatchSnapshot();
     });
   });
 });
