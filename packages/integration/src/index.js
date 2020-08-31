@@ -17,14 +17,19 @@ function isES9Supported() {
   return (_isES9Supported = Object.values && checkAsyncAwait());
 }
 
-function _loadScript(assetSource) {
+function _loadScript(asset) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
 
-    script.defer = true;
-    script.onload = resolve;
-    script.onerror = reject;
-    script.src = assetSource;
+    if (asset.type === 'script') {
+      script.defer = true;
+      script.onload = resolve;
+      script.onerror = reject;
+      script.src = asset;
+    } else {
+      script.innerHTML = asset.source;
+      resolve();
+    }
 
     document.head.appendChild(script);
   });
@@ -57,30 +62,28 @@ export function loadStyleAssets(assets) {
       asset.type === 'inlineStyle'
   );
 
-  return Promise.all(stylesToRender.map((asset) => _loadStyle(asset.source)));
+  return Promise.all(stylesToRender.map((asset) => _loadStyle(asset)));
 }
 
 export function loadScriptAssets(assets) {
   const scriptsToRender = assets
     .map((asset) => {
-      let assetSource = asset.source;
+      const { source } = asset;
 
-      if (typeof assetSource !== 'string') {
-        assetSource = isES9Supported() ? assetSource.es9 : assetSource.es5;
+      if (typeof source !== 'string') {
+        asset.source = isES9Supported() ? source.es9 : source.es5;
       }
 
-      if (
-        asset.type === 'script' &&
-        !document.querySelector(`script[src='${assetSource}']`)
-      ) {
-        return assetSource;
-      }
+      return asset;
     })
-    .filter((assetSource) => assetSource);
+    .filter(
+      (asset) =>
+        (asset.type === 'script' &&
+          !document.querySelector(`script[src='${asset.source}']`)) ||
+        asset.type === 'inlineScript'
+    );
 
-  return Promise.all(
-    scriptsToRender.map((assetSource) => _loadScript(assetSource))
-  );
+  return Promise.all(scriptsToRender.map((asset) => _loadScript(asset)));
 }
 
 export default function loadAssets(assets) {
