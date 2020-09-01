@@ -2,6 +2,7 @@ import { getMerkur } from '@merkur/core';
 import { loadScriptAssets } from '@merkur/integration';
 import React from 'react';
 
+// error event name from @merkur/plugin-error
 const MERKUR_ERROR_EVENT_NAME = '@merkur/plugin-error.error';
 
 export default class MerkurComponent extends React.Component {
