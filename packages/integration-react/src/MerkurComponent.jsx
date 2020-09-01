@@ -158,7 +158,10 @@ export default class MerkurComponent extends React.Component {
       this.props.onWidgetUnmounting(this._widget);
     }
 
-    this._widget.off(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
+    if (typeof this._widget.off === 'function') {
+      // widget might not be using @merkur/plugin-event-emitter
+      this._widget.off(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
+    }
 
     this._widget.unmount();
     this._widget = null;
@@ -184,7 +187,10 @@ export default class MerkurComponent extends React.Component {
       this._widget = await merkur.create(widgetProperties);
       await this._widget.mount();
 
-      this._widget.on(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
+      if (typeof this._widget.on === 'function') {
+        // widget might not be using @merkur/plugin-event-emitter
+        this._widget.on(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
+      }
 
       if (typeof onWidgetMounted === 'function') {
         onWidgetMounted(this._widget);
