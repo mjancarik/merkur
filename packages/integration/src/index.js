@@ -1,21 +1,4 @@
-let _isES9Supported = undefined;
-
-function isES9Supported() {
-  if (_isES9Supported !== undefined) {
-    return _isES9Supported;
-  }
-
-  function checkAsyncAwait() {
-    try {
-      new Function('(async () => ({}))()');
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  return (_isES9Supported = Object.values && checkAsyncAwait());
-}
+import testScript from './testScript';
 
 function _loadScript(asset) {
   return new Promise((resolve, reject) => {
@@ -71,16 +54,17 @@ export function loadScriptAssets(assets) {
       const { source } = asset;
 
       if (typeof source !== 'string') {
-        asset.source = isES9Supported() ? source.es9 : source.es5;
+        asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
       }
 
       return asset;
     })
     .filter(
       (asset) =>
-        (asset.type === 'script' &&
+        ((asset.type === 'script' &&
           !document.querySelector(`script[src='${asset.source}']`)) ||
-        asset.type === 'inlineScript'
+          asset.type === 'inlineScript') &&
+        testScript.test(asset.test)
     );
 
   return Promise.all(scriptsToRender.map((asset) => _loadScript(asset)));

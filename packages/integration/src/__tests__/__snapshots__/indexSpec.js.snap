@@ -19,6 +19,7 @@ Array [
     "src": Object {
       "name": "polyfill.js",
       "source": "http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js",
+      "test": "var a;",
       "type": "script",
     },
   },
