@@ -2,12 +2,17 @@ import { getMerkur } from '@merkur/core';
 import { loadScriptAssets } from '@merkur/integration';
 import React from 'react';
 
+// error event name from @merkur/plugin-error
+const MERKUR_ERROR_EVENT_NAME = '@merkur/plugin-error.error';
+
 export default class MerkurComponent extends React.Component {
   constructor(props, context) {
     super(props, context);
 
     this._html = null;
     this._widget = null;
+
+    this._handleClientError = this._handleError.bind(this);
 
     this.state = {
       encounteredError: false,
@@ -154,6 +159,11 @@ export default class MerkurComponent extends React.Component {
       this.props.onWidgetUnmounting(this._widget);
     }
 
+    if (typeof this._widget.off === 'function') {
+      // widget might not be using @merkur/plugin-event-emitter
+      this._widget.off(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
+    }
+
     this._widget.unmount();
     this._widget = null;
   }
@@ -177,6 +187,11 @@ export default class MerkurComponent extends React.Component {
     try {
       this._widget = await merkur.create(widgetProperties);
       await this._widget.mount();
+
+      if (typeof this._widget.on === 'function') {
+        // widget might not be using @merkur/plugin-event-emitter
+        this._widget.on(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
+      }
 
       if (typeof onWidgetMounted === 'function') {
         onWidgetMounted(this._widget);

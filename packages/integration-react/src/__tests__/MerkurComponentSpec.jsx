@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import { createMerkur, createMerkurWidget, removeMerkur } from '@merkur/core';
 import { componentPlugin } from '@merkur/plugin-component';
+import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 import * as MerkurIntegration from '@merkur/integration';
 import React from 'react';
 
@@ -55,7 +56,7 @@ describe('Merkur component', () => {
       $dependencies: {
         shallow,
       },
-      $plugins: [componentPlugin],
+      $plugins: [componentPlugin, eventEmitterPlugin],
       assets: widgetProperties.assets,
       mount(widget) {
         return widget.$dependencies.shallow(<span />);
