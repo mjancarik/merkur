@@ -10,7 +10,7 @@ function _loadScript(asset) {
       script.onerror = reject;
       script.src = asset;
     } else {
-      script.innerHTML = asset.source;
+      script.text = asset.source;
       resolve();
     }
 
@@ -49,21 +49,30 @@ export function loadStyleAssets(assets) {
 }
 
 export function loadScriptAssets(assets) {
+  const scriptElements = document.getElementsByTagName('script');
   const scriptsToRender = assets
     .map((asset) => {
       const { source } = asset;
+      const _asset = Object.assign({}, asset);
 
       if (typeof source !== 'string') {
-        asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
+        _asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
       }
 
-      return asset;
+      return _asset;
     })
     .filter(
       (asset) =>
         ((asset.type === 'script' &&
           !document.querySelector(`script[src='${asset.source}']`)) ||
-          asset.type === 'inlineScript') &&
+          (asset.type === 'inlineScript' &&
+            Array.from(scriptElements).reduce((acc, cur) => {
+              if (cur.text === asset.source) {
+                return false;
+              }
+
+              return acc;
+            }, true))) &&
         testScript.test(asset.test)
     );
 
