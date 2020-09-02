@@ -1,21 +1,4 @@
-let _isES9Supported = undefined;
-
-function isES9Supported() {
-  if (_isES9Supported !== undefined) {
-    return _isES9Supported;
-  }
-
-  function checkAsyncAwait() {
-    try {
-      new Function('(async () => ({}))()');
-      return true;
-    } catch (e) {
-      return false;
-    }
-  }
-
-  return (_isES9Supported = Object.values && checkAsyncAwait());
-}
+import testScript from './testScript';
 
 function _loadScript(asset) {
   return new Promise((resolve, reject) => {
@@ -26,6 +9,23 @@ function _loadScript(asset) {
       script.onload = resolve;
       script.onerror = reject;
       script.src = asset;
+
+      const { attr } = asset;
+      if (attr && Object.keys(attr).length) {
+        for (const name in attr) {
+          const value = attr[name];
+
+          if (typeof value === 'boolean') {
+            if (value) {
+              script.setAttribute(name, '');
+            } else {
+              script.removeAttribute(name);
+            }
+          } else {
+            script.setAttribute(name, value);
+          }
+        }
+      }
     } else {
       script.text = asset.source;
       resolve();
@@ -55,11 +55,19 @@ function _loadStyle(asset) {
 }
 
 export function loadStyleAssets(assets) {
+  const styleElements = document.getElementsByTagName('style');
   const stylesToRender = assets.filter(
     (asset) =>
       (asset.type === 'stylesheet' &&
         !document.querySelector(`style[href='${asset.source}']`)) ||
-      asset.type === 'inlineStyle'
+      (asset.type === 'inlineStyle' &&
+        Array.from(styleElements).reduce((acc, cur) => {
+          if (cur.innerHTML === asset.source) {
+            return false;
+          }
+
+          return acc;
+        }, true))
   );
 
   return Promise.all(stylesToRender.map((asset) => _loadStyle(asset)));
@@ -73,23 +81,24 @@ export function loadScriptAssets(assets) {
       const _asset = Object.assign({}, asset);
 
       if (typeof source !== 'string') {
-        _asset.source = isES9Supported() ? source.es9 : source.es5;
+        _asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
       }
 
       return _asset;
     })
     .filter(
       (asset) =>
-        (asset.type === 'script' &&
+        ((asset.type === 'script' &&
           !document.querySelector(`script[src='${asset.source}']`)) ||
-        (asset.type === 'inlineScript' &&
-          Array.from(scriptElements).reduce((acc, cur) => {
-            if (cur.text === asset.source) {
-              return false;
-            }
+          (asset.type === 'inlineScript' &&
+            Array.from(scriptElements).reduce((acc, cur) => {
+              if (cur.text === asset.source) {
+                return false;
+              }
 
-            return acc;
-          }, true))
+              return acc;
+            }, true))) &&
+        (asset.test ? testScript.test(asset.test) : true)
     );
 
   return Promise.all(scriptsToRender.map((asset) => _loadScript(asset)));
