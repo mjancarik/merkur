@@ -3,6 +3,7 @@
 exports[`Merkur component loadScriptAssets() function should create script elements for script assets 1`] = `
 Array [
   Object {
+
     "async": "",
     "custom-element": "amp-fx-collection",
     "onerror": [Function],
