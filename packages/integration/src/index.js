@@ -55,11 +55,19 @@ function _loadStyle(asset) {
 }
 
 export function loadStyleAssets(assets) {
+  const styleElements = document.getElementsByTagName('style');
   const stylesToRender = assets.filter(
     (asset) =>
       (asset.type === 'stylesheet' &&
         !document.querySelector(`style[href='${asset.source}']`)) ||
-      asset.type === 'inlineStyle'
+      (asset.type === 'inlineStyle' &&
+        Array.from(styleElements).reduce((acc, cur) => {
+          if (cur.innerHTML === asset.source) {
+            return false;
+          }
+
+          return acc;
+        }, true))
   );
 
   return Promise.all(stylesToRender.map((asset) => _loadStyle(asset)));
