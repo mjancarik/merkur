@@ -27,9 +27,9 @@ Array [
     "removeAttribute": [Function],
     "setAttribute": [Function],
     "src": Object {
-      "name": "polyfill.js",
-      "source": "http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js",
-      "test": "return typeof window !== \\"undefined\\"",
+      "name": "polyfill2.js",
+      "source": "http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js",
+      "test": "return (function () {foo();})()",
       "type": "script",
     },
   },
