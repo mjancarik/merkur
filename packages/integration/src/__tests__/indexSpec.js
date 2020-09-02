@@ -41,14 +41,14 @@ describe('Merkur component', () => {
       },
       {
         name: 'polyfill.js',
-        test: 'var a;',
+        test: 'return typeof window !== "undefined"',
         type: 'script',
         source:
           'http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js',
       },
       {
         name: 'polyfill.js',
-        test: '(function () {foo();})()',
+        test: 'return (function () {foo();})()',
         type: 'script',
         source:
           'http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb1472.js',

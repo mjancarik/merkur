@@ -23,11 +23,13 @@ describe('Merkur component', () => {
 
   describe('test() function', () => {
     it('should return true', () => {
-      expect(testScript.test('var a;')).toEqual(true);
+      expect(testScript.test('return typeof window !== "undefined"')).toEqual(
+        true
+      );
     });
 
     it('should return false', () => {
-      expect(testScript.test('(function () {foo();})()')).toEqual(false);
+      expect(testScript.test('return (function () {foo();})()')).toEqual(false);
     });
   });
 });

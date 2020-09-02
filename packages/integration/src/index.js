@@ -98,7 +98,7 @@ export function loadScriptAssets(assets) {
 
               return acc;
             }, true))) &&
-        testScript.test(asset.test)
+        (asset.test ? testScript.test(asset.test) : true)
     );
 
   return Promise.all(scriptsToRender.map((asset) => _loadScript(asset)));
