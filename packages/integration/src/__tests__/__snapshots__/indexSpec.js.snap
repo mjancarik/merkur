@@ -23,7 +23,6 @@ Array [
     },
   },
   Object {
-    "innerHTML": "alert();",
     "onerror": [MockFunction],
     "onload": [MockFunction] {
       "calls": Array [
@@ -36,6 +35,7 @@ Array [
         },
       ],
     },
+    "text": "alert();",
   },
 ]
 `;
