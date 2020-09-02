@@ -9,6 +9,23 @@ function _loadScript(asset) {
       script.onload = resolve;
       script.onerror = reject;
       script.src = asset;
+
+      const { attr } = asset;
+      if (attr && Object.keys(attr).length) {
+        for (const name in attr) {
+          const value = attr[name];
+
+          if (typeof value === 'boolean') {
+            if (value) {
+              script.setAttribute(name, '');
+            } else {
+              script.removeAttribute(name);
+            }
+          } else {
+            script.setAttribute(name, value);
+          }
+        }
+      }
     } else {
       script.text = asset.source;
       resolve();

@@ -5,7 +5,12 @@ describe('Merkur component', () => {
   let fakeAssetObjects = [];
 
   const fakeAssetObjectGenerator = () => {
-    const fakeAssetObject = { onload: jest.fn(), onerror: jest.fn() };
+    const fakeAssetObject = {
+      onerror: jest.fn(),
+      onload: jest.fn(),
+      removeAttribute: (name) => delete fakeAssetObject[name],
+      setAttribute: (name, value) => (fakeAssetObject[name] = value),
+    };
     fakeAssetObjects.push(fakeAssetObject);
 
     return fakeAssetObject;
@@ -27,6 +32,11 @@ describe('Merkur component', () => {
             'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js',
           es5:
             'http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js',
+        },
+        attr: {
+          async: true,
+          'custom-element': 'amp-fx-collection',
+          defer: false,
         },
       },
       {
