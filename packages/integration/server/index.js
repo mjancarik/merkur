@@ -17,6 +17,10 @@ function memo(fn, options = { generateKey: () => {} }) {
 }
 
 async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
+  if (staticBaseUrl.endsWith('/')) {
+    staticBaseUrl = staticBaseUrl.slice(0, -1);
+  }
+
   return folders.reduce(async (assets, folder) => {
     assets = await assets;
     const folderPath = path.join(staticFolder, folder);
