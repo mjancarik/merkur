@@ -3,6 +3,49 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.18.0](https://github.com/mjancarik/merkur/compare/v0.17.0...v0.18.0) (2020-09-03)
+
+
+### Bug Fixes
+
+* 🐛 added check for object destructuring in ES9 supported fn ([952cd8c](https://github.com/mjancarik/merkur/commit/952cd8c3551192ba4c78f30c55f4506a547924cb))
+* 🐛 keep controller after changing props with same pathname ([27266c7](https://github.com/mjancarik/merkur/commit/27266c7ddbdb311175cc04048e9b29e0a6bb2249))
+* 🐛 optional event-emitter ([5f0edd1](https://github.com/mjancarik/merkur/commit/5f0edd191e99d6fef66a8c29530b73dba956d874))
+* 🐛 run bootstrap life cycle method before resolving route ([c3172c2](https://github.com/mjancarik/merkur/commit/c3172c21ad68eabc3846d32c0e3c1747a3d06824))
+* 🐛 skip loading missing script asset in playground ([127f39b](https://github.com/mjancarik/merkur/commit/127f39bd0759884c601f8e8c416442c02d3d0076))
+* 🐛 umd version of module ([e90b6b1](https://github.com/mjancarik/merkur/commit/e90b6b16c512607db423ae2e2724cd6da6afb118))
+* Double slash in assets path ([#25](https://github.com/mjancarik/merkur/issues/25)) ([bebb81e](https://github.com/mjancarik/merkur/commit/bebb81ee98d7d13d2054368939f70f290c0905df))
+
+
+### Code Refactoring
+
+* 💡 rename ecmaversions option to folders ([54d62aa](https://github.com/mjancarik/merkur/commit/54d62aa11bf294e6c561bd93ac6719a89cb21cca))
+
+
+### Features
+
+* 🎸 added polyfill file ([b2b2a99](https://github.com/mjancarik/merkur/commit/b2b2a99380ea741d8a36fa95a94ded3414fc8a9f))
+* 🎸 added terser for minification umd version of modules ([192c9b2](https://github.com/mjancarik/merkur/commit/192c9b206656da6fb870134b9725bf12ed098ab7))
+* 🎸 added timeout transformer ([9ff3dc7](https://github.com/mjancarik/merkur/commit/9ff3dc7f73dec79f39b552700c73dcc8427c0cce))
+* 🎸 handling client side error ([96c736f](https://github.com/mjancarik/merkur/commit/96c736f18bcd1f41287f71c8526c2fb9288bbcd7))
+* 🎸 pipe allow async function ([97f6aa5](https://github.com/mjancarik/merkur/commit/97f6aa53159cb988ab6dd6e02d422ecdeb6c0064))
+* 🎸 polyfill is downloaded only for falsy result from test ([b65b4c8](https://github.com/mjancarik/merkur/commit/b65b4c8fbbe131dc2ef66486077b9666745aac22))
+* 🎸 removed containerSelector from API call ([e54303d](https://github.com/mjancarik/merkur/commit/e54303df23264980f888fc3bf3d50b6c3892728c))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+* 🧨 yes
+* 🧨 yes
+* 🧨 yes
+* 🧨 yes
+* 🧨 yes
+
+
+
+
+
 # [0.17.0](https://github.com/mjancarik/merkur/compare/v0.16.2...v0.17.0) (2020-08-27)
 
 

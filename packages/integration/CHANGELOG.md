@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.18.0](https://github.com/mjancarik/merkur/compare/v0.17.0...v0.18.0) (2020-09-03)
+
+
+### Bug Fixes
+
+* 🐛 added check for object destructuring in ES9 supported fn ([952cd8c](https://github.com/mjancarik/merkur/commit/952cd8c3551192ba4c78f30c55f4506a547924cb))
+* 🐛 update dependencies ([5ca444a](https://github.com/mjancarik/merkur/commit/5ca444a70dd9a2a7bb94a592241ccea63c788430))
+* Double slash in assets path ([#25](https://github.com/mjancarik/merkur/issues/25)) ([bebb81e](https://github.com/mjancarik/merkur/commit/bebb81ee98d7d13d2054368939f70f290c0905df))
+
+
+### Code Refactoring
+
+* 💡 rename ecmaversions option to folders ([54d62aa](https://github.com/mjancarik/merkur/commit/54d62aa11bf294e6c561bd93ac6719a89cb21cca))
+
+
+### Features
+
+* 🎸 polyfill is downloaded only for falsy result from test ([b65b4c8](https://github.com/mjancarik/merkur/commit/b65b4c8fbbe131dc2ef66486077b9666745aac22))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 # [0.17.0](https://github.com/mjancarik/merkur/compare/v0.16.2...v0.17.0) (2020-08-27)
 
 

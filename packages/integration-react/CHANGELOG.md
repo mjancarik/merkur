@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.18.0](https://github.com/mjancarik/merkur/compare/v0.17.0...v0.18.0) (2020-09-03)
+
+
+### Bug Fixes
+
+* 🐛 optional event-emitter ([5f0edd1](https://github.com/mjancarik/merkur/commit/5f0edd191e99d6fef66a8c29530b73dba956d874))
+* 🐛 update dependencies ([5ca444a](https://github.com/mjancarik/merkur/commit/5ca444a70dd9a2a7bb94a592241ccea63c788430))
+
+
+### Features
+
+* 🎸 handling client side error ([96c736f](https://github.com/mjancarik/merkur/commit/96c736f18bcd1f41287f71c8526c2fb9288bbcd7))
+
+
+
+
+
 # [0.17.0](https://github.com/mjancarik/merkur/compare/v0.16.2...v0.17.0) (2020-08-27)
 
 

@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-http-client",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "Merkur event emitter plugin.",
   "main": "lib/index",
   "module": "lib/index",
@@ -34,7 +34,7 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.17.0",
+    "@merkur/core": "^0.18.0",
     "rollup": "^2.26.9"
   },
   "peerDependencies": {
