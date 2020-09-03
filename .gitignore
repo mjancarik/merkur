@@ -8,4 +8,3 @@ dist/
 es/
 lib/
 coverage/
-packages/**/package-lock.json
