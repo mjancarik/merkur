@@ -16,6 +16,9 @@ function createWidget(widgetParams) {
         widget.onReset();
       });
     },
+    unmount(widget) {
+      document.querySelector(widget.props.containerSelector).innerHTML = '';
+    },
     update(widget) {
       document.getElementById('counter').innerText = widget.state.counter;
     },
