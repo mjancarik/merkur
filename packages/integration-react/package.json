@@ -34,14 +34,14 @@
   "devDependencies": {
     "@babel/preset-react": "^7.10.4",
     "@merkur/core": "^0.17.0",
-    "@merkur/plugin-component": "^0.15.0",
+    "@merkur/plugin-component": "^0.17.0",
     "@merkur/plugin-event-emitter": "^0.17.0",
     "enzyme": "3.11.0",
-    "enzyme-adapter-react-16": "1.15.3",
+    "enzyme-adapter-react-16": "1.15.4",
     "enzyme-to-json": "^3.5.0",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "rollup": "^2.25.0"
+    "rollup": "^2.26.9"
   },
   "peerDependencies": {
     "@merkur/core": "*",
