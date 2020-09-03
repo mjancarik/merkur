@@ -3,7 +3,9 @@ let _isES9Supported;
 function isES9Supported() {
   if (_isES9Supported === undefined) {
     _isES9Supported =
-      exported.test('return (async () => ({}))()') && !!Object.values;
+      exported.test(
+        'return (() => { const o = { t: 1 }; return { ...o }; })() && (async () => ({}))()'
+      ) && !!Object.values;
   }
 
   return _isES9Supported;
