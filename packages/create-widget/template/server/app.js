@@ -10,7 +10,7 @@ const ejs = require('ejs');
 const config = require('config');
 
 const { createAssets, memo } = require('@merkur/integration/server/');
-const memoCraeteAssets = memo(createAssets);
+const memoCreateAssets = memo(createAssets);
 
 const widgetEnvironment = config.get('widget');
 
@@ -48,7 +48,6 @@ app
       const widget = await merkurModule.createWidget({
         props: {
           name: req.query.name,
-          containerSelector: req.query.containerSelector,
           environment: widgetEnvironment,
         },
       });
@@ -59,11 +58,11 @@ app
       const staticFolder = `${__dirname}/../build/static`;
       const staticBaseUrl = `${getServerUrl(req)}/static`;
 
-      info.assets = await memoCraeteAssets({
+      info.assets = await memoCreateAssets({
         assets: info.assets,
         staticFolder,
         staticBaseUrl,
-        ecmaversions: ['es9', 'es5'],
+        folders: ['es9', 'es5'],
       });
 
       res.json({ ...info, html });
@@ -74,14 +73,11 @@ app
     asyncMiddleware(async (req, res) => {
       const container = 'container';
       const response = await got(
-        `${getServerUrl(
-          req
-        )}/widget?name=merkur&counter=0&containerSelector=${encodeURIComponent(
-          `.${container}`
-        )}`
+        `${getServerUrl(req)}/widget?name=merkur&counter=0`
       );
       const widgetProperties = JSON.parse(response.body);
       const { html } = widgetProperties;
+      widgetProperties.props.containerSelector = `.${container}`;
 
       delete widgetProperties.html;
 

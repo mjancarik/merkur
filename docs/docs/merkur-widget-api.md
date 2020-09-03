@@ -11,7 +11,7 @@ Other properties are for your own usage. The property `$external` is for storing
 
 The widget also contains two methods for plugins; `setup` and `create`. For more details continue to [plugins]({{ '/docs/plugins' | relative_url }}) section. You can use these methods also in widgetProperties.
 
-The widget instance is sealed after creating so you can't add properties or functions to widget directly. But for rare use cases you can use property `$external`. The Merkur automatically binds widget functions to recieve widget as a first argument. You can see it in easy counter example widget.
+The widget instance is sealed after creating so you can't add properties or functions to widget directly. But for rare use cases you can use property `$external`. The Merkur automatically binds widget functions to receive widget as a first argument. You can see it in easy counter example widget.
 
 ```javascript
 import { createMerkurWidget, createMerkur } from '@merkur/core';

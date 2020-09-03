@@ -13,15 +13,19 @@ At first we must make API call with your framework of choice. In this example we
 
 ```javascript
 // browser
-const widgetClassName = 'widget__container';
-fetch(
-  `http://localhost:4000/widget?containerSelector=${
-    encodeURIComponent(`.${widgetClassName}`)
-  }`)
-  .then((response) => response.json())
-  .then(({ body }) => {
-    console.log(body);
-  })
+(async() => {
+  const widgetClassName = 'widget__container';
+  const widgetProperties = await fetch(`http://localhost:4000/widget`)
+    .then((response) => response.json())
+    .then(({ body }) => {
+      // added container selector for our widget
+      body.props.containerSelector = `.${widgetClassName}`;
+
+      return body;
+    });
+
+  console.log(widgetProperties);
+}();
 ```
 
 ```json
@@ -62,49 +66,97 @@ fetch(
 
 ## Alive merkur widget in browser (SPA)
 
-After we recieve response body we must first create widget container.
+After we receive response body we create widget container at first.
 
 ```javascript
-let widgetContainer = document.createElement('div');
-widgetContainer.innerHTML = body.html;
+  const widgetContainer = document.createElement('div');
+  widgetContainer.classList.add(widgetClassName);
+  widgetContainer.innerHTML = widgetProperties.html;
 ```
 
-After that we must download widget assets and insert widget container to DOM.
+After that we must download widget assets, insert widget container to DOM and alive our widget.
+For downloading assets we can use `loadAssets` method from @merkur/integration module. Full example of integration merkur widget to SPA is:
 
 ```javascript
-body.assets.forEach((asset) => {
-  if (asset.type === 'script') {
-    let script = document.createElement('script');
-    script.src = asset.es5.source;
-    document.body.appendChild(script);
-  }
+import loadAssets from '@merkur/integration';
+import { getMerkur } from '@merkur/core';
 
-  if (asset.type === 'stylesheet') {
-    // insert to page simalar as script
-  }
-});
+(async() => {
+  const widgetClassName = 'widget__container';
+  const widgetProperties = await fetch(`http://localhost:4000/widget`)
+    .then((response) => response.json())
+    .then(({ body }) => {
+      // added container selector for our widget
+      body.props.containerSelector = `.${widgetClassName}`;
 
-document.body.appendChild(widgetContainer);
+      return body;
+    });
+
+    // create widget container
+    const widgetContainer = document.createElement('div');
+    widgetContainer.classList.add(widgetClassName);
+    widgetContainer.innerHTML = widgetProperties.html;
+
+    // load widget assets
+    await loadAssets(widgetProperties.assets);
+
+    // insert widget container to DOM
+    document.body.appendChild(widgetContainer);
+
+    // create instance of merkur widget
+    const widget = await getMerkur().create(widgetProperties);
+
+    // alive merkur widget
+    return widget.mount();
+}();
 ```
 
-The last step is to make the widget alive in your app. We add `onload` method for script asset.
+If you have old application without npm modules. You can handle assets your own way and add `onload` method for script asset where we are going to alive merkur widget. Primitive example:
 
 ```javascript
-if (asset.type === 'script') {
-  let script = document.createElement('script');
-  script.onload = () => {
-    let widget = __merkur__.create(body);
 
-    widget.mount();
-  };
-  script.src = asset.es5.source;
-  document.body.appendChild(script);
-}
+(async() => {
+  const widgetClassName = 'widget__container';
+  const widgetProperties = await fetch(`http://localhost:4000/widget`)
+    .then((response) => response.json())
+    .then(({ body }) => {
+      // added container selector for our widget
+      body.props.containerSelector = `.${widgetClassName}`;
+
+      return body;
+    });
+
+    // create widget container
+    const widgetContainer = document.createElement('div');
+    widgetContainer.classList.add(widgetClassName);
+    widgetContainer.innerHTML = widgetProperties.html;
+
+    // own very primitive handling widget assets
+    widgetProperties.assets.forEach((asset) => {
+      if (asset.type === 'script') {
+        let script = document.createElement('script');
+        script.onload = () => {
+          let widget = __merkur__.create(body);
+
+          widget.mount();
+        };
+        script.src = asset.es5.source;
+        document.body.appendChild(script);
+      }
+
+      if (asset.type === 'stylesheet') {
+        // insert to page similar as script tag
+      }
+    });
+
+    // insert widget container to DOM
+    document.body.appendChild(widgetContainer);
+}();
 ```
 
 ## Hydrate server side rendering widget (MPA)
 
-After we recieve response from the widget API call we must update the final html which is sent to the browser. First we add assets.
+After we receive response from the widget API call we must update the final html which is sent to the browser. First we add assets.
 
 ```html
 <head>
@@ -116,9 +168,10 @@ After we recieve response from the widget API call we must update the final html
     <% } %>
     
     <%if (asset.type === 'script') { %>
-      <%if (typeof asset.source === 'string') { %>
+     <%if (typeof asset.source === 'string') { %>
         <script src='<%= asset.source %>' defer='true'></script>
-      <% } else { %>
+      <% } %>
+      <%if (typeof asset.source === 'object') { %>
         <script src='<%= asset.source.es5 %>' defer='true'></script>
       <% } %>
     <% } %>
@@ -138,7 +191,10 @@ The last step is to hydrate the widget in your app after the page is loaded.
 ```html
 <script>
   window.addEventListener('load', () => {
-    __merkur__.create(<%- JSON.stringify(body) %>)
+    var widgetProperties = <%- JSON.stringify(body) %>;
+    // define widget container selector
+    widgetProperties.props.containerSelector = '.<%= widgetClassName %>';
+    __merkur__.create(widgetProperties)
       .then((widget) => {
         widget.mount();
       });
@@ -148,21 +204,18 @@ The last step is to hydrate the widget in your app after the page is loaded.
 
 ## Integration with React
 
-For easy integration with React library we created `@merkur/integration-react` module. The module is designed for client side and also for server side. You can use your own application stack for making API call for receiving `widgetProperties`. You only pass `widgetProperties` and `widgetClassName` from API call result to `MerkurComponent`. The component makes the hard work for you.
+For easy integration with React library we created `@merkur/integration-react` module. The module is designed for client side and also for server side. You can use your own application stack for making API call for receiving `widgetProperties`. You only pass `widgetClassName` and `widgetProperties` from API call result to `MerkurComponent`. The component makes the hard work for you.
 
 ```jsx
-
 import React from 'react';
 import { MerkurComponent } from '@merkur/integration-react';
 
 // example in browser
 const widgetClassName = 'widget__container';
-let widgetProperties = await fetch(
-  `http://localhost:4000/widget?containerSelector=${
-    encodeURIComponent(`.${widgetClassName}`)
-  }`)
+let widgetProperties = await fetch(`http://localhost:4000/widget`)
   .then((response) => response.json())
   .then(({ body }) => {
+    body.props.containerSelector = `.${widgetClassName}`;
     return body;
   })
 
