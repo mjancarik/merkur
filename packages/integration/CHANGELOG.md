@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.18.1](https://github.com/mjancarik/merkur/compare/v0.18.0...v0.18.1) (2020-09-04)
+
+
+### Bug Fixes
+
+* updated snapshot ([334d38c](https://github.com/mjancarik/merkur/commit/334d38c5f72117b23799d75e26ede8b0048e3844))
+
+
+
+
+
 # [0.18.0](https://github.com/mjancarik/merkur/compare/v0.17.0...v0.18.0) (2020-09-03)
 
 

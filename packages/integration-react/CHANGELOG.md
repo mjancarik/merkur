@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.18.1](https://github.com/mjancarik/merkur/compare/v0.18.0...v0.18.1) (2020-09-04)
+
+
+### Bug Fixes
+
+* escaping CSS styles ([#26](https://github.com/mjancarik/merkur/issues/26)) ([71051cc](https://github.com/mjancarik/merkur/commit/71051ccd8e1d51a3917f86238fd4764578c3b37b))
+
+
+
+
+
 # [0.18.0](https://github.com/mjancarik/merkur/compare/v0.17.0...v0.18.0) (2020-09-03)
 
 
