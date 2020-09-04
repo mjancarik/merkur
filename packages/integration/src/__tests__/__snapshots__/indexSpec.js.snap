@@ -9,16 +9,7 @@ Array [
     "onload": [Function],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": Object {
-      "attr": Object {
-        "async": true,
-        "custom-element": "amp-fx-collection",
-        "defer": false,
-      },
-      "name": "widget.js",
-      "source": "http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js",
-      "type": "script",
-    },
+    "src": "http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js",
   },
   Object {
     "defer": true,
@@ -26,12 +17,7 @@ Array [
     "onload": [Function],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": Object {
-      "name": "polyfill2.js",
-      "source": "http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js",
-      "test": "return (function () {foo();})()",
-      "type": "script",
-    },
+    "src": "http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js",
   },
   Object {
     "onerror": [MockFunction],
