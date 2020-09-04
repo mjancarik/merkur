@@ -8,7 +8,7 @@ function _loadScript(asset) {
       script.defer = true;
       script.onload = resolve;
       script.onerror = reject;
-      script.src = asset;
+      script.src = asset.source;
 
       const { attr } = asset;
       if (attr && Object.keys(attr).length) {
