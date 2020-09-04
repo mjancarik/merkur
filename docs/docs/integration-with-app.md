@@ -75,7 +75,7 @@ After we receive response body we create widget container at first.
 ```
 
 After that we must download widget assets, insert widget container to DOM and alive our widget.
-For downloading assets we can use `loadAssets` method from @merkur/integration module. Full example of integration merkur widget to SPA is:
+For downloading assets we can use `loadAssets` method from `@merkur/integration` module. Full example of integration merkur widget to SPA is:
 
 ```javascript
 import loadAssets from '@merkur/integration';
@@ -136,7 +136,7 @@ If you have old application without npm modules. You can handle assets your own 
       if (asset.type === 'script') {
         let script = document.createElement('script');
         script.onload = () => {
-          let widget = __merkur__.create(body);
+          let widget = __merkur__.create(widgetProperties);
 
           widget.mount();
         };
