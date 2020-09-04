@@ -58,7 +58,6 @@ function createLiveReloadServer() {
 }
 
 function createWebConfig(options = {}) {
-  console.log('create web config');
   return {
     target: 'web',
     mode: webpackMode,
