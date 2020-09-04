@@ -117,7 +117,9 @@ export default class MerkurComponent extends React.Component {
       }
 
       if (asset.type === 'inlineStyle') {
-        return <style key={key}>{asset.source}</style>;
+        return (
+          <style key={key} dangerouslySetInnerHTML={{ __html: asset.source }} />
+        );
       }
     });
   }
