@@ -54,7 +54,7 @@ function _loadStyle(asset) {
   });
 }
 
-export function loadStyleAssets(assets) {
+function loadStyleAssets(assets) {
   const styleElements = document.getElementsByTagName('style');
   const stylesToRender = assets.filter(
     (asset) =>
@@ -73,7 +73,7 @@ export function loadStyleAssets(assets) {
   return Promise.all(stylesToRender.map((asset) => _loadStyle(asset)));
 }
 
-export function loadScriptAssets(assets) {
+function loadScriptAssets(assets) {
   const scriptElements = document.getElementsByTagName('script');
   const scriptsToRender = assets
     .map((asset) => {
@@ -104,8 +104,8 @@ export function loadScriptAssets(assets) {
   return Promise.all(scriptsToRender.map((asset) => _loadScript(asset)));
 }
 
-export { testScript };
-
-export default function loadAssets(assets) {
+function loadAssets(assets) {
   return Promise.all(loadScriptAssets(assets), loadStyleAssets(assets));
 }
+
+export { testScript, loadAssets, loadStyleAssets, loadScriptAssets };

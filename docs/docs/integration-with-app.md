@@ -78,11 +78,13 @@ After that we must download widget assets, insert widget container to DOM and al
 For downloading assets we can use `loadAssets` method from `@merkur/integration` module. Full example of integration merkur widget to SPA is:
 
 ```javascript
-import loadAssets from '@merkur/integration';
+import { loadAssets } from '@merkur/integration';
 import { getMerkur } from '@merkur/core';
 
 (async() => {
   const widgetClassName = 'widget__container';
+
+  // make API call to widget
   const widgetProperties = await fetch(`http://localhost:4000/widget`)
     .then((response) => response.json())
     .then(({ body }) => {
