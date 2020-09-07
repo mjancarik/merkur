@@ -10,7 +10,7 @@
       "import": "./lib/index.mjs",
       "require": "./lib/index.cjs"
     },
-    "./server": "./server/index.cjs"
+    "./server/": "./server/index.cjs"
   },
   "scripts": {
     "preversion": "npm test",
