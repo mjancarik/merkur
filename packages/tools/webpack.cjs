@@ -137,6 +137,17 @@ function findLoaders(rules = [], loader) {
 function applyBundleAnalyzer(config, options = {}) {
   config.plugins.push(new BundleAnalyzerPlugin(options));
 
+  if (webpackMode === DEVELOPMENT) {
+    config.optimization = {
+      ...{
+        usedExports: true,
+        minimize: true,
+        sideEffects: false,
+      },
+      ...config.optimization,
+    };
+  }
+
   return config;
 }
 
