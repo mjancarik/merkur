@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.19.1](https://github.com/mjancarik/merkur/compare/v0.19.0...v0.19.1) (2020-09-07)
+
+
+### Bug Fixes
+
+* 🐛 package exports for server ([a36a5e2](https://github.com/mjancarik/merkur/commit/a36a5e2d357feec0ca955326af79a1ccff3859d5))
+
+
+
+
+
 # [0.19.0](https://github.com/mjancarik/merkur/compare/v0.18.1...v0.19.0) (2020-09-07)
 
 
