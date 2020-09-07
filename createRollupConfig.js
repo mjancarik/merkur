@@ -43,7 +43,9 @@ const babelUMDConfig = {
         globals: {
           '@merkur/core': getGlobalName('@merkur/core'),
           '@merkur/plugin-component': getGlobalName('@merkur/plugin-component'),
-          '@merkur/plugin-event': getGlobalName('@merkur/plugin-event'),
+          '@merkur/plugin-event-emitter': getGlobalName(
+            '@merkur/plugin-event-emitter'
+          ),
           '@merkur/plugin-http-client': getGlobalName(
             '@merkur/plugin-http-client'
           ),
