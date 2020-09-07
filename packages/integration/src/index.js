@@ -104,6 +104,8 @@ export function loadScriptAssets(assets) {
   return Promise.all(scriptsToRender.map((asset) => _loadScript(asset)));
 }
 
+export { testScript };
+
 export default function loadAssets(assets) {
   return Promise.all(loadScriptAssets(assets), loadStyleAssets(assets));
 }

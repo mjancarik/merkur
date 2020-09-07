@@ -194,7 +194,17 @@ function applyES5Transformation(config, options = {}) {
       use: {
         loader: loader,
         options: options?.babel?.options ?? {
-          presets: [...(options?.babel?.presets ?? []), '@babel/preset-env'],
+          presets: [
+            ...(options?.babel?.presets ?? []),
+            [
+              '@babel/preset-env',
+              {
+                modules: false,
+                useBuiltIns: 'usage',
+                corejs: { version: 3, proposals: false },
+              },
+            ],
+          ],
           plugins: [...(options?.babel?.plugins ?? [])],
         },
       },
@@ -203,7 +213,14 @@ function applyES5Transformation(config, options = {}) {
     babelLoaders.forEach((use) => {
       use.options.presets = [
         ...(use?.options?.presets ?? []),
-        '@babel/preset-env',
+        [
+          '@babel/preset-env',
+          {
+            modules: false,
+            useBuiltIns: 'usage',
+            corejs: { version: 3, proposals: false },
+          },
+        ],
       ];
     });
   }
