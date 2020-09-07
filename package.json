@@ -36,7 +36,7 @@
     "release": "lerna version --force-publish @merkur/create-widget",
     "release:publish": "lerna publish from-git --yes",
     "lint:cmd": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore  --no-eslintrc",
-    "lint": "npm run lint:cmd -- './**/*.{js,jsx}'",
+    "lint": "npm run lint:cmd -- './**/*.{mjs,cjs,js,jsx}'",
     "lint:fix": "npm run lint -- --fix",
     "stylelint:fix": "npm run stylelint -- --fix",
     "commit": "git-cz",
