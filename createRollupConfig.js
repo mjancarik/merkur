@@ -87,26 +87,16 @@ function createRollupESConfig() {
 
   config.output = [
     {
-      file: `./lib/index.js`,
+      dir: './lib',
+      entryFileNames: '[name].cjs',
       format: 'cjs',
       exports: 'named',
     },
     {
-      file: `./lib/index.min.js`,
-      format: 'cjs',
-      exports: 'named',
-      plugins: [terser()],
-    },
-    {
-      file: `./lib/index.mjs`,
+      dir: './lib',
+      entryFileNames: '[name].mjs',
       format: 'esm',
       exports: 'named',
-    },
-    {
-      file: `./lib/index.min.mjs`,
-      format: 'esm',
-      exports: 'named',
-      plugins: [terser()],
     },
   ];
 
@@ -122,24 +112,6 @@ function createRollupES5Config() {
       format: 'cjs',
       exports: 'named',
       plugins: [getBabelOutputPlugin(babelBaseConfig)],
-    },
-    {
-      file: `./lib/index.es5.min.js`,
-      format: 'cjs',
-      exports: 'named',
-      plugins: [getBabelOutputPlugin(babelBaseConfig), terser()],
-    },
-    {
-      file: `./lib/index.es5.mjs`,
-      format: 'esm',
-      exports: 'named',
-      plugins: [getBabelOutputPlugin(babelBaseConfig)],
-    },
-    {
-      file: `./lib/index.es5.min.mjs`,
-      format: 'esm',
-      exports: 'named',
-      plugins: [getBabelOutputPlugin(babelBaseConfig), terser()],
     },
   ];
 
