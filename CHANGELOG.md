@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.19.0](https://github.com/mjancarik/merkur/compare/v0.18.1...v0.19.0) (2020-09-07)
+
+
+### Code Refactoring
+
+* 💡 remove default export ([92301e3](https://github.com/mjancarik/merkur/commit/92301e3b48eb1b210b1240f70a6eb4286f9b1c0a))
+
+
+### Features
+
+* 🎸 add file extension in package.json ([7b8f8b3](https://github.com/mjancarik/merkur/commit/7b8f8b31b4d45f6f6bc59b5ad81c25ab067de091))
+* 🎸 bundle analyzer show tree shakeable version for dev env ([29c5bcd](https://github.com/mjancarik/merkur/commit/29c5bcdb5c8b3dc815169c14a116bc6c591ff81e))
+
+
+### BREAKING CHANGES
+
+* 🧨 removed default export from @merkur/integration and keep only named
+exports in all @merkur modules
+* 🧨 remove useless files from lib folder and defined exports in package.json
+
+
+
+
+
 ## [0.18.1](https://github.com/mjancarik/merkur/compare/v0.18.0...v0.18.1) (2020-09-04)
 
 
