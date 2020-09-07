@@ -185,7 +185,15 @@ function applyES5Transformation(config, options = {}) {
   };
 
   const loader = 'babel-loader';
-  let babelLoaders = findLoaders(config.module.rules, loader);
+  const babelLoaders = findLoaders(config.module.rules, loader);
+  const babelPresetEnv = [
+    '@babel/preset-env',
+    {
+      modules: false,
+      useBuiltIns: 'usage',
+      corejs: { version: 3, proposals: false },
+    },
+  ];
 
   if (babelLoaders.length === 0) {
     config.module.rules.push({
@@ -194,34 +202,14 @@ function applyES5Transformation(config, options = {}) {
       use: {
         loader: loader,
         options: options?.babel?.options ?? {
-          presets: [
-            ...(options?.babel?.presets ?? []),
-            [
-              '@babel/preset-env',
-              {
-                modules: false,
-                useBuiltIns: 'usage',
-                corejs: { version: 3, proposals: false },
-              },
-            ],
-          ],
+          presets: [...(options?.babel?.presets ?? []), babelPresetEnv],
           plugins: [...(options?.babel?.plugins ?? [])],
         },
       },
     });
   } else {
     babelLoaders.forEach((use) => {
-      use.options.presets = [
-        ...(use?.options?.presets ?? []),
-        [
-          '@babel/preset-env',
-          {
-            modules: false,
-            useBuiltIns: 'usage',
-            corejs: { version: 3, proposals: false },
-          },
-        ],
-      ];
+      use.options.presets = [...(use?.options?.presets ?? []), babelPresetEnv];
     });
   }
 
