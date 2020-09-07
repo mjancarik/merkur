@@ -23,7 +23,7 @@ const resolve = {
 };
 
 function getPlugins(options = {}) {
-  const sharedPlugins = [];
+  const sharedPlugins = [new WebpackModules(options.webpackModules)];
 
   const webPlugins = [
     new CleanWebpackPlugin(options.cleanWebpackPlugin),
@@ -34,10 +34,7 @@ function getPlugins(options = {}) {
     new ManifestPlugin(options.manifestPlugin),
     ...sharedPlugins,
   ];
-  const nodePlugins = [
-    new WebpackModules(options.webpackModules),
-    ...sharedPlugins,
-  ];
+  const nodePlugins = [...sharedPlugins];
 
   if (environment === DEVELOPMENT) {
     nodePlugins.push(
