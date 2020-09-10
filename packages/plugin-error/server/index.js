@@ -1,3 +1,19 @@
+//**** CALLBACK DEFINITIONS ****//
+
+/**
+ * playgroundErrorMiddleware error render function. This is used when rendering playground fails. It's recommended to either mute this for production, or sanitize the output thoroughly.
+ *
+ * @callback playgroundErrorRenderer
+ * @param {string} message
+ */
+
+/**
+ * Function to render the playground page normally (e.g. a compiled EJS template).
+ *
+ * @callback playgroundRenderer
+ * @param {object} properties
+ */
+
 /**
  * logUnhandledPromises logging function.
  *
@@ -5,6 +21,14 @@
  * @param {string} err
  * @param {Promise} promise
  */
+
+//**** ****//
+
+const DEV = 'development';
+const ENV =
+  typeof process !== 'undefined' && process && process.env
+    ? process.env.NODE_ENV
+    : DEV;
 
 function defaultUnhandledPromiseError(err, promise) {
   console.error(`WARNING: Unhandled promise rejection`);
@@ -45,11 +69,15 @@ function apiErrorMiddleware() {
 }
 
 function defaultPlaygroundError(message) {
-  return process.env.NODE_ENV === 'dev' ? message : '';
+  return ENV === DEV ? message : '';
 }
 
 /**
  * Express middleware that attempts to render a widget that has been returned with a non-OK HTTP status.
+ *
+ * @param {playgroundRenderer} renderPlayground
+ * @param {object} props Default widget prop values
+ * @param {playgroundErrorRenderer} renderError
  */
 function playgroundErrorMiddleware(
   renderPlayground,
