@@ -4,6 +4,10 @@ const ENV =
     ? process.env.NODE_ENV
     : DEV;
 
+export const ERROR_EVENTS = {
+  ERROR: '@merkur/plugin-error.error',
+};
+
 export function errorPlugin() {
   return {
     async setup(widget) {
@@ -25,6 +29,11 @@ export function errorPlugin() {
         if (!widget.$in.component) {
           throw new Error(
             'You must install missing plugin: npm i @merkur/plugin-component'
+          );
+        }
+        if (!widget.$in.eventEmitter) {
+          throw new Error(
+            'You must install missing plugin: npm i @merkur/plugin-event-emitter'
           );
         }
       }
@@ -61,8 +70,7 @@ async function loadHook(widget, ...rest) {
     error.status = error.status || 500;
 
     setErrorInfo(widget, error);
-    runErrorHandler(widget, error);
-    setErrorView(widget);
+    emitError(widget, error);
   }
 
   return result;
@@ -88,48 +96,50 @@ async function updateHook(widget, ...rest) {
 
 // HELPER FUNCTIONS
 
-function setErrorInfo(widget, error) {
+export function setErrorInfo(widget, error) {
   widget.error.status = error.status;
   widget.error.message = error.message;
-}
 
-function runErrorHandler(widget, error) {
-  if (isFunction(widget.errorHandler)) {
-    widget.errorHandler(error);
+  if (ENV === DEV) {
+    widget.error.stack = error.stack;
   }
 }
 
-function setErrorView(widget) {
-  if (widget.ErrorView) {
-    widget.View = widget.ErrorView;
-  }
+function emitError(widget, thrownError) {
+  widget.emit(ERROR_EVENTS.ERROR, { thrownError });
 }
 
-async function renderContent(widget, methodName = 'mount', properties) {
+export async function renderContent(widget, methodName = 'mount', properties) {
   const method = widget.$in.error.originalFunctions[methodName];
   let result = null;
 
   if (widget.error.status) {
-    setErrorView(widget);
-  }
-
-  try {
-    result = await method(widget, ...properties);
-  } catch (error) {
-    error.status = error.status || 500;
-
-    setErrorInfo(widget, error);
-    runErrorHandler(widget, error);
-
-    if (widget.ErrorView) {
-      widget.View = widget.ErrorView;
+    // error was captured in an earlier lifecycle method
+    try {
+      // try rendering content, in case the method can handle the error state on its own
       result = await method(widget, ...properties);
-    } else {
+      return result;
+    } catch (err) {
+      // content rendering failed
+      // do not save the new error info, it would overwrite the previous error
       result = '';
+      return result;
     }
   }
 
-  return result;
+  try {
+    // no earlier error captured
+    result = await method(widget, ...properties);
+    return result;
+  } catch (err) {
+    // save error info
+    err.status = err.status || 500;
+    setErrorInfo(widget, err);
+    emitError(widget, err);
+
+    // try rendering again
+    return renderContent(widget, methodName, properties);
+  }
 }
 
 function isFunction(value) {
