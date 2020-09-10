@@ -51,6 +51,15 @@ describe('Merkur component', () => {
         },
       },
       {
+        name: 'undefined.js',
+        test: 'return typeof window !== "undefined"',
+        type: 'script',
+        source: {
+          es9: undefined,
+          es5: undefined,
+        },
+      },
+      {
         name: 'polyfill2.js',
         test: 'return (function () {foo();})()',
         type: 'script',
@@ -66,6 +75,11 @@ describe('Merkur component', () => {
         type: 'stylesheet',
         source:
           'http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css',
+      },
+      {
+        name: 'undefined.css',
+        type: 'stylesheet',
+        source: null,
       },
       {
         type: 'inlineStyle',

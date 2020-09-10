@@ -59,6 +59,7 @@ function loadStyleAssets(assets) {
   const stylesToRender = assets.filter(
     (asset) =>
       (asset.type === 'stylesheet' &&
+        asset.source &&
         !document.querySelector(`style[href='${asset.source}']`)) ||
       (asset.type === 'inlineStyle' &&
         Array.from(styleElements).reduce((acc, cur) => {
@@ -76,6 +77,7 @@ function loadStyleAssets(assets) {
 function loadScriptAssets(assets) {
   const scriptElements = document.getElementsByTagName('script');
   const scriptsToRender = assets
+    .filter((asset) => ['script', 'inlineScript'].includes(asset.type))
     .map((asset) => {
       const { source } = asset;
       const _asset = Object.assign({}, asset);
@@ -89,6 +91,7 @@ function loadScriptAssets(assets) {
     .filter(
       (asset) =>
         ((asset.type === 'script' &&
+          asset.source &&
           !document.querySelector(`script[src='${asset.source}']`)) ||
           (asset.type === 'inlineScript' &&
             Array.from(scriptElements).reduce((acc, cur) => {
