@@ -59,7 +59,6 @@ function loadStyleAssets(assets) {
   const stylesToRender = assets.filter(
     (asset) =>
       (asset.type === 'stylesheet' &&
-        asset.source &&
         !document.querySelector(`style[href='${asset.source}']`)) ||
       (asset.type === 'inlineStyle' &&
         Array.from(styleElements).reduce((acc, cur) => {
@@ -77,21 +76,28 @@ function loadStyleAssets(assets) {
 function loadScriptAssets(assets) {
   const scriptElements = document.getElementsByTagName('script');
   const scriptsToRender = assets
-    .filter((asset) => ['script', 'inlineScript'].includes(asset.type))
-    .map((asset) => {
+    .reduce((scripts, asset) => {
       const { source } = asset;
       const _asset = Object.assign({}, asset);
 
-      if (typeof source !== 'string') {
+      if (source === Object(source)) {
         _asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
+
+        if (!_asset.source) {
+          console.warn(
+            `Asset '${_asset.name}' is missing ES variant and could not be loaded.`
+          );
+          return scripts;
+        }
       }
 
-      return _asset;
-    })
+      scripts.push(_asset);
+
+      return scripts;
+    }, [])
     .filter(
       (asset) =>
         ((asset.type === 'script' &&
-          asset.source &&
           !document.querySelector(`script[src='${asset.source}']`)) ||
           (asset.type === 'inlineScript' &&
             Array.from(scriptElements).reduce((acc, cur) => {
