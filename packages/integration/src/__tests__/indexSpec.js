@@ -79,7 +79,7 @@ describe('Merkur component', () => {
       {
         name: 'undefined.css',
         type: 'stylesheet',
-        source: null,
+        source: undefined,
       },
       {
         type: 'inlineStyle',
