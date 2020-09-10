@@ -1,5 +1,5 @@
 import { createMerkurWidget } from '@merkur/core';
-import { errorPlugin } from '../index';
+import { errorPlugin, setErrorInfo } from '../index';
 import { componentPlugin } from '@merkur/plugin-component';
 
 describe('createWidget method with error plugin', () => {
@@ -83,5 +83,33 @@ describe('createWidget method with error plugin', () => {
         "version": "1.0.0",
       }
     `);
+  });
+});
+
+describe('setErrorInfo', () => {
+  const error = new Error('ERROR MESSAGE');
+  error.status = 123;
+
+  let widgetMock;
+
+  beforeEach(() => {
+    widgetMock = {
+      error: {},
+    };
+  });
+
+  it('should set error info on widget', () => {
+    const expectedObject = {
+      message: 'ERROR MESSAGE',
+      status: 123,
+    };
+
+    try {
+      throw error;
+    } catch (err) {
+      setErrorInfo(widgetMock, err);
+
+      expect(widgetMock.error).toMatchObject(expectedObject);
+    }
   });
 });
