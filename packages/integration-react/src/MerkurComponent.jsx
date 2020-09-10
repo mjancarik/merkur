@@ -88,7 +88,11 @@ export default class MerkurComponent extends React.Component {
   }
 
   render() {
-    if (!this.props.widgetProperties || this.state.encounteredError) {
+    if (!this.props.widgetProperties) {
+      return null;
+    }
+
+    if (this.state.encounteredError) {
       return this.props.children || null;
     }
 
