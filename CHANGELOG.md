@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.19.3](https://github.com/mjancarik/merkur/compare/v0.19.2...v0.19.3) (2020-09-10)
+
+**Note:** Version bump only for package merkur-monorepo
+
+
+
+
+
 ## [0.19.2](https://github.com/mjancarik/merkur/compare/v0.19.1...v0.19.2) (2020-09-09)
 
 
