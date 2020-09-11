@@ -88,12 +88,15 @@ export default class MerkurComponent extends React.Component {
   }
 
   render() {
-    if (!this.props.widgetProperties) {
-      return null;
+    const { widgetProperties, widgetClassName } = this.props;
+    const { encounteredError } = this.state;
+
+    if (!widgetProperties) {
+      return this._renderFallback();
     }
 
-    if (this.state.encounteredError) {
-      return this.props.children || null;
+    if (encounteredError) {
+      return this._renderFallback(encounteredError);
     }
 
     const html = this._getWidgetHTML();
@@ -102,10 +105,22 @@ export default class MerkurComponent extends React.Component {
       <>
         {this._renderStyleAssets()}
         <div
-          className={this.props.widgetClassName}
+          className={widgetClassName}
           dangerouslySetInnerHTML={{ __html: html }}></div>
       </>
     );
+  }
+
+  _renderFallback(error) {
+    const { children } = this.props;
+
+    if (typeof children === 'function') {
+      return children(error);
+    } else if (React.isValidElement(children)) {
+      return children;
+    }
+
+    return null;
   }
 
   _renderStyleAssets() {
@@ -153,7 +168,7 @@ export default class MerkurComponent extends React.Component {
       this.props.onError(error);
     }
 
-    this.setState({ encounteredError: true });
+    this.setState({ encounteredError: error });
   }
 
   _removeWidget() {
