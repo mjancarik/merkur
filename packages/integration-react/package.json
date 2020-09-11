@@ -9,6 +9,10 @@
     "import": "./lib/index.mjs",
     "require": "./lib/index.cjs"
   },
+  "browser": {
+    "./lib/index.cjs": "./lib/index.es5.js",
+    "./lib/index.mjs": "./lib/index.mjs"
+  },
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
