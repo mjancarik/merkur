@@ -115,7 +115,7 @@ export default class MerkurComponent extends React.Component {
     const { children } = this.props;
 
     if (typeof children === 'function') {
-      return children(error);
+      return children({ error });
     } else if (React.isValidElement(children)) {
       return children;
     }

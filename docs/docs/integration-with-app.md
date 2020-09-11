@@ -242,7 +242,7 @@ return (
   <MerkurComponent
       widgetProperties = {widgetProperties}
       widgetClassName = {widgetClassName}>
-    {(error) => error ? <span>Error happened.</span> : <span>Loading...</span>}
+    {({ error} ) => error ? <span>Error happened.</span> : <span>Loading...</span>}
   </MerkurComponent>
 )
 ```
