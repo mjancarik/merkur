@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
+
+
+### Bug Fixes
+
+* 🐛 added browser field to package.json ([85cf4a1](https://github.com/mjancarik/merkur/commit/85cf4a1e73b883125d4482c36892aa5de410653f))
+
+
+### BREAKING CHANGES
+
+* 🧨 new browser field in pakckage.json
+
+
+
+
+
 ## [0.19.3](https://github.com/mjancarik/merkur/compare/v0.19.2...v0.19.3) (2020-09-10)
 
 **Note:** Version bump only for package @merkur/integration-react

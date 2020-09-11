@@ -17,10 +17,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@merkur/core": "0.19.0",
-    "@merkur/integration": "0.19.3",
-    "@merkur/plugin-component": "0.19.0",
-    "@merkur/plugin-event-emitter": "0.19.0",
+    "@merkur/core": "0.20.0",
+    "@merkur/integration": "0.20.0",
+    "@merkur/plugin-component": "0.20.0",
+    "@merkur/plugin-event-emitter": "0.20.0",
     "compression": "^1.7.4",
     "config": "^3.3.1",
     "cors": "^2.8.5",
@@ -31,7 +31,7 @@
     "helmet": "^3.23.3"
   },
   "devDependencies": {
-    "@merkur/tools": "0.19.2",
+    "@merkur/tools": "0.20.0",
     "nodemon": "^2.0.4",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
