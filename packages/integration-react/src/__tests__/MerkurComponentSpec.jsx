@@ -151,7 +151,7 @@ describe('Merkur component', () => {
   it('should call onError callback and render fallback when script loading fails.', (done) => {
     jest
       .spyOn(MerkurIntegration, 'loadScriptAssets')
-      .mockImplementation(() => Promise.reject());
+      .mockImplementation(() => Promise.reject('failed to load'));
 
     const onError = jest.fn();
 
