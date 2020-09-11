@@ -91,12 +91,8 @@ export default class MerkurComponent extends React.Component {
     const { widgetProperties, widgetClassName } = this.props;
     const { encounteredError } = this.state;
 
-    if (!widgetProperties) {
+    if (!widgetProperties || encounteredError) {
       return this._renderFallback();
-    }
-
-    if (encounteredError) {
-      return this._renderFallback(encounteredError);
     }
 
     const html = this._getWidgetHTML();
@@ -111,11 +107,12 @@ export default class MerkurComponent extends React.Component {
     );
   }
 
-  _renderFallback(error) {
+  _renderFallback() {
     const { children } = this.props;
+    const { encounteredError } = this.state;
 
     if (typeof children === 'function') {
-      return children({ error });
+      return children({ error: encounteredError });
     } else if (React.isValidElement(children)) {
       return children;
     }
