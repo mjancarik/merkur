@@ -44,7 +44,8 @@ At first we must make API call with your framework of choice. In this example we
       "type": "script",
       "source": {
         "es5": "http://localhost:4444/static/es5/polyfill.31c5090d8c961e43fade.js"
-      }
+      },
+      "test": "return window.fetch"
     },
     {
       "name": "widget.js",
@@ -52,7 +53,11 @@ At first we must make API call with your framework of choice. In this example we
       "source": {
         "es9": "http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js",
         "es5": "http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js"
-      }
+      },
+      "attr": {
+        "async": true,
+        "custom-attribute": "foo"
+      },
     },
     {
       "name": "widget.css",
@@ -75,7 +80,7 @@ After we receive response body we create widget container at first.
 ```
 
 After that we must download widget assets, insert widget container to DOM and alive our widget.
-For downloading assets we can use `loadAssets` method from `@merkur/integration` module. Full example of integration merkur widget to SPA is:
+For downloading assets we can use `loadAssets` method from `@merkur/integration` module. Assets can have custom attributes defined in `attr` object. Only default attribute is `defer` and you can override it by setting it as a custom attribute with value `false`. Assets may contain also a test expression. If test expression evaluates to `false` the asset will be loaded. Full example of integration merkur widget to SPA is:
 
 ```javascript
 import { loadAssets } from '@merkur/integration';
@@ -168,7 +173,7 @@ After we receive response from the widget API call we must update the final html
     <%if (asset.type === 'stylesheet') { %>
       <link rel='stylesheet' href='<%= asset.source %>' />
     <% } %>
-    
+
     <%if (asset.type === 'script') { %>
      <%if (typeof asset.source === 'string') { %>
         <script src='<%= asset.source %>' defer='true'></script>
@@ -233,6 +238,18 @@ React.render(
   </div>,
   document.body
 );
+```
+
+Children component passed to `<MerkurComponent/>` is used as a fallback when the widget is not yet ready or an error happened. To differentiate loading and error state pass a function as children.
+
+```jsx
+return (
+  <MerkurComponent
+      widgetProperties = {widgetProperties}
+      widgetClassName = {widgetClassName}>
+    {({ error} ) => error ? <span>Error happened.</span> : <span>Loading...</span>}
+  </MerkurComponent>
+)
 ```
 
 You can also react to component events through callbacks.
