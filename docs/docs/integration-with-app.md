@@ -168,7 +168,7 @@ After we receive response from the widget API call we must update the final html
     <%if (asset.type === 'stylesheet') { %>
       <link rel='stylesheet' href='<%= asset.source %>' />
     <% } %>
-    
+
     <%if (asset.type === 'script') { %>
      <%if (typeof asset.source === 'string') { %>
         <script src='<%= asset.source %>' defer='true'></script>
@@ -233,6 +233,18 @@ React.render(
   </div>,
   document.body
 );
+```
+
+Children component passed to `<MerkurComponent/>` is used as a fallback when the widget is not yet ready or an error happened. To differentiate loading and error state pass a function as children.
+
+```jsx
+return (
+  <MerkurComponent
+      widgetProperties = {widgetProperties}
+      widgetClassName = {widgetClassName}>
+    {(error) => error ? <span>Error happened.</span> : <span>Loading...</span>}
+  </MerkurComponent>
+)
 ```
 
 You can also react to component events through callbacks.
