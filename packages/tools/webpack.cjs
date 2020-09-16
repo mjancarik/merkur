@@ -186,7 +186,7 @@ function applyES5Transformation(config, options = {}) {
   const babelPresetEnv = [
     '@babel/preset-env',
     {
-      modules: 'cjs',
+      modules: 'auto',
       useBuiltIns: 'usage',
       corejs: { version: 3, proposals: false },
     },
