@@ -37,20 +37,20 @@ function _loadScript(asset) {
 
 function _loadStyle(asset) {
   return new Promise((resolve, reject) => {
-    const style = document.createElement('style');
-
-    style.type = 'text/css';
-
     if (asset.type === 'stylesheet') {
-      style.onload = resolve;
-      style.onerror = reject;
-      style.src = asset.source;
+      const link = document.createElement('link');
+      link.onload = resolve;
+      link.onerror = reject;
+      link.href = asset.source;
+
+      document.head.appendChild(link);
     } else {
+      const style = document.createElement('style');
       style.innerHTML = asset.source;
+
+      document.head.appendChild(style);
       resolve();
     }
-
-    document.head.appendChild(style);
   });
 }
 
@@ -60,7 +60,7 @@ function loadStyleAssets(assets) {
     (asset) =>
       (asset.type === 'stylesheet' &&
         asset.source &&
-        !document.querySelector(`style[href='${asset.source}']`)) ||
+        !document.querySelector(`link[href='${asset.source}']`)) ||
       (asset.type === 'inlineStyle' &&
         Array.from(styleElements).reduce((acc, cur) => {
           if (cur.innerHTML === asset.source) {
