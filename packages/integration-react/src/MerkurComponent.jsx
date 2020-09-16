@@ -1,5 +1,5 @@
 import { getMerkur } from '@merkur/core';
-import { loadScriptAssets } from '@merkur/integration';
+import { loadScriptAssets, loadStyleAssets } from '@merkur/integration';
 import React from 'react';
 
 // error event name from @merkur/plugin-error
@@ -98,12 +98,9 @@ export default class MerkurComponent extends React.Component {
     const html = this._getWidgetHTML();
 
     return (
-      <>
-        {this._renderStyleAssets()}
-        <div
-          className={widgetClassName}
-          dangerouslySetInnerHTML={{ __html: html }}></div>
-      </>
+      <div
+        className={widgetClassName}
+        dangerouslySetInnerHTML={{ __html: html }}></div>
     );
   }
 
@@ -118,26 +115,6 @@ export default class MerkurComponent extends React.Component {
     }
 
     return null;
-  }
-
-  _renderStyleAssets() {
-    const { widgetProperties } = this.props;
-
-    if (!widgetProperties || !Array.isArray(widgetProperties.assets)) {
-      return null;
-    }
-
-    return widgetProperties.assets.map((asset, key) => {
-      if (asset.type === 'stylesheet') {
-        return <link rel="stylesheet" href={asset.source} key={key} />;
-      }
-
-      if (asset.type === 'inlineStyle') {
-        return (
-          <style key={key} dangerouslySetInnerHTML={{ __html: asset.source }} />
-        );
-      }
-    });
   }
 
   _getWidgetHTML() {
@@ -194,6 +171,7 @@ export default class MerkurComponent extends React.Component {
     }
 
     try {
+      await loadStyleAssets(widgetProperties.assets);
       await loadScriptAssets(widgetProperties.assets);
     } catch (error) {
       this._handleError(error);

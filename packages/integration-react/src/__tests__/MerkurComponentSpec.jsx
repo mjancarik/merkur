@@ -8,6 +8,7 @@ import React from 'react';
 jest.mock('@merkur/integration', () => {
   return {
     loadScriptAssets: jest.fn(() => Promise.resolve()),
+    loadStyleAssets: jest.fn(() => Promise.resolve()),
   };
 });
 
@@ -93,7 +94,14 @@ describe('Merkur component', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('should render merkur component for defined widgetProperties', () => {
+  it('should render merkur component for defined widgetProperties', (done) => {
+    jest
+      .spyOn(MerkurIntegration, 'loadScriptAssets')
+      .mockImplementation(() => Promise.resolve());
+    jest
+      .spyOn(MerkurIntegration, 'loadStyleAssets')
+      .mockImplementation(() => Promise.resolve());
+
     wrapper = shallow(
       <MerkurComponent
         widgetProperties={widgetProperties}
@@ -102,23 +110,22 @@ describe('Merkur component', () => {
       </MerkurComponent>
     );
 
-    expect(wrapper).toMatchInlineSnapshot(`
-      <Fragment>
-        <link
-          href="http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css"
-          key="1"
-          rel="stylesheet"
-        />
-        <div
-          className="container"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "<div class=\\"merkur__page\\"></div>",
-            }
+    setImmediate(() => {
+      expect(MerkurIntegration.loadScriptAssets).toHaveBeenCalled();
+      expect(MerkurIntegration.loadStyleAssets).toHaveBeenCalled();
+      expect(wrapper).toMatchInlineSnapshot(`
+      <div
+        className="container"
+        dangerouslySetInnerHTML={
+          Object {
+            "__html": "<div class=\\"merkur__page\\"></div>",
           }
-        />
-      </Fragment>
+        }
+      />
     `);
+    });
+
+    done();
   });
 
   it('should call onWidgetMounted and onWidgetUnmouting callback', (done) => {
@@ -151,6 +158,35 @@ describe('Merkur component', () => {
   it('should call onError callback and render fallback when script loading fails.', (done) => {
     jest
       .spyOn(MerkurIntegration, 'loadScriptAssets')
+      .mockImplementation(() => Promise.reject('failed to load'));
+
+    const onError = jest.fn();
+
+    wrapper = shallow(
+      <MerkurComponent
+        widgetProperties={widgetProperties}
+        widgetClassName={widgetClassName}
+        onError={onError}>
+        <span>Fallback</span>
+      </MerkurComponent>
+    );
+
+    setImmediate(() => {
+      expect(onError).toHaveBeenCalled();
+
+      expect(wrapper).toMatchInlineSnapshot(`
+        <span>
+          Fallback
+        </span>
+      `);
+
+      done();
+    });
+  });
+
+  it('should call onError callback and render fallback when style loading fails.', (done) => {
+    jest
+      .spyOn(MerkurIntegration, 'loadStyleAssets')
       .mockImplementation(() => Promise.reject('failed to load'));
 
     const onError = jest.fn();
