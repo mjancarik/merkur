@@ -11,6 +11,7 @@ export default class MerkurComponent extends React.Component {
 
     this._html = null;
     this._widget = null;
+    this._styleAssetsPreloaded = false;
 
     this._handleClientError = this._handleError.bind(this);
 
@@ -98,9 +99,12 @@ export default class MerkurComponent extends React.Component {
     const html = this._getWidgetHTML();
 
     return (
-      <div
-        className={widgetClassName}
-        dangerouslySetInnerHTML={{ __html: html }}></div>
+      <>
+        {this._renderStyleAssets()}
+        <div
+          className={widgetClassName}
+          dangerouslySetInnerHTML={{ __html: html }}></div>
+      </>
     );
   }
 
@@ -115,6 +119,32 @@ export default class MerkurComponent extends React.Component {
     }
 
     return null;
+  }
+
+  _renderStyleAssets() {
+    if (this._isClient() && this._styleAssetsPreloaded) {
+      return null;
+    }
+
+    const { widgetProperties } = this.props;
+    if (!widgetProperties || !Array.isArray(widgetProperties.assets)) {
+      return null;
+    }
+
+    return widgetProperties.assets.map((asset, key) => {
+      switch (asset.type) {
+        case 'stylesheet':
+          return <link rel="stylesheet" href={asset.source} key={key} />;
+
+        case 'inlineStyle':
+          return (
+            <style
+              key={key}
+              dangerouslySetInnerHTML={{ __html: asset.source }}
+            />
+          );
+      }
+    });
   }
 
   _getWidgetHTML() {
@@ -145,7 +175,7 @@ export default class MerkurComponent extends React.Component {
     this.setState({ encounteredError: error });
   }
 
-  _removeWidget() {
+  async _removeWidget() {
     if (!this._widget) {
       return;
     }
@@ -161,6 +191,19 @@ export default class MerkurComponent extends React.Component {
 
     this._widget.unmount();
     this._widget = null;
+
+    const { widgetProperties } = this.props;
+
+    // Preload style assets into document.head during route change in SPA
+    if (widgetProperties && !this._styleAssetsPreloaded) {
+      try {
+        await loadStyleAssets(widgetProperties.assets);
+        this._styleAssetsPreloaded = true;
+      } catch (error) {
+        this._handleError(error);
+        return;
+      }
+    }
   }
 
   async _tryCreateWidget() {
@@ -171,7 +214,6 @@ export default class MerkurComponent extends React.Component {
     }
 
     try {
-      await loadStyleAssets(widgetProperties.assets);
       await loadScriptAssets(widgetProperties.assets);
     } catch (error) {
       this._handleError(error);
@@ -197,5 +239,9 @@ export default class MerkurComponent extends React.Component {
         console.warn(_);
       }
     }
+  }
+
+  _isClient() {
+    return typeof window !== 'undefined';
   }
 }

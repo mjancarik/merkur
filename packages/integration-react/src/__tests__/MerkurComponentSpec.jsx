@@ -98,9 +98,6 @@ describe('Merkur component', () => {
     jest
       .spyOn(MerkurIntegration, 'loadScriptAssets')
       .mockImplementation(() => Promise.resolve());
-    jest
-      .spyOn(MerkurIntegration, 'loadStyleAssets')
-      .mockImplementation(() => Promise.resolve());
 
     wrapper = shallow(
       <MerkurComponent
@@ -112,17 +109,23 @@ describe('Merkur component', () => {
 
     setImmediate(() => {
       expect(MerkurIntegration.loadScriptAssets).toHaveBeenCalled();
-      expect(MerkurIntegration.loadStyleAssets).toHaveBeenCalled();
       expect(wrapper).toMatchInlineSnapshot(`
-      <div
-        className="container"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "<div class=\\"merkur__page\\"></div>",
-          }
-        }
-      />
-    `);
+        <Fragment>
+          <link
+            href="http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css"
+            key="1"
+            rel="stylesheet"
+          />
+          <div
+            className="container"
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "<div class=\\"merkur__page\\"></div>",
+              }
+            }
+          />
+        </Fragment>
+      `);
     });
 
     done();
@@ -184,32 +187,30 @@ describe('Merkur component', () => {
     });
   });
 
-  it('should call onError callback and render fallback when style loading fails.', (done) => {
+  it('should load style assets on unmount', (done) => {
     jest
       .spyOn(MerkurIntegration, 'loadStyleAssets')
-      .mockImplementation(() => Promise.reject('failed to load'));
-
-    const onError = jest.fn();
+      .mockImplementation(() => Promise.resolve());
+    const onWidgetMounted = jest.fn();
+    const onWidgetUnmounting = jest.fn();
 
     wrapper = shallow(
       <MerkurComponent
         widgetProperties={widgetProperties}
         widgetClassName={widgetClassName}
-        onError={onError}>
+        onWidgetMounted={onWidgetMounted}
+        onWidgetUnmounting={onWidgetUnmounting}>
         <span>Fallback</span>
       </MerkurComponent>
     );
 
     setImmediate(() => {
-      expect(onError).toHaveBeenCalled();
+      wrapper.unmount();
 
-      expect(wrapper).toMatchInlineSnapshot(`
-        <span>
-          Fallback
-        </span>
-      `);
-
-      done();
+      setImmediate(() => {
+        expect(MerkurIntegration.loadStyleAssets).toHaveBeenCalled();
+        done();
+      });
     });
   });
 });
