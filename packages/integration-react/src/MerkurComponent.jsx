@@ -11,13 +11,24 @@ export default class MerkurComponent extends React.Component {
 
     this._html = null;
     this._widget = null;
-    this._styleAssetsPreloaded = false;
+    this._preloadedStyleAssetsMap = new Map();
 
     this._handleClientError = this._handleError.bind(this);
 
     this.state = {
       encounteredError: false,
     };
+  }
+
+  get _assetKey() {
+    const { widgetProperties } = this.props;
+
+    return (
+      widgetProperties &&
+      widgetProperties.name &&
+      widgetProperties.version &&
+      `${widgetProperties.name}@${widgetProperties.version}`
+    );
   }
 
   shouldComponentUpdate(nextProps) {
@@ -122,12 +133,12 @@ export default class MerkurComponent extends React.Component {
   }
 
   _renderStyleAssets() {
-    if (this._isClient() && this._styleAssetsPreloaded) {
+    const { widgetProperties } = this.props;
+    if (!widgetProperties || !Array.isArray(widgetProperties.assets)) {
       return null;
     }
 
-    const { widgetProperties } = this.props;
-    if (!widgetProperties || !Array.isArray(widgetProperties.assets)) {
+    if (this._isClient() && this._areStyleAssetsPreloaded()) {
       return null;
     }
 
@@ -175,7 +186,7 @@ export default class MerkurComponent extends React.Component {
     this.setState({ encounteredError: error });
   }
 
-  async _removeWidget() {
+  _removeWidget() {
     if (!this._widget) {
       return;
     }
@@ -193,16 +204,17 @@ export default class MerkurComponent extends React.Component {
     this._widget = null;
 
     const { widgetProperties } = this.props;
+    const curAssetKey = this._assetKey;
 
     // Preload style assets into document.head during route change in SPA
-    if (widgetProperties && !this._styleAssetsPreloaded) {
-      try {
-        await loadStyleAssets(widgetProperties.assets);
-        this._styleAssetsPreloaded = true;
-      } catch (error) {
-        this._handleError(error);
-        return;
-      }
+    if (
+      widgetProperties &&
+      Array.isArray(widgetProperties.assets) &&
+      curAssetKey
+    ) {
+      loadStyleAssets(widgetProperties.assets).then(() => {
+        this._preloadedStyleAssetsMap.set(curAssetKey, true);
+      });
     }
   }
 
@@ -243,5 +255,13 @@ export default class MerkurComponent extends React.Component {
 
   _isClient() {
     return typeof window !== 'undefined';
+  }
+
+  _areStyleAssetsPreloaded() {
+    return (
+      this._assetKey &&
+      typeof this._preloadedStyleAssetsMap.get(this._assetKey) === 'boolean' &&
+      this._preloadedStyleAssetsMap.get(this._assetKey)
+    );
   }
 }
