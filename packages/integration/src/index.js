@@ -37,20 +37,20 @@ function _loadScript(asset) {
 
 function _loadStyle(asset) {
   return new Promise((resolve, reject) => {
-    let stylElem = null;
-
     if (asset.type === 'stylesheet') {
-      stylElem = document.createElement('link');
-      stylElem.onload = resolve;
-      stylElem.onerror = reject;
-      stylElem.href = asset.source;
-    } else {
-      stylElem = document.createElement('style');
-      stylElem.innerHTML = asset.source;
-    }
+      const link = document.createElement('link');
+      link.onload = resolve;
+      link.onerror = reject;
+      link.href = asset.source;
 
-    document.head.appendChild(stylElem);
-    resolve();
+      document.head.appendChild(link);
+    } else {
+      const style = document.createElement('style');
+      style.innerHTML = asset.source;
+
+      document.head.appendChild(style);
+      resolve();
+    }
   });
 }
 
