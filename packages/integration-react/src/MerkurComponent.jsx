@@ -20,6 +20,7 @@ export default class MerkurComponent extends React.Component {
 
     this._html = null;
     this._widget = null;
+    this._isMounted = false;
 
     this._handleClientError = this._handleError.bind(this);
 
@@ -65,6 +66,7 @@ export default class MerkurComponent extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this._tryCreateWidget();
   }
 
@@ -117,11 +119,10 @@ export default class MerkurComponent extends React.Component {
       return this._renderFallback();
     }
 
-    if (this._isClient() && !loaded) {
+    const html = this._getWidgetHTML();
+    if (this._isClient() && !loaded && !(!this._isMounted && html)) {
       return this._renderPlaceholder();
     }
-
-    const html = this._getWidgetHTML();
 
     return (
       <>
@@ -228,44 +229,52 @@ export default class MerkurComponent extends React.Component {
     this._html = null;
   }
 
-  async _tryCreateWidget() {
+  _tryCreateWidget() {
     const { widgetProperties, onWidgetMounted, debug } = this.props;
 
     if (!widgetProperties || this._widget) {
       return;
     }
 
-    try {
-      await loadStyleAssets(widgetProperties.assets);
-      this.setState({
-        loaded: true,
+    Promise.all([
+      this._getLoadStyleAssetsPromise(widgetProperties.assets),
+      loadScriptAssets(widgetProperties.assets),
+    ])
+      .catch((error) => this._handleError(error))
+      .then(async () => {
+        const merkur = getMerkur();
+        this._widget = await merkur.create(widgetProperties);
+        await this._widget.mount();
+
+        if (typeof this._widget.on === 'function') {
+          // widget might not be using @merkur/plugin-event-emitter
+          this._widget.on(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
+        }
+
+        if (typeof onWidgetMounted === 'function') {
+          onWidgetMounted(this._widget);
+        }
+      })
+      .catch((error) => {
+        if (debug) {
+          console.warn(error);
+        }
       });
+  }
 
-      await loadScriptAssets(widgetProperties.assets);
-    } catch (error) {
-      this._handleError(error);
-      return;
-    }
-
-    const merkur = getMerkur();
-
-    try {
-      this._widget = await merkur.create(widgetProperties);
-      await this._widget.mount();
-
-      if (typeof this._widget.on === 'function') {
-        // widget might not be using @merkur/plugin-event-emitter
-        this._widget.on(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
-      }
-
-      if (typeof onWidgetMounted === 'function') {
-        onWidgetMounted(this._widget);
-      }
-    } catch (_) {
-      if (debug) {
-        console.warn(_);
-      }
-    }
+  _getLoadStyleAssetsPromise(assets) {
+    return loadStyleAssets(assets).then(
+      new Promise((resolve) => {
+        this.setState(
+          {
+            loaded: true,
+          },
+          () => {
+            resolve();
+          }
+        );
+      })
+    );
   }
 
   _isClient() {
