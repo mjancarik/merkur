@@ -1,9 +1,18 @@
 import { getMerkur } from '@merkur/core';
-import { loadScriptAssets } from '@merkur/integration';
+import { loadScriptAssets, loadStyleAssets } from '@merkur/integration';
 import React from 'react';
 
 // error event name from @merkur/plugin-error
 const MERKUR_ERROR_EVENT_NAME = '@merkur/plugin-error.error';
+
+function WidgetWrapper({ html, widgetClassName }) {
+  return (
+    <div
+      className={widgetClassName}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
 
 export default class MerkurComponent extends React.Component {
   constructor(props, context) {
@@ -11,11 +20,13 @@ export default class MerkurComponent extends React.Component {
 
     this._html = null;
     this._widget = null;
+    this._isMounted = false;
 
     this._handleClientError = this._handleError.bind(this);
 
     this.state = {
       encounteredError: false,
+      loaded: false,
     };
   }
 
@@ -55,6 +66,7 @@ export default class MerkurComponent extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     this._tryCreateWidget();
   }
 
@@ -63,7 +75,12 @@ export default class MerkurComponent extends React.Component {
     const { widgetProperties: prevWidgetProperties } = prevProps;
 
     if (!currentWidgetProperties && prevWidgetProperties) {
-      return this._removeWidget();
+      this._removeWidget();
+      this.setState({
+        loaded: false,
+      });
+
+      return;
     }
 
     if (currentWidgetProperties && !prevWidgetProperties) {
@@ -79,7 +96,14 @@ export default class MerkurComponent extends React.Component {
 
     if (prevName !== name || prevVersion !== version) {
       this._removeWidget();
-      this._tryCreateWidget();
+      this.setState(
+        {
+          loaded: false,
+        },
+        () => {
+          this._tryCreateWidget();
+        }
+      );
     }
   }
 
@@ -89,20 +113,21 @@ export default class MerkurComponent extends React.Component {
 
   render() {
     const { widgetProperties, widgetClassName } = this.props;
-    const { encounteredError } = this.state;
+    const { encounteredError, loaded } = this.state;
 
     if (!widgetProperties || encounteredError) {
       return this._renderFallback();
     }
 
     const html = this._getWidgetHTML();
+    if (this._isClient() && !loaded && !(!this._isMounted && html)) {
+      return this._renderPlaceholder();
+    }
 
     return (
       <>
         {this._renderStyleAssets()}
-        <div
-          className={widgetClassName}
-          dangerouslySetInnerHTML={{ __html: html }}></div>
+        <WidgetWrapper className={widgetClassName} html={html} />
       </>
     );
   }
@@ -120,22 +145,39 @@ export default class MerkurComponent extends React.Component {
     return null;
   }
 
+  _renderPlaceholder() {
+    const { widgetProperties, widgetClassName } = this.props;
+    const { placeholder } = widgetProperties;
+
+    if (!placeholder) {
+      return null;
+    }
+
+    return <WidgetWrapper className={widgetClassName} html={placeholder} />;
+  }
+
   _renderStyleAssets() {
     const { widgetProperties } = this.props;
-
     if (!widgetProperties || !Array.isArray(widgetProperties.assets)) {
       return null;
     }
 
-    return widgetProperties.assets.map((asset, key) => {
-      if (asset.type === 'stylesheet') {
-        return <link rel="stylesheet" href={asset.source} key={key} />;
-      }
+    if (this._isClient() || !this._getWidgetHTML()) {
+      return null;
+    }
 
-      if (asset.type === 'inlineStyle') {
-        return (
-          <style key={key} dangerouslySetInnerHTML={{ __html: asset.source }} />
-        );
+    return widgetProperties.assets.map((asset, key) => {
+      switch (asset.type) {
+        case 'stylesheet':
+          return <link rel="stylesheet" href={asset.source} key={key} />;
+
+        case 'inlineStyle':
+          return (
+            <style
+              key={key}
+              dangerouslySetInnerHTML={{ __html: asset.source }}
+            />
+          );
       }
     });
   }
@@ -184,40 +226,58 @@ export default class MerkurComponent extends React.Component {
 
     this._widget.unmount();
     this._widget = null;
+    this._html = null;
   }
 
-  async _tryCreateWidget() {
+  _tryCreateWidget() {
     const { widgetProperties, onWidgetMounted, debug } = this.props;
 
     if (!widgetProperties || this._widget) {
       return;
     }
 
-    try {
-      await loadScriptAssets(widgetProperties.assets);
-    } catch (error) {
-      this._handleError(error);
-      return;
-    }
+    Promise.all([
+      this._getLoadStyleAssetsPromise(widgetProperties.assets),
+      loadScriptAssets(widgetProperties.assets),
+    ])
+      .catch((error) => this._handleError(error))
+      .then(async () => {
+        const merkur = getMerkur();
+        this._widget = await merkur.create(widgetProperties);
+        await this._widget.mount();
 
-    const merkur = getMerkur();
+        if (typeof this._widget.on === 'function') {
+          // widget might not be using @merkur/plugin-event-emitter
+          this._widget.on(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
+        }
 
-    try {
-      this._widget = await merkur.create(widgetProperties);
-      await this._widget.mount();
+        if (typeof onWidgetMounted === 'function') {
+          onWidgetMounted(this._widget);
+        }
+      })
+      .catch((error) => {
+        if (debug) {
+          console.warn(error);
+        }
+      });
+  }
 
-      if (typeof this._widget.on === 'function') {
-        // widget might not be using @merkur/plugin-event-emitter
-        this._widget.on(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
-      }
+  _getLoadStyleAssetsPromise(assets) {
+    return loadStyleAssets(assets).then(
+      new Promise((resolve) => {
+        this.setState(
+          {
+            loaded: true,
+          },
+          () => {
+            resolve();
+          }
+        );
+      })
+    );
+  }
 
-      if (typeof onWidgetMounted === 'function') {
-        onWidgetMounted(this._widget);
-      }
-    } catch (_) {
-      if (debug) {
-        console.warn(_);
-      }
-    }
+  _isClient() {
+    return typeof window !== 'undefined';
   }
 }
