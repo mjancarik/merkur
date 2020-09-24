@@ -1,5 +1,5 @@
 import { createMerkurWidget } from '@merkur/core';
-import { errorPlugin, setErrorInfo } from '../index';
+import { errorPlugin, renderContent, setErrorInfo } from '../index';
 import { componentPlugin } from '@merkur/plugin-component';
 
 describe('createWidget method with error plugin', () => {
@@ -83,6 +83,33 @@ describe('createWidget method with error plugin', () => {
         "version": "1.0.0",
       }
     `);
+  });
+});
+
+describe('renderContent', () => {
+  it('should call the saved original method', async () => {
+    const methodMock = jest.fn(() => {
+      return Promise.resolve('');
+    });
+
+    const emitMock = jest.fn();
+    const widgetMock = {
+      $in: {
+        error: {
+          originalFunctions: {
+            someMethod: methodMock,
+          },
+        },
+      },
+      error: {},
+      emit: emitMock,
+    };
+
+    const renderProperties = ['value'];
+
+    renderContent(widgetMock, 'someMethod', renderProperties);
+
+    expect(methodMock).toBeCalled();
   });
 });
 

@@ -126,7 +126,6 @@ export async function renderContent(widget, methodName = 'mount', properties) {
       return result;
     }
   }
-
   try {
     // no earlier error captured
     result = await method(widget, ...properties);
