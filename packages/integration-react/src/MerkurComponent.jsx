@@ -5,12 +5,9 @@ import React from 'react';
 // error event name from @merkur/plugin-error
 const MERKUR_ERROR_EVENT_NAME = '@merkur/plugin-error.error';
 
-function WidgetWrapper({ html, widgetClassName }) {
+function WidgetWrapper({ html, className }) {
   return (
-    <div
-      className={widgetClassName}
-      dangerouslySetInnerHTML={{ __html: html }}
-    />
+    <div className={className} dangerouslySetInnerHTML={{ __html: html }} />
   );
 }
 
@@ -30,8 +27,12 @@ export default class MerkurComponent extends React.Component {
     };
   }
 
-  shouldComponentUpdate(nextProps) {
-    if (!this.props.widgetProperties || !this._widget) {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      !this.props.widgetProperties ||
+      this.state.loaded !== nextState.loaded ||
+      this.state.encounteredError !== nextState.encounteredError
+    ) {
       return true;
     }
 
@@ -119,14 +120,17 @@ export default class MerkurComponent extends React.Component {
       return this._renderFallback();
     }
 
-    const html = this._getWidgetHTML();
-    if (this._isClient() && !loaded && !(!this._isMounted && html)) {
-      return this._renderPlaceholder();
+    let html = this._getWidgetHTML();
+    const isSSRHydrate = !!(this._isClient() && !this._isMounted && html);
+
+    // Render placeholder
+    if (this._isClient() && !loaded && !isSSRHydrate) {
+      html = widgetProperties.placeholder || '';
     }
 
     return (
       <>
-        {this._renderStyleAssets()}
+        {(!this._isClient() || isSSRHydrate) && this._renderStyleAssets()}
         <WidgetWrapper className={widgetClassName} html={html} />
       </>
     );
@@ -158,15 +162,10 @@ export default class MerkurComponent extends React.Component {
 
   _renderStyleAssets() {
     const { widgetProperties } = this.props;
-    if (!widgetProperties || !Array.isArray(widgetProperties.assets)) {
-      return null;
-    }
+    const assets =
+      (Array.isArray(widgetProperties.assets) && widgetProperties.assets) || [];
 
-    if (this._isClient() || !this._getWidgetHTML()) {
-      return null;
-    }
-
-    return widgetProperties.assets.map((asset, key) => {
+    return assets.map((asset, key) => {
       switch (asset.type) {
         case 'stylesheet':
           return <link rel="stylesheet" href={asset.source} key={key} />;
@@ -264,16 +263,17 @@ export default class MerkurComponent extends React.Component {
 
   _getLoadStyleAssetsPromise(assets) {
     return loadStyleAssets(assets).then(
-      new Promise((resolve) => {
-        this.setState(
-          {
-            loaded: true,
-          },
-          () => {
-            resolve();
-          }
-        );
-      })
+      () =>
+        new Promise((resolve) => {
+          this.setState(
+            {
+              loaded: true,
+            },
+            () => {
+              resolve();
+            }
+          );
+        })
     );
   }
 
