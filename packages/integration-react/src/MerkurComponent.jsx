@@ -1,6 +1,6 @@
+import React from 'react';
 import { getMerkur } from '@merkur/core';
 import { loadScriptAssets, loadStyleAssets } from '@merkur/integration';
-import React from 'react';
 
 // error event name from @merkur/plugin-error
 const MERKUR_ERROR_EVENT_NAME = '@merkur/plugin-error.error';
@@ -23,14 +23,14 @@ export default class MerkurComponent extends React.Component {
 
     this.state = {
       encounteredError: false,
-      loaded: false,
+      assetsLoaded: false,
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
       !this.props.widgetProperties ||
-      this.state.loaded !== nextState.loaded ||
+      this.state.assetsLoaded !== nextState.assetsLoaded ||
       this.state.encounteredError !== nextState.encounteredError
     ) {
       return true;
@@ -68,24 +68,32 @@ export default class MerkurComponent extends React.Component {
 
   componentDidMount() {
     this._isMounted = true;
-    this._tryCreateWidget();
+    this._loadWidgetAssets();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { widgetProperties: currentWidgetProperties } = this.props;
     const { widgetProperties: prevWidgetProperties } = prevProps;
+
+    // Mount widget after resources have been loaded
+    if (
+      this.state.assetsLoaded &&
+      prevState.assetsLoaded !== this.state.assetsLoaded
+    ) {
+      return this._mountWidget();
+    }
 
     if (!currentWidgetProperties && prevWidgetProperties) {
       this._removeWidget();
       this.setState({
-        loaded: false,
+        assetsLoaded: false,
       });
 
       return;
     }
 
     if (currentWidgetProperties && !prevWidgetProperties) {
-      return this._tryCreateWidget();
+      return this._loadWidgetAssets();
     }
 
     if (!currentWidgetProperties && !prevWidgetProperties) {
@@ -99,10 +107,10 @@ export default class MerkurComponent extends React.Component {
       this._removeWidget();
       this.setState(
         {
-          loaded: false,
+          assetsLoaded: false,
         },
         () => {
-          this._tryCreateWidget();
+          this._loadWidgetAssets();
         }
       );
     }
@@ -114,23 +122,18 @@ export default class MerkurComponent extends React.Component {
 
   render() {
     const { widgetProperties, widgetClassName } = this.props;
-    const { encounteredError, loaded } = this.state;
+    const { encounteredError, assetsLoaded } = this.state;
 
-    if (!widgetProperties || encounteredError) {
+    if (!widgetProperties || encounteredError || !assetsLoaded) {
       return this._renderFallback();
     }
 
-    let html = this._getWidgetHTML();
-    const isSSRHydrate = !!(this._isClient() && !this._isMounted && html);
-
-    // Render placeholder
-    if (this._isClient() && !loaded && !isSSRHydrate) {
-      html = widgetProperties.placeholder || '';
-    }
+    const html = this._getWidgetHTML();
 
     return (
       <>
-        {(!this._isClient() || isSSRHydrate) && this._renderStyleAssets()}
+        {(!this._isClient() || this._getSSRHtml().length > 0) &&
+          this._renderStyleAssets()}
         <WidgetWrapper className={widgetClassName} html={html} />
       </>
     );
@@ -147,17 +150,6 @@ export default class MerkurComponent extends React.Component {
     }
 
     return null;
-  }
-
-  _renderPlaceholder() {
-    const { widgetProperties, widgetClassName } = this.props;
-    const { placeholder } = widgetProperties;
-
-    if (!placeholder) {
-      return null;
-    }
-
-    return <WidgetWrapper className={widgetClassName} html={placeholder} />;
   }
 
   _renderStyleAssets() {
@@ -186,17 +178,7 @@ export default class MerkurComponent extends React.Component {
       return this._html;
     }
 
-    this._html = this.props.widgetProperties.html || '';
-
-    if (typeof document !== 'undefined') {
-      const container = document.querySelector(
-        this.props.widgetProperties.props.containerSelector
-      );
-
-      if (container && container.children && container.children[0]) {
-        this._html = container.children[0].outerHTML;
-      }
-    }
+    this._html = this.props.widgetProperties.html || this._getSSRHtml();
 
     return this._html;
   }
@@ -228,53 +210,91 @@ export default class MerkurComponent extends React.Component {
     this._html = null;
   }
 
-  _tryCreateWidget() {
-    const { widgetProperties, onWidgetMounted, debug } = this.props;
+  /**
+   * Loads widget assets into page.
+   */
+  _loadWidgetAssets() {
+    const { widgetProperties } = this.props;
 
     if (!widgetProperties || this._widget) {
       return;
     }
 
-    Promise.all([
-      this._getLoadStyleAssetsPromise(widgetProperties.assets),
+    return Promise.all([
+      loadStyleAssets(widgetProperties.assets),
       loadScriptAssets(widgetProperties.assets),
     ])
-      .catch((error) => this._handleError(error))
-      .then(async () => {
-        const merkur = getMerkur();
-        this._widget = await merkur.create(widgetProperties);
-        await this._widget.mount();
-
-        if (typeof this._widget.on === 'function') {
-          // widget might not be using @merkur/plugin-event-emitter
-          this._widget.on(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
-        }
-
-        if (typeof onWidgetMounted === 'function') {
-          onWidgetMounted(this._widget);
-        }
-      })
-      .catch((error) => {
-        if (debug) {
-          console.warn(error);
-        }
-      });
+      .then(
+        () =>
+          new Promise((resolve) => {
+            this.setState(
+              {
+                assetsLoaded: true,
+              },
+              () => {
+                resolve();
+              }
+            );
+          })
+      )
+      .catch((error) => this._handleError(error));
   }
 
-  _getLoadStyleAssetsPromise(assets) {
-    return loadStyleAssets(assets).then(
-      () =>
-        new Promise((resolve) => {
-          this.setState(
-            {
-              loaded: true,
-            },
-            () => {
-              resolve();
-            }
-          );
-        })
-    );
+  /**
+   * Creates and mounts widget instance after all resoures loaded.
+   */
+  async _mountWidget() {
+    const { widgetProperties, onWidgetMounted, debug = false } = this.props;
+
+    if (!widgetProperties || this._widget) {
+      return;
+    }
+
+    try {
+      const merkur = getMerkur();
+      this._widget = await merkur.create(widgetProperties);
+      await this._widget.mount();
+
+      if (typeof this._widget.on === 'function') {
+        // widget might not be using @merkur/plugin-event-emitter
+        this._widget.on(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
+      }
+
+      if (typeof onWidgetMounted === 'function') {
+        onWidgetMounted(this._widget);
+      }
+    } catch (error) {
+      if (debug) {
+        console.warn(error);
+      }
+    }
+  }
+
+  /**
+   * Returns server-side rendered html, if its the first render on client
+   * after SSR.
+   *
+   * @return {string} server-side rendered html, if it's not available, returns empty string.
+   */
+  _getSSRHtml() {
+    if (
+      !this._isMounted &&
+      this._isClient() &&
+      typeof document !== 'undefined'
+    ) {
+      const container = document.querySelector(
+        this.props.widgetProperties.props.containerSelector
+      );
+
+      return (
+        container &&
+        container.children &&
+        container.children[0] &&
+        container.children[0].outerHTML
+      );
+    }
+
+    return '';
   }
 
   _isClient() {
