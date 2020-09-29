@@ -29,6 +29,7 @@ export default class MerkurComponent extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
+      !this._widget ||
       !this.props.widgetProperties ||
       this.state.assetsLoaded !== nextState.assetsLoaded ||
       this.state.encounteredError !== nextState.encounteredError
@@ -241,7 +242,7 @@ export default class MerkurComponent extends React.Component {
   }
 
   /**
-   * Creates and mounts widget instance after all resoures loaded.
+   * Creates and mounts widget instance after all resource loaded.
    */
   async _mountWidget() {
     const { widgetProperties, onWidgetMounted, debug = false } = this.props;
