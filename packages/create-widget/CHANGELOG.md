@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.21.0](https://github.com/mjancarik/merkur/compare/v0.20.0...v0.21.0) (2020-09-30)
+
+
+### Features
+
+* 🎸 preact use hydrate for aliving widget ([354ddb0](https://github.com/mjancarik/merkur/commit/354ddb0ede71aa9ed7500a5fa4a560f2a00424a3))
+
+
+
+
+
 # [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
 
 **Note:** Version bump only for package @merkur/create-widget

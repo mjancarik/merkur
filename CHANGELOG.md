@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.21.0](https://github.com/mjancarik/merkur/compare/v0.20.0...v0.21.0) (2020-09-30)
+
+
+### Bug Fixes
+
+* 🐛 Fixed babel-loader config to re-enable tree-shaking ([e125818](https://github.com/mjancarik/merkur/commit/e12581838273571be2c88d03c5061ed33857b0a2))
+* 🐛 Fixed FOUC and unnecessary component re-renderings ([#39](https://github.com/mjancarik/merkur/issues/39)) ([0b8d90f](https://github.com/mjancarik/merkur/commit/0b8d90fffec1136df1a3787ff505fd9c528f848f))
+* Calling update on unmounted widget ([#40](https://github.com/mjancarik/merkur/issues/40)) ([6ce9c65](https://github.com/mjancarik/merkur/commit/6ce9c65264c58235a732dc27d4ea2cd45d95ce92))
+
+
+### Features
+
+* 🎸 preact use hydrate for aliving widget ([354ddb0](https://github.com/mjancarik/merkur/commit/354ddb0ede71aa9ed7500a5fa4a560f2a00424a3))
+
+
+
+
+
 # [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
 
 
