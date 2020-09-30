@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.21.1](https://github.com/mjancarik/merkur/compare/v0.21.0...v0.21.1) (2020-09-30)
+
+
+### Features
+
+* Option to open links in newTab in router.redirect ([#41](https://github.com/mjancarik/merkur/issues/41)) ([2719173](https://github.com/mjancarik/merkur/commit/2719173671823c1ebbd667f6eb3f0f999b24e81f))
+
+
+
+
+
 # [0.21.0](https://github.com/mjancarik/merkur/compare/v0.20.0...v0.21.0) (2020-09-30)
 
 
