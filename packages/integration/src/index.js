@@ -41,6 +41,7 @@ function _loadStyle(asset) {
       const link = document.createElement('link');
       link.onload = resolve;
       link.onerror = reject;
+      link.rel = 'stylesheet';
       link.href = asset.source;
 
       document.head.appendChild(link);
@@ -60,7 +61,7 @@ function loadStyleAssets(assets) {
     (asset) =>
       (asset.type === 'stylesheet' &&
         asset.source &&
-        !document.querySelector(`link[href='${asset.source}']`)) ||
+        !document.head.querySelector(`link[href='${asset.source}']`)) ||
       (asset.type === 'inlineStyle' &&
         Array.from(styleElements).reduce((acc, cur) => {
           if (cur.innerHTML === asset.source) {
