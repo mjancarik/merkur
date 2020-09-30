@@ -80,7 +80,12 @@ function componentAPI() {
       return html;
     },
     async unmount(widget, ...args) {
-      return callLifeCycleMethod(widget, 'unmount', args);
+      const unmounted = await callLifeCycleMethod(widget, 'unmount', args);
+
+      widget.$in.component.isMounted = false;
+      widget.$in.component.isHydrated = false;
+
+      return unmounted;
     },
     async bootstrap(widget, ...args) {
       return callLifeCycleMethod(widget, 'bootstrap', args);
