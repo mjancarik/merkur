@@ -8,6 +8,7 @@ import React from 'react';
 jest.mock('@merkur/integration', () => {
   return {
     loadScriptAssets: jest.fn(() => Promise.resolve()),
+    loadStyleAssets: jest.fn(() => Promise.resolve()),
   };
 });
 
@@ -93,7 +94,11 @@ describe('Merkur component', () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('should render merkur component for defined widgetProperties', () => {
+  it('should render merkur component for defined widgetProperties', (done) => {
+    jest
+      .spyOn(MerkurIntegration, 'loadScriptAssets')
+      .mockImplementation(() => Promise.resolve());
+
     wrapper = shallow(
       <MerkurComponent
         widgetProperties={widgetProperties}
@@ -102,23 +107,19 @@ describe('Merkur component', () => {
       </MerkurComponent>
     );
 
-    expect(wrapper).toMatchInlineSnapshot(`
-      <Fragment>
-        <link
-          href="http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css"
-          key="1"
-          rel="stylesheet"
-        />
-        <div
-          className="container"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "<div class=\\"merkur__page\\"></div>",
-            }
-          }
-        />
-      </Fragment>
-    `);
+    setImmediate(() => {
+      expect(MerkurIntegration.loadScriptAssets).toHaveBeenCalled();
+      expect(wrapper).toMatchInlineSnapshot(`
+        <Fragment>
+          <WidgetWrapper
+            className="container"
+            html="<div class=\\"merkur__page\\"></div>"
+          />
+        </Fragment>
+      `);
+    });
+
+    done();
   });
 
   it('should call onWidgetMounted and onWidgetUnmouting callback', (done) => {
@@ -174,6 +175,33 @@ describe('Merkur component', () => {
       `);
 
       done();
+    });
+  });
+
+  it('should load style assets on unmount', (done) => {
+    jest
+      .spyOn(MerkurIntegration, 'loadStyleAssets')
+      .mockImplementation(() => Promise.resolve());
+    const onWidgetMounted = jest.fn();
+    const onWidgetUnmounting = jest.fn();
+
+    wrapper = shallow(
+      <MerkurComponent
+        widgetProperties={widgetProperties}
+        widgetClassName={widgetClassName}
+        onWidgetMounted={onWidgetMounted}
+        onWidgetUnmounting={onWidgetUnmounting}>
+        <span>Fallback</span>
+      </MerkurComponent>
+    );
+
+    setImmediate(() => {
+      wrapper.unmount();
+
+      setImmediate(() => {
+        expect(MerkurIntegration.loadStyleAssets).toHaveBeenCalled();
+        done();
+      });
     });
   });
 });
