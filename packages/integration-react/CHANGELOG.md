@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.21.2](https://github.com/mjancarik/merkur/compare/v0.21.1...v0.21.2) (2020-10-01)
+
+
+### Bug Fixes
+
+* 🐛 Fixed SSR in MerkurComponent (was rendering placeholder) ([#42](https://github.com/mjancarik/merkur/issues/42)) ([7e76e13](https://github.com/mjancarik/merkur/commit/7e76e13ff723049687d8b1ae45629d938f3f8df0))
+
+
+
+
+
 # [0.21.0](https://github.com/mjancarik/merkur/compare/v0.20.0...v0.21.0) (2020-09-30)
 
 
