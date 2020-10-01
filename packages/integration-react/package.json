@@ -1,6 +1,6 @@
 {
   "name": "@merkur/integration-react",
-  "version": "0.21.2",
+  "version": "0.21.3",
   "description": "Merkur module for easy integration with react.",
   "main": "lib/index.cjs",
   "module": "lib/index.mjs",

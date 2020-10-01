@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.21.3](https://github.com/mjancarik/merkur/compare/v0.21.2...v0.21.3) (2020-10-01)
+
+
+### Bug Fixes
+
+* 🐛 Fixed unintentional render of placeholder after SSR ([#43](https://github.com/mjancarik/merkur/issues/43)) ([64ec121](https://github.com/mjancarik/merkur/commit/64ec121dca6a458c818b3c6a291cc19b81b29e74))
+
+
+
+
+
 ## [0.21.2](https://github.com/mjancarik/merkur/compare/v0.21.1...v0.21.2) (2020-10-01)
 
 
