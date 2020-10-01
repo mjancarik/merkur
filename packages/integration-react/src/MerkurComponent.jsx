@@ -29,7 +29,6 @@ export default class MerkurComponent extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
-      !this._widget ||
       !this.props.widgetProperties ||
       this.state.assetsLoaded !== nextState.assetsLoaded ||
       this.state.encounteredError !== nextState.encounteredError
@@ -37,8 +36,11 @@ export default class MerkurComponent extends React.Component {
       return true;
     }
 
-    // TODO refactoring
-    if (nextProps.widgetProperties && nextProps.widgetProperties.props) {
+    if (
+      this._widget &&
+      nextProps.widgetProperties &&
+      nextProps.widgetProperties.props
+    ) {
       for (let key in nextProps.widgetProperties.props) {
         if (
           !this.props.widgetProperties ||
@@ -47,11 +49,17 @@ export default class MerkurComponent extends React.Component {
             this.props.widgetProperties.props[key]
         ) {
           this._widget.setProps(nextProps.widgetProperties.props);
+
+          return false;
         }
       }
     }
 
-    if (nextProps.widgetProperties && nextProps.widgetProperties.state) {
+    if (
+      this._widget &&
+      nextProps.widgetProperties &&
+      nextProps.widgetProperties.state
+    ) {
       for (let key in nextProps.widgetProperties.state) {
         if (
           !this.props.widgetProperties ||
@@ -60,6 +68,8 @@ export default class MerkurComponent extends React.Component {
             this.props.widgetProperties.state[key]
         ) {
           this._widget.setState(nextProps.widgetProperties.state);
+
+          return false;
         }
       }
     }
