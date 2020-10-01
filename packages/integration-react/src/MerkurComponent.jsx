@@ -48,7 +48,9 @@ export default class MerkurComponent extends React.Component {
           nextProps.widgetProperties.props[key] !==
             this.props.widgetProperties.props[key]
         ) {
-          return this._widget.setProps(nextProps.widgetProperties.props);
+          this._widget.setProps(nextProps.widgetProperties.props);
+
+          return false;
         }
       }
     }
@@ -65,7 +67,9 @@ export default class MerkurComponent extends React.Component {
           nextProps.widgetProperties.state[key] !==
             this.props.widgetProperties.state[key]
         ) {
-          return this._widget.setState(nextProps.widgetProperties.state);
+          this._widget.setState(nextProps.widgetProperties.state);
+
+          return false;
         }
       }
     }
