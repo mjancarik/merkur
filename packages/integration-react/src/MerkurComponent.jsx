@@ -125,7 +125,11 @@ export default class MerkurComponent extends React.Component {
     const { widgetProperties, widgetClassName } = this.props;
     const { encounteredError, assetsLoaded } = this.state;
 
-    if (!widgetProperties || encounteredError || !assetsLoaded) {
+    if (
+      !widgetProperties ||
+      encounteredError ||
+      (this._isClient() && !this._isSSRHydrate() && !assetsLoaded)
+    ) {
       return this._renderFallback();
     }
 
@@ -133,7 +137,7 @@ export default class MerkurComponent extends React.Component {
 
     return (
       <>
-        {(!this._isClient() || this._getSSRHtml().length > 0) &&
+        {(!this._isClient() || this._isSSRHydrate()) &&
           this._renderStyleAssets()}
         <WidgetWrapper className={widgetClassName} html={html} />
       </>
@@ -296,6 +300,15 @@ export default class MerkurComponent extends React.Component {
     }
 
     return '';
+  }
+
+  /**
+   * Checks if it's the first render after SSR.
+   *
+   * @return {boolean} true in case of a first render after SSR, otherwise false.
+   */
+  _isSSRHydrate() {
+    return this._getSSRHtml().length > 0;
   }
 
   _isClient() {
