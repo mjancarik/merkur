@@ -22,6 +22,10 @@ describe('Merkur component', () => {
   beforeEach(() => {
     const merkur = createMerkur();
 
+    jest
+      .spyOn(MerkurComponent.prototype, '_isSSRHydrate')
+      .mockReturnValue(false);
+
     widgetClassName = 'container';
 
     widgetProperties = {
