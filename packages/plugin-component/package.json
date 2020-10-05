@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-component",
-  "version": "0.19.0",
+  "version": "0.21.0",
   "description": "Merkur component plugin.",
   "main": "lib/index.cjs",
   "module": "lib/index.mjs",
@@ -9,6 +9,10 @@
   "exports": {
     "import": "./lib/index.mjs",
     "require": "./lib/index.cjs"
+  },
+  "browser": {
+    "./lib/index.cjs": "./lib/index.es5.js",
+    "./lib/index.mjs": "./lib/index.mjs"
   },
   "scripts": {
     "preversion": "npm test",
@@ -38,7 +42,7 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.19.0",
+    "@merkur/core": "^0.21.0",
     "rollup": "^2.26.9"
   },
   "peerDependencies": {

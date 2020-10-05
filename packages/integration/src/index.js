@@ -37,20 +37,21 @@ function _loadScript(asset) {
 
 function _loadStyle(asset) {
   return new Promise((resolve, reject) => {
-    const style = document.createElement('style');
-
-    style.type = 'text/css';
-
     if (asset.type === 'stylesheet') {
-      style.onload = resolve;
-      style.onerror = reject;
-      style.src = asset.source;
+      const link = document.createElement('link');
+      link.onload = resolve;
+      link.onerror = reject;
+      link.rel = 'stylesheet';
+      link.href = asset.source;
+
+      document.head.appendChild(link);
     } else {
+      const style = document.createElement('style');
       style.innerHTML = asset.source;
+
+      document.head.appendChild(style);
       resolve();
     }
-
-    document.head.appendChild(style);
   });
 }
 
@@ -58,16 +59,17 @@ function loadStyleAssets(assets) {
   const styleElements = document.getElementsByTagName('style');
   const stylesToRender = assets.filter(
     (asset) =>
-      (asset.type === 'stylesheet' &&
-        !document.querySelector(`style[href='${asset.source}']`)) ||
-      (asset.type === 'inlineStyle' &&
-        Array.from(styleElements).reduce((acc, cur) => {
-          if (cur.innerHTML === asset.source) {
-            return false;
-          }
+      asset.source &&
+      ((asset.type === 'stylesheet' &&
+        !document.head.querySelector(`link[href='${asset.source}']`)) ||
+        (asset.type === 'inlineStyle' &&
+          Array.from(styleElements).reduce((acc, cur) => {
+            if (cur.innerHTML === asset.source) {
+              return false;
+            }
 
-          return acc;
-        }, true))
+            return acc;
+          }, true)))
   );
 
   return Promise.all(stylesToRender.map((asset) => _loadStyle(asset)));

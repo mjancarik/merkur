@@ -80,6 +80,9 @@ function componentAPI() {
       return html;
     },
     async unmount(widget, ...args) {
+      widget.$in.component.isMounted = false;
+      widget.$in.component.isHydrated = false;
+
       return callLifeCycleMethod(widget, 'unmount', args);
     },
     async bootstrap(widget, ...args) {

@@ -100,6 +100,8 @@ describe('Merkur component', () => {
 
       loadStyleAssets(assets).then(() => {
         expect(document.createElement).toHaveBeenCalledTimes(2);
+        expect(document.createElement).toHaveBeenNthCalledWith(1, 'link');
+        expect(document.createElement).toHaveBeenNthCalledWith(2, 'style');
         expect(document.head.appendChild).toHaveBeenCalledTimes(2);
 
         done();

@@ -113,7 +113,7 @@ function createRollupES5Config() {
       file: `./lib/index.es5.js`,
       format: 'cjs',
       exports: 'named',
-      plugins: [getBabelOutputPlugin(babelBaseConfig)],
+      plugins: [getBabelOutputPlugin(babelBaseConfig), terser()],
     },
   ];
 

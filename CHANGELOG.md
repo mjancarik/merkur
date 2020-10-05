@@ -3,6 +3,73 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.21.3](https://github.com/mjancarik/merkur/compare/v0.21.2...v0.21.3) (2020-10-01)
+
+
+### Bug Fixes
+
+* 🐛 Fixed unintentional render of placeholder after SSR ([#43](https://github.com/mjancarik/merkur/issues/43)) ([64ec121](https://github.com/mjancarik/merkur/commit/64ec121dca6a458c818b3c6a291cc19b81b29e74))
+
+
+
+
+
+## [0.21.2](https://github.com/mjancarik/merkur/compare/v0.21.1...v0.21.2) (2020-10-01)
+
+
+### Bug Fixes
+
+* 🐛 Fixed SSR in MerkurComponent (was rendering placeholder) ([#42](https://github.com/mjancarik/merkur/issues/42)) ([7e76e13](https://github.com/mjancarik/merkur/commit/7e76e13ff723049687d8b1ae45629d938f3f8df0))
+
+
+
+
+
+## [0.21.1](https://github.com/mjancarik/merkur/compare/v0.21.0...v0.21.1) (2020-09-30)
+
+
+### Features
+
+* Option to open links in newTab in router.redirect ([#41](https://github.com/mjancarik/merkur/issues/41)) ([2719173](https://github.com/mjancarik/merkur/commit/2719173671823c1ebbd667f6eb3f0f999b24e81f))
+
+
+
+
+
+# [0.21.0](https://github.com/mjancarik/merkur/compare/v0.20.0...v0.21.0) (2020-09-30)
+
+
+### Bug Fixes
+
+* 🐛 Fixed babel-loader config to re-enable tree-shaking ([e125818](https://github.com/mjancarik/merkur/commit/e12581838273571be2c88d03c5061ed33857b0a2))
+* 🐛 Fixed FOUC and unnecessary component re-renderings ([#39](https://github.com/mjancarik/merkur/issues/39)) ([0b8d90f](https://github.com/mjancarik/merkur/commit/0b8d90fffec1136df1a3787ff505fd9c528f848f))
+* Calling update on unmounted widget ([#40](https://github.com/mjancarik/merkur/issues/40)) ([6ce9c65](https://github.com/mjancarik/merkur/commit/6ce9c65264c58235a732dc27d4ea2cd45d95ce92))
+
+
+### Features
+
+* 🎸 preact use hydrate for aliving widget ([354ddb0](https://github.com/mjancarik/merkur/commit/354ddb0ede71aa9ed7500a5fa4a560f2a00424a3))
+
+
+
+
+
+# [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
+
+
+### Bug Fixes
+
+* 🐛 added browser field to package.json ([85cf4a1](https://github.com/mjancarik/merkur/commit/85cf4a1e73b883125d4482c36892aa5de410653f))
+
+
+### BREAKING CHANGES
+
+* 🧨 new browser field in pakckage.json
+
+
+
+
+
 ## [0.19.3](https://github.com/mjancarik/merkur/compare/v0.19.2...v0.19.3) (2020-09-10)
 
 **Note:** Version bump only for package merkur-monorepo
