@@ -42,13 +42,10 @@ describe('createWidget method with router plugin', () => {
             "event": Object {},
           },
           "router": Object {
+            "isBootstrapCalled": false,
             "isMounting": false,
             "isRouteActivated": false,
-            "originalFunctions": Object {
-              "mount": [Function],
-              "unmount": [Function],
-              "update": [Function],
-            },
+            "pathname": null,
             "route": null,
           },
         },
@@ -102,6 +99,7 @@ describe('createWidget method with router plugin', () => {
 
   describe('router plugin API', () => {
     let widget = null;
+    let bootstrap = jest.fn();
     let homeRoute = {
       init: jest.fn(),
       load: jest.fn(() => ({ page: 'home' })),
@@ -138,6 +136,7 @@ describe('createWidget method with router plugin', () => {
         props: {
           pathname: '/',
         },
+        bootstrap,
       });
 
       createRouter(widget, routes);
@@ -148,6 +147,13 @@ describe('createWidget method with router plugin', () => {
       await widget.mount();
 
       expect(widget.router.getCurrentRoute()).toEqual(homeRoute);
+    });
+
+    it('should call widget bootstrap method once', async () => {
+      await widget.mount();
+      await widget.mount();
+
+      expect(bootstrap).toHaveBeenCalledTimes(1);
     });
 
     it('should call init method on home route', async () => {
@@ -179,6 +185,13 @@ describe('createWidget method with router plugin', () => {
       await widget.mount();
 
       expect(homeRoute.destroy).not.toHaveBeenCalled();
+    });
+
+    it('should not call deactivate method on home route for same pathname', async () => {
+      await widget.mount();
+      await widget.setProps({ pathname: '/', key: 1 });
+
+      expect(homeRoute.deactivate).not.toHaveBeenCalled();
     });
 
     it('should call deactivate method on home route', async () => {

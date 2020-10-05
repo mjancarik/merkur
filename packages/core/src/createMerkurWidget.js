@@ -1,4 +1,8 @@
-import { setDefaultValueForUndefined, isFunction } from './utils';
+import {
+  setDefaultValueForUndefined,
+  bindWidgetToFunctions,
+  isFunction,
+} from './utils';
 
 async function callPluginMethod(widget, method, args) {
   for (const plugin of widget.$plugins) {
@@ -8,19 +12,6 @@ async function callPluginMethod(widget, method, args) {
   }
 
   return widget;
-}
-
-export function bindWidgetToFunctions(widget, target) {
-  target = target || widget;
-  Object.keys(target).forEach((key) => {
-    if (isFunction(target[key])) {
-      let originalFunction = target[key];
-
-      target[key] = (...rest) => {
-        return originalFunction(widget, ...rest);
-      };
-    }
-  });
 }
 
 export async function createMerkurWidget(widgetDefinition = {}) {

@@ -1,13 +1,26 @@
 {
   "name": "@merkur/integration",
-  "version": "0.14.0",
+  "version": "0.20.0",
   "description": "Merkur module for easy integration with other apps.",
-  "main": "lib/index",
-  "module": "lib/index",
+  "main": "lib/index.cjs",
+  "module": "lib/index.mjs",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs"
+    },
+    "./server/": "./server/index.js",
+    "./server/index.js": "./server/index.js"
+  },
+  "browser": {
+    "./lib/index.cjs": "./lib/index.es5.js",
+    "./lib/index.mjs": "./lib/index.mjs"
+  },
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
-    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check es9 ./lib/index.js",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check --module es9 ./lib/index.mjs",
     "build": "node_modules/.bin/rollup -c",
     "prepare": "npm run build"
   },
@@ -30,8 +43,8 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.14.0",
-    "rollup": "^2.22.1"
+    "@merkur/core": "^0.20.0",
+    "rollup": "^2.26.9"
   },
   "peerDependencies": {
     "@merkur/core": "*"

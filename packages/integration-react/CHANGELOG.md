@@ -3,6 +3,151 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
+
+
+### Bug Fixes
+
+* 🐛 added browser field to package.json ([85cf4a1](https://github.com/mjancarik/merkur/commit/85cf4a1e73b883125d4482c36892aa5de410653f))
+
+
+### BREAKING CHANGES
+
+* 🧨 new browser field in pakckage.json
+
+
+
+
+
+## [0.19.3](https://github.com/mjancarik/merkur/compare/v0.19.2...v0.19.3) (2020-09-10)
+
+**Note:** Version bump only for package @merkur/integration-react
+
+
+
+
+
+## [0.19.2](https://github.com/mjancarik/merkur/compare/v0.19.1...v0.19.2) (2020-09-09)
+
+**Note:** Version bump only for package @merkur/integration-react
+
+
+
+
+
+## [0.19.1](https://github.com/mjancarik/merkur/compare/v0.19.0...v0.19.1) (2020-09-07)
+
+**Note:** Version bump only for package @merkur/integration-react
+
+
+
+
+
+# [0.19.0](https://github.com/mjancarik/merkur/compare/v0.18.1...v0.19.0) (2020-09-07)
+
+
+### Features
+
+* 🎸 add file extension in package.json ([7b8f8b3](https://github.com/mjancarik/merkur/commit/7b8f8b31b4d45f6f6bc59b5ad81c25ab067de091))
+
+
+### BREAKING CHANGES
+
+* 🧨 remove useless files from lib folder and defined exports in package.json
+
+
+
+
+
+## [0.18.1](https://github.com/mjancarik/merkur/compare/v0.18.0...v0.18.1) (2020-09-04)
+
+
+### Bug Fixes
+
+* escaping CSS styles ([#26](https://github.com/mjancarik/merkur/issues/26)) ([71051cc](https://github.com/mjancarik/merkur/commit/71051ccd8e1d51a3917f86238fd4764578c3b37b))
+
+
+
+
+
+# [0.18.0](https://github.com/mjancarik/merkur/compare/v0.17.0...v0.18.0) (2020-09-03)
+
+
+### Bug Fixes
+
+* 🐛 optional event-emitter ([5f0edd1](https://github.com/mjancarik/merkur/commit/5f0edd191e99d6fef66a8c29530b73dba956d874))
+* 🐛 update dependencies ([5ca444a](https://github.com/mjancarik/merkur/commit/5ca444a70dd9a2a7bb94a592241ccea63c788430))
+
+
+### Features
+
+* 🎸 handling client side error ([96c736f](https://github.com/mjancarik/merkur/commit/96c736f18bcd1f41287f71c8526c2fb9288bbcd7))
+
+
+
+
+
+# [0.17.0](https://github.com/mjancarik/merkur/compare/v0.16.2...v0.17.0) (2020-08-27)
+
+
+### Features
+
+* 🎸 integration-react using base integration pkg ([a3aef85](https://github.com/mjancarik/merkur/commit/a3aef859a80ff0a884d32fc5c98f77843b55f5f0))
+
+
+
+
+
+## [0.16.1](https://github.com/mjancarik/merkur/compare/v0.16.0...v0.16.1) (2020-08-14)
+
+**Note:** Version bump only for package @merkur/integration-react
+
+
+
+
+
+# [0.16.0](https://github.com/mjancarik/merkur/compare/v0.15.2...v0.16.0) (2020-08-14)
+
+**Note:** Version bump only for package @merkur/integration-react
+
+
+
+
+
+## [0.15.2](https://github.com/mjancarik/merkur/compare/v0.15.1...v0.15.2) (2020-08-07)
+
+**Note:** Version bump only for package @merkur/integration-react
+
+
+
+
+
+# [0.15.0](https://github.com/mjancarik/merkur/compare/v0.14.1...v0.15.0) (2020-08-06)
+
+
+### Bug Fixes
+
+* 🐛 Support for ES5/ES9 scripts ([#15](https://github.com/mjancarik/merkur/issues/15)) ([0334cda](https://github.com/mjancarik/merkur/commit/0334cdac2c1f62ae4fb8895bf077a4ebebc99e4c))
+
+
+### chore
+
+* 🤖 update dependencies ([9d5f3eb](https://github.com/mjancarik/merkur/commit/9d5f3eb1b0b1e6845fa2ae5e2714cefd53e6782e))
+
+
+### Features
+
+* 🎸 allow tree shaking for merkur ([731371e](https://github.com/mjancarik/merkur/commit/731371ec09bfd1a7765caa55c9cc52124d7a42ed))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 # [0.14.0](https://github.com/mjancarik/merkur/compare/v0.13.1...v0.14.0) (2020-07-28)
 
 

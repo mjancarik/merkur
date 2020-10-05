@@ -1,7 +1,17 @@
 import { shallow } from 'enzyme';
 import { createMerkur, createMerkurWidget, removeMerkur } from '@merkur/core';
 import { componentPlugin } from '@merkur/plugin-component';
+import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
+import * as MerkurIntegration from '@merkur/integration';
 import React from 'react';
+
+jest.mock('@merkur/integration', () => {
+  return {
+    loadScriptAssets: jest.fn(() => Promise.resolve()),
+    loadStyleAssets: jest.fn(() => Promise.resolve()),
+  };
+});
+
 import MerkurComponent from '../MerkurComponent';
 
 describe('Merkur component', () => {
@@ -47,7 +57,7 @@ describe('Merkur component', () => {
       $dependencies: {
         shallow,
       },
-      $plugins: [componentPlugin],
+      $plugins: [componentPlugin, eventEmitterPlugin],
       assets: widgetProperties.assets,
       mount(widget) {
         return widget.$dependencies.shallow(<span />);
@@ -74,22 +84,20 @@ describe('Merkur component', () => {
     removeMerkur();
   });
 
-  it('should render fallback view for not defined widgetProperties', () => {
+  it('should render nothing for not defined widgetProperties', () => {
     wrapper = shallow(
       <MerkurComponent>
         <span>Fallback</span>
       </MerkurComponent>
     );
 
-    expect(wrapper).toMatchInlineSnapshot(`
-      <span>
-        Fallback
-      </span>
-    `);
+    expect(wrapper.exists()).toBeTruthy();
   });
 
-  it('should render merkur component for defined widgetProperties', () => {
-    spyOn(MerkurComponent.prototype, '_loadScriptAssets').and.stub();
+  it('should render merkur component for defined widgetProperties', (done) => {
+    jest
+      .spyOn(MerkurIntegration, 'loadScriptAssets')
+      .mockImplementation(() => Promise.resolve());
 
     wrapper = shallow(
       <MerkurComponent
@@ -99,54 +107,22 @@ describe('Merkur component', () => {
       </MerkurComponent>
     );
 
-    expect(wrapper).toMatchInlineSnapshot(`
-      <Fragment>
-        <link
-          href="http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css"
-          key="1"
-          rel="stylesheet"
-        />
-        <div
-          className="container"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "<div class=\\"merkur__page\\"></div>",
-            }
-          }
-        />
-      </Fragment>
-    `);
-  });
+    setImmediate(() => {
+      expect(MerkurIntegration.loadScriptAssets).toHaveBeenCalled();
+      expect(wrapper).toMatchInlineSnapshot(`
+        <Fragment>
+          <WidgetWrapper
+            className="container"
+            html="<div class=\\"merkur__page\\"></div>"
+          />
+        </Fragment>
+      `);
+    });
 
-  it('should load script assets prior to mounting the widget', () => {
-    spyOn(MerkurComponent.prototype, '_loadScript').and.stub();
-
-    wrapper = shallow(
-      <MerkurComponent
-        widgetProperties={widgetProperties}
-        widgetClassName={widgetClassName}>
-        <span>Fallback</span>
-      </MerkurComponent>
-    );
-
-    expect(MerkurComponent.prototype._loadScript).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: 'widget.js',
-        type: 'script',
-        source: {
-          es9:
-            'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js',
-          es5:
-            'http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js',
-        },
-      })
-    );
+    done();
   });
 
   it('should call onWidgetMounted and onWidgetUnmouting callback', (done) => {
-    spyOn(MerkurComponent.prototype, '_loadScriptAssets').and.returnValue(
-      Promise.resolve()
-    );
     const onWidgetMounted = jest.fn();
     const onWidgetUnmounting = jest.fn();
 
@@ -174,9 +150,10 @@ describe('Merkur component', () => {
   });
 
   it('should call onError callback and render fallback when script loading fails.', (done) => {
-    spyOn(MerkurComponent.prototype, '_loadScript').and.returnValue(
-      Promise.reject()
-    );
+    jest
+      .spyOn(MerkurIntegration, 'loadScriptAssets')
+      .mockImplementation(() => Promise.reject('failed to load'));
+
     const onError = jest.fn();
 
     wrapper = shallow(
@@ -198,6 +175,33 @@ describe('Merkur component', () => {
       `);
 
       done();
+    });
+  });
+
+  it('should load style assets on unmount', (done) => {
+    jest
+      .spyOn(MerkurIntegration, 'loadStyleAssets')
+      .mockImplementation(() => Promise.resolve());
+    const onWidgetMounted = jest.fn();
+    const onWidgetUnmounting = jest.fn();
+
+    wrapper = shallow(
+      <MerkurComponent
+        widgetProperties={widgetProperties}
+        widgetClassName={widgetClassName}
+        onWidgetMounted={onWidgetMounted}
+        onWidgetUnmounting={onWidgetUnmounting}>
+        <span>Fallback</span>
+      </MerkurComponent>
+    );
+
+    setImmediate(() => {
+      wrapper.unmount();
+
+      setImmediate(() => {
+        expect(MerkurIntegration.loadStyleAssets).toHaveBeenCalled();
+        done();
+      });
     });
   });
 });

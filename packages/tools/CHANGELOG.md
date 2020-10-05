@@ -3,6 +3,132 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
+
+**Note:** Version bump only for package @merkur/tools
+
+
+
+
+
+## [0.19.2](https://github.com/mjancarik/merkur/compare/v0.19.1...v0.19.2) (2020-09-09)
+
+**Note:** Version bump only for package @merkur/tools
+
+
+
+
+
+## [0.19.1](https://github.com/mjancarik/merkur/compare/v0.19.0...v0.19.1) (2020-09-07)
+
+
+### Bug Fixes
+
+* 🐛 set webpack to handle .mjs files for both envs ([131b06d](https://github.com/mjancarik/merkur/commit/131b06de9ea766ce4ea8c39405232ed103dc7eb6))
+
+
+
+
+
+# [0.19.0](https://github.com/mjancarik/merkur/compare/v0.18.1...v0.19.0) (2020-09-07)
+
+
+### Features
+
+* 🎸 bundle analyzer show tree shakeable version for dev env ([29c5bcd](https://github.com/mjancarik/merkur/commit/29c5bcdb5c8b3dc815169c14a116bc6c591ff81e))
+
+
+
+
+
+## [0.18.1](https://github.com/mjancarik/merkur/compare/v0.18.0...v0.18.1) (2020-09-04)
+
+**Note:** Version bump only for package @merkur/tools
+
+
+
+
+
+# [0.18.0](https://github.com/mjancarik/merkur/compare/v0.17.0...v0.18.0) (2020-09-03)
+
+
+### Bug Fixes
+
+* 🐛 update dependencies ([5ca444a](https://github.com/mjancarik/merkur/commit/5ca444a70dd9a2a7bb94a592241ccea63c788430))
+
+
+### Features
+
+* 🎸 added polyfill file ([b2b2a99](https://github.com/mjancarik/merkur/commit/b2b2a99380ea741d8a36fa95a94ded3414fc8a9f))
+* 🎸 pipe allow async function ([97f6aa5](https://github.com/mjancarik/merkur/commit/97f6aa53159cb988ab6dd6e02d422ecdeb6c0064))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+* 🧨 yes
+
+
+
+
+
+# [0.17.0](https://github.com/mjancarik/merkur/compare/v0.16.2...v0.17.0) (2020-08-27)
+
+**Note:** Version bump only for package @merkur/tools
+
+
+
+
+
+## [0.16.1](https://github.com/mjancarik/merkur/compare/v0.16.0...v0.16.1) (2020-08-14)
+
+**Note:** Version bump only for package @merkur/tools
+
+
+
+
+
+# [0.16.0](https://github.com/mjancarik/merkur/compare/v0.15.2...v0.16.0) (2020-08-14)
+
+**Note:** Version bump only for package @merkur/tools
+
+
+
+
+
+## [0.15.1](https://github.com/mjancarik/merkur/compare/v0.15.0...v0.15.1) (2020-08-06)
+
+
+### Bug Fixes
+
+* 🐛 resolving @merkur/* modules to es5 version ([802a952](https://github.com/mjancarik/merkur/commit/802a952995499f18d803414b26c0ac4356d7d881))
+
+
+
+
+
+# [0.15.0](https://github.com/mjancarik/merkur/compare/v0.14.1...v0.15.0) (2020-08-06)
+
+
+### chore
+
+* 🤖 update dependencies ([9d5f3eb](https://github.com/mjancarik/merkur/commit/9d5f3eb1b0b1e6845fa2ae5e2714cefd53e6782e))
+
+
+### Features
+
+* 🎸 Ability to override node_modules dir in ES5 transformer ([#14](https://github.com/mjancarik/merkur/issues/14)) ([253a443](https://github.com/mjancarik/merkur/commit/253a44346e324d98ed4408775ddbb9e3e769d9c7))
+* 🎸 added jest-watch-typeahead plugin ([f0de4e7](https://github.com/mjancarik/merkur/commit/f0de4e726e41239676cce956e7374a7ca64dcd64))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 ## [0.14.1](https://github.com/mjancarik/merkur/compare/v0.14.0...v0.14.1) (2020-07-28)
 
 

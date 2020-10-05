@@ -17,6 +17,12 @@ function createWidget(widgetParams) {
         widget.View()
       );
     },
+    unmount(widget) {
+      return widget.$dependencies.render(
+        document.querySelector(widget.props.containerSelector),
+        widget.$dependencies.html``
+      );
+    },
     update(widget) {
       return widget.$dependencies.render(
         document.querySelector(widget.props.containerSelector),

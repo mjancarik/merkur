@@ -8,5 +8,10 @@
     "text": "Docs",
     "title": "Merkur documentation",
     "url": "/docs"
+  },
+  {
+    "text": "Demo",
+    "title": "Merkur Demo",
+    "url": "/demo"
   }
 ]

@@ -3,6 +3,155 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+## [0.19.3](https://github.com/mjancarik/merkur/compare/v0.19.2...v0.19.3) (2020-09-10)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+## [0.19.2](https://github.com/mjancarik/merkur/compare/v0.19.1...v0.19.2) (2020-09-09)
+
+
+### Bug Fixes
+
+* 🐛 jest integration tests for widget with server.cjs file ([4e213cd](https://github.com/mjancarik/merkur/commit/4e213cd42ad27502667deb35f025f8b79ed2533a))
+
+
+
+
+
+## [0.19.1](https://github.com/mjancarik/merkur/compare/v0.19.0...v0.19.1) (2020-09-07)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+# [0.19.0](https://github.com/mjancarik/merkur/compare/v0.18.1...v0.19.0) (2020-09-07)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+## [0.18.1](https://github.com/mjancarik/merkur/compare/v0.18.0...v0.18.1) (2020-09-04)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+# [0.18.0](https://github.com/mjancarik/merkur/compare/v0.17.0...v0.18.0) (2020-09-03)
+
+
+### Bug Fixes
+
+* 🐛 skip loading missing script asset in playground ([127f39b](https://github.com/mjancarik/merkur/commit/127f39bd0759884c601f8e8c416442c02d3d0076))
+* 🐛 update dependencies ([5ca444a](https://github.com/mjancarik/merkur/commit/5ca444a70dd9a2a7bb94a592241ccea63c788430))
+
+
+### Features
+
+* 🎸 added polyfill file ([b2b2a99](https://github.com/mjancarik/merkur/commit/b2b2a99380ea741d8a36fa95a94ded3414fc8a9f))
+* 🎸 pipe allow async function ([97f6aa5](https://github.com/mjancarik/merkur/commit/97f6aa53159cb988ab6dd6e02d422ecdeb6c0064))
+* 🎸 removed containerSelector from API call ([e54303d](https://github.com/mjancarik/merkur/commit/e54303df23264980f888fc3bf3d50b6c3892728c))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+* 🧨 yes
+* 🧨 yes
+
+
+
+
+
+# [0.17.0](https://github.com/mjancarik/merkur/compare/v0.16.2...v0.17.0) (2020-08-27)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+## [0.16.2](https://github.com/mjancarik/merkur/compare/v0.16.1...v0.16.2) (2020-08-25)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+## [0.16.1](https://github.com/mjancarik/merkur/compare/v0.16.0...v0.16.1) (2020-08-14)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+# [0.16.0](https://github.com/mjancarik/merkur/compare/v0.15.2...v0.16.0) (2020-08-14)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+## [0.15.2](https://github.com/mjancarik/merkur/compare/v0.15.1...v0.15.2) (2020-08-07)
+
+
+### Bug Fixes
+
+* 🐛 test:all command ([3529e1d](https://github.com/mjancarik/merkur/commit/3529e1dc403723e7afc2f27053deaa74851dc9d2))
+
+
+
+
+
+## [0.15.1](https://github.com/mjancarik/merkur/compare/v0.15.0...v0.15.1) (2020-08-06)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
+# [0.15.0](https://github.com/mjancarik/merkur/compare/v0.14.1...v0.15.0) (2020-08-06)
+
+
+### Bug Fixes
+
+* 🐛 running integration tests ([c2cfb3c](https://github.com/mjancarik/merkur/commit/c2cfb3cf5b8ae05d7ec91d04e9af29790f73a711))
+
+
+### chore
+
+* 🤖 update dependencies ([9d5f3eb](https://github.com/mjancarik/merkur/commit/9d5f3eb1b0b1e6845fa2ae5e2714cefd53e6782e))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 ## [0.14.1](https://github.com/mjancarik/merkur/compare/v0.14.0...v0.14.1) (2020-07-28)
 
 

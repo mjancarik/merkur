@@ -13,7 +13,8 @@
     <%if (asset.type === 'script') { %>
       <%if (typeof asset.source === 'string') { %>
         <script src='<%= asset.source %>' defer='true'></script>
-      <% } else { %>
+      <% } %>
+      <%if (typeof asset.source === 'object') { %>
         <script src='<%= asset.source.es9 %>' defer='true'></script>
       <% } %>
     <% } %>

@@ -14,6 +14,13 @@ Merkur is tiny extensible library and has got a few base methods by default.
 - **getMerkur** - returns merkur instance
 - **createMerkurWidget** - factory function for your widget
 
+Module has some other utils methods which is useful for plugins.
+
+- **setDefaultValueForUndefined** - set defined default value for undefined keys
+- **bindWidgetToFunctions** - auto bind widget property as first parameter
+- **hookMethod** - for creating hook on defined widget method, example in [plugins section]({{ '/docs/plugins' | relative_url }})
+- **isFunction** - for detection function, example in [plugins section]({{ '/docs/plugins' | relative_url }})
+
 ### createMerkur
 
 The method accepts an object with property `$plugins` which can extend merkur interface. The plugin `setup` method can be called more times than once. Therefore you need to make an extra check so you won't redefine the plugin.

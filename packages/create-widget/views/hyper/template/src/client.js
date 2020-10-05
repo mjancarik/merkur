@@ -17,6 +17,9 @@ function createWidget(widgetParams) {
       );
       return widget.View(widget.$external.render);
     },
+    unmount(widget) {
+      document.querySelector(widget.props.containerSelector).innerHTML = '';
+    },
     update(widget) {
       widget.View(widget.$external.render);
     },

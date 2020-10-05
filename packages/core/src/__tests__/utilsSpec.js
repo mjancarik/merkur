@@ -1,4 +1,10 @@
-import { isFunction, isUndefined, setDefaultValueForUndefined } from '../utils';
+import {
+  isFunction,
+  isUndefined,
+  setDefaultValueForUndefined,
+  bindWidgetToFunctions,
+  hookMethod,
+} from '../utils';
 
 describe('utils function', () => {
   describe('isFunction', () => {
@@ -38,6 +44,75 @@ describe('utils function', () => {
       setDefaultValueForUndefined(original, ['a', 'b'], {});
 
       expect(original).toEqual({});
+    });
+  });
+
+  describe('bindWidgetToFunctions', () => {
+    it('should bind widget to all widget methods', () => {
+      let widget = {
+        a: function (widget, a) {
+          return a;
+        },
+        b: function (widget, b) {
+          return b;
+        },
+        c: {},
+        d: 'string',
+      };
+
+      bindWidgetToFunctions(widget);
+
+      expect(widget.a('a')).toEqual('a');
+      expect(widget.a('b')).toEqual('b');
+      expect(widget.d).toEqual('string');
+    });
+  });
+
+  describe('hookMethod', () => {
+    let widget = null;
+
+    beforeEach(() => {
+      widget = {
+        a: function (widget, a) {
+          return a;
+        },
+        b: function (widget, b) {
+          return b;
+        },
+        c: {},
+        d: 'string',
+      };
+    });
+
+    it('hook defined method on widget', () => {
+      hookMethod(
+        widget,
+        'a',
+        (widget, originalMethod, ...rest) => 'a' + originalMethod(...rest)
+      );
+      bindWidgetToFunctions(widget);
+
+      expect(widget.a('a')).toEqual('aa');
+      expect(widget.b('b')).toEqual('b');
+      expect(widget.d).toEqual('string');
+    });
+
+    it('hook defined method on widget multiple times', () => {
+      hookMethod(
+        widget,
+        'a',
+        (widget, originalMethod, ...rest) => 'a' + originalMethod(...rest)
+      );
+      hookMethod(
+        widget,
+        'a',
+        (widget, originalMethod, ...rest) => 'b' + originalMethod(...rest)
+      );
+      bindWidgetToFunctions(widget);
+
+      expect(widget.a('a')).toEqual('baa');
+      expect(widget.b('b')).toEqual('b');
+      expect(widget.d).toEqual('string');
     });
   });
 });

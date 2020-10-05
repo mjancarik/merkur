@@ -1,4 +1,4 @@
-import { bindWidgetToFunctions } from '@merkur/core';
+import { bindWidgetToFunctions, hookMethod, isFunction } from '@merkur/core';
 
 import UniversalRouter from 'universal-router';
 import generateUrls from 'universal-router/generateUrls';
@@ -15,7 +15,7 @@ export function createRouter(widget, routes, options) {
 }
 
 export const ROUTER_EVENTS = {
-  REDIRECT: '@mekur/plugin-router.redirect',
+  REDIRECT: '@merkur/plugin-router.redirect',
 };
 
 export function routerPlugin() {
@@ -28,9 +28,10 @@ export function routerPlugin() {
 
       widget.$in.router = {
         route: null,
+        pathname: null,
         isMounting: false,
         isRouteActivated: false,
-        originalFunctions: {},
+        isBootstrapCalled: false,
       };
 
       bindWidgetToFunctions(widget, widget.router);
@@ -53,17 +54,11 @@ export function routerPlugin() {
       }
 
       widget.$in.component.lifeCycle.load = loadHook;
-      const { mount, unmount, update } = widget;
 
-      widget.$in.router.originalFunctions = {
-        mount,
-        unmount,
-        update,
-      };
-
-      widget.mount = mountHook;
-      widget.unmount = unmountHook;
-      widget.update = updateHook;
+      hookMethod(widget, 'bootstrap', bootstrapHook);
+      hookMethod(widget, 'mount', mountHook);
+      hookMethod(widget, 'unmount', unmountHook);
+      hookMethod(widget, 'update', updateHook);
 
       return widget;
     },
@@ -86,11 +81,21 @@ function routerAPI() {
   };
 }
 
+async function bootstrapHook(widget, originalBootstrap, ...rest) {
+  if (widget.$in.router.isBootstrapCalled) {
+    return;
+  }
+
+  widget.$in.router.isBootstrapCalled = true;
+
+  return originalBootstrap(...rest);
+}
+
 // hook Component
 async function loadHook(widget, ...rest) {
   const plugin = widget.$in.router;
 
-  if (!plugin.isMounting) {
+  if (!plugin.isMounting && widget.props.pathname !== plugin.pathname) {
     await tearDownRouterCycle(widget, ...rest);
 
     await setupRouterCycle(widget, ...rest);
@@ -104,18 +109,16 @@ async function loadHook(widget, ...rest) {
 }
 
 // hook Component
-async function mountHook(widget, ...rest) {
-  const plugin = widget.$in.router;
+async function mountHook(widget, originalMount, ...rest) {
+  await widget.bootstrap(...rest);
 
+  const plugin = widget.$in.router;
   if (!plugin.route) {
-    plugin.route = await resolveRoute(widget);
+    await resolveRoute(widget);
     plugin.isMounting = true;
   }
 
-  const result = await widget.$in.router.originalFunctions.mount(
-    widget,
-    ...rest
-  );
+  const result = await originalMount(...rest);
 
   if (plugin.isMounting && isFunction(plugin.route.init)) {
     await plugin.route.init(widget, { route: plugin.route, args: rest });
@@ -136,11 +139,8 @@ async function mountHook(widget, ...rest) {
 }
 
 // hook Component
-async function updateHook(widget, ...rest) {
-  const result = await widget.$in.router.originalFunctions.update(
-    widget,
-    ...rest
-  );
+async function updateHook(widget, originalUpdate, ...rest) {
+  const result = await originalUpdate(...rest);
 
   const plugin = widget.$in.router;
 
@@ -157,11 +157,8 @@ async function updateHook(widget, ...rest) {
 }
 
 // hook Component
-async function unmountHook(widget, ...rest) {
-  const result = await widget.$in.router.originalFunctions.unmount(
-    widget,
-    ...rest
-  );
+async function unmountHook(widget, originalUnmount, ...rest) {
+  const result = await originalUnmount(...rest);
 
   await tearDownRouterCycle(widget, ...rest);
 
@@ -181,10 +178,15 @@ async function resolveRoute(widget) {
     }
   }
 
-  return widget.$dependencies.router.resolve({
+  const route = await widget.$dependencies.router.resolve({
     pathname: widget.props.pathname,
     widget,
   });
+
+  widget.$in.router.route = route;
+  widget.$in.router.pathname = widget.props.pathname;
+
+  return route;
 }
 
 async function setupRouterCycle(widget, ...rest) {
@@ -193,8 +195,6 @@ async function setupRouterCycle(widget, ...rest) {
   if (isFunction(route.init)) {
     await route.init(widget, { route, args: rest });
   }
-
-  widget.$in.router.route = route;
 }
 
 async function tearDownRouterCycle(widget, ...rest) {
@@ -213,10 +213,6 @@ async function tearDownRouterCycle(widget, ...rest) {
   }
 
   plugin.isRouteActivated = false;
-}
-
-function isFunction(value) {
-  return typeof value === 'function';
 }
 
 function isClient() {

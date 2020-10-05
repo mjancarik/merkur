@@ -44,9 +44,11 @@ describe('createWidget method with http client plugin', () => {
     expect(widget).toMatchInlineSnapshot(`
       Object {
         "$dependencies": Object {
+          "AbortController": [Function],
           "fetch": [Function],
         },
         "$external": Object {
+          "AbortController": [Function],
           "fetch": [Function],
         },
         "$in": Object {
@@ -56,6 +58,7 @@ describe('createWidget method with http client plugin', () => {
               "headers": Object {},
               "method": "GET",
               "query": Object {},
+              "timeout": 15000,
               "transformers": Array [
                 Object {
                   "transformRequest": [Function],
@@ -63,6 +66,10 @@ describe('createWidget method with http client plugin', () => {
                 },
                 Object {
                   "transformRequest": [Function],
+                },
+                Object {
+                  "transformRequest": [Function],
+                  "transformResponse": [Function],
                 },
               ],
             },
@@ -172,6 +179,27 @@ describe('createWidget method with http client plugin', () => {
       });
 
       expect(request.body).toMatchInlineSnapshot(`"{\\"a\\":\\"b\\"}"`);
+    });
+
+    it('should timeout request which exceed predefined timeout limit', async (done) => {
+      widget.$dependencies.fetch = jest.fn((url, request) => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            request.signal.aborted ? reject(new Error('Timeout')) : resolve();
+          }, 10);
+        });
+      });
+
+      try {
+        await widget.http.request({
+          path: '/path',
+          timeout: 5,
+        });
+      } catch (error) {
+        expect(error.message).toEqual('Timeout');
+        expect(widget.$dependencies.fetch).toHaveBeenCalled();
+        done();
+      }
     });
   });
 

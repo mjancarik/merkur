@@ -23,7 +23,7 @@ const resolve = {
 };
 
 function getPlugins(options = {}) {
-  const sharedPlugins = [];
+  const sharedPlugins = [new WebpackModules(options.webpackModules)];
 
   const webPlugins = [
     new CleanWebpackPlugin(options.cleanWebpackPlugin),
@@ -34,10 +34,7 @@ function getPlugins(options = {}) {
     new ManifestPlugin(options.manifestPlugin),
     ...sharedPlugins,
   ];
-  const nodePlugins = [
-    new WebpackModules(options.webpackModules),
-    ...sharedPlugins,
-  ];
+  const nodePlugins = [...sharedPlugins];
 
   if (environment === DEVELOPMENT) {
     nodePlugins.push(
@@ -137,35 +134,63 @@ function findLoaders(rules = [], loader) {
 function applyBundleAnalyzer(config, options = {}) {
   config.plugins.push(new BundleAnalyzerPlugin(options));
 
+  if (webpackMode === DEVELOPMENT) {
+    config.optimization = {
+      ...{
+        usedExports: true,
+        minimize: true,
+        sideEffects: false,
+      },
+      ...config.optimization,
+    };
+  }
+
   return config;
 }
 
 function applyES5Transformation(config, options = {}) {
-  const nodeModulesDir = options.nodeModulesDir ? options.nodeModulesDir : path.resolve(DIR, '/node_modules');
+  const nodeModulesDir = options.nodeModulesDir
+    ? options.nodeModulesDir
+    : path.resolve(DIR, 'node_modules');
+
+  config.entry.polyfill = './src/polyfill.js';
 
   config.resolve.alias = {
     ...config.resolve.alias,
     ...{
       '@merkur/core': path.resolve(
-        nodeModulesDir, '@merkur/core/lib/index.es5'
+        nodeModulesDir,
+        '@merkur/core/lib/index.es5'
       ),
       '@merkur/plugin-component': path.resolve(
-        nodeModulesDir, '@merkur/plugin-component/lib/index.es5'
+        nodeModulesDir,
+        '@merkur/plugin-component/lib/index.es5'
       ),
       '@merkur/plugin-event-emitter': path.resolve(
-        nodeModulesDir, '@merkur/plugin-event-emitter/lib/index.es5'
+        nodeModulesDir,
+        '@merkur/plugin-event-emitter/lib/index.es5'
       ),
       '@merkur/plugin-http-client': path.resolve(
-        nodeModulesDir, '@merkur/plugin-http-client/lib/index.es5'
+        nodeModulesDir,
+        '@merkur/plugin-http-client/lib/index.es5'
       ),
       '@merkur/plugin-router': path.resolve(
-        nodeModulesDir, '@merkur/plugin-router/lib/index.es5'
+        nodeModulesDir,
+        '@merkur/plugin-router/lib/index.es5'
       ),
     },
   };
 
   const loader = 'babel-loader';
-  let babelLoaders = findLoaders(config.module.rules, loader);
+  const babelLoaders = findLoaders(config.module.rules, loader);
+  const babelPresetEnv = [
+    '@babel/preset-env',
+    {
+      modules: 'auto',
+      useBuiltIns: 'usage',
+      corejs: { version: 3, proposals: false },
+    },
+  ];
 
   if (babelLoaders.length === 0) {
     config.module.rules.push({
@@ -174,25 +199,16 @@ function applyES5Transformation(config, options = {}) {
       use: {
         loader: loader,
         options: options?.babel?.options ?? {
-          presets: [...(options?.babel?.presets ?? []), '@babel/preset-env'],
+          presets: [...(options?.babel?.presets ?? []), babelPresetEnv],
           plugins: [...(options?.babel?.plugins ?? [])],
         },
       },
     });
   } else {
     babelLoaders.forEach((use) => {
-      use.options.presets = [
-        ...(use?.options?.presets ?? []),
-        '@babel/preset-env',
-      ];
+      use.options.presets = [...(use?.options?.presets ?? []), babelPresetEnv];
     });
   }
-
-  try {
-    require.resolve('@merkur/plugin-http-client');
-    config.entry['fetch'] = require.resolve('whatwg-fetch');
-    // eslint-disable-next-line no-empty
-  } catch (_) {}
 
   config.output.path = path.resolve(config.output.path, '../es5/');
 
@@ -200,7 +216,7 @@ function applyES5Transformation(config, options = {}) {
 }
 
 function _pipe(a, b) {
-  return (arg) => b(a(arg));
+  return async (arg) => b(await a(arg));
 }
 
 function pipe(...ops) {

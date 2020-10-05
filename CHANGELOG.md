@@ -3,6 +3,229 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
+
+
+### Bug Fixes
+
+* 🐛 added browser field to package.json ([85cf4a1](https://github.com/mjancarik/merkur/commit/85cf4a1e73b883125d4482c36892aa5de410653f))
+
+
+### BREAKING CHANGES
+
+* 🧨 new browser field in pakckage.json
+
+
+
+
+
+## [0.19.3](https://github.com/mjancarik/merkur/compare/v0.19.2...v0.19.3) (2020-09-10)
+
+**Note:** Version bump only for package merkur-monorepo
+
+
+
+
+
+## [0.19.2](https://github.com/mjancarik/merkur/compare/v0.19.1...v0.19.2) (2020-09-09)
+
+
+### Bug Fixes
+
+* 🐛 jest integration tests for widget with server.cjs file ([4e213cd](https://github.com/mjancarik/merkur/commit/4e213cd42ad27502667deb35f025f8b79ed2533a))
+
+
+
+
+
+## [0.19.1](https://github.com/mjancarik/merkur/compare/v0.19.0...v0.19.1) (2020-09-07)
+
+
+### Bug Fixes
+
+* 🐛 name of umd version for @merkur/plugin-event-emitter ([3c0709a](https://github.com/mjancarik/merkur/commit/3c0709aced4411137f18b55043ba8c57c7808354))
+* 🐛 package exports for server ([a36a5e2](https://github.com/mjancarik/merkur/commit/a36a5e2d357feec0ca955326af79a1ccff3859d5))
+* 🐛 set webpack to handle .mjs files for both envs ([131b06d](https://github.com/mjancarik/merkur/commit/131b06de9ea766ce4ea8c39405232ed103dc7eb6))
+
+
+
+
+
+# [0.19.0](https://github.com/mjancarik/merkur/compare/v0.18.1...v0.19.0) (2020-09-07)
+
+
+### Code Refactoring
+
+* 💡 remove default export ([92301e3](https://github.com/mjancarik/merkur/commit/92301e3b48eb1b210b1240f70a6eb4286f9b1c0a))
+
+
+### Features
+
+* 🎸 add file extension in package.json ([7b8f8b3](https://github.com/mjancarik/merkur/commit/7b8f8b31b4d45f6f6bc59b5ad81c25ab067de091))
+* 🎸 bundle analyzer show tree shakeable version for dev env ([29c5bcd](https://github.com/mjancarik/merkur/commit/29c5bcdb5c8b3dc815169c14a116bc6c591ff81e))
+
+
+### BREAKING CHANGES
+
+* 🧨 removed default export from @merkur/integration and keep only named
+exports in all @merkur modules
+* 🧨 remove useless files from lib folder and defined exports in package.json
+
+
+
+
+
+## [0.18.1](https://github.com/mjancarik/merkur/compare/v0.18.0...v0.18.1) (2020-09-04)
+
+
+### Bug Fixes
+
+* escaping CSS styles ([#26](https://github.com/mjancarik/merkur/issues/26)) ([71051cc](https://github.com/mjancarik/merkur/commit/71051ccd8e1d51a3917f86238fd4764578c3b37b))
+* updated snapshot ([334d38c](https://github.com/mjancarik/merkur/commit/334d38c5f72117b23799d75e26ede8b0048e3844))
+
+
+
+
+
+# [0.18.0](https://github.com/mjancarik/merkur/compare/v0.17.0...v0.18.0) (2020-09-03)
+
+
+### Bug Fixes
+
+* 🐛 added check for object destructuring in ES9 supported fn ([952cd8c](https://github.com/mjancarik/merkur/commit/952cd8c3551192ba4c78f30c55f4506a547924cb))
+* 🐛 keep controller after changing props with same pathname ([27266c7](https://github.com/mjancarik/merkur/commit/27266c7ddbdb311175cc04048e9b29e0a6bb2249))
+* 🐛 optional event-emitter ([5f0edd1](https://github.com/mjancarik/merkur/commit/5f0edd191e99d6fef66a8c29530b73dba956d874))
+* 🐛 run bootstrap life cycle method before resolving route ([c3172c2](https://github.com/mjancarik/merkur/commit/c3172c21ad68eabc3846d32c0e3c1747a3d06824))
+* 🐛 skip loading missing script asset in playground ([127f39b](https://github.com/mjancarik/merkur/commit/127f39bd0759884c601f8e8c416442c02d3d0076))
+* 🐛 umd version of module ([e90b6b1](https://github.com/mjancarik/merkur/commit/e90b6b16c512607db423ae2e2724cd6da6afb118))
+* Double slash in assets path ([#25](https://github.com/mjancarik/merkur/issues/25)) ([bebb81e](https://github.com/mjancarik/merkur/commit/bebb81ee98d7d13d2054368939f70f290c0905df))
+
+
+### Code Refactoring
+
+* 💡 rename ecmaversions option to folders ([54d62aa](https://github.com/mjancarik/merkur/commit/54d62aa11bf294e6c561bd93ac6719a89cb21cca))
+
+
+### Features
+
+* 🎸 added polyfill file ([b2b2a99](https://github.com/mjancarik/merkur/commit/b2b2a99380ea741d8a36fa95a94ded3414fc8a9f))
+* 🎸 added terser for minification umd version of modules ([192c9b2](https://github.com/mjancarik/merkur/commit/192c9b206656da6fb870134b9725bf12ed098ab7))
+* 🎸 added timeout transformer ([9ff3dc7](https://github.com/mjancarik/merkur/commit/9ff3dc7f73dec79f39b552700c73dcc8427c0cce))
+* 🎸 handling client side error ([96c736f](https://github.com/mjancarik/merkur/commit/96c736f18bcd1f41287f71c8526c2fb9288bbcd7))
+* 🎸 pipe allow async function ([97f6aa5](https://github.com/mjancarik/merkur/commit/97f6aa53159cb988ab6dd6e02d422ecdeb6c0064))
+* 🎸 polyfill is downloaded only for falsy result from test ([b65b4c8](https://github.com/mjancarik/merkur/commit/b65b4c8fbbe131dc2ef66486077b9666745aac22))
+* 🎸 removed containerSelector from API call ([e54303d](https://github.com/mjancarik/merkur/commit/e54303df23264980f888fc3bf3d50b6c3892728c))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+* 🧨 yes
+* 🧨 yes
+* 🧨 yes
+* 🧨 yes
+* 🧨 yes
+
+
+
+
+
+# [0.17.0](https://github.com/mjancarik/merkur/compare/v0.16.2...v0.17.0) (2020-08-27)
+
+
+### Features
+
+* 🎸 base integration package ([8320b22](https://github.com/mjancarik/merkur/commit/8320b22a4d46cf99678f372defe8d84f4488aaa9))
+* 🎸 integration-react using base integration pkg ([a3aef85](https://github.com/mjancarik/merkur/commit/a3aef859a80ff0a884d32fc5c98f77843b55f5f0))
+
+
+
+
+
+## [0.16.2](https://github.com/mjancarik/merkur/compare/v0.16.1...v0.16.2) (2020-08-25)
+
+**Note:** Version bump only for package merkur-monorepo
+
+
+
+
+
+## [0.16.1](https://github.com/mjancarik/merkur/compare/v0.16.0...v0.16.1) (2020-08-14)
+
+**Note:** Version bump only for package merkur-monorepo
+
+
+
+
+
+# [0.16.0](https://github.com/mjancarik/merkur/compare/v0.15.2...v0.16.0) (2020-08-14)
+
+
+### Bug Fixes
+
+* 🐛 typo ([cfee48f](https://github.com/mjancarik/merkur/commit/cfee48f38bcd3d8437cbf823f9887c62376baad1))
+
+
+### Features
+
+* 🎸 added hook method to module base ([66d122c](https://github.com/mjancarik/merkur/commit/66d122c0a1679a4a77a86407b59ddd225d8fc682))
+* 🎸 using hookMethod and isFunction in plugin ([b1b08e5](https://github.com/mjancarik/merkur/commit/b1b08e56b087bb30ea3dbda7e70e64729c83287e))
+
+
+
+
+
+## [0.15.2](https://github.com/mjancarik/merkur/compare/v0.15.1...v0.15.2) (2020-08-07)
+
+
+### Bug Fixes
+
+* 🐛 test:all command ([3529e1d](https://github.com/mjancarik/merkur/commit/3529e1dc403723e7afc2f27053deaa74851dc9d2))
+
+
+
+
+
+## [0.15.1](https://github.com/mjancarik/merkur/compare/v0.15.0...v0.15.1) (2020-08-06)
+
+
+### Bug Fixes
+
+* 🐛 resolving @merkur/* modules to es5 version ([802a952](https://github.com/mjancarik/merkur/commit/802a952995499f18d803414b26c0ac4356d7d881))
+
+
+
+
+
+# [0.15.0](https://github.com/mjancarik/merkur/compare/v0.14.1...v0.15.0) (2020-08-06)
+
+
+### Bug Fixes
+
+* 🐛 running integration tests ([c2cfb3c](https://github.com/mjancarik/merkur/commit/c2cfb3cf5b8ae05d7ec91d04e9af29790f73a711))
+* 🐛 Support for ES5/ES9 scripts ([#15](https://github.com/mjancarik/merkur/issues/15)) ([0334cda](https://github.com/mjancarik/merkur/commit/0334cdac2c1f62ae4fb8895bf077a4ebebc99e4c))
+
+
+### chore
+
+* 🤖 update dependencies ([9d5f3eb](https://github.com/mjancarik/merkur/commit/9d5f3eb1b0b1e6845fa2ae5e2714cefd53e6782e))
+
+
+### Features
+
+* 🎸 Ability to override node_modules dir in ES5 transformer ([#14](https://github.com/mjancarik/merkur/issues/14)) ([253a443](https://github.com/mjancarik/merkur/commit/253a44346e324d98ed4408775ddbb9e3e769d9c7))
+* 🎸 added jest-watch-typeahead plugin ([f0de4e7](https://github.com/mjancarik/merkur/commit/f0de4e726e41239676cce956e7374a7ca64dcd64))
+* 🎸 allow tree shaking for merkur ([731371e](https://github.com/mjancarik/merkur/commit/731371ec09bfd1a7765caa55c9cc52124d7a42ed))
+
+
+### BREAKING CHANGES
+
+* 🧨 yes
+
+
+
+
+
 ## [0.14.1](https://github.com/mjancarik/merkur/compare/v0.14.0...v0.14.1) (2020-07-28)
 
 

@@ -1,12 +1,17 @@
 import { bindWidgetToFunctions } from '@merkur/core';
 
 import fetch from 'node-fetch';
+import AbortController from 'abort-controller';
 
 export function setDefaultConfig(widget, newDefaultConfig) {
   widget.$in.httpClient.defaultConfig = {
     ...widget.$in.httpClient.defaultConfig,
     ...newDefaultConfig,
   };
+}
+
+export function getDefaultTransformers() {
+  return [transformBody(), transformQuery(), transformTimeout()];
 }
 
 export function httpClientPlugin() {
@@ -20,13 +25,15 @@ export function httpClientPlugin() {
       widget.$in.httpClient = {
         defaultConfig: {
           method: 'GET',
-          transformers: [transformBody(), transformQuery()],
+          transformers: getDefaultTransformers(widget),
           headers: {},
           query: {},
+          timeout: 15000,
         },
       };
 
       widget.$dependencies.fetch = getFetchAPI();
+      widget.$dependencies.AbortController = AbortController;
 
       bindWidgetToFunctions(widget, widget.http);
 
@@ -46,13 +53,16 @@ function httpClientAPI() {
         const transformers = request.transformers;
 
         [request] = await runTransformers(
+          widget,
           transformers,
           'transformRequest',
           request
         );
+
         let response = await widget.$dependencies.fetch(request.url, request);
 
         [request, response] = await runTransformers(
+          widget,
           transformers,
           'transformResponse',
           request,
@@ -65,10 +75,10 @@ function httpClientAPI() {
   };
 }
 
-async function runTransformers(transformers, method, ...rest) {
+async function runTransformers(widget, transformers, method, ...rest) {
   for (const transformer of transformers) {
     if (typeof transformer[method] === 'function') {
-      rest = await transformer[method](...rest);
+      rest = await transformer[method](widget, ...rest);
     }
   }
 
@@ -85,7 +95,7 @@ function getFetchAPI() {
 
 export function transformQuery() {
   return {
-    async transformRequest(request) {
+    async transformRequest(widget, request) {
       let newRequest = { ...request };
       let { baseUrl = '', path = '/' } = request;
 
@@ -119,7 +129,7 @@ export function transformQuery() {
 
 export function transformBody() {
   return {
-    async transformResponse(request, response) {
+    async transformResponse(widget, request, response) {
       const contentType = response.headers.get('content-type');
       let body = null;
 
@@ -136,7 +146,7 @@ export function transformBody() {
 
       return [request, newResponse];
     },
-    async transformRequest(request) {
+    async transformRequest(widget, request) {
       if (
         request.body &&
         request.headers['Content-Type'] === 'application/json' &&
@@ -148,6 +158,32 @@ export function transformBody() {
       }
 
       return [request];
+    },
+  };
+}
+
+export function transformTimeout() {
+  return {
+    async transformRequest(widget, request) {
+      let newRequest = { ...request };
+
+      if ('timeout' in request) {
+        const controller = new widget.$dependencies.AbortController();
+        newRequest.signal = controller.signal;
+
+        newRequest.timeoutTimer = setTimeout(() => {
+          controller.abort();
+        }, request.timeout);
+      }
+
+      return [newRequest];
+    },
+    async transformResponse(widget, request, response) {
+      if ('timeoutTimer' in request) {
+        clearTimeout(request.timeoutTimer);
+      }
+
+      return [request, response];
     },
   };
 }
