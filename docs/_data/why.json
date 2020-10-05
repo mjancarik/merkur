@@ -1,26 +1,26 @@
 [
   {
-    "title": "Connectable",
-    "text": "You can pick up your favorite framework (Vue, Angular, Ember) or template engine (React, Preact, hyperHTML, µhtml)."
+    "title": "Flexible",
+    "text": "You can pick your favorite framework (Vue, Angular, Ember) or templating engine (React, Preact, hyperHTML, µhtml)."
   },
   {
     "title": "Usable",
-    "text": "The Merkur widget works with multi page application with jQuery, single page application or isomorphic application."
+    "text": "Merkur widgets work with a multi-page application built with jQuery or a single-page application, as well as an isomorphic application."
   },
   {
-    "title": "Allow SSR",
-    "text": "The website load time is critical part for your users. The Merkur use by default server side rendering."
+    "title": "SSR-ready",
+    "text": "Website load time is a critical usability factor for your users. Merkur speeds up loading by including server-side rendering out of the box."
   },
   {
     "title": "Extensible",
-    "text": "All base functions of widget is defined as plugin too. You can easy add your own plugin."
+    "text": "All base functionality is defined as plugins, and adding your own is a matter of creating a single file."
   },
   {
     "title": "Configurable",
-    "text": "You have got control over Babel, Webpack, server, etc."
+    "text": "You have control over Babel, Webpack, server, etc."
   },
   {
     "title": "Tiny",
-    "text": "The Merkur is less than 1 KB minified + gzipped."
+    "text": "Merkur is less than 1 KB minified + gzipped."
   }
 ]
