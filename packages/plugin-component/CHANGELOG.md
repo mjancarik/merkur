@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.21.0](https://github.com/mjancarik/merkur/compare/v0.20.0...v0.21.0) (2020-09-30)
+
+
+### Bug Fixes
+
+* Calling update on unmounted widget ([#40](https://github.com/mjancarik/merkur/issues/40)) ([6ce9c65](https://github.com/mjancarik/merkur/commit/6ce9c65264c58235a732dc27d4ea2cd45d95ce92))
+
+
+
+
+
 # [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
 
 

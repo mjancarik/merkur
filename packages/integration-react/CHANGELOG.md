@@ -3,6 +3,39 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.21.3](https://github.com/mjancarik/merkur/compare/v0.21.2...v0.21.3) (2020-10-01)
+
+
+### Bug Fixes
+
+* 🐛 Fixed unintentional render of placeholder after SSR ([#43](https://github.com/mjancarik/merkur/issues/43)) ([64ec121](https://github.com/mjancarik/merkur/commit/64ec121dca6a458c818b3c6a291cc19b81b29e74))
+
+
+
+
+
+## [0.21.2](https://github.com/mjancarik/merkur/compare/v0.21.1...v0.21.2) (2020-10-01)
+
+
+### Bug Fixes
+
+* 🐛 Fixed SSR in MerkurComponent (was rendering placeholder) ([#42](https://github.com/mjancarik/merkur/issues/42)) ([7e76e13](https://github.com/mjancarik/merkur/commit/7e76e13ff723049687d8b1ae45629d938f3f8df0))
+
+
+
+
+
+# [0.21.0](https://github.com/mjancarik/merkur/compare/v0.20.0...v0.21.0) (2020-09-30)
+
+
+### Bug Fixes
+
+* 🐛 Fixed FOUC and unnecessary component re-renderings ([#39](https://github.com/mjancarik/merkur/issues/39)) ([0b8d90f](https://github.com/mjancarik/merkur/commit/0b8d90fffec1136df1a3787ff505fd9c528f848f))
+
+
+
+
+
 # [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
 
 

@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.21.0](https://github.com/mjancarik/merkur/compare/v0.20.0...v0.21.0) (2020-09-30)
+
+
+### Bug Fixes
+
+* 🐛 Fixed FOUC and unnecessary component re-renderings ([#39](https://github.com/mjancarik/merkur/issues/39)) ([0b8d90f](https://github.com/mjancarik/merkur/commit/0b8d90fffec1136df1a3787ff505fd9c528f848f))
+
+
+
+
+
 # [0.20.0](https://github.com/mjancarik/merkur/compare/v0.19.3...v0.20.0) (2020-09-11)
 
 

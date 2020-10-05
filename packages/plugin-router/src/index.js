@@ -68,8 +68,8 @@ export function routerPlugin() {
 function routerAPI() {
   return {
     router: {
-      redirect(widget, url) {
-        widget.emit(ROUTER_EVENTS.REDIRECT, { url });
+      redirect(widget, url, data = {}) {
+        widget.emit(ROUTER_EVENTS.REDIRECT, { url, ...data });
       },
       link(widget, routeName, data = {}) {
         return widget.$dependencies.link(routeName, data);
