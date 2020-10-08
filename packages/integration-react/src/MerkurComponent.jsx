@@ -24,14 +24,82 @@ export default class MerkurComponent extends React.Component {
     this.state = {
       encounteredError: false,
       assetsLoaded: false,
+      cachedWidgetMeta: null,
     };
   }
 
+  /**
+   * Checks if widget has changed, e.g has different name or version.
+   *
+   * @param {{ name: string, version: string }} props
+   * @param {{ name: string, vesrion: string }} nextProps
+   */
+  static hasWidgetChanged(props, nextProps) {
+    return (
+      props &&
+      nextProps &&
+      (props.version !== nextProps.version || props.name !== nextProps.name)
+    );
+  }
+
+  /**
+   * In case widget props change to new widget, we need to reset
+   * state before next render. This enables us to immediately render
+   * fallback without first rendering empty widget wrapper.
+   *
+   * @param {object} nextProps
+   * @param {object} prevState
+   */
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (nextProps.widgetProperties) {
+      const { version, name } = nextProps.widgetProperties;
+
+      if (!prevState.cachedWidgetMeta) {
+        // Cache widget meta data (name & version)
+        return {
+          cachedWidgetMeta: {
+            name,
+            version,
+          },
+        };
+      } else if (
+        prevState.cachedWidgetMeta &&
+        this.hasWidgetChanged(prevState.cachedWidgetMeta, nextProps)
+      ) {
+        // Replace cached widget meta data with new ones and reset state
+        return {
+          encounteredError: false,
+          assetsLoaded: false,
+          cachedWidgetMeta: {
+            name,
+            version,
+          },
+        };
+      }
+    }
+
+    return null;
+  }
+
+  /**
+   * Component should be updated only in these cases:
+   *  1) State of MerkurComponent has changed (excluding { @code this.state.cachedWidgetMeta }).
+   *  2) Component has no props.widgetProperties.
+   *  3) Widget properties changed (name or version).
+   *
+   * In case { @code widgetProperties.state } or { @code widgetProperties.props }
+   * the component should still not update, however we should update the widget
+   * state and props using appropriate methods on the widget instance.
+   *
+   * @param {object} nextProps
+   * @param {object} nextState
+   */
   shouldComponentUpdate(nextProps, nextState) {
     if (
-      !this.props.widgetProperties ||
       this.state.assetsLoaded !== nextState.assetsLoaded ||
-      this.state.encounteredError !== nextState.encounteredError
+      this.state.encounteredError !== nextState.encounteredError ||
+      !this.props.widgetProperties ||
+      MerkurComponent.hasWidgetChanged(this.props, nextProps)
     ) {
       return true;
     }
@@ -41,16 +109,34 @@ export default class MerkurComponent extends React.Component {
       nextProps.widgetProperties &&
       nextProps.widgetProperties.props
     ) {
-      for (let key in nextProps.widgetProperties.props) {
-        if (
-          !this.props.widgetProperties ||
-          !this.props.widgetProperties.props ||
-          nextProps.widgetProperties.props[key] !==
-            this.props.widgetProperties.props[key]
-        ) {
-          this._widget.setProps(nextProps.widgetProperties.props);
+      if (
+        Object.keys(nextProps.widgetProperties.props).length !==
+        Object.keys(this.props.widgetProperties.props).length
+      ) {
+        /**
+         * In case the new props are only subset of the existing ones
+         * and all existing values are the same, simple key/value
+         * comparison below would not work.
+         */
+        this._widget.setProps(nextProps.widgetProperties.props);
 
-          return false;
+        return false;
+      } else {
+        /**
+         * In case the lenght of both property instances is the same
+         * we need to shallow compare their values.
+         */
+        for (let key in nextProps.widgetProperties.props) {
+          if (
+            !this.props.widgetProperties ||
+            !this.props.widgetProperties.props ||
+            nextProps.widgetProperties.props[key] !==
+              this.props.widgetProperties.props[key]
+          ) {
+            this._widget.setProps(nextProps.widgetProperties.props);
+
+            return false;
+          }
         }
       }
     }
@@ -60,16 +146,25 @@ export default class MerkurComponent extends React.Component {
       nextProps.widgetProperties &&
       nextProps.widgetProperties.state
     ) {
-      for (let key in nextProps.widgetProperties.state) {
-        if (
-          !this.props.widgetProperties ||
-          !this.props.widgetProperties.state ||
-          nextProps.widgetProperties.state[key] !==
-            this.props.widgetProperties.state[key]
-        ) {
-          this._widget.setState(nextProps.widgetProperties.state);
+      if (
+        Object.keys(nextProps.widgetProperties.state).length !==
+        Object.keys(this.props.widgetProperties.state).length
+      ) {
+        this._widget.setState(nextProps.widgetProperties.state);
 
-          return false;
+        return false;
+      } else {
+        for (let key in nextProps.widgetProperties.state) {
+          if (
+            !this.props.widgetProperties ||
+            !this.props.widgetProperties.state ||
+            nextProps.widgetProperties.state[key] !==
+              this.props.widgetProperties.state[key]
+          ) {
+            this._widget.setState(nextProps.widgetProperties.state);
+
+            return false;
+          }
         }
       }
     }
@@ -77,16 +172,28 @@ export default class MerkurComponent extends React.Component {
     return false;
   }
 
+  /**
+   * In case of mounting the component, we allways try to first load
+   * the widget assets. Be it first mount after SSR or mount after
+   * first render on client.
+   */
   componentDidMount() {
     this._isMounted = true;
     this._loadWidgetAssets();
   }
 
+  /**
+   * After the component has been updated, we still need to handle few situations.
+   *  1) In case assets have been loaded, we need to mount the widget.
+   *  2) Handle situations where either old or new widget properties have changed.
+   *
+   * @param {object} prevProps
+   * @param {object} prevState
+   */
   componentDidUpdate(prevProps, prevState) {
     const { widgetProperties: currentWidgetProperties } = this.props;
     const { widgetProperties: prevWidgetProperties } = prevProps;
 
-    // Mount widget after resources have been loaded
     if (
       this.state.assetsLoaded &&
       prevState.assetsLoaded !== this.state.assetsLoaded
@@ -95,29 +202,38 @@ export default class MerkurComponent extends React.Component {
     }
 
     if (!currentWidgetProperties && prevWidgetProperties) {
+      // In case we receive empty new properties, we need to cleanup.
       this._removeWidget();
       this.setState({
+        encounteredError: false,
         assetsLoaded: false,
       });
 
       return;
-    }
-
-    if (currentWidgetProperties && !prevWidgetProperties) {
+    } else if (currentWidgetProperties && !prevWidgetProperties) {
+      /**
+       * In case there were no widget properties before, we try to
+       * initialize widget first by doing the same as if it first mounted
+       * (loading assets into the DOM).
+       */
       return this._loadWidgetAssets();
-    }
-
-    if (!currentWidgetProperties && !prevWidgetProperties) {
-      return;
-    }
-
-    const { name: prevName, version: prevVersion } = prevWidgetProperties;
-    const { name, version } = currentWidgetProperties;
-
-    if (prevName !== name || prevVersion !== version) {
+    } else if (
+      currentWidgetProperties &&
+      prevWidgetProperties &&
+      MerkurComponent.hasWidgetChanged(
+        currentWidgetProperties,
+        prevWidgetProperties
+      )
+    ) {
+      /**
+       * In case widget has changed, first we need to cleanup (remove previous widget),
+       * reset state and then we again try to intialize the new widget same way as
+       * if it has mounted for the first time.
+       */
       this._removeWidget();
       this.setState(
         {
+          encounteredError: false,
           assetsLoaded: false,
         },
         () => {
@@ -127,10 +243,23 @@ export default class MerkurComponent extends React.Component {
     }
   }
 
+  /**
+   * In case of unmounting we only really need to do the cleanup.
+   */
   componentWillUnmount() {
     this._removeWidget();
   }
 
+  /**
+   * There are two possible outputs from the render method:
+   *  1) Fallback is rendered only, when assets are not yet loaded
+   *     or there was en error or there are no widget properties.
+   *  2) WidgetWrapper is rendered in case of SSR (on server-side),
+   *     SSR hydrate, with server-side rendered HTML, when assets
+   *     are loaded with widget HTML, which is later mounted.
+   *
+   * @return {React.ReactElement|null}
+   */
   render() {
     const { widgetProperties, widgetClassName } = this.props;
     const { encounteredError, assetsLoaded } = this.state;
@@ -154,6 +283,9 @@ export default class MerkurComponent extends React.Component {
     );
   }
 
+  /**
+   * @return {React.ReactElement|null}
+   */
   _renderFallback() {
     const { children } = this.props;
     const { encounteredError } = this.state;
@@ -167,6 +299,12 @@ export default class MerkurComponent extends React.Component {
     return null;
   }
 
+  /**
+   * Renders widget style assets inline. This is used on SSR
+   * and in first render after SSR hydratation.
+   *
+   * @return {[React.ReactElement]}
+   */
   _renderStyleAssets() {
     const { widgetProperties } = this.props;
     const assets =
@@ -188,6 +326,9 @@ export default class MerkurComponent extends React.Component {
     });
   }
 
+  /**
+   * @return {string} SSR rendered HTML, html from widgetProperties or ''.
+   */
   _getWidgetHTML() {
     if (this._html !== null) {
       return this._html;
@@ -206,6 +347,10 @@ export default class MerkurComponent extends React.Component {
     this.setState({ encounteredError: error });
   }
 
+  /**
+   * Handles widget unmounting and removal, while removing
+   * event listeners, calling unmount on props and widget.
+   */
   _removeWidget() {
     if (!this._widget) {
       return;
@@ -215,8 +360,8 @@ export default class MerkurComponent extends React.Component {
       this.props.onWidgetUnmounting(this._widget);
     }
 
+    // widget might not be using @merkur/plugin-event-emitter
     if (typeof this._widget.off === 'function') {
-      // widget might not be using @merkur/plugin-event-emitter
       this._widget.off(MERKUR_ERROR_EVENT_NAME, this._handleClientError);
     }
 
@@ -286,10 +431,10 @@ export default class MerkurComponent extends React.Component {
   }
 
   /**
-   * Returns server-side rendered html, if its the first render on client
+   * Return server-side rendered html, if its the first render on client
    * after SSR.
    *
-   * @return {string} server-side rendered html, if it's not available, returns empty string.
+   * @return {string} server-side rendered html, if it's not available, return empty string.
    */
   _getSSRHtml() {
     if (
@@ -321,6 +466,9 @@ export default class MerkurComponent extends React.Component {
     return this._getSSRHtml().length > 0;
   }
 
+  /**
+   * @return {boolean} true in browser environment.
+   */
   _isClient() {
     return typeof window !== 'undefined';
   }
