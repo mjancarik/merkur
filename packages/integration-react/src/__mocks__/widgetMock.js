@@ -26,6 +26,10 @@ const mockedWidgetProperties = {
       source:
         'http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css',
     },
+    {
+      type: 'inlineStyle',
+      source: 'html { font-weight: bold }',
+    },
   ],
   html: '<div class="merkur__page"></div>',
 };

@@ -321,20 +321,22 @@ export default class MerkurComponent extends React.Component {
     const assets =
       (Array.isArray(widgetProperties.assets) && widgetProperties.assets) || [];
 
-    return assets.map((asset, key) => {
-      switch (asset.type) {
-        case 'stylesheet':
-          return <link rel="stylesheet" href={asset.source} key={key} />;
+    return assets
+      .filter(({ type }) => ['stylesheet', 'inlineStyle'].includes(type))
+      .map((asset, key) => {
+        switch (asset.type) {
+          case 'stylesheet':
+            return <link rel="stylesheet" href={asset.source} key={key} />;
 
-        case 'inlineStyle':
-          return (
-            <style
-              key={key}
-              dangerouslySetInnerHTML={{ __html: asset.source }}
-            />
-          );
-      }
-    });
+          case 'inlineStyle':
+            return (
+              <style
+                key={key}
+                dangerouslySetInnerHTML={{ __html: asset.source }}
+              />
+            );
+        }
+      });
   }
 
   /**
@@ -345,7 +347,7 @@ export default class MerkurComponent extends React.Component {
       return this._html;
     }
 
-    this._html = this.props.widgetProperties.html || this._getSSRHtml();
+    this._html = this.props.widgetProperties.html || this._getSSRHTML();
 
     return this._html;
   }
@@ -447,12 +449,8 @@ export default class MerkurComponent extends React.Component {
    *
    * @return {string} server-side rendered html, if it's not available, return empty string.
    */
-  _getSSRHtml() {
-    if (
-      !this._isMounted &&
-      this._isClient() &&
-      typeof document !== 'undefined'
-    ) {
+  _getSSRHTML() {
+    if (!this._isMounted && this._isClient()) {
       const container = document.querySelector(
         this.props.widgetProperties.props.containerSelector
       );
@@ -474,13 +472,13 @@ export default class MerkurComponent extends React.Component {
    * @return {boolean} true in case of a first render after SSR, otherwise false.
    */
   _isSSRHydrate() {
-    return this._getSSRHtml().length > 0;
+    return this._getSSRHTML().length > 0;
   }
 
   /**
    * @return {boolean} true in browser environment.
    */
   _isClient() {
-    return typeof window !== 'undefined';
+    return typeof window !== 'undefined' && typeof document !== 'undefined';
   }
 }

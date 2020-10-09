@@ -32,6 +32,14 @@ describe('Merkur component', () => {
     widgetProperties = mockedWidgetProperties;
 
     widgetMockInit();
+
+    wrapper = shallow(
+      <MerkurComponent widgetProperties={widgetProperties}>
+        <span>Fallback</span>
+      </MerkurComponent>
+    );
+
+    instance = wrapper.instance();
   });
 
   afterEach(() => {
@@ -65,13 +73,13 @@ describe('Merkur component', () => {
       setImmediate(() => {
         expect(MerkurIntegration.loadScriptAssets).toHaveBeenCalled();
         expect(wrapper).toMatchInlineSnapshot(`
-        <Fragment>
-          <WidgetWrapper
-            className="container"
-            html="<div class=\\"merkur__page\\"></div>"
-          />
-        </Fragment>
-      `);
+          <Fragment>
+            <WidgetWrapper
+              className="container"
+              html="<div class=\\"merkur__page\\"></div>"
+            />
+          </Fragment>
+        `);
 
         done();
       });
@@ -124,10 +132,10 @@ describe('Merkur component', () => {
         expect(onError).toHaveBeenCalled();
 
         expect(wrapper).toMatchInlineSnapshot(`
-        <span>
-          Fallback
-        </span>
-      `);
+          <span>
+            Fallback
+          </span>
+        `);
 
         done();
       });
@@ -307,16 +315,6 @@ describe('Merkur component', () => {
   });
 
   describe('shouldComponentUpdate() method', () => {
-    beforeEach(() => {
-      wrapper = shallow(
-        <MerkurComponent widgetProperties={widgetProperties}>
-          <span>Fallback</span>
-        </MerkurComponent>
-      );
-
-      instance = wrapper.instance();
-    });
-
     it('should always return false except for specific cases, when widgetProperties are defined', () => {
       let defaultState = wrapper.state();
 
@@ -420,7 +418,7 @@ describe('Merkur component', () => {
 
       instance.componentDidMount();
 
-      expect(instance._loadWidgetAssets).toHaveBeenCalled();
+      expect(instance._loadWidgetAssets).toHaveBeenCalledTimes(1);
     });
 
     it('should set _isMounted flag to true', () => {
@@ -433,9 +431,435 @@ describe('Merkur component', () => {
     });
   });
 
-  describe('SSR widget lifecycle', () => {});
+  describe('componentDidUpdate() method', () => {
+    it('should try to mount the widget if assets have been loaded', () => {
+      wrapper.setState({ assetsLoaded: true });
+      spyOn(instance, '_mountWidget').and.stub();
 
-  describe('SPA widget lifecycle', () => {});
+      instance.componentDidUpdate({}, { assetsLoaded: false });
 
-  describe('widget props change lifecycle', () => {});
+      expect(instance._mountWidget).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not try to mount the widget if assesLoaded changed but are not true', () => {
+      wrapper.setState({ assetsLoaded: false });
+      spyOn(instance, '_mountWidget').and.stub();
+
+      instance.componentDidUpdate({}, { assetsLoaded: true });
+
+      expect(instance._mountWidget).not.toHaveBeenCalled();
+    });
+
+    it('should not try to mount the widget if anything else in the state changed', () => {
+      spyOn(instance, '_mountWidget').and.stub();
+
+      instance.componentDidUpdate({}, { somethingElseChanged: true });
+
+      expect(instance._mountWidget).not.toHaveBeenCalled();
+    });
+
+    it('should not try to mount the widget if anything else in the state changed', () => {
+      spyOn(instance, '_mountWidget').and.stub();
+
+      instance.componentDidUpdate({}, { somethingElseChanged: true });
+
+      expect(instance._mountWidget).not.toHaveBeenCalled();
+    });
+
+    it('should remove current widget and reset state, if widgetProperties are deleted', () => {
+      wrapper.setProps({ widgetProperties: null });
+
+      spyOn(instance, '_mountWidget').and.stub();
+      spyOn(instance, '_removeWidget').and.stub();
+      spyOn(instance, '_loadWidgetAssets').and.stub();
+      spyOn(instance, 'setState').and.callThrough();
+
+      instance.componentDidUpdate({ widgetProperties }, {});
+
+      expect(instance._mountWidget).not.toHaveBeenCalled();
+      expect(instance._loadWidgetAssets).not.toHaveBeenCalled();
+      expect(instance._loadWidgetAssets).not.toHaveBeenCalled();
+      expect(instance.setState).toHaveBeenCalledWith({
+        assetsLoaded: false,
+        encounteredError: false,
+      });
+    });
+
+    it('should start loading widget assets for new widget properties', () => {
+      wrapper.setProps({
+        widgetProperties,
+      });
+
+      spyOn(instance, '_mountWidget').and.stub();
+      spyOn(instance, '_removeWidget').and.stub();
+      spyOn(instance, '_loadWidgetAssets').and.stub();
+      spyOn(instance, 'setState').and.callThrough();
+
+      instance.componentDidUpdate({ widgetProperties: null }, {});
+
+      expect(instance._loadWidgetAssets).toHaveBeenCalledTimes(1);
+      expect(instance._mountWidget).not.toHaveBeenCalled();
+      expect(instance._removeWidget).not.toHaveBeenCalled();
+    });
+
+    it('should remove old widget, reset state and start loading new one', () => {
+      wrapper.setProps({
+        widgetProperties,
+      });
+
+      spyOn(instance, '_mountWidget').and.stub();
+      spyOn(instance, '_removeWidget').and.stub();
+      spyOn(instance, '_loadWidgetAssets').and.stub();
+      spyOn(instance, 'setState').and.callThrough();
+
+      instance.componentDidUpdate(
+        {
+          widgetProperties: {
+            ...widgetProperties,
+            name: 'new-name',
+            version: '1.2.3',
+          },
+        },
+        {}
+      );
+
+      expect(instance._removeWidget).toHaveBeenCalledTimes(1);
+      expect(instance.setState).toHaveBeenCalledWith(
+        {
+          assetsLoaded: false,
+          encounteredError: false,
+        },
+        expect.any(Function)
+      );
+      expect(instance._loadWidgetAssets).toHaveBeenCalledTimes(1);
+      expect(instance._mountWidget).not.toHaveBeenCalled();
+    });
+
+    it('should not call any action for any other state updates', () => {
+      let oldState = Object.assign({}, wrapper.state());
+
+      wrapper.setState({
+        testKey: 'value',
+        cachedWidgetMeta: {
+          name: 'newName',
+          version: 'newVersion',
+        },
+      });
+
+      spyOn(instance, '_mountWidget').and.stub();
+      spyOn(instance, '_removeWidget').and.stub();
+      spyOn(instance, '_loadWidgetAssets').and.stub();
+      spyOn(instance, 'setState').and.callThrough();
+
+      instance.componentDidUpdate({ widgetProperties }, oldState);
+
+      expect(instance._mountWidget).not.toHaveBeenCalled();
+      expect(instance._removeWidget).not.toHaveBeenCalled();
+      expect(instance._loadWidgetAssets).not.toHaveBeenCalled();
+      expect(instance.setState).not.toHaveBeenCalled();
+    });
+
+    it('should not call any action for any other prop updates', () => {
+      let oldState = Object.assign({}, wrapper.state());
+
+      wrapper.setProps({
+        testKey: 'value',
+      });
+
+      spyOn(instance, '_mountWidget').and.stub();
+      spyOn(instance, '_removeWidget').and.stub();
+      spyOn(instance, '_loadWidgetAssets').and.stub();
+      spyOn(instance, 'setState').and.callThrough();
+
+      instance.componentDidUpdate({ widgetProperties }, oldState);
+
+      expect(instance._mountWidget).not.toHaveBeenCalled();
+      expect(instance._removeWidget).not.toHaveBeenCalled();
+      expect(instance._loadWidgetAssets).not.toHaveBeenCalled();
+      expect(instance.setState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('componentWillUnmount() method', () => {
+    it('should remove widget on unmounting', () => {
+      spyOn(instance, '_removeWidget');
+
+      instance.componentWillUnmount();
+
+      expect(instance._removeWidget).toHaveBeenCalled();
+    });
+  });
+
+  describe('_renderFallback() method', () => {
+    it('should return null if no children are given', () => {
+      wrapper.setProps({ children: undefined });
+
+      expect(instance._renderFallback()).toBe(null);
+    });
+
+    it('should return react element given in children', () => {
+      let element = <span>Fallback</span>;
+      wrapper.setProps({ children: element });
+
+      expect(instance._renderFallback()).toBe(element);
+    });
+
+    it('should return result of children function call', () => {
+      wrapper.setProps({ children: ({ error }) => `error:${error}` });
+      wrapper.setState({
+        encounteredError: 'test-error',
+      });
+
+      expect(instance._renderFallback()).toBe('error:test-error');
+    });
+  });
+
+  describe('_renderStyleAssets() method', () => {
+    it('should return array of style elements for given widget assets', () => {
+      expect(instance._renderStyleAssets()).toMatchInlineSnapshot(`
+        Array [
+          <link
+            href="http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css"
+            rel="stylesheet"
+          />,
+          <style
+            dangerouslySetInnerHTML={
+              Object {
+                "__html": "html { font-weight: bold }",
+              }
+            }
+          />,
+        ]
+      `);
+    });
+
+    it('should return empty array for no style assets', () => {
+      let newWidgetProperties = {
+        ...widgetProperties,
+        assets: [],
+      };
+
+      wrapper = shallow(
+        <MerkurComponent widgetProperties={newWidgetProperties}>
+          <span>Fallback</span>
+        </MerkurComponent>
+      );
+
+      instance = wrapper.instance();
+
+      expect(instance._renderStyleAssets()).toMatchInlineSnapshot(`Array []`);
+    });
+  });
+
+  describe('_getWidgetHTML() method', () => {
+    it('should return SSR rendered HTML', () => {
+      let newWidgetProperties = {
+        ...widgetProperties,
+        html: null,
+      };
+
+      wrapper = shallow(
+        <MerkurComponent widgetProperties={newWidgetProperties}>
+          <span>Fallback</span>
+        </MerkurComponent>
+      );
+
+      instance = wrapper.instance();
+
+      spyOn(instance, '_getSSRHTML').and.returnValue('SSR HTML');
+
+      expect(instance._getWidgetHTML()).toBe('SSR HTML');
+    });
+
+    it('should return widgetProperties html if available', () => {
+      expect(instance._getWidgetHTML()).toBe(widgetProperties.html);
+    });
+
+    it('should return cached html when called multiple times', () => {
+      let newWidgetProperties = {
+        ...widgetProperties,
+        html: null,
+      };
+
+      wrapper = shallow(
+        <MerkurComponent widgetProperties={newWidgetProperties}>
+          <span>Fallback</span>
+        </MerkurComponent>
+      );
+
+      instance = wrapper.instance();
+
+      spyOn(instance, '_getSSRHTML').and.returnValue('SSR HTML');
+      expect(instance._getWidgetHTML()).toBe('SSR HTML');
+      expect(instance._getWidgetHTML()).toBe('SSR HTML');
+      expect(instance._getWidgetHTML()).toBe('SSR HTML');
+      expect(instance._getWidgetHTML()).toBe('SSR HTML');
+      expect(instance._getSSRHTML).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('_handleError() method', () => {
+    let onError;
+
+    beforeEach(() => {
+      onError = jest.fn();
+      wrapper = shallow(
+        <MerkurComponent widgetProperties={widgetProperties} onError={onError}>
+          <span>Fallback</span>
+        </MerkurComponent>
+      );
+
+      instance = wrapper.instance();
+      spyOn(instance, 'setState').and.callThrough();
+    });
+
+    it('should call props.onError if defined', () => {
+      instance._handleError('error');
+
+      expect(onError).toHaveBeenCalledWith('error');
+    });
+
+    it('should set error to state', () => {
+      instance._handleError('error');
+
+      expect(instance.setState).toHaveBeenCalledWith({
+        encounteredError: 'error',
+      });
+    });
+  });
+
+  describe('_removeWidget() method', () => {
+    let onWidgetUnmounting = jest.fn();
+
+    beforeEach(() => {
+      wrapper = shallow(
+        <MerkurComponent
+          widgetProperties={widgetProperties}
+          onWidgetUnmounting={onWidgetUnmounting}>
+          <span>Fallback</span>
+        </MerkurComponent>
+      );
+
+      instance = wrapper.instance();
+    });
+
+    afterEach(() => {
+      jest.resetAllMocks();
+    });
+
+    it('should return if there is no widget instance currently available', () => {
+      expect(instance._widget).toBe(null);
+
+      instance._removeWidget();
+
+      expect(onWidgetUnmounting).not.toHaveBeenCalled();
+    });
+
+    it('should call props.onWidgetUnmounting', () => {
+      let widget = { name: 'name', unmount: jest.fn() };
+      instance._widget = widget;
+
+      instance._removeWidget();
+
+      expect(onWidgetUnmounting).toHaveBeenCalledWith(widget);
+    });
+
+    it('should remove event listeners before unmounting', () => {
+      let offWidget = jest.fn();
+      instance._widget = { name: 'name', unmount: jest.fn(), off: offWidget };
+
+      instance._removeWidget();
+
+      expect(offWidget).toHaveBeenCalledWith(
+        '@merkur/plugin-error.error',
+        instance._handleClientError
+      );
+    });
+
+    it('should unmount widget and do cleanup', () => {
+      let unmount = jest.fn();
+      let widget = { name: 'name', unmount };
+      instance._widget = widget;
+      instance._html = 'html';
+
+      expect(instance._widget).toBe(widget);
+      expect(instance._html).toBe('html');
+
+      instance._removeWidget();
+
+      expect(unmount).toHaveBeenCalled();
+      expect(instance._widget).toBe(null);
+      expect(instance._html).toBe(null);
+    });
+  });
+
+  describe('_getSSRHTML() method', () => {
+    it('return empty string if component is already mounted', () => {
+      instance._isMounted = true;
+
+      expect(instance._getSSRHTML()).toBe('');
+    });
+
+    it('return empty string if we are not on client', () => {
+      spyOn(instance, '_isClient').and.returnValue(false);
+      instance._isMounted = false;
+
+      expect(instance._getSSRHTML()).toBe('');
+    });
+
+    it('return html widget content from document', () => {
+      spyOn(instance, '_isClient').and.returnValue(true);
+      instance._isMounted = false;
+      delete global.document;
+      global.document = {
+        querySelector: () => ({
+          children: [
+            {
+              outerHTML: 'outerHTML',
+            },
+          ],
+        }),
+      };
+
+      expect(instance._getSSRHTML()).toBe('outerHTML');
+    });
+  });
+
+  describe('_isClient() method', () => {
+    it('should return false for non-browser environments', () => {
+      delete global.window;
+      delete global.document;
+      expect(instance._isClient()).toBe(false);
+      global.window = {};
+      delete global.document;
+      expect(instance._isClient()).toBe(false);
+      global.document = {};
+      delete global.window;
+      expect(instance._isClient()).toBe(false);
+    });
+
+    it('should return true for browser environments', () => {
+      global.window = {};
+      global.document = {};
+      expect(instance._isClient()).toBe(true);
+    });
+  });
+
+  describe('_isSSRHydrate() method', () => {
+    beforeEach(() => {
+      MerkurComponent.prototype._isSSRHydrate.mockRestore();
+    });
+
+    it("should return true if there's some server side rendered html", () => {
+      spyOn(instance, '_getSSRHTML').and.returnValue('html');
+
+      expect(instance._isSSRHydrate()).toBe(true);
+    });
+
+    it('should return false, if SSR renderd html is empty', () => {
+      spyOn(instance, '_getSSRHTML').and.returnValue('');
+
+      expect(instance._isSSRHydrate()).toBe(false);
+    });
+  });
 });
