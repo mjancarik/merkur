@@ -33,11 +33,16 @@ export default class MerkurComponent extends React.Component {
    *
    * @param {{ name: string, version: string }} props
    * @param {{ name: string, vesrion: string }} nextProps
+   * @return {boolean} true if both inputs have name and version defined and any of them changed.
    */
   static hasWidgetChanged(props, nextProps) {
-    return (
+    return !!(
       props &&
+      props.name &&
+      props.version &&
       nextProps &&
+      nextProps.name &&
+      nextProps.version &&
       (props.version !== nextProps.version || props.name !== nextProps.name)
     );
   }
@@ -51,7 +56,7 @@ export default class MerkurComponent extends React.Component {
    * @param {object} prevState
    */
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (nextProps.widgetProperties) {
+    if (prevState && nextProps && nextProps.widgetProperties) {
       const { version, name } = nextProps.widgetProperties;
 
       if (!prevState.cachedWidgetMeta) {
@@ -63,7 +68,6 @@ export default class MerkurComponent extends React.Component {
           },
         };
       } else if (
-        prevState.cachedWidgetMeta &&
         MerkurComponent.hasWidgetChanged(
           prevState.cachedWidgetMeta,
           nextProps.widgetProperties
@@ -102,7 +106,10 @@ export default class MerkurComponent extends React.Component {
       this.state.assetsLoaded !== nextState.assetsLoaded ||
       this.state.encounteredError !== nextState.encounteredError ||
       !this.props.widgetProperties ||
-      MerkurComponent.hasWidgetChanged(this.props, nextProps)
+      MerkurComponent.hasWidgetChanged(
+        this.props.widgetProperties,
+        nextProps.widgetProperties
+      )
     ) {
       return true;
     }
@@ -222,8 +229,6 @@ export default class MerkurComponent extends React.Component {
        */
       return this._loadWidgetAssets();
     } else if (
-      currentWidgetProperties &&
-      prevWidgetProperties &&
       MerkurComponent.hasWidgetChanged(
         currentWidgetProperties,
         prevWidgetProperties
