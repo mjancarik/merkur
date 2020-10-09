@@ -64,7 +64,10 @@ export default class MerkurComponent extends React.Component {
         };
       } else if (
         prevState.cachedWidgetMeta &&
-        this.hasWidgetChanged(prevState.cachedWidgetMeta, nextProps)
+        MerkurComponent.hasWidgetChanged(
+          prevState.cachedWidgetMeta,
+          nextProps.widgetProperties
+        )
       ) {
         // Replace cached widget meta data with new ones and reset state
         return {
@@ -194,6 +197,7 @@ export default class MerkurComponent extends React.Component {
     const { widgetProperties: currentWidgetProperties } = this.props;
     const { widgetProperties: prevWidgetProperties } = prevProps;
 
+    // 1) Assets have been loaded => mount the widget
     if (
       this.state.assetsLoaded &&
       prevState.assetsLoaded !== this.state.assetsLoaded
@@ -202,7 +206,7 @@ export default class MerkurComponent extends React.Component {
     }
 
     if (!currentWidgetProperties && prevWidgetProperties) {
-      // In case we receive empty new properties, we need to cleanup.
+      // 2.1) In case we receive empty new properties, we need to cleanup.
       this._removeWidget();
       this.setState({
         encounteredError: false,
@@ -212,7 +216,7 @@ export default class MerkurComponent extends React.Component {
       return;
     } else if (currentWidgetProperties && !prevWidgetProperties) {
       /**
-       * In case there were no widget properties before, we try to
+       * 2.2) In case there were no widget properties before, we try to
        * initialize widget first by doing the same as if it first mounted
        * (loading assets into the DOM).
        */
@@ -226,7 +230,7 @@ export default class MerkurComponent extends React.Component {
       )
     ) {
       /**
-       * In case widget has changed, first we need to cleanup (remove previous widget),
+       * 2.3) In case widget has changed, first we need to cleanup (remove previous widget),
        * reset state and then we again try to intialize the new widget same way as
        * if it has mounted for the first time.
        */
@@ -240,6 +244,8 @@ export default class MerkurComponent extends React.Component {
           this._loadWidgetAssets();
         }
       );
+
+      return;
     }
   }
 
