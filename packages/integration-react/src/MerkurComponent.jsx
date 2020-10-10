@@ -12,8 +12,8 @@ function WidgetWrapper({ html, className }) {
 }
 
 export default class MerkurComponent extends React.Component {
-  constructor(props, context) {
-    super(props, context);
+  constructor(props) {
+    super(props);
 
     this._html = null;
     this._widget = null;
@@ -322,7 +322,10 @@ export default class MerkurComponent extends React.Component {
       (Array.isArray(widgetProperties.assets) && widgetProperties.assets) || [];
 
     return assets
-      .filter(({ type }) => ['stylesheet', 'inlineStyle'].includes(type))
+      .filter(
+        (asset) =>
+          ['stylesheet', 'inlineStyle'].includes(asset.type) && asset.source
+      )
       .map((asset, key) => {
         switch (asset.type) {
           case 'stylesheet':

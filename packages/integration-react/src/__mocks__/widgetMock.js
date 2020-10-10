@@ -28,7 +28,7 @@ const mockedWidgetProperties = {
     },
     {
       type: 'inlineStyle',
-      source: 'html { font-weight: bold }',
+      source: 'html { font-weight: bold; }',
     },
   ],
   html: '<div class="merkur__page"></div>',
