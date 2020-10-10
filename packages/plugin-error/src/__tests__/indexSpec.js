@@ -36,14 +36,6 @@ describe('createWidget method with error plugin', () => {
               "update": undefined,
             },
           },
-          "error": Object {
-            "originalFunctions": Object {
-              "info": [Function],
-              "load": [Function],
-              "mount": [Function],
-              "update": [Function],
-            },
-          },
         },
         "$plugins": Array [
           Object {
@@ -94,20 +86,13 @@ describe('renderContent', () => {
 
     const emitMock = jest.fn();
     const widgetMock = {
-      $in: {
-        error: {
-          originalFunctions: {
-            someMethod: methodMock,
-          },
-        },
-      },
       error: {},
       emit: emitMock,
     };
 
     const renderProperties = ['value'];
 
-    renderContent(widgetMock, 'someMethod', renderProperties);
+    renderContent(widgetMock, methodMock, renderProperties);
 
     expect(methodMock).toBeCalled();
   });

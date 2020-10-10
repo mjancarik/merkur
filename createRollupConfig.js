@@ -49,6 +49,7 @@ const babelUMDConfig = {
           '@merkur/plugin-http-client': getGlobalName(
             '@merkur/plugin-http-client'
           ),
+          '@merkur/plugin-error': getGlobalName('@merkur/plugin-error'),
           '@merkur/integration': getGlobalName('@merkur/integration'),
           'node-fetch': 'fetch',
         },

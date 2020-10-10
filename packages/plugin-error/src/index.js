@@ -1,3 +1,5 @@
+import { hookMethod } from '@merkur/core';
+
 const DEV = 'development';
 const ENV =
   typeof process !== 'undefined' && process && process.env
@@ -18,10 +20,6 @@ export function errorPlugin() {
             message: null,
           };
 
-      widget.$in.error = {
-        originalFunctions: {},
-      };
-
       return widget;
     },
     async create(widget) {
@@ -38,19 +36,11 @@ export function errorPlugin() {
         }
       }
 
-      const { mount, update, info, load } = widget;
+      hookMethod(widget, 'info', infoHook);
+      hookMethod(widget, 'load', loadHook);
+      hookMethod(widget, 'mount', mountHook);
+      hookMethod(widget, 'update', updateHook);
 
-      widget.$in.error.originalFunctions = {
-        load,
-        info,
-        mount,
-        update,
-      };
-
-      widget.load = loadHook;
-      widget.info = infoHook;
-      widget.mount = mountHook;
-      widget.update = updateHook;
       return widget;
     },
   };
@@ -58,14 +48,14 @@ export function errorPlugin() {
 
 // LIFECYCLE HOOKS
 
-async function loadHook(widget, ...rest) {
+async function loadHook(widget, originalLoad, ...rest) {
   let result = {};
   if (widget.error.status) {
     return result;
   }
 
   try {
-    result = await widget.$in.error.originalFunctions.load(widget, ...rest);
+    result = await originalLoad(...rest);
   } catch (error) {
     error.status = error.status || 500;
 
@@ -76,9 +66,8 @@ async function loadHook(widget, ...rest) {
   return result;
 }
 
-async function infoHook(widget, ...rest) {
-  const { info } = widget.$in.error.originalFunctions;
-  const result = isFunction(info) ? await info(widget, ...rest) : {};
+async function infoHook(widget, originalInfo, ...rest) {
+  const result = await originalInfo(...rest);
 
   return {
     error: widget.error,
@@ -86,12 +75,12 @@ async function infoHook(widget, ...rest) {
   };
 }
 
-async function mountHook(widget, ...rest) {
-  return renderContent(widget, 'mount', rest);
+async function mountHook(widget, originalMount, ...rest) {
+  return renderContent(widget, originalMount, rest);
 }
 
-async function updateHook(widget, ...rest) {
-  return renderContent(widget, 'update', rest);
+async function updateHook(widget, originalUpdate, ...rest) {
+  return renderContent(widget, originalUpdate, rest);
 }
 
 // HELPER FUNCTIONS
@@ -109,15 +98,14 @@ function emitError(widget, thrownError) {
   widget.emit(ERROR_EVENTS.ERROR, { thrownError });
 }
 
-export async function renderContent(widget, methodName = 'mount', properties) {
-  const method = widget.$in.error.originalFunctions[methodName];
+export async function renderContent(widget, method, properties) {
   let result = null;
 
   if (widget.error.status) {
     // error was captured in an earlier lifecycle method
     try {
       // try rendering content, in case the method can handle the error state on its own
-      result = await method(widget, ...properties);
+      result = await method(...properties);
       return result;
     } catch (err) {
       // content rendering failed
@@ -128,7 +116,7 @@ export async function renderContent(widget, methodName = 'mount', properties) {
   }
   try {
     // no earlier error captured
-    result = await method(widget, ...properties);
+    result = await method(...properties);
     return result;
   } catch (err) {
     // save error info
@@ -137,10 +125,6 @@ export async function renderContent(widget, methodName = 'mount', properties) {
     emitError(widget, err);
 
     // try rendering again
-    return renderContent(widget, methodName, properties);
+    return renderContent(widget, method, properties);
   }
-}
-
-function isFunction(value) {
-  return typeof value === 'function';
 }
