@@ -4,6 +4,7 @@
   "description": "Merkur module for easy integration with other apps.",
   "main": "lib/index.cjs",
   "module": "lib/index.mjs",
+    "unpkg": "lib/index.umd.js",
   "sideEffects": false,
   "exports": {
     ".": {
