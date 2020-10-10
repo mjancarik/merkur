@@ -17,7 +17,7 @@
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
-    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check es9 ./lib/index.js",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check --module es9 ./lib/index.mjs",
     "build": "node_modules/.bin/rollup -c",
     "prepare": "npm run build"
   },
