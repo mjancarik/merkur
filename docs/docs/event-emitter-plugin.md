@@ -5,11 +5,11 @@ title: Event emitter plugin - Merkur
 
 # Event emitter plugin
 
-The event emitter plugin is one of the base [Merkur]({{ '/' | relative_url }}) plugins which adds event methods to your widget. Other [Merkur plugins]({{ '/docs/plugins' | relative_url }}) can depends on it.
+The event emitter plugin is one of the base [Merkur]({{ '/' | relative_url }}) plugins which adds event methods to your widget. Other [Merkur plugins]({{ '/docs/plugins' | relative_url }}) can depend on it.
 
 ## Installation
 
-We must add import for `eventEmitterPlugin` and register it to `$plugins` property of the widget.
+We must add import of `eventEmitterPlugin` and register it to `$plugins` property of the widget.
 
 ```javascript
 // ./src/widget.js
@@ -30,8 +30,8 @@ After that we have `on`, `off` and `emit` methods available on the widget.
 
 ### on
 
-- eventName - string
-- listener - function
+- `eventName` - string
+- `listener` - function
 
 The `on` method adds a listener function to the end of the listeners array for the event named *eventName*.
 
@@ -43,8 +43,8 @@ widget.on('save', (widget, ...rest) => {
 
 ### off
 
-- eventName - string
-- listener - function
+- `eventName` - string
+- `listener` - function
 
 The `off` method removes the specified listener from the listener array for the event named *eventName*.
 
@@ -57,8 +57,8 @@ widget.off('save', (widget, ...rest) => {
 
 ### emit
 
-- eventName - string
-- ...args - any
+- `eventName` - string
+- `...args` - any
 
 The `emit` method synchronously calls each of the listeners registered for the event named *eventName*, in the order they were registered, passing the supplied arguments to each.
 

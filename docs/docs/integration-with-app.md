@@ -5,11 +5,11 @@ title: Integrating Merkur widget to application
 
 # Integration with your app
 
-Merkur widget can be connected with any framework or library and we can use it with other languages like PHP, Python or Java of course. It uses REST/GRAPHQL API which has got predefined and extensible response body.
+Merkur widget can be connected with any framework or library and we can use it with other languages like PHP, Python or Java of course. It uses REST/GRAPHQL API which has a predefined and extensible response body.
 
 ## API call for widget properties
 
-At first we must make API call with your framework of choice. In this example we will use built-in browser fetch API. Feel free to choose yours.
+At first we must make an API call with your framework of choice. In this example we will use the built-in browser fetch API. Feel free to choose yours.
 
 ```javascript
 // browser
@@ -69,9 +69,9 @@ At first we must make API call with your framework of choice. In this example we
 }
 ```
 
-## Alive merkur widget in browser (SPA)
+## Revive merkur widget in browser (SPA)
 
-After we receive response body we create widget container at first.
+After we receive response body, we first create the widget container.
 
 ```javascript
   const widgetContainer = document.createElement('div');
@@ -79,8 +79,8 @@ After we receive response body we create widget container at first.
   widgetContainer.innerHTML = widgetProperties.html;
 ```
 
-After that we must download widget assets, insert widget container to DOM and alive our widget.
-For downloading assets we can use `loadAssets` method from `@merkur/integration` module. Assets can have custom attributes defined in `attr` object. Only default attribute is `defer` and you can override it by setting it as a custom attribute with value `false`. Assets may contain also a test expression. If test expression evaluates to `false` the asset will be loaded. Full example of integration merkur widget to SPA is:
+After that we must download widget assets, insert widget container into DOM and revive our widget.
+For downloading assets we can use the `loadAssets` method from `@merkur/integration` module. Assets can have custom attributes defined in `attr` object. The only default attribute is `defer` and you can override it by setting it as a custom attribute with value `false`. Assets may contain also a test expression. If test expression evaluates to `false` the asset will be loaded. A full example of a Merkur widget integration into an SPA application:
 
 ```javascript
 import { loadAssets } from '@merkur/integration';
@@ -118,7 +118,7 @@ import { getMerkur } from '@merkur/core';
 }();
 ```
 
-If you have old application without npm modules. You can handle assets your own way and add `onload` method for script asset where we are going to alive merkur widget. Primitive example:
+If your application doesn't use npm modules, you can handle assets your own way and add `onload` method for script assets, where you will revive the merkur widget. A primitive example:
 
 ```javascript
 
@@ -163,7 +163,7 @@ If you have old application without npm modules. You can handle assets your own 
 
 ## Hydrate server side rendering widget (MPA)
 
-After we receive response from the widget API call we must update the final html which is sent to the browser. First we add assets.
+After we receive response from the widget API call we must update the final HTML which is sent to the browser. First we add assets:
 
 ```html
 <head>
@@ -187,13 +187,13 @@ After we receive response from the widget API call we must update the final html
 </head>
 ```
 
-Then we add widget html to our page.
+Then we add the widget HTML to our page:
 
 ```html
 <div class="<%= widgetClassName %>"><%- body.html %></div>
 ```
 
-The last step is to hydrate the widget in your app after the page is loaded.
+The last step is to hydrate the widget in your app after the page is loaded:
 
 ```html
 <script>
@@ -211,7 +211,7 @@ The last step is to hydrate the widget in your app after the page is loaded.
 
 ## Integration with React
 
-For easy integration with React library we created `@merkur/integration-react` module. The module is designed for client side and also for server side. You can use your own application stack for making API call for receiving `widgetProperties`. You only pass `widgetClassName` and `widgetProperties` from API call result to `MerkurComponent`. The component makes the hard work for you.
+For easy integration with React library we created the `@merkur/integration-react` module. The module is designed for both client-side and server-side use. You can use your own application stack to make the API call for `widgetProperties`. You then pass `widgetClassName` and `widgetProperties` from the API call result to `MerkurComponent`. The component then does all the hard work for you.
 
 ```jsx
 import React from 'react';
@@ -240,7 +240,7 @@ React.render(
 );
 ```
 
-Children component passed to `<MerkurComponent/>` is used as a fallback when the widget is not yet ready or an error happened. To differentiate loading and error state pass a function as children.
+Children component(s) passed to `<MerkurComponent/>` are used as a fallback when the widget is not yet ready or an error happened. To differentiate between loading and error states, pass a function as children.
 
 ```jsx
 return (
@@ -253,9 +253,9 @@ return (
 ```
 
 You can also react to component events through callbacks.
-- When widget is mounted a function passed through `onWidgetMounted` prop is called with the widget instance.
-- Before the widget is unmounted `onWidgetUnmounting` is called.
-- Whenever error occurs during the widget lifetime an `onError` function prop is called.
+- When widget is mounted, a function passed through `onWidgetMounted` prop is called with the widget instance.
+- Before the widget is unmounted, `onWidgetUnmounting` is called.
+- Whenever error occurs during the widget lifetime, an `onError` function prop is called.
 
 ```jsx
 return (

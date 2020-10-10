@@ -5,13 +5,15 @@ title: Widget API - Merkur
 
 # Merkur widget API
 
-Merkur widget contains six predefined properties `name`, `version`, `$in`, `$external`, `$dependencies` and `$plugins`. The property `$in` is for internals usage of merkur widget plugins or merkur itself.
+A Merkur widget, whether within the application or when returned as JSON by the API endpoint, contains six predefined properties: `name`, `version`, `$in`, `$external`, `$dependencies`, and `$plugins`. The property `$in` is intended for internal usage by merkur widget plugins or merkur itself.
 
-Other properties are for your own usage. The property `$external` is for storing variables. The property `$dependencies` is for defining widget dependencies and specific features of environment where widget works. The last one property `$plugins` is for defining specific widget plugins.
+Other properties are for your own needs. The property `$external` is for storing variables. The property `$dependencies` is for defining widget dependencies and specific features of the environment where the widget operates. The last property, `$plugins`, is for defining specific widget plugins.
 
-The widget also contains two methods for plugins; `setup` and `create`. For more details continue to [plugins]({{ '/docs/plugins' | relative_url }}) section. You can use these methods also in widgetProperties.
+The widget also contains two methods for plugins; `setup` and `create`. For more details continue to the [plugins]({{ '/docs/plugins' | relative_url }}) section. You can use these methods also in `widgetProperties`.
 
-The widget instance is sealed after creating so you can't add properties or functions to widget directly. But for rare use cases you can use property `$external`. The Merkur automatically binds widget functions to receive widget as a first argument. You can see it in easy counter example widget.
+The widget instance is sealed after creation so you cannot add properties or functions to the widget directly. But for rare use cases you can use the `$external` property. Merkur automatically binds widget functions to receive the widget as a first argument. You can see it in the example widget.
+
+Sometimes you might not be sure whether to store data in widget state or the `$external` property. The best way to decide is to ask if you need to react to the change of the variable. If you do, store it in state; if you don't, or specifically want to avoid that, `$external` might be the right choice.
 
 ```javascript
 import { createMerkurWidget, createMerkur } from '@merkur/core';

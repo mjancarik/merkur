@@ -4,6 +4,7 @@
   "description": "Merkur module for easy integration with other apps.",
   "main": "lib/index.cjs",
   "module": "lib/index.mjs",
+    "unpkg": "lib/index.umd.js",
   "sideEffects": false,
   "exports": {
     ".": {
@@ -44,7 +45,7 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@merkur/core": "^0.21.0",
-    "rollup": "^2.26.9"
+    "rollup": "^2.29.0"
   },
   "peerDependencies": {
     "@merkur/core": "*"

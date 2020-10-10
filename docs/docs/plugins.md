@@ -5,7 +5,7 @@ title: Merkur plugins
 
 # Plugins
 
-Like we said, Merkur is tiny and **extensible** library and allows you to define custom widget plugins as well. Widget plugin has got two lifecycle methods `setup` and `create`. Both methods are called during creating widget. The order is `setup` and then `create`. Both methods receive `widget` and `widgetProperties` and must return extended widget.
+Like we said, Merkur is tiny and **extensible** library and allows you to define custom widget plugins as well. Widget plugin has two lifecycle methods, `setup` and `create`. Both methods are called during the creation of a widget; first `setup`, then `create`. Both methods receive `widget` and `widgetProperties` and must return an extended widget object.
 
 The `setup` method is for creating a new widget interface and a base widget properties in `widget.$in` property. The `create` method is for connecting more plugins or reusing some plugin methods from another plugin.
 
@@ -67,6 +67,6 @@ export const widgetProperties = {
 const widget = createMerkurWidget(widgetProperties);
 ```
 
-We created `debugPlugin` which adds `debug` method in the `setup` lifecycle method and adds tracking to all widget methods in the `create` lifecycle method. We used our new plugin in `$plugins` property of a specific widget.
+We created `debugPlugin` which adds `debug` method in the `setup` lifecycle method and adds tracking to all widget methods in the `create` lifecycle method. We used our new plugin in the `$plugins` property of a specific widget.
 
-Merkur has got only three predefined plugins [componentPlugin]({{ '/docs/component-plugin' | relative_url }}),  [eventEmitterPlugin]({{ '/docs/event-emitter-plugin' | relative_url }}) and [httpClientPlugin]({{ '/docs/http-client-plugin' | relative_url }}).
+Merkur has only three predefined plugins [componentPlugin]({{ '/docs/component-plugin' | relative_url }}),  [eventEmitterPlugin]({{ '/docs/event-emitter-plugin' | relative_url }}) and [httpClientPlugin]({{ '/docs/http-client-plugin' | relative_url }}).
