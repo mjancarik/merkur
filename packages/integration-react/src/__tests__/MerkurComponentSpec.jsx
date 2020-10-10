@@ -793,6 +793,20 @@ describe('Merkur component', () => {
     });
   });
 
+  describe('_loadWidgetAssets() method', () => {
+    it('should call functinos to load widget assets and update the state after successful load', async () => {
+      spyOn(instance, 'setState').and.callThrough();
+      await instance._loadWidgetAssets();
+
+      expect(MerkurIntegration.loadStyleAssets).toHaveBeenCalled();
+      expect(MerkurIntegration.loadScriptAssets).toHaveBeenCalled();
+      expect(instance.setState).toHaveBeenCalledWith(
+        { assetsLoaded: true },
+        expect.any(Function)
+      );
+    });
+  });
+
   describe('_getSSRHTML() method', () => {
     it('return empty string if component is already mounted', () => {
       instance._isMounted = true;
