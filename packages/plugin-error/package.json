@@ -1,0 +1,42 @@
+{
+  "name": "@merkur/plugin-error",
+  "version": "0.14.0",
+  "description": "Merkur plugin for error handling.",
+  "main": "lib/index",
+  "module": "lib/index",
+  "scripts": {
+    "preversion": "npm test",
+    "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check es9 ./lib/index.js",
+    "build": "node_modules/.bin/rollup -c",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "merkur",
+    "plugin",
+    "error"
+  ],
+  "author": "Anna Frankova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "devDependencies": {
+    "@merkur/core": "^0.14.0",
+    "@merkur/plugin-component": "^0.14.0",
+    "rollup": "^2.22.1"
+  },
+  "peerDependencies": {
+    "@merkur/core": "^0.13.0",
+    "@merkur/plugin-component": "^0.13.0"
+  }
+}
