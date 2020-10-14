@@ -109,7 +109,7 @@ function loadScriptAssets(assets) {
 }
 
 function loadAssets(assets) {
-  return Promise.all(loadScriptAssets(assets), loadStyleAssets(assets));
+  return Promise.all([loadScriptAssets(assets), loadStyleAssets(assets)]);
 }
 
 export { testScript, loadAssets, loadStyleAssets, loadScriptAssets };
