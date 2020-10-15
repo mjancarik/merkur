@@ -543,6 +543,7 @@ describe('Merkur component methods', () => {
       expect(instance.setState).toHaveBeenCalledWith({
         assetsLoaded: false,
         encounteredError: false,
+        cachedWidgetMeta: null,
       });
     });
 
@@ -559,7 +560,7 @@ describe('Merkur component methods', () => {
       expect(instance.setState).not.toHaveBeenCalled();
     });
 
-    it('should remove old widget, reset state and start loading new one', () => {
+    it('should remove old widget and start loading new one', () => {
       wrapper.setProps({
         widgetProperties,
       });
@@ -576,13 +577,6 @@ describe('Merkur component methods', () => {
       );
 
       expect(instance._removeWidget).toHaveBeenCalledTimes(1);
-      expect(instance.setState).toHaveBeenCalledWith(
-        {
-          assetsLoaded: false,
-          encounteredError: false,
-        },
-        expect.any(Function)
-      );
       expect(instance._loadWidgetAssets).toHaveBeenCalledTimes(1);
       expect(instance._mountWidget).not.toHaveBeenCalled();
     });
