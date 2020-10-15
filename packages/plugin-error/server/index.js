@@ -52,7 +52,10 @@ function logUnhandledPromises(logError = defaultUnhandledPromiseError) {
 
 /**
  * Simple Express middleware to return widget-like JSON on error that couldn't be handled by plugin-error.
+ *
+ * @returns {function}
  */
+// eslint-disable-next-line no-unused-vars
 function apiErrorMiddleware() {
   //eslint-disable-next-line no-unused-vars
   return (error, req, res, next) => {
@@ -75,15 +78,18 @@ function defaultPlaygroundError(message) {
 /**
  * Express middleware that attempts to render a widget that has been returned with a non-OK HTTP status.
  *
- * @param {playgroundRenderer} renderPlayground
- * @param {object} props Default widget prop values
- * @param {playgroundErrorRenderer} renderError
+ * @param {object} config
+ * @param {playgroundRenderer} config.renderPlayground
+ * @param {object} config.props Default widget prop values
+ * @param {playgroundErrorRenderer} config.renderError
+ * @returns {function}
  */
-function playgroundErrorMiddleware(
+// eslint-disable-next-line no-unused-vars
+function playgroundErrorMiddleware({
   renderPlayground,
   props = {},
-  renderError = defaultPlaygroundError
-) {
+  renderError = defaultPlaygroundError,
+} = {}) {
   //eslint-disable-next-line no-unused-vars
   return (error, req, res, next) => {
     // error handling for playground page
@@ -115,7 +121,7 @@ function playgroundErrorMiddleware(
 }
 
 module.exports = {
-  apiErrorMiddleware,
+  //apiErrorMiddleware,
   logUnhandledPromises,
-  playgroundErrorMiddleware,
+  //playgroundErrorMiddleware,
 };

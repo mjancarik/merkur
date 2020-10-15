@@ -7,8 +7,12 @@
   "unpkg": "lib/index.umd.js",
   "sideEffects": false,
   "exports": {
-    "import": "./lib/index.mjs",
-    "require": "./lib/index.cjs"
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs"
+    },
+    "./server/": "./server/index.js",
+    "./server/index.js": "./server/index.js"
   },
   "browser": {
     "./lib/index.cjs": "./lib/index.es5.js",
