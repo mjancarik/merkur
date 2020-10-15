@@ -59,21 +59,23 @@ export default class MerkurComponent extends React.Component {
     if (prevState && nextProps && nextProps.widgetProperties) {
       const { version, name } = nextProps.widgetProperties;
 
+      // Cache widget meta data (name & version)
       if (!prevState.cachedWidgetMeta) {
-        // Cache widget meta data (name & version)
         return {
           cachedWidgetMeta: {
             name,
             version,
           },
         };
-      } else if (
+      }
+
+      // Replace cached widget meta data with new ones and reset state
+      if (
         MerkurComponent.hasWidgetChanged(
           prevState.cachedWidgetMeta,
           nextProps.widgetProperties
         )
       ) {
-        // Replace cached widget meta data with new ones and reset state
         return {
           encounteredError: false,
           assetsLoaded: false,
@@ -212,43 +214,40 @@ export default class MerkurComponent extends React.Component {
       return this._mountWidget();
     }
 
+    // 2.1) In case we receive empty new properties, we need to cleanup.
     if (!currentWidgetProperties && prevWidgetProperties) {
-      // 2.1) In case we receive empty new properties, we need to cleanup.
       this._removeWidget();
       this.setState({
         encounteredError: false,
         assetsLoaded: false,
+        cachedWidgetMeta: null,
       });
 
       return;
-    } else if (currentWidgetProperties && !prevWidgetProperties) {
-      /**
-       * 2.2) In case there were no widget properties before, we try to
-       * initialize widget first by doing the same as if it first mounted
-       * (loading assets into the DOM).
-       */
+    }
+
+    /**
+     * 2.2) In case there were no widget properties before, we try to
+     * initialize widget first by doing the same as if it first mounted
+     * (loading assets into the DOM).
+     */
+    if (currentWidgetProperties && !prevWidgetProperties) {
       return this._loadWidgetAssets();
-    } else if (
+    }
+
+    /**
+     * 2.3) In case widget has changed, first we need to cleanup (remove previous widget),
+     * and then we again try to intialize the new widget same way as
+     * if it has mounted for the first time.
+     */
+    if (
       MerkurComponent.hasWidgetChanged(
         currentWidgetProperties,
         prevWidgetProperties
       )
     ) {
-      /**
-       * 2.3) In case widget has changed, first we need to cleanup (remove previous widget),
-       * reset state and then we again try to intialize the new widget same way as
-       * if it has mounted for the first time.
-       */
       this._removeWidget();
-      this.setState(
-        {
-          encounteredError: false,
-          assetsLoaded: false,
-        },
-        () => {
-          this._loadWidgetAssets();
-        }
-      );
+      this._loadWidgetAssets();
 
       return;
     }
