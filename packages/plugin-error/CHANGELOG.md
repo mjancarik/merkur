@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.22.0](https://github.com/mjancarik/merkur/compare/v0.21.3...v0.22.0) (2020-10-15)
+
+
+### Bug Fixes
+
+* 🐛 es version tests ([86d3604](https://github.com/mjancarik/merkur/commit/86d36049ae2b2da66152fe4af541124eb5af6e9f))
+
+
+
+
+
 # [0.14.0](https://github.com/mjancarik/merkur/compare/v0.13.1...v0.14.0) (2020-07-28)
 
 **Note:** Version bump only for package @merkur/plugin-router
