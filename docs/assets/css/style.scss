@@ -81,4 +81,8 @@ a {
   .page__docs__navigation {
     padding: 24px 0 32px 0;
   }
+  .page__docs__navigation--top {
+    margin-top: -16px;
+    padding: 0 0 24px 0;
+  }
 }
