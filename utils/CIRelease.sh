@@ -3,7 +3,7 @@
 set -e
 
 TARGET_WEB_URL="http://localhost:4444/"
-PARALLEL_TEST_CONNECTIONS=10
+PARALLEL_TEST_CONNECTIONS=300
 
 NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL="localhost:4873"
 NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
@@ -61,7 +61,7 @@ npm run test -- -- --u
 npm start &
 MERKUR_WIDGET_PID=$!
 
-sleep 10
+sleep 5
 
 # Run test
 cd "$ROOT_DIR"
