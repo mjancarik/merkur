@@ -98,6 +98,12 @@ function createRollupESConfig() {
     },
     {
       dir: './lib',
+      entryFileNames: '[name].js',
+      format: 'cjs',
+      exports: 'named',
+    },
+    {
+      dir: './lib',
       entryFileNames: '[name].mjs',
       format: 'esm',
       exports: 'named',
