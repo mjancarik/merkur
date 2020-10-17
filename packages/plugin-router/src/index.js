@@ -110,7 +110,7 @@ async function loadHook(widget, ...rest) {
 
   const globalStatePromise = isFunction(plugin.originalFunctions.load)
     ? plugin.originalFunctions.load(widget, ...rest)
-    : {};
+    : Promise.resolve({});
   const routeStatePromise = plugin.route.load(widget, {
     route: plugin.route,
     args: rest,
