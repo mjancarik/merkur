@@ -55,7 +55,7 @@ npx @merkur/create-widget my-widget --view preact
 cd my-widget
 
 npm run build
-npm run test
+npm run test -- -- --u
 
 # start widget
 npm start &
