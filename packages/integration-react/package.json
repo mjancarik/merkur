@@ -2,14 +2,15 @@
   "name": "@merkur/integration-react",
   "version": "0.22.0",
   "description": "Merkur module for easy integration with react.",
-  "main": "lib/index.cjs",
-  "module": "lib/index.mjs",
+  "main": "lib/index",
+  "module": "lib/index",
   "sideEffects": false,
   "exports": {
     "import": "./lib/index.mjs",
     "require": "./lib/index.cjs"
   },
   "browser": {
+    "./lib/index.js": "./lib/index.es5.js",
     "./lib/index.cjs": "./lib/index.es5.js",
     "./lib/index.mjs": "./lib/index.mjs"
   },

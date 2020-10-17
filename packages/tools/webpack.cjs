@@ -174,6 +174,10 @@ function applyES5Transformation(config, options = {}) {
         nodeModulesDir,
         '@merkur/plugin-http-client/lib/index.es5'
       ),
+      '@merkur/plugin-error': path.resolve(
+        nodeModulesDir,
+        '@merkur/plugin-error/lib/index.es5'
+      ),
       '@merkur/plugin-router': path.resolve(
         nodeModulesDir,
         '@merkur/plugin-router/lib/index.es5'
