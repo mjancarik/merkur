@@ -9,7 +9,7 @@ const { info, error } = console;
 
 const dir = argv._[0];
 
-let exampleResolver = argv.view
+let viewResolver = argv.view
   ? Promise.resolve({ view: argv.view })
   : inquirer.prompt([
       {
@@ -51,7 +51,7 @@ let exampleResolver = argv.view
       },
     ]);
 
-exampleResolver.then(({ view }) => {
+viewResolver.then(({ view }) => {
   createMerkurApp(dir, view);
 });
 

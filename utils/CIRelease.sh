@@ -11,7 +11,7 @@ NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 ROOT_DIR=`pwd`
 CREATE_MERKUR_WIDGET_DIR="$ROOT_DIR/packages/create-widget"
 PACKAGE_VERSION=`node -e "console.log(require('./lerna.json').version)"`-next
-PACKAGES="core integration integration-react plugin-component plugin-error plugin-event-emitter plugin-http-client plugin-router tools"
+PACKAGES="core create-widget integration integration-react plugin-component plugin-error plugin-event-emitter plugin-http-client plugin-router tools"
 
 # Install dependencies
 npm i verdaccio@4.8.1 autocannon@6.5.0 --no-save
@@ -20,13 +20,14 @@ npm i verdaccio@4.8.1 autocannon@6.5.0 --no-save
 node_modules/.bin/verdaccio -l "$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL" -c utils/verdaccioConfig.yml >/dev/null &
 NPM_LOCAL_REGISTRY_PID=$!
 
+echo "Local verdaccio running"
+
 npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 
 # Release @merkur packages to local registry
 for PACKAGE in $PACKAGES ; do
     cd "$ROOT_DIR/packages/$PACKAGE"
-    echo "Working on $PACKAGE"
-
+    echo "Working on $PACKAGE@$PACKAGE_VERSION"
     sed -i "s#\"version\":\s\".*\"#\"version\": \"$PACKAGE_VERSION\"#" package.json
 
     for PACKAGE_UPDATE in $PACKAGES ; do
