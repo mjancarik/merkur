@@ -46,5 +46,7 @@ module.exports = {
     jest: true,
     jasmine: true,
   },
-  globals: {},
+  globals: {
+    globalThis: false,
+  },
 };
