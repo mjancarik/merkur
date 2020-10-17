@@ -45,6 +45,9 @@ describe('createWidget method with router plugin', () => {
             "isBootstrapCalled": false,
             "isMounting": false,
             "isRouteActivated": false,
+            "originalFunctions": Object {
+              "load": undefined,
+            },
             "pathname": null,
             "route": null,
           },
@@ -100,6 +103,9 @@ describe('createWidget method with router plugin', () => {
   describe('router plugin API', () => {
     let widget = null;
     let bootstrap = jest.fn();
+    let load = jest.fn(() => ({
+      globalData: 'global value',
+    }));
     let homeRoute = {
       init: jest.fn(),
       load: jest.fn(() => ({ page: 'home' })),
@@ -128,19 +134,22 @@ describe('createWidget method with router plugin', () => {
       },
     ];
 
+    let widgetProperties = {
+      name: 'my-widget',
+      version: '1.0.0',
+      $plugins: [componentPlugin, eventEmitterPlugin, routerPlugin],
+      props: {
+        pathname: '/',
+      },
+      bootstrap,
+      load,
+    };
+
     beforeEach(async () => {
-      widget = await createMerkurWidget({
-        name: 'my-widget',
-        version: '1.0.0',
-        $plugins: [componentPlugin, eventEmitterPlugin, routerPlugin],
-        props: {
-          pathname: '/',
-        },
-        bootstrap,
-      });
+      widget = await createMerkurWidget({ ...widgetProperties });
 
       createRouter(widget, routes);
-      jest.resetAllMocks();
+      jest.clearAllMocks();
     });
 
     it('should resolve route to home', async () => {
@@ -162,10 +171,22 @@ describe('createWidget method with router plugin', () => {
       expect(homeRoute.init).toHaveBeenCalledTimes(1);
     });
 
+    it('should call load method on home route without defined global load method', async () => {
+      const cloneWidgetProperties = { ...widgetProperties };
+      delete cloneWidgetProperties['load'];
+      widget = await createMerkurWidget(cloneWidgetProperties);
+      createRouter(widget, routes);
+
+      await widget.mount();
+
+      expect(widget.state.page).toEqual('home');
+      expect(homeRoute.load).toHaveBeenCalledTimes(1);
+    });
+
     it('should call load method on home route', async () => {
       await widget.mount();
 
-      //expect(widget.state.page).toEqual('home');
+      expect(widget.state.page).toEqual('home');
       expect(homeRoute.load).toHaveBeenCalledTimes(1);
     });
 
@@ -226,6 +247,7 @@ describe('createWidget method with router plugin', () => {
       await widget.mount();
       await widget.setProps({ pathname: '/other' });
 
+      expect(widget.state.page).toEqual('other');
       expect(otherRoute.load).toHaveBeenCalledTimes(1);
     });
 
