@@ -18,6 +18,8 @@ jobs:
       script: npm run build
     - name: "Check es versions"
       script: npm run test:es:version
+    - name: "Check new release"
+      script: npm run test:release
     - if: tag =~ ^v # Run only for tags
       stage: "deploy"
       script:

@@ -9,8 +9,8 @@ const { info, error } = console;
 
 const dir = argv._[0];
 
-let exampleResolver = argv.example
-  ? Promise.resolve({ example: argv.example })
+let exampleResolver = argv.view
+  ? Promise.resolve({ view: argv.view })
   : inquirer.prompt([
       {
         type: 'list',
