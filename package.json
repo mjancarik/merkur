@@ -32,6 +32,7 @@
   "scripts": {
     "test": "lerna run test",
     "test:es:version": "lerna run test:es:version",
+    "test:release": "utils/CIRelease.sh",
     "build": "lerna run build",
     "release": "lerna version --force-publish @merkur/create-widget",
     "release:publish": "lerna publish from-git --yes",
