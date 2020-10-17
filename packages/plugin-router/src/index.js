@@ -32,6 +32,7 @@ export function routerPlugin() {
         isMounting: false,
         isRouteActivated: false,
         isBootstrapCalled: false,
+        originalFunctions: {},
       };
 
       bindWidgetToFunctions(widget, widget.router);
@@ -53,6 +54,8 @@ export function routerPlugin() {
         }
       }
 
+      widget.$in.router.originalFunctions.load =
+        widget.$in.component.lifeCycle.load;
       widget.$in.component.lifeCycle.load = loadHook;
 
       hookMethod(widget, 'bootstrap', bootstrapHook);
@@ -105,7 +108,21 @@ async function loadHook(widget, ...rest) {
     throw new Error('The load method is mandatory.');
   }
 
-  return plugin.route.load(widget, { route: plugin.route, args: rest });
+  const globalStatePromise = isFunction(plugin.originalFunctions.load)
+    ? plugin.originalFunctions.load(widget, ...rest)
+    : Promise.resolve({});
+  const routeStatePromise = plugin.route.load(widget, {
+    route: plugin.route,
+    args: rest,
+    globalState: globalStatePromise,
+  });
+
+  const [globalState, routeState] = await Promise.all([
+    globalStatePromise,
+    routeStatePromise,
+  ]);
+
+  return { ...globalState, ...routeState };
 }
 
 // hook Component
