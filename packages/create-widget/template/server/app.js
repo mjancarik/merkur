@@ -89,7 +89,7 @@ app
   .use((req, res) => {
     res.status(404).json({ error: `The endpoint ${req.path} doesn't exist.` });
   })
-  .use((error, req, res) => {
+  .use((error, req, res, next) => { // eslint-disable-line
     res.status(500).json({ error: error.message });
   });
 
