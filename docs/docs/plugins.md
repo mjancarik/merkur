@@ -44,12 +44,13 @@ export function debugPlugin() {
            return originalMethod(...args);
         });
 
-        originalMethod = widget[key];
-        widget[key] = (widget, ...args) => {
-          console.info(`call ${key} method with `, ...args);
+        // similar without hookMethod
+        // originalMethod = widget[key];
+        // widget[key] = (widget, ...args) => {
+        //   console.info(`call ${key} method with `, ...args);
 
-          return originalMethod(widget, ...args);
-        };
+        //   return originalMethod(widget, ...args);
+        // };
       });
 
       return widget;
