@@ -53,3 +53,9 @@ button {
 .merkur__icon img {
   max-width: 100%;
 }
+
+.merkur__error {
+  padding: 24px;
+  background-color: #ed858f;
+  height:100%;
+}
