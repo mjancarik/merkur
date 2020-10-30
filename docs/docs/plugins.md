@@ -15,6 +15,7 @@ We are creating custom debug plugin.
 import { createMerkurWidget, hookMethod, isFunction } from '@merkur/core';
 import { componentPlugin } from '@merkur/plugin-component';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
+import { errorPlugin } from '@merkur/plugin-error';
 
 export function debugPlugin() {
   return {
@@ -61,7 +62,7 @@ export function debugPlugin() {
 export const widgetProperties = {
   name,
   version,
-  $plugins: [componentPlugin, eventEmitterPlugin, debugPlugin],
+  $plugins: [componentPlugin, eventEmitterPlugin, debugPlugin, errorPlugin],
   // ... other properties
 };
 
@@ -70,4 +71,4 @@ const widget = createMerkurWidget(widgetProperties);
 
 We created `debugPlugin` which adds `debug` method in the `setup` lifecycle method and adds tracking to all widget methods in the `create` lifecycle method. We used our new plugin in the `$plugins` property of a specific widget.
 
-Merkur has only three predefined plugins [componentPlugin]({{ '/docs/component-plugin' | relative_url }}),  [eventEmitterPlugin]({{ '/docs/event-emitter-plugin' | relative_url }}) and [httpClientPlugin]({{ '/docs/http-client-plugin' | relative_url }}).
+Merkur has only four predefined plugins [componentPlugin]({{ '/docs/component-plugin' | relative_url }}),  [eventEmitterPlugin]({{ '/docs/event-emitter-plugin' | relative_url }}), [httpClientPlugin]({{ '/docs/http-client-plugin' | relative_url }}) and [errorPlugin]({{ '/docs/error-plugin' | relative_url }}).

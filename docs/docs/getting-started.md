@@ -30,10 +30,16 @@ If you take a look inside the created widget, you'll see this file structure:
 │   package.json
 │   webpack.config.js
 └───server
+│   └───config
+│       │   default.json
+│       │   production.json
+│       │   test.json
+│   └───router
+│       └───error
+│       └───playground
+│       └───widgetAPI
 │   │   app.js
 │   │   server.js
-│   └───view
-│   │    index.ejs
 │   └───static
 │   │   // static files for serving from server
 └───src
@@ -67,7 +73,15 @@ This folder contains the two entry points for your widget — `src/client.js` an
 
 ### server
 
-The server folder contains assets, predefined `index.html` as index.ejs view and most importantly the `app.js` file.
+The server folder contains assets, predefined config per environment, routes and most importantly the `app.js` file.
+
+### server/config
+
+Merkur use [config](https://www.npmjs.com/package/config) module for hierarchical configurations for your widget.
+
+### server/router
+
+This contains individual [Express](https://expressjs.com/en/guide/routing.html) routes. The most important route is widgetAPI which defined widget API interface. You can find here also playground route for development purpose.
 
 ### app.js
 
