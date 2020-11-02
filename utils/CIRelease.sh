@@ -46,12 +46,13 @@ cd "$ROOT_DIR"
 node utils/bumpVersion.js
 
 # Link current @merkur/create-widget version to global scope
-cd "$CREATE_MERKUR_WIDGET_DIR"
-npm link
+#cd "$CREATE_MERKUR_WIDGET_DIR"
+# npm link
 
 # Setup app from example feed
 cd "$ROOT_DIR"
-npx @merkur/create-widget my-widget --view preact
+node packages/create-widget/bin/createWidget.js my-widget --view preact
+#npx @merkur/create-widget my-widget --view preact
 cd my-widget
 
 npm run build
