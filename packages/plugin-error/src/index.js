@@ -94,8 +94,8 @@ export function setErrorInfo(widget, error) {
   }
 }
 
-function emitError(widget, thrownError) {
-  widget.emit(ERROR_EVENTS.ERROR, { thrownError });
+function emitError(widget, error) {
+  widget.emit(ERROR_EVENTS.ERROR, { error });
 }
 
 export async function renderContent(widget, method, properties) {
