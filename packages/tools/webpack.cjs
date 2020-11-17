@@ -1,5 +1,5 @@
 const path = require('path');
-const WebpackShellPlugin = require('webpack-shell-plugin');
+const WebpackShellPlugin = require('webpack-shell-plugin-next');
 const nodeExternals = require('webpack-node-externals');
 const WebpackModules = require('webpack-modules');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
