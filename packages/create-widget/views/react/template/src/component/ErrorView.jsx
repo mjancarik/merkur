@@ -1,6 +1,6 @@
-import { h } from 'preact'; // eslint-disable-line no-unused-vars
+import React from 'react';
 
-export default function Error({ error }) {
+export default function ErrorView({ error }) {
   return (
     <div className="merkur__error">
       <h1>Status: {error.status}</h1>

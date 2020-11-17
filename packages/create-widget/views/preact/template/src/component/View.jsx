@@ -3,11 +3,11 @@ import WidgetContext from './WidgetContext';
 import Welcome from './Welcome';
 import WidgetDescription from './WidgetDescription';
 import Counter from './Counter';
-import Error from './Error';
+import ErrorView from './ErrorView';
 
 export default function View(widget) {
   if (widget.error && widget.error.status) {
-    return <Error error={widget.error} />;
+    return <ErrorView error={widget.error} />;
   }
 
   return (
