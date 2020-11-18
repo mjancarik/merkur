@@ -1,11 +1,11 @@
 import Welcome from './Welcome';
 import Counter from './Counter';
 import WidgetDescription from './WidgetDescription';
-import Error from './Error';
+import ErrorView from './ErrorView';
 
 export default function View(widget, render) {
   if (widget.error && widget.error.status) {
-    return render`${Error(widget)}`;
+    return render`${ErrorView(widget)}`;
   }
 
   return render`
