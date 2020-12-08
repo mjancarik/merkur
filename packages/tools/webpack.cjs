@@ -4,7 +4,7 @@ const nodeExternals = require('webpack-node-externals');
 const WebpackModules = require('webpack-modules');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
   .BundleAnalyzerPlugin;
-const ManifestPlugin = require('webpack-manifest-plugin');
+const { ManifestPlugin } = require('webpack-manifest-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
