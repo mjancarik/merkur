@@ -9,6 +9,7 @@ const IGNORED_PACKAGES = [
   'plugin-component',
   'plugin-event-emitter',
   'plugin-http-client',
+  'plugin-error',
 ];
 
 PACKAGES.forEach((packageName) => {

@@ -9,8 +9,8 @@ const { info, error } = console;
 
 const dir = argv._[0];
 
-let exampleResolver = argv.example
-  ? Promise.resolve({ example: argv.example })
+let viewResolver = argv.view
+  ? Promise.resolve({ view: argv.view })
   : inquirer.prompt([
       {
         type: 'list',
@@ -51,7 +51,7 @@ let exampleResolver = argv.example
       },
     ]);
 
-exampleResolver.then(({ view }) => {
+viewResolver.then(({ view }) => {
   createMerkurApp(dir, view);
 });
 

@@ -7,7 +7,7 @@ title: Getting started - Merkur
 
 ## Installation
 
-We recommend creating a new  [Mekur]({{ '/' | relative_url }}) widget using `@merkur/create-widget`, which sets up everything automatically for you. You can use one of four predefined template libraries [React](https://reactjs.org/), [Preact](https://preactjs.com/), [hyperHTML](https://viperhtml.js.org/hyper.html) and [µhtml](https://github.com/WebReflection/uhtml#readme) but you can easily add others.
+We recommend creating a new  [Mekur]({{ '/' | relative_url }}) widget using `@merkur/create-widget`, which sets up everything automatically for you. You can use one of four predefined template libraries: [React](https://reactjs.org/), [Preact](https://preactjs.com/), [hyperHTML](https://viperhtml.js.org/hyper.html), or [µhtml](https://github.com/WebReflection/uhtml#readme) (or you can easily add your own).
 
 ```shell
 npx @merkur/create-widget <name>
@@ -30,10 +30,16 @@ If you take a look inside the created widget, you'll see this file structure:
 │   package.json
 │   webpack.config.js
 └───server
+│   └───config
+│       │   default.json
+│       │   production.json
+│       │   test.json
+│   └───router
+│       └───error
+│       └───playground
+│       └───widgetAPI
 │   │   app.js
 │   │   server.js
-│   └───view
-│   │    index.ejs
 │   └───static
 │   │   // static files for serving from server
 └───src
@@ -57,18 +63,26 @@ You'll notice a few extra files for [ESLint](https://eslint.org/), [Babel](https
 The package.json contains predefined dependencies and defines some scripts:
 
 - `npm run dev` - start the widget in development mode, and watch source files for changes
-- `npm run build` - build the widget in production mode
+- `npm run build` - build the widget in production mode
 - `npm test` - run the tests
 - `npm start` - start the app in production mode after you've built it
 
 ### src
 
-This contains the two entry points for your widget — src/client.js and src/server.js. Of course you can add other files and folders.
+This folder contains the two entry points for your widget — `src/client.js` and `src/server.js`. Here you would store all code necessary for displaying the widget, such as React components.
 
 ### server
 
-The server folder contains assets, predefined `index.html` as index.ejs view and the most important `app.js` file.
+The server folder contains assets, predefined config per environment, routes and most importantly the `app.js` file.
+
+### server/config
+
+Merkur use [config](https://www.npmjs.com/package/config) module for hierarchical configurations for your widget.
+
+### server/router
+
+This contains individual [Express](https://expressjs.com/en/guide/routing.html) routes. The most important route is widgetAPI which defined widget API interface. You can find here also playground route for development purpose.
 
 ### app.js
 
-This contains normal [Express](https://expressjs.com/) server with predefined middlewares.
+This contains a basic [Express](https://expressjs.com/) server with predefined middleware. 

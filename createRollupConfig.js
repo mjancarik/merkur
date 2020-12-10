@@ -49,6 +49,8 @@ const babelUMDConfig = {
           '@merkur/plugin-http-client': getGlobalName(
             '@merkur/plugin-http-client'
           ),
+          '@merkur/plugin-error': getGlobalName('@merkur/plugin-error'),
+          '@merkur/integration': getGlobalName('@merkur/integration'),
           'node-fetch': 'fetch',
         },
         exactGlobals: true,
@@ -91,6 +93,12 @@ function createRollupESConfig() {
     {
       dir: './lib',
       entryFileNames: '[name].cjs',
+      format: 'cjs',
+      exports: 'named',
+    },
+    {
+      dir: './lib',
+      entryFileNames: '[name].js',
       format: 'cjs',
       exports: 'named',
     },

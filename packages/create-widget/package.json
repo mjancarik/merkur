@@ -1,6 +1,6 @@
 {
   "name": "@merkur/create-widget",
-  "version": "0.21.3",
+  "version": "0.22.0",
   "description": "CLI for creating merkur widget easily.",
   "bin": {
     "merkur-create-widget": "./bin/createWidget.js"
@@ -36,6 +36,6 @@
     "execa": "^4.0.3",
     "fs-extra": "^9.0.1",
     "inquirer": "^7.3.3",
-    "yargs": "^15.4.1"
+    "yargs": "^16.0.3"
   }
 }

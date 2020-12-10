@@ -3,8 +3,13 @@ import WidgetContext from './WidgetContext';
 import Welcome from './Welcome';
 import WidgetDescription from './WidgetDescription';
 import Counter from './Counter';
+import ErrorView from './ErrorView';
 
 export default function View(widget) {
+  if (widget.error && widget.error.status) {
+    return <ErrorView error={widget.error} />;
+  }
+
   return (
     <WidgetContext.Provider value={widget}>
       <div className="merkur__page">

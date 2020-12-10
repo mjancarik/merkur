@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.22.0](https://github.com/mjancarik/merkur/compare/v0.21.3...v0.22.0) (2020-10-15)
+
+
+### Bug Fixes
+
+* 🐛 es version tests ([86d3604](https://github.com/mjancarik/merkur/commit/86d36049ae2b2da66152fe4af541124eb5af6e9f))
+* 🐛 fixed state resetting while unmounting and changing widg ([#49](https://github.com/mjancarik/merkur/issues/49)) ([9bef7f8](https://github.com/mjancarik/merkur/commit/9bef7f822a44cd7e690863ef76b3c6d6164cd1bd))
+
+
+### Features
+
+* 🎸 export umd file in integration module ([3a75802](https://github.com/mjancarik/merkur/commit/3a758020c59ee6671edade27482de64fa427405d))
+
+
+
+
+
 ## [0.21.3](https://github.com/mjancarik/merkur/compare/v0.21.2...v0.21.3) (2020-10-01)
 
 

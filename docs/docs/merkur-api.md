@@ -7,23 +7,23 @@ title: Merkur Top-Level API
 
 ## Module
 
-Merkur is tiny extensible library and has got a few base methods by default.
+Merkur is a tiny extensible library and has got a few base methods by default.
 
-- **createMerkur** - creates new instance of merkur in the global context under `__merkur__` variable
-- **removeMerkur** - removes merkur variable from global context
-- **getMerkur** - returns merkur instance
+- **createMerkur** - creates new instance of Merkur in the global context under the `__merkur__` variable
+- **removeMerkur** - removes the Merkur variable from global context
+- **getMerkur** - returns the Merkur instance
 - **createMerkurWidget** - factory function for your widget
 
-Module has some other utils methods which is useful for plugins.
+Module has some other utils methods which are useful for plugins.
 
 - **setDefaultValueForUndefined** - set defined default value for undefined keys
 - **bindWidgetToFunctions** - auto bind widget property as first parameter
-- **hookMethod** - for creating hook on defined widget method, example in [plugins section]({{ '/docs/plugins' | relative_url }})
-- **isFunction** - for detection function, example in [plugins section]({{ '/docs/plugins' | relative_url }})
+- **hookMethod** - create a hook on a defined widget method, example use in [plugins section]({{ '/docs/plugins' | relative_url }})
+- **isFunction** - detect whether a value is a function, example use in [plugins section]({{ '/docs/plugins' | relative_url }})
 
 ### createMerkur
 
-The method accepts an object with property `$plugins` which can extend merkur interface. The plugin `setup` method can be called more times than once. Therefore you need to make an extra check so you won't redefine the plugin.
+The method accepts an object with property `$plugins` which can extend Merkur interface. Please note that the plugin `setup` method may be called more than once - you will have to make an extra check so you won't redefine the plugin accidentally.
 
 ```javascript
 import { createMerkur } from '@merkur/core';
@@ -48,7 +48,7 @@ const merkur = createMerkur({
 
 ## Merkur instance
 
-Merkur instance contains three predefined properties `$in`, `$external` and `$dependencies`. The property `$in` is for internal usage of merkur plugins or merkur itself. Other properties are for your own usage. The properties `$external` and `$dependencies` are for storing values and sharing dependencies.
+The Merkur instance contains three predefined properties `$in`, `$external` and `$dependencies`. The property `$in` is for internal usage of merkur plugins or Merkur itself. Other properties are for your own usage. The properties `$external` and `$dependencies` are for storing values and sharing dependencies.
 
 ```javascript
 import { getMerkur } from '@merkur/core';
@@ -65,7 +65,7 @@ console.log(getMerkur());
 // };
 ```
 
-Other important part of Merkur instance are methods `register` and `create`. The `register` method register widget to merkur with name, version and createWidget properties. The `create` method returns a new instace of the registered widget with defined properties.
+Other important part of the Merkur instance are methods `register` and `create`. The `register` method register widget to Merkur with a `name`, `version` and `createWidget` properties. The `create` method returns a new instace of the registered widget with defined properties.
 
 ```javascript
 import { getMerkur } from '@merkur/core';

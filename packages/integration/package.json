@@ -1,9 +1,10 @@
 {
   "name": "@merkur/integration",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "Merkur module for easy integration with other apps.",
-  "main": "lib/index.cjs",
-  "module": "lib/index.mjs",
+  "main": "lib/index",
+  "module": "lib/index",
+  "unpkg": "lib/index.umd.js",
   "sideEffects": false,
   "exports": {
     ".": {
@@ -14,6 +15,7 @@
     "./server/index.js": "./server/index.js"
   },
   "browser": {
+    "./lib/index.js": "./lib/index.es5.js",
     "./lib/index.cjs": "./lib/index.es5.js",
     "./lib/index.mjs": "./lib/index.mjs"
   },
@@ -43,8 +45,8 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.21.0",
-    "rollup": "^2.26.9"
+    "@merkur/core": "^0.22.0",
+    "rollup": "^2.29.0"
   },
   "peerDependencies": {
     "@merkur/core": "*"

@@ -1,0 +1,58 @@
+{
+  "name": "@merkur/plugin-error",
+  "version": "0.22.0",
+  "description": "Merkur plugin for error handling.",
+  "main": "lib/index",
+  "module": "lib/index",
+  "unpkg": "lib/index.umd.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs"
+    },
+    "./server": "./server/index.js",
+    "./server/": "./server/index.js",
+    "./server/index.js": "./server/index.js"
+  },
+  "browser": {
+    "./lib/index.js": "./lib/index.es5.js",
+    "./lib/index.cjs": "./lib/index.es5.js",
+    "./lib/index.mjs": "./lib/index.mjs"
+  },
+  "scripts": {
+    "preversion": "npm test",
+    "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check --module es9 ./lib/index.mjs",
+    "build": "node_modules/.bin/rollup -c",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "merkur",
+    "plugin",
+    "error"
+  ],
+  "author": "Anna Frankova",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "devDependencies": {
+    "@merkur/core": "^0.22.0",
+    "@merkur/plugin-component": "^0.22.0",
+    "rollup": "^2.29.0"
+  },
+  "peerDependencies": {
+    "@merkur/core": "^0.21.0",
+    "@merkur/plugin-component": "^0.21.0"
+  }
+}

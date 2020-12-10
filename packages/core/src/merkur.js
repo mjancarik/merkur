@@ -1,4 +1,4 @@
-import { isUndefined, isFunction } from './utils';
+import { isFunction } from './utils';
 
 function register({ name, version, createWidget }) {
   const merkur = getMerkur();
@@ -60,13 +60,16 @@ export function getMerkur() {
 }
 
 function getGlobalContext() {
-  if (!isUndefined(self)) {
+  if (typeof globalThis !== 'undefined') {
+    return globalThis;
+  }
+  if (typeof self !== 'undefined') {
     return self;
   }
-  if (!isUndefined(window)) {
+  if (typeof window !== 'undefined') {
     return window;
   }
-  if (!isUndefined(global)) {
+  if (typeof global !== 'undefined') {
     return global;
   }
 

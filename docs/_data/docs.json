@@ -38,7 +38,7 @@
       ]
     },
     {
-      "title": "Integration with app",
+      "title": "Integration with host app",
       "url": "/docs/integration-with-app",
       "submenu": [
         {
@@ -150,6 +150,20 @@
         {
           "title": "request method",
           "url": "/docs/http-client-plugin#request"
+        }
+      ]
+    },
+    {
+      "title": "Error plugin",
+      "url": "/docs/error-plugin",
+      "submenu": [
+        {
+          "title": "Installation",
+          "url": "/docs/error-plugin#installation"
+        },
+        {
+          "title": "Operation",
+          "url": "/docs/error-plugin#operation"
         }
       ]
     }
