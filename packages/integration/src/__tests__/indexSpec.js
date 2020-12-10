@@ -1,5 +1,7 @@
 import { loadStyleAssets, loadScriptAssets } from '../index';
 
+global.console.warn = jest.fn();
+
 describe('Merkur component', () => {
   let assets = [];
   let fakeAssetObjects = [];
@@ -52,11 +54,11 @@ describe('Merkur component', () => {
       },
       {
         name: 'undefined.js',
-        test: 'return typeof window !== "undefined"',
         type: 'script',
         source: {
           es9: undefined,
-          es5: undefined,
+          es5:
+            'http://localhost:4444/static/es5/undefined.6961af42bfa3596bb147.js',
         },
       },
       {
@@ -75,11 +77,6 @@ describe('Merkur component', () => {
         type: 'stylesheet',
         source:
           'http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css',
-      },
-      {
-        name: 'undefined.css',
-        type: 'stylesheet',
-        source: undefined,
       },
       {
         type: 'inlineStyle',

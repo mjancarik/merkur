@@ -59,17 +59,17 @@ function loadStyleAssets(assets) {
   const styleElements = document.getElementsByTagName('style');
   const stylesToRender = assets.filter(
     (asset) =>
-      (asset.type === 'stylesheet' &&
-        asset.source &&
+      asset.source &&
+      ((asset.type === 'stylesheet' &&
         !document.head.querySelector(`link[href='${asset.source}']`)) ||
-      (asset.type === 'inlineStyle' &&
-        Array.from(styleElements).reduce((acc, cur) => {
-          if (cur.innerHTML === asset.source) {
-            return false;
-          }
+        (asset.type === 'inlineStyle' &&
+          Array.from(styleElements).reduce((acc, cur) => {
+            if (cur.innerHTML === asset.source) {
+              return false;
+            }
 
-          return acc;
-        }, true))
+            return acc;
+          }, true)))
   );
 
   return Promise.all(stylesToRender.map((asset) => _loadStyle(asset)));
@@ -77,33 +77,45 @@ function loadStyleAssets(assets) {
 
 function loadScriptAssets(assets) {
   const scriptElements = document.getElementsByTagName('script');
-  const scriptsToRender = assets
-    .filter((asset) => ['script', 'inlineScript'].includes(asset.type))
-    .map((asset) => {
-      const { source } = asset;
-      const _asset = Object.assign({}, asset);
+  const scriptsToRender = assets.reduce((scripts, asset) => {
+    const { source } = asset;
+    const _asset = Object.assign({}, asset);
 
-      if (typeof source !== 'string') {
-        _asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
+    if (_asset.type !== 'script' && _asset.type !== 'inlineScript') {
+      return scripts;
+    }
+
+    if (source === Object(source)) {
+      _asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
+
+      if (!_asset.source) {
+        console.warn(
+          `Asset '${_asset.name}' is missing ES variant and could not be loaded.`
+        );
+        return scripts;
       }
+    }
 
-      return _asset;
-    })
-    .filter(
-      (asset) =>
-        ((asset.type === 'script' &&
-          asset.source &&
-          !document.querySelector(`script[src='${asset.source}']`)) ||
-          (asset.type === 'inlineScript' &&
-            Array.from(scriptElements).reduce((acc, cur) => {
-              if (cur.text === asset.source) {
-                return false;
-              }
+    if (
+      document.querySelector(`script[src='${_asset.source}']`) ||
+      Array.from(scriptElements).reduce((acc, cur) => {
+        if (cur.text === _asset.source) {
+          return true;
+        }
 
-              return acc;
-            }, true))) &&
-        (asset.test ? !testScript.test(asset.test) : true)
-    );
+        return acc;
+      }, false) ||
+      _asset.test
+        ? testScript.test(_asset.test)
+        : false
+    ) {
+      return scripts;
+    }
+
+    scripts.push(_asset);
+
+    return scripts;
+  }, []);
 
   return Promise.all(scriptsToRender.map((asset) => _loadScript(asset)));
 }
