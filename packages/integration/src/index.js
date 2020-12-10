@@ -77,40 +77,46 @@ function loadStyleAssets(assets) {
 
 function loadScriptAssets(assets) {
   const scriptElements = document.getElementsByTagName('script');
-  const scriptsToRender = assets
-    .reduce((scripts, asset) => {
-      const { source } = asset;
-      const _asset = Object.assign({}, asset);
+  const scriptsToRender = assets.reduce((scripts, asset) => {
+    const { source } = asset;
 
-      if (source === Object(source)) {
-        _asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
-
-        if (!_asset.source) {
-          console.warn(
-            `Asset '${_asset.name}' is missing ES variant and could not be loaded.`
-          );
-          return scripts;
-        }
-      }
-
-      scripts.push(_asset);
-
+    if (asset.type !== 'script' && asset.type !== 'inlineScript') {
       return scripts;
-    }, [])
-    .filter(
-      (asset) =>
-        ((asset.type === 'script' &&
-          !document.querySelector(`script[src='${asset.source}']`)) ||
-          (asset.type === 'inlineScript' &&
-            Array.from(scriptElements).reduce((acc, cur) => {
-              if (cur.text === asset.source) {
-                return false;
-              }
+    }
 
-              return acc;
-            }, true))) &&
-        (asset.test ? !testScript.test(asset.test) : true)
-    );
+    const _asset = Object.assign({}, asset);
+
+    if (source === Object(source)) {
+      _asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
+
+      if (!_asset.source) {
+        console.warn(
+          `Asset '${_asset.name}' is missing ES variant and could not be loaded.`
+        );
+        return scripts;
+      }
+    }
+
+    if (
+      document.querySelector(`script[src='${_asset.source}']`) ||
+      Array.from(scriptElements).reduce((acc, cur) => {
+        if (cur.text === asset.source) {
+          return true;
+        }
+
+        return acc;
+      }, false) ||
+      asset.test
+        ? testScript.test(asset.test)
+        : false
+    ) {
+      return scripts;
+    }
+
+    scripts.push(_asset);
+
+    return scripts;
+  }, []);
 
   return Promise.all(scriptsToRender.map((asset) => _loadScript(asset)));
 }
