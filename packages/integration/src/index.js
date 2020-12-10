@@ -79,12 +79,11 @@ function loadScriptAssets(assets) {
   const scriptElements = document.getElementsByTagName('script');
   const scriptsToRender = assets.reduce((scripts, asset) => {
     const { source } = asset;
+    const _asset = Object.assign({}, asset);
 
-    if (asset.type !== 'script' && asset.type !== 'inlineScript') {
+    if (_asset.type !== 'script' && _asset.type !== 'inlineScript') {
       return scripts;
     }
-
-    const _asset = Object.assign({}, asset);
 
     if (source === Object(source)) {
       _asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
@@ -100,14 +99,14 @@ function loadScriptAssets(assets) {
     if (
       document.querySelector(`script[src='${_asset.source}']`) ||
       Array.from(scriptElements).reduce((acc, cur) => {
-        if (cur.text === asset.source) {
+        if (cur.text === _asset.source) {
           return true;
         }
 
         return acc;
       }, false) ||
-      asset.test
-        ? testScript.test(asset.test)
+      _asset.test
+        ? testScript.test(_asset.test)
         : false
     ) {
       return scripts;
