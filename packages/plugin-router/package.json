@@ -44,12 +44,12 @@
     "@merkur/core": "^0.22.0",
     "@merkur/plugin-component": "^0.22.0",
     "@merkur/plugin-event-emitter": "^0.22.0",
-    "rollup": "^2.29.0"
+    "rollup": "^2.36.2"
   },
   "peerDependencies": {
-    "@merkur/core": "^0.21.0",
-    "@merkur/plugin-component": "^0.21.0",
-    "@merkur/plugin-event-emitter": "^0.21.0"
+    "@merkur/core": "^0.22.0",
+    "@merkur/plugin-component": "^0.22.0",
+    "@merkur/plugin-event-emitter": "^0.22.0"
   },
   "dependencies": {
     "universal-router": "^9.0.1"
