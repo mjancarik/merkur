@@ -10,6 +10,7 @@ const IGNORED_PACKAGES = [
   'plugin-event-emitter',
   'plugin-http-client',
   'plugin-error',
+  'tool-storybook',
 ];
 
 PACKAGES.forEach((packageName) => {
