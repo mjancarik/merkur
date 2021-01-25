@@ -41,6 +41,8 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
+    "@babel/plugin-proposal-optional-chaining": "^7.12.7",
     "@merkur/core": "^0.22.0",
     "@merkur/plugin-component": "^0.22.0",
     "rollup": "^2.36.2"
