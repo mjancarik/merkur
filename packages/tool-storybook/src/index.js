@@ -1,6 +1,6 @@
 import { getMerkur } from '@merkur/core';
 
-function createStoryLoader({ render, widgetProperties }) {
+function createWidgetLoader({ render, widgetProperties }) {
   let lastStory = {};
 
   return async (args) => {
@@ -40,4 +40,4 @@ function createStoryLoader({ render, widgetProperties }) {
   };
 }
 
-export { createStoryLoader };
+export { createWidgetLoader };

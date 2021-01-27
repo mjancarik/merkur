@@ -5,7 +5,7 @@
 ![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@merkur/plugin-component/latest)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-The module is integration with [storybook](https://storybook.js.org/) tool.
+The module is integration [Merkur](https://merkur.js.org/) with [storybook](https://storybook.js.org/) tool.
 
 **[Documentation for @merkur/tool-storybook](https://merkur.js.org/docs/tool-storybook).**
 

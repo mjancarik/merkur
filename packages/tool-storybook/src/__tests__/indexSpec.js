@@ -1,10 +1,10 @@
-import { createStoryLoader } from '../index';
+import { createWidgetLoader } from '../index';
 
 import { getMerkur, createMerkurWidget } from '@merkur/core';
 import { componentPlugin } from '@merkur/plugin-component';
 
 describe('Merkur tool storybook', () => {
-  describe('createStoryLoader method', () => {
+  describe('createWidgetLoader method', () => {
     let render;
     let widgetProperties;
     let storyArgs;
@@ -32,7 +32,7 @@ describe('Merkur tool storybook', () => {
     });
 
     it('should return empty widget for not defined props', async () => {
-      let loader = createStoryLoader({ widgetProperties, render });
+      let loader = createWidgetLoader({ widgetProperties, render });
 
       delete storyArgs.args.widget.props;
       let { widget } = await loader(storyArgs);
@@ -41,7 +41,7 @@ describe('Merkur tool storybook', () => {
     });
 
     it('should return widget instance for defined props', async () => {
-      let loader = createStoryLoader({ widgetProperties, render });
+      let loader = createWidgetLoader({ widgetProperties, render });
 
       let { widget } = await loader(storyArgs);
 
@@ -51,7 +51,7 @@ describe('Merkur tool storybook', () => {
     });
 
     it('should rerender widget for update', async () => {
-      let loader = createStoryLoader({ widgetProperties, render });
+      let loader = createWidgetLoader({ widgetProperties, render });
 
       let { widget } = await loader(storyArgs);
       widget.setState({});
@@ -60,7 +60,7 @@ describe('Merkur tool storybook', () => {
     });
 
     it('should unmount previous widget if story is changed', async () => {
-      let loader = createStoryLoader({ widgetProperties, render });
+      let loader = createWidgetLoader({ widgetProperties, render });
 
       let { widget } = await loader(storyArgs);
       spyOn(widget, 'unmount');
@@ -71,7 +71,7 @@ describe('Merkur tool storybook', () => {
     });
 
     it('should defined custom function on widget through story args', async () => {
-      let loader = createStoryLoader({ widgetProperties, render });
+      let loader = createWidgetLoader({ widgetProperties, render });
 
       storyArgs.args.widget.customFunction = () => {};
       let { widget } = await loader(storyArgs);
