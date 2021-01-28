@@ -8,6 +8,7 @@ install:
 
 jobs:
   include:
+    - stage: "test"
     - name: "Unit Tests"
       script: npm test -- -- -- --coverage
       after_script:
@@ -18,8 +19,17 @@ jobs:
       script: npm run build
     - name: "Check es versions"
       script: npm run test:es:version
-    - name: "Check new release"
-      script: npm run test:release
+    - stage: "Check template"
+    - name: "React"
+      script: npm run test:release -- react
+    - name: "Preact"
+      script: npm run test:release -- preact
+    - name: "Hyper"
+      script: npm run test:release -- hyper
+    - name: "uHtml"
+      script: npm run test:release -- uhtml
+    - name: "Vanilla"
+      script: npm run test:release -- vanilla
     - if: tag =~ ^v # Run only for tags
       stage: "deploy"
       script:
