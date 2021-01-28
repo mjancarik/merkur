@@ -19,7 +19,7 @@ jobs:
       script: npm run build
     - name: "Check es versions"
       script: npm run test:es:version
-    - stage: "Check template"
+    - stage: "check template"
     - name: "React"
       script: npm run test:release -- react
     - name: "Preact"
