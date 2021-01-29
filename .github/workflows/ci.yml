@@ -41,6 +41,11 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
       - name: Load node_modules
         uses: actions/cache@v2
         with:
@@ -48,6 +53,7 @@ jobs:
           key: ${{ github.sha }}-node-modules
       - name: Bootstrap monorepo
         run: npx lerna bootstrap
+
       - name: Unit tests
         run: npm test -- -- -- --coverage
       - name: Linter
