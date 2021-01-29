@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Merkur integration to Storybook
+title: Integrating Storybook into Merkur
 ---
 
 # Storybook
