@@ -34,8 +34,10 @@ jobs:
       - name: Cache node_modules
         uses: actions/cache@v2
         with:
-          path: node_modules
-          key: ${{ github.sha }}-node-modules
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
   test:
     needs: setup
@@ -49,10 +51,10 @@ jobs:
       - name: Load node_modules
         uses: actions/cache@v2
         with:
-          path: node_modules
-          key: ${{ github.sha }}-node-modules
-      - name: Bootstrap monorepo
-        run: npx lerna bootstrap
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
 
       - name: Unit tests
         run: npm test -- -- -- --coverage
