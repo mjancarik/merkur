@@ -55,7 +55,7 @@ export const decorators = [
 ];
 ```
 
-At second we add to storybook's webpack config handling `*.mjs` files. Fortunately, it's easy.
+Then, we add to storybook's webpack config handling of `*.mjs` files. Fortunately, it's easy.
 
 ```javascript
 // ./storybook/main.js
