@@ -33,14 +33,19 @@ jobs:
           path: |
             node_modules
             */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
 
       - name: Install dependencies
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm install
       - name: Bootstrap monorepo
-        if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npx lerna bootstrap
+
+      - name: Cache packages lib
+        uses: actions/cache@v2
+        with:
+          path: packages/*/lib
+          key: ${{ runner.os }}-lib-${{ github.sha }}
 
   test:
     needs: setup
@@ -57,7 +62,13 @@ jobs:
           path: |
             node_modules
             */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+
+      - name: Load lib
+        uses: actions/cache@v2
+        with:
+          path: packages/*/lib
+          key: ${{ runner.os }}-lib-${{ github.sha }}
 
       - name: Unit tests
         run: npm test -- -- -- --coverage
