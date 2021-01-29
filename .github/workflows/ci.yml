@@ -55,7 +55,7 @@ jobs:
       - name: Linter
         run: npm run lint
 
-      - naem: Build packages
+      - name: Build packages
         run: npm run build
       - name: Script version check
         run: npm run test:es:version
