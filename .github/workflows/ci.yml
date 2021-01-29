@@ -34,9 +34,7 @@ jobs:
       - name: Cache node_modules
         uses: actions/cache@v2
         with:
-          path: |
-            node_modules
-            **/node_modules
+          path: node_modules
           key: ${{ github.sha }}-node-modules
 
   test:
@@ -46,15 +44,14 @@ jobs:
       - name: Load node_modules
         uses: actions/cache@v2
         with:
-          path: |
-            node_modules
-            **/node_modules
+          path: node_modules
           key: ${{ github.sha }}-node-modules
+      - name: Bootstrap monorepo
+        run: npx lerna bootstrap
       - name: Unit tests
         run: npm test -- -- -- --coverage
       - name: Linter
         run: npm run lint
-
       - name: Build packages
         run: npm run build
       - name: Script version check
