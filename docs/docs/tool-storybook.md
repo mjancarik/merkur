@@ -38,7 +38,7 @@ import WidgetContext from '../src/component/WidgetContext';
 // defined our custom widget loader
 export const loaders = [
   createMerkurLoader({
-    render: forceReRender, // widget must have opportunity to update storybook playground
+    render: forceReRender, // widget must be able to update the storybook playground
     widgetProperties, // created widget properties
   })
 ];
