@@ -40,7 +40,7 @@ jobs:
           key: ${{ github.sha }}-node-modules
 
   test:
-    needs: build
+    needs: setup
     runs-on: ubuntu-latest
     steps:
       - name: Load node_modules
