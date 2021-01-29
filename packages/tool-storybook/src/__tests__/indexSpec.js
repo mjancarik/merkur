@@ -70,7 +70,7 @@ describe('Merkur tool storybook', () => {
       expect(widget.unmount).toHaveBeenCalled();
     });
 
-    it('should defined custom function on widget through story args', async () => {
+    it('should define custom function on widget through story args', async () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
       storyArgs.args.widget.customFunction = () => {};
