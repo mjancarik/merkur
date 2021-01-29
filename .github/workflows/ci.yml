@@ -16,7 +16,7 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
-  build:
+  setup:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
@@ -31,8 +31,31 @@ jobs:
       - name: Bootstrap monorepo
         run: npx lerna bootstrap
 
-      - name: Build packages
-        run: npm run build
+      - name: Cache node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            **/node_modules
+          key: ${{ github.sha }}-node-modules
 
-      - name: Test packages
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Load node_modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            **/node_modules
+          key: ${{ github.sha }}-node-modules
+      - name: Unit tests
         run: npm test -- -- -- --coverage
+      - name: Linter
+        run: npm run lint
+
+      - naem: Build packages
+        run: npm run build
+      - name: Script version check
+        run: npm run test:es:version
