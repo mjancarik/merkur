@@ -109,7 +109,7 @@ import Counter from './Counter';
 export default {
   title: 'Counter',
   args: {
-    // Every Merkur stories must have defined props property
+    // Every Merkur story must have defined props property
     widget: {
       props: {},
     }
