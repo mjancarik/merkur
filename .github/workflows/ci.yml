@@ -26,18 +26,21 @@ jobs:
         with:
           node-version: 14
 
-      - name: Install dependencies
-        run: npm ci
-      - name: Bootstrap monorepo
-        run: npx lerna bootstrap
-
       - name: Cache node_modules
+        id: cache-modules
         uses: actions/cache@v2
         with:
           path: |
             node_modules
             */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: npm install
+      - name: Bootstrap monorepo
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: npx lerna bootstrap
 
   test:
     needs: setup
@@ -54,7 +57,7 @@ jobs:
           path: |
             node_modules
             */*/node_modules
-          key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-${{ hashFiles('**/package.json') }}
 
       - name: Unit tests
         run: npm test -- -- -- --coverage
