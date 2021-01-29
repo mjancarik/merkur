@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches: [ $default-branch ]
+  pull_request:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  setup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Cache node_modules
+        id: cache-modules
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-modules.outputs.cache-hit != 'true'
+        run: npm install
+      - name: Bootstrap monorepo
+        run: npx lerna bootstrap
+
+      - name: Cache libs
+        uses: actions/cache@v2
+        with:
+          path: packages/*/lib
+          key: ${{ runner.os }}-lib-${{ github.sha }}
+
+  test:
+    needs: setup
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Load node_modules from cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+
+      - name: Load libs from cache
+        uses: actions/cache@v2
+        with:
+          path: packages/*/lib
+          key: ${{ runner.os }}-lib-${{ github.sha }}
+
+
+      - name: Unit tests
+        run: npm test -- -- -- --coverage
+      - name: Linter
+        run: npm run lint
+      - name: Build packages
+        run: npm run build
+      - name: Script version check
+        run: npm run test:es:version
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        preview: ['react', 'preact', 'hyper', 'uhtml', 'vanilla']
+
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Load node_modules from cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+
+      - name: Load libs from cache
+        uses: actions/cache@v2
+        with:
+          path: packages/*/lib
+          key: ${{ runner.os }}-lib-${{ github.sha }}
+
+
+      - name: Test release ${{ matrix.preview }}
+        run: npm run test:release -- ${{ matrix.preview }}
