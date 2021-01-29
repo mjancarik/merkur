@@ -17,7 +17,7 @@ After that we install merkur module for easy integration.
 npm i @merkur/tool-storybook --save-dev
 ```
 
-Now we must update two storybook files `./storybook/preview.js` and `./storybook/main.js`. At first we update our `./storybook/preview.js` similar to example below.
+Now we must update two storybook files `./storybook/preview.js` and `./storybook/main.js`. At first we update our `./storybook/preview.js` similarly to the example below.
 
 ```javascript
 // ./storybook/preview
