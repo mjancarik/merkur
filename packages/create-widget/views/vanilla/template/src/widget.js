@@ -1,19 +1,23 @@
 import { componentPlugin } from '@merkur/plugin-component';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
-import { name, version } from '../package.json';
+import pkg from '../package.json';
 
 export const widgetProperties = {
-  name,
-  version,
+  name: pkg.name,
+  version: pkg.version,
   $plugins: [componentPlugin, eventEmitterPlugin],
   assets: [
     {
+      name: 'polyfill.js',
       type: 'script',
-      source: 'http://localhost:4444/static/widget-client.js',
     },
     {
+      name: 'widget.js',
+      type: 'script',
+    },
+    {
+      name: 'widget.css',
       type: 'stylesheet',
-      source: 'http://localhost:4444/static/widget-client.css',
     },
   ],
   onClick(widget) {
