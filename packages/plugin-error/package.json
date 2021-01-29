@@ -49,7 +49,7 @@
   "devDependencies": {
     "@merkur/core": "^0.22.0",
     "@merkur/plugin-component": "^0.22.0",
-    "rollup": "^2.36.2"
+    "rollup": "^2.38.1"
   },
   "peerDependencies": {
     "@merkur/core": "^0.22.0",
