@@ -131,8 +131,7 @@ jobs:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
 
-      #- run: npm run release:publish
-      - run: echo 'release'
+      - run: npm run release:publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
