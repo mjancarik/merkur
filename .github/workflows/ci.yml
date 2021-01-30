@@ -9,6 +9,7 @@ on:
 
 jobs:
   setup:
+    name: Setup environment
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -38,6 +39,7 @@ jobs:
           key: ${{ runner.os }}-lib-${{ github.sha }}
 
   test:
+    name: Test
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -71,7 +73,7 @@ jobs:
         run: npm run test:es:version
 
   release:
-    needs: test
+    needs: Test release
     runs-on: ubuntu-latest
     strategy:
       matrix:
