@@ -73,7 +73,8 @@ jobs:
         run: npm run test:es:version
 
   release:
-    needs: Test release
+    name: Test release
+    needs: test
     runs-on: ubuntu-latest
     strategy:
       matrix:
