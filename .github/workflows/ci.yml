@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: 14
 
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: 14
 
@@ -84,7 +84,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: 14
 
@@ -105,3 +105,35 @@ jobs:
 
       - name: Test release ${{ matrix.preview }}
         run: npm run test:release -- ${{ matrix.preview }}
+
+  publish:
+    if: github.event_name == 'push' && contains(github.ref, '/tags/v')
+    name: Publish to npm
+    needs: release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Load node_modules from cache
+        uses: actions/cache@v2
+        with:
+          path: |
+            node_modules
+            */*/node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package.json') }}
+
+      - name: Load libs from cache
+        uses: actions/cache@v2
+        with:
+          path: packages/*/lib
+          key: ${{ runner.os }}-lib-${{ github.sha }}
+
+      #- run: npm run release:publish
+      - run: echo 'release'
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+
