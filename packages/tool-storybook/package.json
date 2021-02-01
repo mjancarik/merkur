@@ -1,6 +1,6 @@
 {
   "name": "@merkur/tool-storybook",
-  "version": "0.23.1",
+  "version": "0.23.2",
   "description": "Merkur integration to storybook tool.",
   "main": "lib/index",
   "module": "lib/index",
@@ -43,8 +43,8 @@
   "devDependencies": {
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.12.1",
     "@babel/plugin-proposal-optional-chaining": "^7.12.7",
-    "@merkur/core": "^0.23.1",
-    "@merkur/plugin-component": "^0.23.1",
+    "@merkur/core": "^0.23.2",
+    "@merkur/plugin-component": "^0.23.2",
     "rollup": "^2.36.2"
   },
   "peerDependencies": {

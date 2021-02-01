@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-router",
-  "version": "0.23.1",
+  "version": "0.23.2",
   "description": "Merkur router plugin.",
   "main": "lib/index",
   "module": "lib/index",
@@ -41,9 +41,9 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.23.1",
-    "@merkur/plugin-component": "^0.23.1",
-    "@merkur/plugin-event-emitter": "^0.23.1",
+    "@merkur/core": "^0.23.2",
+    "@merkur/plugin-component": "^0.23.2",
+    "@merkur/plugin-event-emitter": "^0.23.2",
     "rollup": "^2.38.1"
   },
   "peerDependencies": {
