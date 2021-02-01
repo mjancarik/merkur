@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-error",
-  "version": "0.22.0",
+  "version": "0.23.0",
   "description": "Merkur plugin for error handling.",
   "main": "lib/index",
   "module": "lib/index",
@@ -47,8 +47,8 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.22.0",
-    "@merkur/plugin-component": "^0.22.0",
+    "@merkur/core": "^0.23.0",
+    "@merkur/plugin-component": "^0.23.0",
     "rollup": "^2.38.1"
   },
   "peerDependencies": {

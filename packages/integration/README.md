@@ -24,6 +24,8 @@ npm run dev // Point your browser at http://localhost:4444/
   <img alt="Merkur example, hello widget" src="https://raw.githubusercontent.com/mjancarik/merkur/master/images/hello-widget.png" />
 </p>
 
+You can see live [demo](https://merkur.js.org/demo).
+
 ## API
 
 Point your browser at `http://localhost:4444/widget`.

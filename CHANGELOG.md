@@ -3,6 +3,98 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.23.0](https://github.com/mjancarik/merkur/compare/v0.22.0...v0.23.0) (2021-02-01)
+
+
+* Storybook (#60) ([640e3e8](https://github.com/mjancarik/merkur/commit/640e3e8490317497eea9c28f669b406608cbfcdc)), closes [#60](https://github.com/mjancarik/merkur/issues/60)
+
+
+### Bug Fixes
+
+* 🐛 error with not declared variables ([67d07a6](https://github.com/mjancarik/merkur/commit/67d07a6971fd3d21bee34ddafd22252299411006))
+* 🐛 express default error handler ([327a018](https://github.com/mjancarik/merkur/commit/327a018995a19adfb7b2c4f4835d31bffc1d7cbf))
+* 🐛 typo ([e9dca16](https://github.com/mjancarik/merkur/commit/e9dca16797593891f4f11e876bd6382b8f98d6d2))
+* missing ES source ([#33](https://github.com/mjancarik/merkur/issues/33)) ([3e08b76](https://github.com/mjancarik/merkur/commit/3e08b7649973cd3d5a5211ce34d4a235e1752c60))
+
+
+### chore
+
+* 🤖 added index.js file for fixing CRA ([#51](https://github.com/mjancarik/merkur/issues/51)) ([bcfb131](https://github.com/mjancarik/merkur/commit/bcfb131abe8a5c02504dd573f8c198ed3dbca648))
+* 🤖 update dependencies ([#59](https://github.com/mjancarik/merkur/issues/59)) ([06ba5d5](https://github.com/mjancarik/merkur/commit/06ba5d578b8b1058d71b3d56d1da11a737b495a9))
+
+
+### Code Refactoring
+
+* 💡 error event is emitted with error property ([cee7d4a](https://github.com/mjancarik/merkur/commit/cee7d4ac202bf9d1ed1a7297c9f8f81b89cc72f5))
+* 💡 replace webpack-shell-plugin ([ea89a9f](https://github.com/mjancarik/merkur/commit/ea89a9f7b253af4a8a723bfd0dca17b1828e0d39))
+
+
+### Features
+
+* 🎸 added @merkur/plugin-error to widget template ([c778c3f](https://github.com/mjancarik/merkur/commit/c778c3fcf5ee6d4bde4248a78250a21127c0507e))
+* 🎸 exported new error express middleware ([bde836a](https://github.com/mjancarik/merkur/commit/bde836ab070b65db448734d2f67f9275abbaf244))
+* 🎸 widget load method is called for every route ([#52](https://github.com/mjancarik/merkur/issues/52)) ([b628e83](https://github.com/mjancarik/merkur/commit/b628e83c6d5f967286f4bc27707d6f11606921be)), closes [#21](https://github.com/mjancarik/merkur/issues/21)
+
+
+### BREAKING CHANGES
+
+* 🧨 Update peer dependencies, dev dependencies and dependencies.
+
+* feat: 🎸 added storybook integration module
+
+* test: 💍 fix es-check test
+
+* docs: ✏️ added documentation for merkur integrtion to Storybook
+
+* ci: 🎡 added check for all supported templates
+
+* fix: 🐛 removed using named exports from JSON modules
+
+* fix: 🐛 typo in filename
+
+* Update docs/docs/tool-storybook.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update docs/docs/tool-storybook.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update docs/docs/tool-storybook.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update packages/tool-storybook/README.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update docs/docs/tool-storybook.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update docs/docs/tool-storybook.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update packages/tool-storybook/src/__tests__/indexSpec.js
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+* 🧨 Update peer dependencies, dev dependencies and dependencies.
+* 🧨   We replace webpack-shell-plugin for webpack-shell-plugin-next which is
+maintained and support webpack5.
+* 🧨 The logUnhandledPromises method was removed from module.
+* 🧨 Error event is emitted with error property instead of thrownError
+property.
+* 🧨 Widget load method is called for every route.
+* 🧨 The values of main and module properties were change without file
+extension in package.json.
+
+
+
+
+
 # [0.22.0](https://github.com/mjancarik/merkur/compare/v0.21.3...v0.22.0) (2020-10-15)
 
 

@@ -3,6 +3,30 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.23.0](https://github.com/mjancarik/merkur/compare/v0.22.0...v0.23.0) (2021-02-01)
+
+
+### Bug Fixes
+
+* 🐛 error with not declared variables ([67d07a6](https://github.com/mjancarik/merkur/commit/67d07a6971fd3d21bee34ddafd22252299411006))
+
+
+### chore
+
+* 🤖 added index.js file for fixing CRA ([#51](https://github.com/mjancarik/merkur/issues/51)) ([bcfb131](https://github.com/mjancarik/merkur/commit/bcfb131abe8a5c02504dd573f8c198ed3dbca648))
+* 🤖 update dependencies ([#59](https://github.com/mjancarik/merkur/issues/59)) ([06ba5d5](https://github.com/mjancarik/merkur/commit/06ba5d578b8b1058d71b3d56d1da11a737b495a9))
+
+
+### BREAKING CHANGES
+
+* 🧨 Update peer dependencies, dev dependencies and dependencies.
+* 🧨 The values of main and module properties were change without file
+extension in package.json.
+
+
+
+
+
 # [0.22.0](https://github.com/mjancarik/merkur/compare/v0.21.3...v0.22.0) (2020-10-15)
 
 **Note:** Version bump only for package @merkur/core

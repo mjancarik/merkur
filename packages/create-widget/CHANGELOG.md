@@ -3,6 +3,78 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.23.0](https://github.com/mjancarik/merkur/compare/v0.22.0...v0.23.0) (2021-02-01)
+
+
+* Storybook (#60) ([640e3e8](https://github.com/mjancarik/merkur/commit/640e3e8490317497eea9c28f669b406608cbfcdc)), closes [#60](https://github.com/mjancarik/merkur/issues/60)
+
+
+### Bug Fixes
+
+* 🐛 express default error handler ([327a018](https://github.com/mjancarik/merkur/commit/327a018995a19adfb7b2c4f4835d31bffc1d7cbf))
+
+
+### chore
+
+* 🤖 update dependencies ([#59](https://github.com/mjancarik/merkur/issues/59)) ([06ba5d5](https://github.com/mjancarik/merkur/commit/06ba5d578b8b1058d71b3d56d1da11a737b495a9))
+
+
+### Features
+
+* 🎸 added @merkur/plugin-error to widget template ([c778c3f](https://github.com/mjancarik/merkur/commit/c778c3fcf5ee6d4bde4248a78250a21127c0507e))
+
+
+### BREAKING CHANGES
+
+* 🧨 Update peer dependencies, dev dependencies and dependencies.
+
+* feat: 🎸 added storybook integration module
+
+* test: 💍 fix es-check test
+
+* docs: ✏️ added documentation for merkur integrtion to Storybook
+
+* ci: 🎡 added check for all supported templates
+
+* fix: 🐛 removed using named exports from JSON modules
+
+* fix: 🐛 typo in filename
+
+* Update docs/docs/tool-storybook.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update docs/docs/tool-storybook.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update docs/docs/tool-storybook.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update packages/tool-storybook/README.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update docs/docs/tool-storybook.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update docs/docs/tool-storybook.md
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+* Update packages/tool-storybook/src/__tests__/indexSpec.js
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+
+Co-authored-by: Anna Frankova <corvidism@users.noreply.github.com>
+* 🧨 Update peer dependencies, dev dependencies and dependencies.
+
+
+
+
+
 # [0.22.0](https://github.com/mjancarik/merkur/compare/v0.21.3...v0.22.0) (2020-10-15)
 
 **Note:** Version bump only for package @merkur/create-widget
