@@ -133,6 +133,7 @@ jobs:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
 
+      - run: echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" >> $HOME/.npmrc 2> /dev/null
       - run: npm run release:publish
 
 
