@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.23.3](https://github.com/mjancarik/merkur/compare/v0.23.2...v0.23.3) (2021-02-04)
+
+
+### Bug Fixes
+
+* 🐛 default value 'auto' in publicPath for manifest.json ([08f5fef](https://github.com/mjancarik/merkur/commit/08f5fefdf80cacac745fea8fc25622f562c05a12))
+* 🐛 npm run dev command start dev:server ([45fa9ac](https://github.com/mjancarik/merkur/commit/45fa9acb46b0efb660b2838b8b4957c1dc5e419b))
+
+
+
+
+
 ## [0.23.2](https://github.com/mjancarik/merkur/compare/v0.23.1...v0.23.2) (2021-02-01)
 
 **Note:** Version bump only for package @merkur/tools
