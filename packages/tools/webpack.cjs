@@ -31,7 +31,7 @@ function getPlugins(options = {}) {
       filename: 'widget.[contenthash].css',
       ...options.miniCSSExtractPlugin,
     }),
-    new WebpackManifestPlugin(options.manifestPlugin),
+    new WebpackManifestPlugin({ publicPath: '', ...options.manifestPlugin }),
     ...sharedPlugins,
   ];
   const nodePlugins = [...sharedPlugins];
