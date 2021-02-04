@@ -11,6 +11,12 @@ title: Integrating Storybook into Merkur
 
 At first we must install storybook to our Merkur project. The best way is using the [Storybook CLI](https://storybook.js.org/docs/react/get-started/install) to install it in a single command.
 
+Because Storybook hasn't official support for Webpack@5. We must install `html-webpack-plugin@next`.
+
+```terminal
+npm i --save-dev html-webpack-plugin@next
+```
+
 After that we install merkur module for easy integration.
 
 ```terminal
@@ -20,7 +26,7 @@ npm i @merkur/tool-storybook --save-dev
 Now we must update two storybook files `./storybook/preview.js` and `./storybook/main.js`. At first we update our `./storybook/preview.js` similarly to the example below.
 
 ```javascript
-// ./storybook/preview
+// ./storybook/preview.js
 // register our widget to Merkur
 import '../src/client';
 
@@ -28,7 +34,7 @@ import '../src/client';
 import { widgetProperties } from '../src/widget';
 
 // helper method for creating storybook loader, which async creates our widget instance.
-import { createMerkurLoader } from '@merkur/tool-storybook';
+import { createWidgetLoader } from '@merkur/tool-storybook';
 
 // Specific imports for your chosen view. For example Preact:
 import { h } from 'preact';
@@ -37,7 +43,7 @@ import WidgetContext from '../src/component/WidgetContext';
 
 // defined our custom widget loader
 export const loaders = [
-  createMerkurLoader({
+  createWidgetLoader({
     render: forceReRender, // widget must be able to update the storybook playground
     widgetProperties, // created widget properties
   })
@@ -133,3 +139,5 @@ TenCounter.args = {
   }
 };
 ```
+
+Now run command `npm run storybook` and you will see our Counter component with two settings.

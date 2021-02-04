@@ -166,6 +166,20 @@
           "url": "/docs/error-plugin#operation"
         }
       ]
+    },
+    {
+      "title": "Storybook integration",
+      "url": "/docs/storybook-integration-into-merkur",
+      "submenu": [
+        {
+          "title": "Installation",
+          "url": "/docs/storybook-integration-into-merkur#installation"
+        },
+        {
+          "title": "How to write stories",
+          "url": "/docs/storybook-integration-into-merkur#how-to-write-stories"
+        }
+      ]
     }
   ]
 }
