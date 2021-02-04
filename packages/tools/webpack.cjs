@@ -39,7 +39,9 @@ function getPlugins(options = {}) {
   if (environment === DEVELOPMENT) {
     nodePlugins.push(
       new WebpackShellPlugin({
-        onBuildEnd: ['npm run dev:server'],
+        onBuildEnd: {
+          scripts: ['npm run dev:server'],
+        },
         ...options.webpackShellPlugin,
       })
     );
