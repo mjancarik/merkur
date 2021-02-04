@@ -111,6 +111,8 @@ jobs:
     name: Publish to npm
     needs: release
     runs-on: ubuntu-latest
+    env:	
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
@@ -134,7 +136,5 @@ jobs:
       - name: Create npmrc file
         run: echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" >> $HOME/.npmrc 2> /dev/null
       - run: npm run release:publish
-        env:	
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
 
