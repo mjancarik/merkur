@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-component",
-  "version": "0.23.4",
+  "version": "0.23.5",
   "description": "Merkur component plugin.",
   "main": "lib/index",
   "module": "lib/index",

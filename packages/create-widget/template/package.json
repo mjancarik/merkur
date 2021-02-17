@@ -19,9 +19,9 @@
   "dependencies": {
     "@merkur/core": "0.23.4",
     "@merkur/integration": "0.23.4",
-    "@merkur/plugin-component": "0.23.4",
-    "@merkur/plugin-error": "0.23.4",
-    "@merkur/plugin-event-emitter": "0.23.4",
+    "@merkur/plugin-component": "0.23.5",
+    "@merkur/plugin-error": "0.23.5",
+    "@merkur/plugin-event-emitter": "0.23.5",
     "compression": "^1.7.4",
     "config": "^3.3.3",
     "cors": "^2.8.5",

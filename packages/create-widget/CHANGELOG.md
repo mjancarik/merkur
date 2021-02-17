@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.23.5](https://github.com/mjancarik/merkur/compare/v0.23.4...v0.23.5) (2021-02-17)
+
+
+### Bug Fixes
+
+* 🐛 ignore build folder for linter ([63d2cd3](https://github.com/mjancarik/merkur/commit/63d2cd3839fb1c21a3c9e6564de888caa92c68a6))
+
+
+
+
+
 ## [0.23.4](https://github.com/mjancarik/merkur/compare/v0.23.3...v0.23.4) (2021-02-04)
 
 **Note:** Version bump only for package @merkur/create-widget
