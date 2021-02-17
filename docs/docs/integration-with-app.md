@@ -143,9 +143,10 @@ If your application doesn't use npm modules, you can handle assets your own way 
       if (asset.type === 'script') {
         let script = document.createElement('script');
         script.onload = () => {
-          let widget = __merkur__.create(widgetProperties);
-
-          widget.mount();
+          __merkur__.create(widgetProperties)
+            .then((widget) => {
+              widget.mount();
+            });
         };
         script.src = asset.es5.source;
         document.body.appendChild(script);
