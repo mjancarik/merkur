@@ -3,8 +3,8 @@
 </center>
 
 [![Build Status](https://github.com/mjancarik/merkur/workflows/CI/badge.svg)](https://travis-ci.com/mjancarik/merkur)
-[![NPM package version](https://img.shields.io/npm/v/@merkur/core/latest.svg)](https://www.npmjs.com/package/@merkur/core)
-![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@merkur/core/latest)
+[![NPM package version](https://img.shields.io/npm/v/@merkur/plugin-router/latest.svg)](https://www.npmjs.com/package/@merkur/core)
+![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@merkur/plugin-router/latest)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 # Merkur
