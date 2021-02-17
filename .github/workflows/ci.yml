@@ -26,7 +26,7 @@ jobs:
           path: |
             node_modules
             */*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('/package.json') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('package.json') }}
 
       - name: Install dependencies
         if: steps.cache-modules.outputs.cache-hit != 'true'
@@ -56,7 +56,7 @@ jobs:
           path: |
             node_modules
             */*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('/package.json') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('package.json') }}
 
       - name: Load libs from cache
         uses: actions/cache@v2
@@ -94,7 +94,7 @@ jobs:
           path: |
             node_modules
             */*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('/package.json') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('package.json') }}
 
       - name: Load libs from cache
         uses: actions/cache@v2
@@ -125,7 +125,7 @@ jobs:
           path: |
             node_modules
             */*/node_modules
-          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('/package.json') }}
+          key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('package.json') }}
 
       - name: Load libs from cache
         uses: actions/cache@v2
