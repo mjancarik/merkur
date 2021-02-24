@@ -56,7 +56,7 @@ function _loadStyle(asset) {
 }
 
 function loadStyleAssets(assets) {
-  const styleElements = document.getElementsByTagName('style');
+  const styleElements = document.head.getElementsByTagName('style');
   const stylesToRender = assets.filter(
     (asset) =>
       asset.source &&
