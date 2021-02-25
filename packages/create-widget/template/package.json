@@ -18,7 +18,7 @@
   "license": "ISC",
   "dependencies": {
     "@merkur/core": "0.23.6",
-    "@merkur/integration": "0.23.6",
+    "@merkur/integration": "0.23.7",
     "@merkur/plugin-component": "0.23.6",
     "@merkur/plugin-error": "0.23.6",
     "@merkur/plugin-event-emitter": "0.23.6",
