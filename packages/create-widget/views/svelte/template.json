@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "svelte": "^3.35.0",
+    "svelte-loader": "^3.0.0"
+  }
+}

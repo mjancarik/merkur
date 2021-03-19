@@ -43,6 +43,12 @@ let viewResolver = argv.view
           },
           {
             name: `${chalk.bold.blue(
+              'Svelte'
+            )} - The basic counter example with svelte.`,
+            value: 'svelte',
+          },
+          {
+            name: `${chalk.bold.blue(
               'Vanilla'
             )} - The basic counter example with vanilla js.`,
             value: 'vanilla',
