@@ -41,6 +41,8 @@ function getPlugins(options = {}) {
       new WebpackShellPlugin({
         onBuildEnd: {
           scripts: ['npm run dev:server'],
+          blocking: false,
+          parallel: true,
         },
         ...options.webpackShellPlugin,
       })
