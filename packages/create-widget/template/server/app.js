@@ -23,7 +23,11 @@ const widgetAPIRouterFactory = require('./router/widgetAPI');
 const widgetAPI = widgetAPIRouterFactory();
 
 app
-  .use(helmet())
+  .use(
+    helmet({
+      contentSecurityPolicy: false,
+    })
+  )
   .use(compression())
   .use(cors())
   .use('/static', express.static(path.join(__dirname, 'static')))
