@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.23.8](https://github.com/mjancarik/merkur/compare/v0.23.7...v0.23.8) (2021-03-21)
+
+
+### Bug Fixes
+
+* 🐛 reloading page after build ([01d4c61](https://github.com/mjancarik/merkur/commit/01d4c613053e1522312468bf411c6784add5eb28))
+* 🐛 restarting nodemone after build ([52166d5](https://github.com/mjancarik/merkur/commit/52166d527638e39f4327014f66d10df0950c5616))
+
+
+### Features
+
+* 🎸 added svelte view ([#65](https://github.com/mjancarik/merkur/issues/65)) ([b3f9e24](https://github.com/mjancarik/merkur/commit/b3f9e24a683477d53153121750a00627f5b176b7))
+
+
+
+
+
 ## [0.23.7](https://github.com/mjancarik/merkur/compare/v0.23.6...v0.23.7) (2021-02-25)
 
 

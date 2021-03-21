@@ -1,6 +1,6 @@
 {
   "name": "@merkur/tools",
-  "version": "0.23.6",
+  "version": "0.23.8",
   "description": "Merkur tools.",
   "bin": {
     "merkur-tools": "./bin/merkurTools.js"
