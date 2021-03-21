@@ -1,7 +1,7 @@
 <script>
   import { getContext } from 'svelte';
 
-	const widget = getContext('widget');
+  const widget = getContext('widget');
   const state = getContext('state');
 </script>
 
