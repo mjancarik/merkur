@@ -4,6 +4,7 @@ const {
   createNodeConfig,
   applyES5Transformation,
   pipe,
+  webpackMode,
 } = require('@merkur/tools/webpack.cjs');
 
 createLiveReloadServer();
@@ -15,11 +16,11 @@ function applySvelteWeb(config) {
       loader: 'svelte-loader',
       options: {
         compilerOptions: {
-          dev: true,
+          dev: webpackMode,
           generate: 'dom',
           hydratable: true,
-          emitCss: true,
         },
+        emitCss: true,
         hotReload: false,
       },
     },
@@ -37,7 +38,7 @@ function applySvelteNode(config) {
         compilerOptions: {
           css: false,
           generate: 'ssr',
-          dev: true,
+          dev: webpackMode,
           hydratable: true,
         },
       },
