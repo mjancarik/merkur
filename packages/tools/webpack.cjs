@@ -239,4 +239,6 @@ module.exports = {
   applyBundleAnalyzer,
   findLoaders,
   pipe,
+  environment,
+  webpackMode,
 };
