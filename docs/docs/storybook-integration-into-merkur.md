@@ -13,13 +13,13 @@ At first we must install storybook to our Merkur project. The best way is using 
 
 Because Storybook hasn't official support for Webpack@5. We must install `html-webpack-plugin@next`.
 
-```terminal
+```bash
 npm i --save-dev html-webpack-plugin@next
 ```
 
 After that we install merkur module for easy integration.
 
-```terminal
+```bash
 npm i @merkur/tool-storybook --save-dev
 ```
 
