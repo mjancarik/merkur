@@ -34,8 +34,7 @@
     "widget",
     "react",
     "preact",
-    "hyperhtml",
-    "library"
+    "svelte"
   ],
   "author": "Miroslav Jancarik",
   "license": "ISC",

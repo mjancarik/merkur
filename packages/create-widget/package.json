@@ -11,9 +11,15 @@
     "build": "echo 'Build pass.'"
   },
   "keywords": [
+    "cli",
+    "microservices",
+    "microfrontends",
+    "SSR",
     "merkur",
-    "JavaScript",
-    "cli"
+    "widget",
+    "react",
+    "preact",
+    "svelte"
   ],
   "repository": {
     "type": "git",
