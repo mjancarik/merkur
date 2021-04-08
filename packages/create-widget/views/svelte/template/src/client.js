@@ -1,7 +1,7 @@
 import { createMerkurWidget, createMerkur } from '@merkur/core';
 import { widgetProperties } from './widget';
 import style from './style.css'; // eslint-disable-line no-unused-vars
-import View from './component/View.svelte'; // eslint-disable-line no-unused-vars
+import View from './components/View.svelte'; // eslint-disable-line no-unused-vars
 
 function createWidget(widgetParams) {
   return createMerkurWidget({

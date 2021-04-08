@@ -1,6 +1,6 @@
 import { createMerkurWidget } from '@merkur/core';
 import { widgetProperties } from './widget';
-import View from './component/View';
+import View from './components/View';
 
 export function createWidget(widgetParams) {
   return createMerkurWidget({

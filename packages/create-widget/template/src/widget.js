@@ -2,7 +2,7 @@ import { componentPlugin } from '@merkur/plugin-component';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 import { errorPlugin } from '@merkur/plugin-error';
 import pkg from '../package.json';
-import View from './component/View';
+import View from './components/View';
 
 export const widgetProperties = {
   name: pkg.name,
