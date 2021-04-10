@@ -219,6 +219,18 @@ function applyES5Transformation(config, options = {}) {
   }
 
   config.output.path = path.resolve(config.output.path, '../es5/');
+  config.output.environment = {
+    ...{
+      arrowFunction: false,
+      bigIntLiteral: false,
+      const: false,
+      destructuring: false,
+      dynamicImport: false,
+      forOf: false,
+      module: false,
+    },
+    ...config.output.environment,
+  };
 
   return config;
 }
