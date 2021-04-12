@@ -111,7 +111,7 @@ jobs:
     name: Publish to npm
     needs: release
     runs-on: ubuntu-latest
-    env:	
+    env:
       NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v2
@@ -139,4 +139,12 @@ jobs:
         run: echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" >> $HOME/.npmrc 2> /dev/null
       - run: npm run release:publish
 
+      - name: Extract tmp current changelog
+        run: node utils/extractChangelog.js
 
+      - name: Create release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: current-changelog.txt
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
