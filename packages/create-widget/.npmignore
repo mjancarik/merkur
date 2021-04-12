@@ -14,4 +14,6 @@ commitlint.config.js
 rollup.config.js
 setupJest.js
 !/template/*
+!/template/**/*
 !/views/*
+!/views/**/*
