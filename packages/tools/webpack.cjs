@@ -1,4 +1,5 @@
 const path = require('path');
+const zlib = require('zlib');
 const WebpackShellPlugin = require('webpack-shell-plugin-next');
 const nodeExternals = require('webpack-node-externals');
 const WebpackModules = require('webpack-modules');
@@ -7,6 +8,7 @@ const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 
 const WebSocket = require('./websocket.cjs');
 
@@ -35,6 +37,41 @@ function getPlugins(options = {}) {
     ...sharedPlugins,
   ];
   const nodePlugins = [...sharedPlugins];
+
+  if (environment === PRODUCTION) {
+    webPlugins.push(
+      new CompressionPlugin({
+        ...{
+          filename: '[path][base].gz',
+          algorithm: 'gzip',
+          test: /\.(js|css|)$/,
+          compressionOptions: {
+            level: 9,
+          },
+          threshold: 0,
+          minRatio: 0.95,
+        },
+        ...options.compressionPluginGzip,
+      })
+    );
+    webPlugins.push(
+      new CompressionPlugin({
+        ...{
+          filename: '[path][base].br',
+          algorithm: 'brotliCompress',
+          test: /\.(js|css)$/,
+          compressionOptions: {
+            params: {
+              [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+            },
+          },
+          threshold: 0,
+          minRatio: 0.95,
+        },
+        ...options.compressionPluginBrotli,
+      })
+    );
+  }
 
   if (environment === DEVELOPMENT) {
     nodePlugins.push(
