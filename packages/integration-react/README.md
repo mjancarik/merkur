@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/mjancarik/merkur/master/images/merkur-illustration.png" width="100px" height="100px" alt="Merkur illustration"/>
+  <a href="https://merkur.js.org/docs/getting-started" title="Getting started">
+    <img src="https://raw.githubusercontent.com/mjancarik/merkur/master/images/merkur-illustration.png" width="100px" height="100px" alt="Merkur illustration"/>
+  </a>
 </p>
 
 # Merkur
@@ -9,7 +11,14 @@
 ![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@merkur/core/latest)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-The [Merkur](https://merkur.js.org/) is tiny extensible javascript library for front-end microservices. It allows by default server side rendering for loading performance boost. You can connect it with other frameworks or languages because merkur defines easy API. You can use one of four predefined template's library [React](https://reactjs.org/), [Preact](https://preactjs.com/), [hyperHTML](https://viperhtml.js.org/hyper.html) and [µhtml](https://github.com/WebReflection/uhtml#readme) but you can easily extend for others.
+The [Merkur](https://merkur.js.org/) is tiny extensible javascript library for front-end microservices(micro frontends). It allows by default server side rendering for loading performance boost. You can connect it with other frameworks or languages because merkur defines easy API. You can use one of six predefined template's library [React](https://reactjs.org/), [Preact](https://preactjs.com/), [hyperHTML](https://viperhtml.js.org/hyper.html), [µhtml](https://github.com/WebReflection/uhtml#readme), [Svelte](https://svelte.dev/) and [vanilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) but you can easily extend for others.
+
+## Features
+ - Flexible templating engine
+ - Usable with all tech stacks
+ - SSR-ready by default
+ - Easy extensible with plugins
+ - Tiny - 1 KB minified + gzipped 
 
 ## Getting started
 
@@ -21,34 +30,18 @@ cd name
 npm run dev // Point your browser at http://localhost:4444/
 ```
 ![alt text](https://raw.githubusercontent.com/mjancarik/merkur/master/images/hello-widget.png "Merkur example, hello widget")
+## Documentation
 
-You can see live [demo](https://merkur.js.org/demo).
+To check ∫out [live demo](https://merkur.js.org/demo) and [docs](https://merkur.js.org/doc), visit [https://merkur.js.org](https://merkur.js.org).
 
-## API
+## Contribution
 
-Point your browser at `http://localhost:4444/widget`.
+Contribute to this project via [Pull-Requests](https://github.com/mjancarik/merkur/pulls).
 
-```json
-{
-  "name":"my-widget",
-  "version":"0.0.1",
-  "props":{},
-  "state":{"counter":0},
-  "assets":[
-    {
-      "name": "widget.js",
-      "type": "script",
-      "source": {
-        "es9": "http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js",
-        "es5": "http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js"
-      }
-    },
-    {
-      "name": "widget.css",
-      "type": "stylesheet",
-      "source": "http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css"
-    }
-  ],
-  "html":"\n      <div class=\"merkur__page\">\n        <div class=\"merkur__headline\">\n          <div class=\"merkur__view\">\n            \n    <div class=\"merkur__icon\">\n      <img src=\"http://localhost:4444/static/merkur-icon.png\" alt=\"Merkur\">\n    </div>\n  \n            \n    <h1>Welcome to <a href=\"https://github.com/mjancarik/merkur\">MERKUR</a>,<br> a javascript library for front-end microservices.</h1>\n  \n            \n    <p>The widget's name is <strong>my-widget@0.0.1</strong>.</p>\n  \n          </div>\n        </div>\n        <div class=\"merkur__view\">\n          \n    <div>\n      <h2>Counter widget:</h2>\n      <p>Count: 0</p>\n      <button onclick=\"return ((...rest) =&gt; {\n        return originalFunction(widget, ...rest);\n      }).call(this, event)\">\n        increase counter\n      </button>\n      <button onclick=\"return ((...rest) =&gt; {\n        return originalFunction(widget, ...rest);\n      }).call(this, event)\">\n        reset counter\n      </button>\n    </div>\n  \n        </div>\n      </div>\n  "
-}
-```
+We are following [Conventional Commits Specification](https://www.conventionalcommits.org/en/v1.0.0/#summary). To simplify the commit process, you can use `npm run commit` command. It opens an interactive interface, which should help you with commit message composition.
+
+Thank you to all the people who already contributed to Merkur!
+
+<a href="https://github.com/mjancarik/merkur/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=mjancarik/merkur" />
+</a>
