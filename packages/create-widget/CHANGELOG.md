@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.23.10](https://github.com/mjancarik/merkur/compare/v0.23.9...v0.23.10) (2021-04-12)
+
+
+### Bug Fixes
+
+* 🐛 eslint config to reflect chosen view ([#71](https://github.com/mjancarik/merkur/issues/71)) ([c1bfb4a](https://github.com/mjancarik/merkur/commit/c1bfb4a1a1589d623d7a228cf874ac801d0dcee0)), closes [#69](https://github.com/mjancarik/merkur/issues/69)
+
+
+### Features
+
+* 🎸 add brotli and gzip compression to webpack build ([#70](https://github.com/mjancarik/merkur/issues/70)) ([3a454fd](https://github.com/mjancarik/merkur/commit/3a454fd45b11e43d84d87ba8fa47cca1441de00b))
+
+
+
+
+
 ## [0.23.9](https://github.com/mjancarik/merkur/compare/v0.23.8...v0.23.9) (2021-04-12)
 
 **Note:** Version bump only for package @merkur/create-widget
