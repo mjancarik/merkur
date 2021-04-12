@@ -4,11 +4,19 @@ const express = require('express');
 const compression = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
+const expressStaticGzip = require('express-static-gzip');
 
 const {
   apiErrorMiddleware,
   logErrorMiddleware,
 } = require('@merkur/plugin-error/server');
+
+const expressStaticConfig = {
+  enableBrotli: true,
+  index: false,
+  orderPreference: ['br'],
+  maxAge: '14d',
+};
 
 const app = express();
 app.set('view engine', 'ejs');
@@ -28,10 +36,19 @@ app
       contentSecurityPolicy: false,
     })
   )
-  .use(compression())
   .use(cors())
-  .use('/static', express.static(path.join(__dirname, 'static')))
-  .use('/static', express.static(path.join(__dirname, '../build/static')))
+  .use(compression())
+  .use(
+    '/static',
+    expressStaticGzip(path.join(__dirname, 'static'), expressStaticConfig)
+  )
+  .use(
+    '/static',
+    expressStaticGzip(
+      path.join(__dirname, '../build/static'),
+      expressStaticConfig
+    )
+  )
   .use(
     '/@merkur/tools/static/',
     express.static(path.join(__dirname, '../node_modules/@merkur/tools/static'))
