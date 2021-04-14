@@ -101,9 +101,10 @@ function createWebConfig(options = {}) {
     mode: webpackMode,
     devtool: environment === PRODUCTION ? false : 'source-map',
     resolve: {
-      ...resolve, ...{
-        mainFields: ['browser', 'module', 'main']
-      }
+      ...resolve,
+      ...{
+        mainFields: ['browser', 'module', 'main'],
+      },
     },
     entry: {
       widget: './src/client.js',
@@ -118,8 +119,8 @@ function createWebConfig(options = {}) {
         {
           test: /\.m?js/,
           resolve: {
-            fullySpecified: false
-          }
+            fullySpecified: false,
+          },
         },
         {
           test: /\.css$/,
