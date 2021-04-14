@@ -100,7 +100,12 @@ function createWebConfig(options = {}) {
     target: 'web',
     mode: webpackMode,
     devtool: environment === PRODUCTION ? false : 'source-map',
-    resolve: { ...resolve },
+    resolve: {
+      ...resolve,
+      ...{
+        mainFields: ['browser', 'module', 'main'],
+      },
+    },
     entry: {
       widget: './src/client.js',
     },
@@ -111,6 +116,12 @@ function createWebConfig(options = {}) {
     plugins: getPlugins(options.plugins).webPlugins,
     module: {
       rules: [
+        {
+          test: /\.m?js/,
+          resolve: {
+            fullySpecified: false,
+          },
+        },
         {
           test: /\.css$/,
           use: [
@@ -136,7 +147,7 @@ function createNodeConfig(options = {}) {
     externals: [nodeExternals()],
     mode: webpackMode,
     devtool: environment === PRODUCTION ? false : 'eval-source-map',
-    resolve: { ...resolve },
+    resolve: { ...resolve, ...{ mainFields: ['module', 'main'] } },
     entry: {
       widget: './src/server.js',
     },
