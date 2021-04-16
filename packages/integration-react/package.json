@@ -41,16 +41,16 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@babel/preset-react": "^7.12.10",
+    "@babel/preset-react": "^7.13.13",
     "@merkur/core": "^0.23.9",
     "@merkur/plugin-component": "^0.23.9",
     "@merkur/plugin-event-emitter": "^0.23.9",
     "enzyme": "3.11.0",
     "enzyme-adapter-react-16": "1.15.6",
-    "enzyme-to-json": "^3.6.1",
+    "enzyme-to-json": "^3.6.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
-    "rollup": "^2.38.1"
+    "rollup": "^2.45.2"
   },
   "peerDependencies": {
     "@merkur/core": "*",
