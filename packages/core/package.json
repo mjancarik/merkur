@@ -47,6 +47,6 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "rollup": "^2.38.1"
+    "rollup": "^2.45.2"
   }
 }
