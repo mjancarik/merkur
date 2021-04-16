@@ -23,20 +23,20 @@
     "@merkur/plugin-error": "0.23.9",
     "@merkur/plugin-event-emitter": "0.23.9",
     "compression": "^1.7.4",
-    "config": "^3.3.3",
+    "config": "^3.3.6",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
-    "ejs": "^3.1.5",
+    "ejs": "^3.1.6",
     "express": "^4.17.1",
     "express-static-gzip": "^2.1.1",
-    "got": "^11.8.1",
+    "got": "^11.8.2",
     "helmet": "^3.23.3"
   },
   "devDependencies": {
     "@merkur/tools": "0.23.11",
     "nodemon": "^2.0.7",
-    "webpack": "^5.15.0",
-    "webpack-cli": "^4.3.1"
+    "webpack": "^5.33.2",
+    "webpack-cli": "^4.6.0"
   },
   "engines": {
     "node": ">=14.0.0"

@@ -1,13 +1,13 @@
 {
   "dependencies": {
-    "preact": "10.5.10",
-    "preact-render-to-string": "5.1.12"
+    "preact": "10.5.13",
+    "preact-render-to-string": "5.1.19"
   },
   "devDependencies": {
-    "@babel/preset-react": "7.12.10",
+    "@babel/preset-react": "7.13.13",
     "babel-loader": "8.2.2",
     "enzyme": "3.11.0",
-    "enzyme-adapter-preact-pure": "3.0.0",
-    "enzyme-to-json": "3.6.1"
+    "enzyme-adapter-preact-pure": "3.1.0",
+    "enzyme-to-json": "3.6.2"
   }
 }
