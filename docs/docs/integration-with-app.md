@@ -17,11 +17,11 @@ At first we must make an API call with your framework of choice. In this example
   const widgetClassName = 'widget__container';
   const widgetProperties = await fetch(`http://localhost:4000/widget`)
     .then((response) => response.json())
-    .then(({ body }) => {
+    .then((data) => {
       // added container selector for our widget
-      body.props.containerSelector = `.${widgetClassName}`;
+      data.props.containerSelector = `.${widgetClassName}`;
 
-      return body;
+      return data;
     });
 
   console.log(widgetProperties);
@@ -92,11 +92,11 @@ import { getMerkur } from '@merkur/core';
   // make API call to widget
   const widgetProperties = await fetch(`http://localhost:4000/widget`)
     .then((response) => response.json())
-    .then(({ body }) => {
+    .then((data) => {
       // added container selector for our widget
-      body.props.containerSelector = `.${widgetClassName}`;
+      data.props.containerSelector = `.${widgetClassName}`;
 
-      return body;
+      return data;
     });
 
     // create widget container
@@ -126,11 +126,11 @@ If your application doesn't use npm modules, you can handle assets your own way 
   const widgetClassName = 'widget__container';
   const widgetProperties = await fetch(`http://localhost:4000/widget`)
     .then((response) => response.json())
-    .then(({ body }) => {
+    .then((data) => {
       // added container selector for our widget
-      body.props.containerSelector = `.${widgetClassName}`;
+      data.props.containerSelector = `.${widgetClassName}`;
 
-      return body;
+      return data;
     });
 
     // create widget container
@@ -222,9 +222,9 @@ import { MerkurComponent } from '@merkur/integration-react';
 const widgetClassName = 'widget__container';
 let widgetProperties = await fetch(`http://localhost:4000/widget`)
   .then((response) => response.json())
-  .then(({ body }) => {
-    body.props.containerSelector = `.${widgetClassName}`;
-    return body;
+  .then((data) => {
+    data.props.containerSelector = `.${widgetClassName}`;
+    return data;
   })
 
 React.render(
