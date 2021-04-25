@@ -1,10 +1,13 @@
 module.exports = {
   root: true,
+  parser: '@typescript-eslint/parser',
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'prettier',
     'prettier/react',
+    'prettier/@typescript-eslint',
+    'plugin:prettier/recommended',
   ],
   rules: {
     'prettier/prettier': [
@@ -27,7 +30,7 @@ module.exports = {
     'react/wrap-multilines': 0,
     'react/no-deprecated': 0,
   },
-  plugins: ['prettier', 'jest', 'react', 'jasmine'],
+  plugins: ['@typescript-eslint', 'prettier', 'jest', 'react', 'jasmine'],
   settings: {
     ecmascript: 2020,
     jsx: true,

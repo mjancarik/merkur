@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "module": "esnext",
+    "lib": [
+      "dom",
+      "esnext"
+    ],
+    "importHelpers": true,
+    "declaration": true,
+    "sourceMap": true,
+    "strict": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false,
+    "rootDir": "./src",
+    "baseUrl": "./",
+    "declarationDir": "dist/types",
+    "outDir": "./dist",
+    "paths": {
+      "*": [
+        "packages/core/src/*",
+        "packages/core/node_modules/*"
+      ]
+    },
+  },
+  "include": [
+    "./src/**/*"
+  ],
+"exclude": [
+  "node_modules",
+  "./src/**/*.spec.ts"
+]
+}

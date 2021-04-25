@@ -1,3 +1,6 @@
+import typescript from '@rollup/plugin-typescript';
+import run from '@rollup/plugin-run';
+import ts from 'typescript';
 import { terser } from 'rollup-plugin-terser';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 
@@ -144,9 +147,40 @@ function createRollupUMDConfig() {
   return config;
 }
 
+function createRollupTypescriptConfig(options = {}) {
+  let config = createRollupConfig();
+
+  config.input = './src/index.ts';
+  config.watch = {
+    include: 'src/**',
+  };
+
+  config.output = {
+    dir: './lib',
+    entryFileNames: '[name].mjs',
+    format: 'esm',
+    exports: 'named',
+    sourcemap: true,
+  };
+
+  config.plugins.push(
+    typescript({
+      typescript: ts,
+      target: 'es2018',
+    }),
+    options.watchMode &&
+      run({
+        execArgv: ['-r', 'source-map-support/register'],
+      })
+  );
+
+  return config;
+}
+
 export default createRollupConfig;
 
 export {
+  createRollupTypescriptConfig,
   createRollupConfig,
   createRollupESConfig,
   createRollupES5Config,

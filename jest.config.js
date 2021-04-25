@@ -10,5 +10,15 @@ exports = {
     },
   },
   modulePaths: ['<rootDir>/'],
-  testRegex: '(/__tests__/).*Spec\\.jsx?$',
+  transform: {
+    '.(ts|tsx)$': require.resolve('ts-jest/dist'),
+    '.(js|jsx)$': require.resolve('babel-jest'),
+  },
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
+  testRegex: '(/__tests__/).*Spec\\.(ts|tsx|js|jsx)$',
+  globals: {
+    'ts-jest': {
+      diagnostics: true,
+    },
+  },
 };
