@@ -11,10 +11,8 @@ title: Integrating Storybook into Merkur
 
 At first we must install storybook to our Merkur project. The best way is using the [Storybook CLI](https://storybook.js.org/docs/react/get-started/install) to install it in a single command.
 
-Because Storybook hasn't official support for Webpack@5. We must install `html-webpack-plugin@next`.
-
 ```bash
-npm i --save-dev html-webpack-plugin@next
+npx sb init --builder webpack5
 ```
 
 After that we install merkur module for easy integration.
