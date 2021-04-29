@@ -8,6 +8,8 @@ module.exports = {
     'prettier/react',
     'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
   ],
   rules: {
     'prettier/prettier': [

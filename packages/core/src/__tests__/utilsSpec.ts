@@ -9,7 +9,7 @@ import {
 describe('utils function', () => {
   describe('isFunction', () => {
     it('should return true for passing function as argument', () => {
-      expect(isFunction(() => {})).toBeTruthy();
+      expect(isFunction(jest.fn())).toBeTruthy();
     });
 
     it('should return false for passing undefined as argument', () => {
@@ -49,8 +49,8 @@ describe('utils function', () => {
 
   describe('bindWidgetToFunctions', () => {
     it('should bind widget to all widget methods', () => {
-      let widget = {
-        a: function (widget, a) {
+      const widget = {
+        a: function (widget, a?) {
           return a;
         },
         b: function (widget, b) {
@@ -69,7 +69,7 @@ describe('utils function', () => {
   });
 
   describe('hookMethod', () => {
-    let widget = null;
+    let widget: any = null;
 
     beforeEach(() => {
       widget = {
