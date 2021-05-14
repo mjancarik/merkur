@@ -272,3 +272,6 @@ return (
   </MerkurComponent>
 );
 ```
+<a href="{{ '/assets/images/merkur-integration-lifecycle.png?v=' | append: site.github.build_revision | relative_url }}" target="_blank" title="Merkur - integration React - lifecycle methods">
+  <img class="responsive" src="{{ '/assets/images/merkur-integration-lifecycle.png?v=' | append: site.github.build_revision | relative_url }}" alt="Merkur - integration React - lifecycle methods" />
+</a>
