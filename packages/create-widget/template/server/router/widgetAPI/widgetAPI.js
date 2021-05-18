@@ -20,7 +20,7 @@ router.get(
       },
     });
 
-    const html = await widget.mount();
+    const { html, slots = [] } = await widget.mount();
     const info = await widget.info();
 
     const staticFolder = `${__dirname}/../../../build/static`;
@@ -33,10 +33,13 @@ router.get(
       folders: ['es9', 'es5'],
     });
 
-    // optional chaining & nullish coalescing operator
     const status = info?.error?.status ?? 200;
 
-    res.status(status).json({ ...info, html });
+    res.status(status).json({
+      ...info,
+      html,
+      slots,
+    });
   })
 );
 

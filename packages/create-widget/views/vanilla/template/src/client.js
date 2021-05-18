@@ -1,13 +1,27 @@
 import { createMerkurWidget, createMerkur } from '@merkur/core';
-import { widgetProperties } from './widget';
+import widgetProperties from './widget';
+import { viewFactory } from './views/View';
 import style from './style.css'; // eslint-disable-line no-unused-vars
+
+async function mapViews(widget, callback) {
+  const { View, containerSelector, slots = [] } = await viewFactory(widget);
+
+  return [{ View, containerSelector }, ...slots].map(
+    ({ View, containerSelector }) =>
+      callback({
+        View,
+        containerSelector,
+        container: document.querySelector(containerSelector),
+      })
+  );
+}
 
 function createWidget(widgetParams) {
   return createMerkurWidget({
     ...widgetProperties,
     ...widgetParams,
     $dependencies: {},
-    mount(widget) {
+    async mount(widget) {
       document.getElementById('increase').addEventListener('click', () => {
         widget.onClick();
       });
@@ -16,10 +30,12 @@ function createWidget(widgetParams) {
         widget.onReset();
       });
     },
-    unmount(widget) {
-      document.querySelector(widget.props.containerSelector).innerHTML = '';
+    async unmount(widget) {
+      mapViews(widget, ({ container }) => {
+        container.innerHTML = '';
+      });
     },
-    update(widget) {
+    async update(widget) {
       document.getElementById('counter').innerText = widget.state.counter;
     },
   });

@@ -1,6 +1,7 @@
 import viper from 'viperhtml';
 import { createMerkurWidget } from '@merkur/core';
-import { widgetProperties } from './widget';
+import widgetProperties from './widget';
+import { viewFactory } from './views/View';
 
 export function createWidget(widgetParams) {
   return createMerkurWidget({
@@ -10,10 +11,19 @@ export function createWidget(widgetParams) {
       bind: viper.bind,
       wire: viper.wire,
     },
-    mount(widget) {
+    async mount(widget) {
+      const { View, slots } = await viewFactory(widget);
       const render = widget.$dependencies.bind(widget.state);
 
-      return widget.View(render).toString();
+      return {
+        html: View(render).toString(),
+        slots: slots.map((slot) => {
+          return {
+            ...slot,
+            html: slot.View(render).toString(),
+          };
+        }),
+      };
     },
   });
 }

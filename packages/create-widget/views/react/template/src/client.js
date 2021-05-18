@@ -1,7 +1,21 @@
 import { render, hydrate, unmountComponentAtNode } from 'react-dom';
 import { createMerkurWidget, createMerkur } from '@merkur/core';
-import { widgetProperties } from './widget';
+import widgetProperties from './widget';
+import { viewFactory } from './views/View.jsx';
 import style from './style.css'; // eslint-disable-line no-unused-vars
+
+async function mapViews(widget, callback) {
+  const { View, containerSelector, slots = [] } = await viewFactory(widget);
+
+  return [{ View, containerSelector }, ...slots].map(
+    ({ View, containerSelector }) =>
+      callback({
+        View,
+        containerSelector,
+        container: document.querySelector(containerSelector),
+      })
+  );
+}
 
 function createWidget(widgetParams) {
   return createMerkurWidget({
@@ -12,22 +26,24 @@ function createWidget(widgetParams) {
       render,
       unmountComponentAtNode,
     },
-    mount(widget) {
-      const View = widget.View();
-      const container = document.querySelector(widget.props.containerSelector);
-
-      return widget.$dependencies.hydrate(View, container);
+    async mount(widget) {
+      return mapViews(widget, ({ View, container }) => {
+        return (container && container.children.length
+          ? widget.$dependencies.hydrate
+          : widget.$dependencies.render)(View(widget), container);
+      });
     },
-    unmount(widget) {
-      const container = document.querySelector(widget.props.containerSelector);
-
-      return widget.$dependencies.unmountComponentAtNode(container);
+    async unmount(widget) {
+      mapViews(widget, ({ container }) => {
+        if (container) {
+          widget.$dependencies.unmountComponentAtNode(container);
+        }
+      });
     },
-    update(widget) {
-      const View = widget.View();
-      const container = document.querySelector(widget.props.containerSelector);
-
-      return widget.$dependencies.render(View, container);
+    async update(widget) {
+      return mapViews(widget, ({ View, container }) =>
+        widget.$dependencies.render(View(widget), container)
+      );
     },
   });
 }

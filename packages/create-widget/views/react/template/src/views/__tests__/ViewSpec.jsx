@@ -1,13 +1,9 @@
-/**
- * @jest-environment jsdom
- */
-
-import { h } from 'preact'; // eslint-disable-line no-unused-vars
+import React from 'react'; // eslint-disable-line no-unused-vars
 import { shallow } from 'enzyme';
 import { createMerkurWidget } from '@merkur/core';
 
 import View from '../View';
-import { widgetProperties } from '../../widget';
+import widgetProperties from '../../widget';
 
 describe('View', () => {
   let widget = null;

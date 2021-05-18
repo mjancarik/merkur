@@ -2,6 +2,7 @@ const path = require('path');
 
 const express = require('express');
 const compression = require('compression');
+const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const expressStaticGzip = require('express-static-gzip');
@@ -31,6 +32,7 @@ const widgetAPIRouterFactory = require('./router/widgetAPI');
 const widgetAPI = widgetAPIRouterFactory();
 
 app
+  .use(morgan('dev'))
   .use(
     helmet({
       contentSecurityPolicy: false,

@@ -14,7 +14,6 @@ const playgroundTemplate = ejs.compile(
 );
 
 const router = express.Router();
-const container = 'container';
 
 router
   .get(
@@ -29,20 +28,21 @@ router
         },
       }).json();
 
-      const { html } = widgetProperties;
-      widgetProperties.props.containerSelector = `.${container}`;
+      const { html, assets, slots = [], ...restProperties } = widgetProperties;
 
-      delete widgetProperties.html;
-
-      res
-        .status(200)
-        .send(playgroundTemplate({ widgetProperties, html, container }));
+      res.status(200).send(
+        playgroundTemplate({
+          widgetProperties: restProperties,
+          assets,
+          html,
+          slots,
+        })
+      );
     })
   )
   .use(
     playgroundErrorMiddleware({
       renderPlayground: playgroundTemplate,
-      container,
     })
   );
 

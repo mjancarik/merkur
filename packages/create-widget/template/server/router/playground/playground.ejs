@@ -5,11 +5,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <script src="/@merkur/tools/static/livereload.js"></script>
-  <% widgetProperties.assets.forEach((asset) => { %>
+  <% assets.forEach((asset) => { %>
     <%if (asset.type === 'stylesheet') { %>
       <link rel='stylesheet' href='<%= asset.source %>' />
     <% } %>
-    
     <%if (asset.type === 'script') { %>
       <%if (typeof asset.source === 'string') { %>
         <script src='<%= asset.source %>' defer='true'></script>
@@ -23,7 +22,10 @@
 </head>
 
 <body>
-  <div class="<%= container %>"><%- html %></div>
+  <% for (let i = 0; i < slots.length; i++) { %>
+    <div class="<%- slots[i].name %>"><%- slots[i].html %></div>
+  <% } %>
+  <div class="merkur-view"><%- html %></div>
   <script>
     window.addEventListener('load', function () {
       __merkur__.create(<%- JSON.stringify(widgetProperties) %>)

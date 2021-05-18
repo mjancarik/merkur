@@ -1,7 +1,21 @@
 import hyper from 'hyperhtml';
 import { createMerkurWidget, createMerkur } from '@merkur/core';
-import { widgetProperties } from './widget';
+import { viewFactory } from './views/View.jsx';
+import widgetProperties from './widget';
 import style from './style.css'; // eslint-disable-line no-unused-vars
+
+async function mapViews(widget, callback) {
+  const { View, containerSelector, slots = [] } = await viewFactory(widget);
+
+  return [{ View, containerSelector }, ...slots].map(
+    ({ View, containerSelector }) =>
+      callback({
+        View,
+        containerSelector,
+        container: document.querySelector(containerSelector),
+      })
+  );
+}
 
 function createWidget(widgetParams) {
   return createMerkurWidget({
@@ -12,16 +26,25 @@ function createWidget(widgetParams) {
       wire: hyper.wire,
     },
     mount(widget) {
-      widget.$external.render = widget.$dependencies.bind(
-        document.querySelector(widget.props.containerSelector)
-      );
-      return widget.View(widget.$external.render);
+      widget.$external.render = {};
+
+      return mapViews(widget, ({ View, containerSelector, container }) => {
+        widget.$external.render[containerSelector] = widget.$dependencies.bind(
+          container
+        );
+
+        View(widget.$external.render[containerSelector]);
+      });
     },
     unmount(widget) {
-      document.querySelector(widget.props.containerSelector).innerHTML = '';
+      mapViews(widget, ({ container }) => {
+        container.innerHTML = '';
+      });
     },
     update(widget) {
-      widget.View(widget.$external.render);
+      mapViews(widget, ({ View, containerSelector }) => {
+        View(widget.$external.render[containerSelector]);
+      });
     },
   });
 }

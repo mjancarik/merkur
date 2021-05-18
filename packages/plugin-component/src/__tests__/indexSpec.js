@@ -7,9 +7,9 @@ describe('createWidget method with component plugin', () => {
       $plugins: [componentPlugin],
       name: 'my-widget',
       version: '1.0.0',
+      containerSelector: '.container',
       props: {
         param: 1,
-        containerSelector: '.container',
       },
       assets: [
         {
@@ -75,9 +75,9 @@ describe('createWidget method with component plugin', () => {
       $plugins: [componentPlugin],
       name: 'my-widget',
       version: '1.0.0',
+      containerSelector: '.container',
       props: {
         param: 1,
-        containerSelector: '.container',
       },
       assets: [
         {

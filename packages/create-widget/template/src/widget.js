@@ -2,13 +2,11 @@ import { componentPlugin } from '@merkur/plugin-component';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 import { errorPlugin } from '@merkur/plugin-error';
 import pkg from '../package.json';
-import View from './component/View';
 
-export const widgetProperties = {
+export default {
   name: pkg.name,
   version: pkg.version,
   $plugins: [componentPlugin, eventEmitterPlugin, errorPlugin],
-  View,
   assets: [
     {
       name: 'polyfill.js',

@@ -1,31 +1,49 @@
 import { createMerkurWidget, createMerkur } from '@merkur/core';
-import { widgetProperties } from './widget';
+import widgetProperties from './widget';
+import { viewFactory } from './views/viewFactory';
 import style from './style.css'; // eslint-disable-line no-unused-vars
-import View from './component/View.svelte'; // eslint-disable-line no-unused-vars
 
+async function mapViews(widget, callback) {
+  const { View, containerSelector, slots = [] } = await viewFactory(widget);
+
+  return [{ View, containerSelector }, ...slots].map(
+    ({ View, containerSelector }) =>
+      callback({
+        View,
+        containerSelector,
+        container: document.querySelector(containerSelector),
+      })
+  );
+}
 function createWidget(widgetParams) {
   return createMerkurWidget({
     ...widgetProperties,
     ...widgetParams,
     $dependencies: {},
-    mount(widget) {
-      widget.$external.app = new View({
-        target: document.querySelector(widget.props.containerSelector),
-        props: {
-          widget,
-          state: widget.state,
-          props: widget.props,
-        },
-        hydrate: true,
+    async mount(widget) {
+      mapViews(widget, ({ containerSelector, View }) => {
+        widget.$external.app[containerSelector] = new View({
+          target: document.querySelector(containerSelector),
+          props: {
+            widget,
+            state: widget.state,
+            props: widget.props,
+          },
+          hydrate: true,
+        });
       });
     },
-    unmount(widget) {
-      widget.$external.app.$destroy();
+    async unmount(widget) {
+      mapViews(widget, ({ containerSelector }) => {
+        widget.$external.app[containerSelector].$destroy();
+      });
     },
-    update(widget) {
-      widget.$external.app.$set({
-        state: widget.state,
-        props: widget.props,
+    async update(widget) {
+      mapViews(widget, ({ containerSelector }) => {
+        widget.$external.app[containerSelector].$set({
+          state: widget.state,
+          props: widget.props,
+        });
       });
     },
   });
