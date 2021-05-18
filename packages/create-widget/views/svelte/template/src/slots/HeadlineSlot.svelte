@@ -2,9 +2,9 @@
   import { setContext } from 'svelte';
   import { writable } from 'svelte/store';
 
-  import Welcome from './Welcome.svelte';
-  import WidgetDescription from './WidgetDescription.svelte';
-  import ErrorView from './ErrorView.svelte';
+  import Welcome from '../component/Welcome.svelte';
+  import WidgetDescription from '../component/WidgetDescription.svelte';
+  import ErrorView from '../component/ErrorView.svelte';
 
   export let widget;
   export let state;
@@ -23,17 +23,16 @@
   }
 </script>
 
-{#if widget.error }
-  <ErrorView />
-{/if}
-
-
-{#if !widget.error }
+{#if widget.error && widget.error.message }
+  <div>
+    <ErrorView />
+  </div>
+{:else}
   <div class="merkur__page">
     <div class="merkur__headline">
       <div class="merkur__view">
         <Welcome />
-        <h3>Current count: {widget.state.counter}</h3>
+        <h3>Current count: {state.counter}</h3>
         <WidgetDescription name={widget.name} version={widget.version}/>
       </div>
     </div>

@@ -20,7 +20,7 @@ function HeadlineSlot(widget) {
         <div class='merkur__headline'>
           <div class='merkur__view'>
             ${Welcome(widget)}
-            <h3>Current count: <span id="counter">${
+            <h3>Current count: <span data-merkur="counter">${
               widget.state.counter
             }</span></h3>
             ${WidgetDescription(widget)}

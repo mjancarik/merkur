@@ -1,4 +1,4 @@
-import HeadlineSlot from './HeadlineSlot';
+import HeadlineSlot from './HeadlineSlot.svelte';
 
 async function headlineSlotFactory() {
   return {

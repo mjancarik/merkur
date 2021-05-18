@@ -16,11 +16,11 @@ export function createWidget(widgetParams) {
       const render = widget.$dependencies.bind(widget.state);
 
       return {
-        html: View(render).toString(),
+        html: View(widget, render).toString(),
         slots: slots.map((slot) => {
           return {
             ...slot,
-            html: slot.View(render).toString(),
+            html: slot.View(widget, render).toString(),
           };
         }),
       };

@@ -15,12 +15,15 @@ async function mapViews(widget, callback) {
       })
   );
 }
+
 function createWidget(widgetParams) {
   return createMerkurWidget({
     ...widgetProperties,
     ...widgetParams,
     $dependencies: {},
     async mount(widget) {
+      widget.$external.app = {};
+
       mapViews(widget, ({ containerSelector, View }) => {
         widget.$external.app[containerSelector] = new View({
           target: document.querySelector(containerSelector),

@@ -22,12 +22,18 @@ function createWidget(widgetParams) {
     ...widgetParams,
     $dependencies: {},
     async mount(widget) {
-      document.getElementById('increase').addEventListener('click', () => {
-        widget.onClick();
-      });
+      mapViews(widget, ({ container }) => {
+        container
+          .querySelector(`[data-merkur="on-increase"]`)
+          ?.addEventListener('click', () => {
+            widget.onClick();
+          });
 
-      document.getElementById('reset').addEventListener('click', () => {
-        widget.onReset();
+        container
+          .querySelector(`[data-merkur="on-reset"]`)
+          ?.addEventListener('click', () => {
+            widget.onReset();
+          });
       });
     },
     async unmount(widget) {
@@ -36,7 +42,10 @@ function createWidget(widgetParams) {
       });
     },
     async update(widget) {
-      document.getElementById('counter').innerText = widget.state.counter;
+      mapViews(widget, ({ container }) => {
+        container.querySelector(`[data-merkur="counter"]`).innerText =
+          widget.state.counter;
+      });
     },
   });
 }

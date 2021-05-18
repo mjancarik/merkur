@@ -1,4 +1,4 @@
-import View from './View';
+import View from './View.svelte';
 import { headlineSlotFactory } from '../slots/headlineSlotFactory';
 
 async function viewFactory(widget) {

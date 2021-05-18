@@ -1,6 +1,6 @@
 import hyper from 'hyperhtml';
 import { createMerkurWidget, createMerkur } from '@merkur/core';
-import { viewFactory } from './views/View.jsx';
+import { viewFactory } from './views/View';
 import widgetProperties from './widget';
 import style from './style.css'; // eslint-disable-line no-unused-vars
 
@@ -33,7 +33,7 @@ function createWidget(widgetParams) {
           container
         );
 
-        View(widget.$external.render[containerSelector]);
+        View(widget, widget.$external.render[containerSelector]);
       });
     },
     unmount(widget) {
@@ -43,7 +43,7 @@ function createWidget(widgetParams) {
     },
     update(widget) {
       mapViews(widget, ({ View, containerSelector }) => {
-        View(widget.$external.render[containerSelector]);
+        View(widget, widget.$external.render[containerSelector]);
       });
     },
   });

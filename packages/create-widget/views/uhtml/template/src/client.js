@@ -26,8 +26,8 @@ function createWidget(widgetParams) {
       html,
     },
     async mount(widget) {
-      return mapViews(widget, ({ container }) =>
-        widget.$dependencies.render(container, widget.View())
+      return mapViews(widget, ({ View, container }) =>
+        widget.$dependencies.render(container, View(widget))
       );
     },
     async unmount(widget) {
@@ -36,8 +36,8 @@ function createWidget(widgetParams) {
       );
     },
     async update(widget) {
-      return mapViews(widget, ({ container }) =>
-        widget.$dependencies.render(container, widget.View())
+      return mapViews(widget, ({ View, container }) =>
+        widget.$dependencies.render(container, View(widget))
       );
     },
   });
