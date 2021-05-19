@@ -32,7 +32,7 @@ export default class MerkurComponent extends React.Component {
    * Checks if widget has changed, e.g has different name or version.
    *
    * @param {{ name: string, version: string }} props
-   * @param {{ name: string, vesrion: string }} nextProps
+   * @param {{ name: string, version: string }} nextProps
    * @return {boolean} true if both inputs have name and version defined and any of them changed.
    */
   static hasWidgetChanged(props, nextProps) {
@@ -237,7 +237,7 @@ export default class MerkurComponent extends React.Component {
 
     /**
      * 2.3) In case widget has changed, first we need to cleanup (remove previous widget),
-     * and then we again try to intialize the new widget same way as
+     * and then we again try to initialize the new widget same way as
      * if it has mounted for the first time.
      */
     if (
@@ -311,7 +311,7 @@ export default class MerkurComponent extends React.Component {
 
   /**
    * Renders widget style assets inline. This is used on SSR
-   * and in first render after SSR hydratation.
+   * and in first render after SSR hydration.
    *
    * @return {[React.ReactElement]}
    */
@@ -454,7 +454,7 @@ export default class MerkurComponent extends React.Component {
   _getSSRHTML() {
     if (!this._isMounted && this._isClient()) {
       const container = document.querySelector(
-        this.props.widgetProperties.props.containerSelector
+        this.props.widgetProperties.containerSelector
       );
 
       return (
