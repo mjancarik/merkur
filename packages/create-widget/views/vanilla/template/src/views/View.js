@@ -3,10 +3,19 @@ import ErrorView from '../component/ErrorView';
 import { headlineSlotFactory } from '../slots/HeadlineSlot';
 
 async function viewFactory(widget) {
+  const slots = (await Promise.all([headlineSlotFactory(widget)])).reduce(
+    (acc, cur) => {
+      acc[cur.name] = cur;
+
+      return acc;
+    },
+    {}
+  );
+
   return {
     View: View,
     containerSelector: '.merkur-view',
-    slots: await Promise.all([headlineSlotFactory(widget)]),
+    slots,
   };
 }
 

@@ -22,14 +22,18 @@
 </head>
 
 <body>
-  <% for (let i = 0; i < slots.length; i++) { %>
-    <div class="<%- slots[i].name %>"><%- slots[i].html %></div>
-  <% } %>
+  <div class="headline-view"><%- widgetProperties && widgetProperties.slots && widgetProperties.slots.headline.html %></div>
   <div class="merkur-view"><%- html %></div>
   <script>
     window.addEventListener('load', function () {
       __merkur__.create(<%- JSON.stringify(widgetProperties) %>)
         .then(function (widget) {
+          window.__widget__ = widget;
+
+          widget.containerSelector = '.merkur-view';
+          widget.slots.headline.containerSelector = '.headline-view';
+          console.log('widget instance', widget);
+
           widget.mount();
         });
     });

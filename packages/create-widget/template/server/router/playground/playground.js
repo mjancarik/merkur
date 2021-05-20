@@ -28,14 +28,13 @@ router
         },
       }).json();
 
-      const { html, assets, slots = [], ...restProperties } = widgetProperties;
+      const { html, assets, ...restProperties } = widgetProperties;
 
       res.status(200).send(
         playgroundTemplate({
           widgetProperties: restProperties,
           assets,
           html,
-          slots,
         })
       );
     })

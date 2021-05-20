@@ -20,7 +20,7 @@ router.get(
       },
     });
 
-    const { html, slots = [] } = await widget.mount();
+    const { html, slots = {} } = await widget.mount();
     const info = await widget.info();
 
     const staticFolder = `${__dirname}/../../../build/static`;

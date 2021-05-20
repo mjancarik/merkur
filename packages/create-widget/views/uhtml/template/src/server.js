@@ -11,16 +11,19 @@ export function createWidget(widgetParams) {
       html,
     },
     async mount(widget) {
-      const { View, slots } = await viewFactory(widget);
+      const { View, slots = {}, ...restView } = await viewFactory(widget);
 
       return {
+        ...restView,
         html: View(widget),
-        slots: slots.map((slot) => {
-          return {
-            ...slot,
-            html: slot.View(widget),
+        slots: Object.keys(slots).reduce((acc, cur) => {
+          acc[cur] = {
+            ...slots[cur],
+            html: slots[cur].View(widget),
           };
-        }),
+
+          return acc;
+        }, {}),
       };
     },
   });

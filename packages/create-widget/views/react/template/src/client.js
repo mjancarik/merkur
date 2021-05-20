@@ -5,15 +5,24 @@ import { viewFactory } from './views/View.jsx';
 import style from './style.css'; // eslint-disable-line no-unused-vars
 
 async function mapViews(widget, callback) {
-  const { View, containerSelector, slots = [] } = await viewFactory(widget);
+  const { View, slots = {} } = await viewFactory(widget);
+  const { containerSelector } = widget;
 
-  return [{ View, containerSelector }, ...slots].map(
-    ({ View, containerSelector }) =>
+  // Update new slot container selectors
+  Object.keys(widget.slots).forEach((slotName) => {
+    slots[slotName].containerSelector =
+      widget.slots[slotName].containerSelector;
+  });
+
+  return [{ View, containerSelector }, ...Object.values(slots)].map(
+    ({ View, containerSelector }) => {
       callback({
         View,
         containerSelector,
-        container: document.querySelector(containerSelector),
-      })
+        container:
+          containerSelector && document.querySelector(containerSelector),
+      });
+    }
   );
 }
 
@@ -28,7 +37,11 @@ function createWidget(widgetParams) {
     },
     async mount(widget) {
       return mapViews(widget, ({ View, container }) => {
-        return (container && container.children.length
+        if (!container) {
+          return null;
+        }
+
+        return (container?.children?.length
           ? widget.$dependencies.hydrate
           : widget.$dependencies.render)(View(widget), container);
       });
@@ -41,8 +54,10 @@ function createWidget(widgetParams) {
       });
     },
     async update(widget) {
-      return mapViews(widget, ({ View, container }) =>
-        widget.$dependencies.render(View(widget), container)
+      return mapViews(
+        widget,
+        ({ View, container }) =>
+          container && widget.$dependencies.render(View(widget), container)
       );
     },
   });
