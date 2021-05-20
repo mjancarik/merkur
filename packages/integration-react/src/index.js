@@ -1,3 +1,4 @@
 import MerkurComponent from './MerkurComponent';
+import MerkurSlot from './MerkurSlot';
 
-export { MerkurComponent };
+export { MerkurComponent, MerkurSlot };

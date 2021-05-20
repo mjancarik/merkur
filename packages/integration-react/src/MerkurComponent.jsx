@@ -2,14 +2,11 @@ import React from 'react';
 import { getMerkur } from '@merkur/core';
 import { loadScriptAssets, loadStyleAssets } from '@merkur/integration';
 
+import WidgetWrapper from './WidgetWrapper';
+import { isClient } from './utils';
+
 // error event name from @merkur/plugin-error
 const MERKUR_ERROR_EVENT_NAME = '@merkur/plugin-error.error';
-
-function WidgetWrapper({ html, className }) {
-  return (
-    <div className={className} dangerouslySetInnerHTML={{ __html: html }} />
-  );
-}
 
 export default class MerkurComponent extends React.Component {
   constructor(props) {
@@ -135,7 +132,7 @@ export default class MerkurComponent extends React.Component {
         return false;
       } else {
         /**
-         * In case the lenght of both property instances is the same
+         * In case the length of both property instances is the same
          * we need to shallow compare their values.
          */
         for (let key in nextProps.widgetProperties.props) {
@@ -277,7 +274,7 @@ export default class MerkurComponent extends React.Component {
     if (
       !widgetProperties ||
       encounteredError ||
-      (this._isClient() && !this._isSSRHydrate() && !assetsLoaded)
+      (isClient() && !this._isSSRHydrate() && !assetsLoaded)
     ) {
       return this._renderFallback();
     }
@@ -286,8 +283,7 @@ export default class MerkurComponent extends React.Component {
 
     return (
       <>
-        {(!this._isClient() || this._isSSRHydrate()) &&
-          this._renderStyleAssets()}
+        {(!isClient() || this._isSSRHydrate()) && this._renderStyleAssets()}
         <WidgetWrapper className={widgetClassName} html={html} />
       </>
     );
@@ -452,7 +448,7 @@ export default class MerkurComponent extends React.Component {
    * @return {string} server-side rendered html, if it's not available, return empty string.
    */
   _getSSRHTML() {
-    if (!this._isMounted && this._isClient()) {
+    if (!this._isMounted && isClient()) {
       const container = document.querySelector(
         this.props.widgetProperties.containerSelector
       );
@@ -475,12 +471,5 @@ export default class MerkurComponent extends React.Component {
    */
   _isSSRHydrate() {
     return this._getSSRHTML().length > 0;
-  }
-
-  /**
-   * @return {boolean} true in browser environment.
-   */
-  _isClient() {
-    return typeof window !== 'undefined' && typeof document !== 'undefined';
   }
 }
