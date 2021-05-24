@@ -4,12 +4,12 @@ import { createMerkur, createMerkurWidget, removeMerkur } from '@merkur/core';
 import { componentPlugin } from '@merkur/plugin-component';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 
-const mockedWidgetClassName = 'container';
+const mockedWidgetContainerSelector = '.container';
 const mockedWidgetProperties = {
   name: 'my-widget',
   version: '0.0.1',
   props: {
-    containerSelector: `.${mockedWidgetClassName}`,
+    containerSelector: mockedWidgetContainerSelector,
   },
   assets: [
     {
@@ -70,9 +70,4 @@ function widgetMockCleanup() {
   removeMerkur();
 }
 
-export {
-  mockedWidgetClassName,
-  mockedWidgetProperties,
-  widgetMockCleanup,
-  widgetMockInit,
-};
+export { mockedWidgetProperties, widgetMockCleanup, widgetMockInit };

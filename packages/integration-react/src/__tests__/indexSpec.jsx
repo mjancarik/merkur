@@ -5,6 +5,7 @@ describe('module @merkur/integration-react', () => {
     expect(module).toMatchInlineSnapshot(`
       Object {
         "MerkurComponent": [Function],
+        "MerkurSlot": [Function],
       }
     `);
   });

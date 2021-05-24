@@ -8,6 +8,10 @@ import React from 'react';
  * @return {{ string: string }} Property name and value tuple.
  */
 function selectorToAttribute(containerSelector = '') {
+  if (typeof containerSelector !== 'string' || containerSelector.length === 0) {
+    return {};
+  }
+
   const lastPart = containerSelector.split(' ').pop();
 
   return {
