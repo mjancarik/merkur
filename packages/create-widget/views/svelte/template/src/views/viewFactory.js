@@ -13,7 +13,6 @@ async function viewFactory(widget) {
 
   return {
     View: View,
-    containerSelector: '.merkur-view',
     slots,
   };
 }

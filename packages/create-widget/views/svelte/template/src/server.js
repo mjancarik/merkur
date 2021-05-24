@@ -8,7 +8,7 @@ export function createWidget(widgetParams) {
     ...widgetParams,
     $dependencies: {},
     async mount(widget) {
-      const { View, slots = {}, ...restView } = await viewFactory(widget);
+      const { View, slots = {} } = await viewFactory(widget);
       const renderParams = {
         widget,
         state: widget.state,
@@ -16,18 +16,15 @@ export function createWidget(widgetParams) {
       };
 
       return {
-        ...restView,
         html: View.render(renderParams)?.html,
         slots: Object.keys(slots).reduce((acc, cur) => {
-          const { html } = slots[cur].View.render(renderParams);
-
           acc[cur] = {
-            ...slots[cur],
-            html,
+            name: slots[cur].name,
+            html: slots[cur].View.render(renderParams)?.html,
           };
 
           return acc;
-        }),
+        }, {}),
       };
     },
   });

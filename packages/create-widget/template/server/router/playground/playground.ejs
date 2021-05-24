@@ -28,11 +28,8 @@
     window.addEventListener('load', function () {
       __merkur__.create(<%- JSON.stringify(widgetProperties) %>)
         .then(function (widget) {
-          window.__widget__ = widget;
-
           widget.containerSelector = '.merkur-view';
           widget.slots.headline.containerSelector = '.headline-view';
-          console.log('widget instance', widget);
 
           widget.mount();
         });

@@ -7,6 +7,6 @@
         "@babel/preset-react": "7.13.13",
         "babel-loader": "8.2.2",
         "enzyme": "3.11.0",
-        "enzyme-adapter-react-16": "1.15.6"
+        "@wojtekmaj/enzyme-adapter-react-17": "0.6.1"
   }
 }

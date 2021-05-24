@@ -2,29 +2,8 @@ import { render, html } from 'uhtml';
 import { createMerkurWidget, createMerkur } from '@merkur/core';
 import widgetProperties from './widget';
 import { viewFactory } from './views/View';
+import { mapViews } from './lib/utils';
 import style from './style.css'; // eslint-disable-line no-unused-vars
-
-async function mapViews(widget, callback) {
-  const { View, slots = {} } = await viewFactory(widget);
-  const { containerSelector } = widget;
-
-  // Update new slot container selectors
-  Object.keys(widget.slots).forEach((slotName) => {
-    slots[slotName].containerSelector =
-      widget.slots[slotName].containerSelector;
-  });
-
-  return [{ View, containerSelector }, ...Object.values(slots)].map(
-    ({ View, containerSelector }) => {
-      callback({
-        View,
-        containerSelector,
-        container:
-          containerSelector && document.querySelector(containerSelector),
-      });
-    }
-  );
-}
 
 function createWidget(widgetParams) {
   return createMerkurWidget({
@@ -37,6 +16,7 @@ function createWidget(widgetParams) {
     async mount(widget) {
       return mapViews(
         widget,
+        viewFactory,
         ({ View, container }) =>
           container && widget.$dependencies.render(container, View(widget))
       );
@@ -44,6 +24,7 @@ function createWidget(widgetParams) {
     async unmount(widget) {
       return mapViews(
         widget,
+        viewFactory,
         ({ container }) =>
           container &&
           widget.$dependencies.render(container, widget.$dependencies.html``)
@@ -52,6 +33,7 @@ function createWidget(widgetParams) {
     async update(widget) {
       return mapViews(
         widget,
+        viewFactory,
         ({ View, container }) =>
           container && widget.$dependencies.render(container, View(widget))
       );

@@ -36,6 +36,7 @@ export function componentPlugin() {
 
       widget = setDefaultValueForUndefined(widget, ['props', 'state']);
       widget = setDefaultValueForUndefined(widget, ['assets'], []);
+      widget = setDefaultValueForUndefined(widget, ['containerSelector'], null);
 
       return widget;
     },

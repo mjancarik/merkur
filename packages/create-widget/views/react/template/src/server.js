@@ -11,14 +11,13 @@ export function createWidget(widgetParams) {
       render: renderToString,
     },
     async mount(widget) {
-      const { View, slots = {}, ...restView } = await viewFactory(widget);
+      const { View, slots = {} } = await viewFactory(widget);
 
       return {
-        ...restView,
         html: widget.$dependencies.render(View(widget)),
         slots: Object.keys(slots).reduce((acc, cur) => {
           acc[cur] = {
-            ...slots[cur],
+            name: slots[cur].name,
             html: widget.$dependencies.render(slots[cur].View(widget)),
           };
 
