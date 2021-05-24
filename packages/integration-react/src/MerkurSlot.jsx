@@ -155,9 +155,9 @@ export default class MerkurSlot extends AbstractMerkurComponent {
    * @return {React.ReactElement|null}
    */
   render() {
-    const { widgetProperties, slotClassName } = this.props;
+    const { widgetProperties } = this.props;
 
-    if (!slotClassName || !widgetProperties || !this.slot) {
+    if (!widgetProperties || !this.slot) {
       return this._renderFallback();
     }
 
@@ -172,7 +172,9 @@ export default class MerkurSlot extends AbstractMerkurComponent {
     const html = isInitialSPARender ? '' : this._getWidgetHTML();
 
     return (
-      <WidgetWrapper className={slotClassName} html={html}>
+      <WidgetWrapper
+        containerSelector={this.slot.containerSelector}
+        html={html}>
         {isInitialSPARender && this._renderFallback()}
       </WidgetWrapper>
     );

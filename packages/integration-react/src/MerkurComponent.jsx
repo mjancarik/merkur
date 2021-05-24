@@ -262,7 +262,7 @@ export default class MerkurComponent extends AbstractMerkurComponent {
    * @return {React.ReactElement|null}
    */
   render() {
-    const { widgetProperties, widgetClassName } = this.props;
+    const { widgetProperties } = this.props;
     const { encounteredError, assetsLoaded } = this.state;
 
     if (
@@ -279,7 +279,10 @@ export default class MerkurComponent extends AbstractMerkurComponent {
       <>
         {(!this._isClient() || this._isSSRHydrate()) &&
           this._renderStyleAssets()}
-        <WidgetWrapper className={widgetClassName} html={html} />
+        <WidgetWrapper
+          containerSelector={widgetProperties.containerSelector}
+          html={html}
+        />
       </>
     );
   }
