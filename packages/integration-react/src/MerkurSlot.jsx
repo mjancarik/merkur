@@ -1,22 +1,13 @@
 import React from 'react';
 
 import WidgetWrapper from './WidgetWrapper';
-import MerkurComponent from './MerkurComponent';
-import { isClient } from './utils';
+import AbstractMerkurComponent from './AbstractMerkurComponent';
 
-export default class MerkurSlot extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this._html = null;
-    this._isMounted = false;
-
-    this.state = {
-      assetsLoaded: false, // TODO figure out how to get this information from MerkurComponent for SPA rendering
-      cachedWidgetMeta: null,
-    };
-  }
-
+export default class MerkurSlot extends AbstractMerkurComponent {
+  /**
+   * Returns access to current slot properties, based on it's name
+   * passed in props.
+   */
   get slot() {
     const { widgetProperties, slotName } = this.props;
 
@@ -26,6 +17,28 @@ export default class MerkurSlot extends React.Component {
         widgetProperties.slots[slotName]) ||
       null
     );
+  }
+
+  /**
+   * @inheritdoc
+   */
+  get html() {
+    return this.slot?.html;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  get container() {
+    return document?.querySelector(this.slot?.containerSelector);
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      cachedWidgetMeta: null,
+    };
   }
 
   /**
@@ -52,13 +65,12 @@ export default class MerkurSlot extends React.Component {
 
       // Replace cached widget meta data with new ones and reset state
       if (
-        MerkurComponent.hasWidgetChanged(
+        AbstractMerkurComponent.hasWidgetChanged(
           prevState.cachedWidgetMeta,
           nextProps.widgetProperties
         )
       ) {
         return {
-          assetsLoaded: false,
           cachedWidgetMeta: {
             name,
             version,
@@ -72,18 +84,15 @@ export default class MerkurSlot extends React.Component {
 
   /**
    * The component should update only in following cases:
-   *  1) State of MerkurComponent has changed (excluding { @code this.state.cachedWidgetMeta }).
-   *  2) Component has no props.widgetProperties.
-   *  3) Widget properties changed (name or version).
+   *  1) Component has no props.widgetProperties.
+   *  2) Widget properties changed (name or version).
    *
    * @param {object} nextProps
-   * @param {object} nextState
    */
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(nextProps) {
     if (
-      this.state.assetsLoaded !== nextState.assetsLoaded ||
       !this.props.widgetProperties ||
-      MerkurComponent.hasWidgetChanged(
+      AbstractMerkurComponent.hasWidgetChanged(
         this.props.widgetProperties,
         nextProps.widgetProperties
       )
@@ -92,13 +101,6 @@ export default class MerkurSlot extends React.Component {
     }
 
     return false;
-  }
-
-  componentDidMount() {
-    this.setState({
-      assetsLoaded: true,
-    }); // simulation of widget assets fetching
-    this._isMounted = true;
   }
 
   /**
@@ -114,9 +116,8 @@ export default class MerkurSlot extends React.Component {
 
     // In case we receive empty new properties, we need to cleanup.
     if (!currentWidgetProperties && prevWidgetProperties) {
-      this._html = null;
+      this._removeSlot();
       this.setState({
-        assetsLoaded: false,
         cachedWidgetMeta: null,
       });
 
@@ -125,12 +126,12 @@ export default class MerkurSlot extends React.Component {
 
     // In case widget has changed, first we need to cleanup
     if (
-      MerkurComponent.hasWidgetChanged(
+      AbstractMerkurComponent.hasWidgetChanged(
         currentWidgetProperties,
         prevWidgetProperties
       )
     ) {
-      this._html = null;
+      this._removeSlot();
 
       return;
     }
@@ -140,7 +141,7 @@ export default class MerkurSlot extends React.Component {
    * In case of unmounting we only really need to do the cleanup.
    */
   componentWillUnmount() {
-    this._html = null;
+    this._removeSlot();
   }
 
   /**
@@ -155,78 +156,32 @@ export default class MerkurSlot extends React.Component {
    */
   render() {
     const { widgetProperties, slotClassName } = this.props;
-    const { assetsLoaded } = this.state;
 
-    if (
-      !slotClassName ||
-      !widgetProperties ||
-      !this.slot ||
-      (isClient() && !this._isSSRHydrate() && !assetsLoaded)
-    ) {
+    if (!slotClassName || !widgetProperties || !this.slot) {
       return this._renderFallback();
     }
 
-    const html = this._getWidgetHTML();
+    /**
+     * In case of SPA rendering, we render fallback (which can also display
+     * loading placeholders) inside the component wrapper, until the widget
+     * assets are loaded and mounted, which results in overriding the contents
+     * of the wrapper (containing fallback) with slot markup. In case of SPA
+     * we also don't want to render html to prevent FOUC.
+     */
+    const isInitialSPARender = this._isClient() && !this._isSSRHydrate();
+    const html = isInitialSPARender ? '' : this._getWidgetHTML();
 
-    return <WidgetWrapper className={slotClassName} html={html} />;
+    return (
+      <WidgetWrapper className={slotClassName} html={html}>
+        {isInitialSPARender && this._renderFallback()}
+      </WidgetWrapper>
+    );
   }
 
   /**
-   * @return {React.ReactElement|null}
+   * Cleanup after slot removal.
    */
-  _renderFallback() {
-    const { children } = this.props;
-    // const { encounteredError } = this.state;
-
-    if (typeof children === 'function') {
-      return children({ error: null }); // TODO also pass somehow error handling along with loaded assets ? :dunno:
-    } else if (React.isValidElement(children)) {
-      return children;
-    }
-
-    return null;
-  }
-
-  /**
-   * @return {string} SSR rendered HTML, html from widgetProperties or ''.
-   */
-  _getWidgetHTML() {
-    if (this._html !== null) {
-      return this._html;
-    }
-
-    this._html = this.slot.html || this._getSSRHTML();
-
-    return this._html;
-  }
-
-  /**
-   * Return server-side rendered html, if its the first render on client
-   * after SSR.
-   *
-   * @return {string} server-side rendered html, if it's not available, return empty string.
-   */
-  _getSSRHTML() {
-    if (!this._isMounted && isClient()) {
-      const container = document.querySelector(this.slot.containerSelector);
-
-      return (
-        container &&
-        container.children &&
-        container.children[0] &&
-        container.children[0].outerHTML
-      );
-    }
-
-    return '';
-  }
-
-  /**
-   * Checks if it's the first render after SSR.
-   *
-   * @return {boolean} true in case of a first render after SSR, otherwise false.
-   */
-  _isSSRHydrate() {
-    return this._getSSRHTML().length > 0;
+  _removeSlot() {
+    this._clearCachedHtml();
   }
 }

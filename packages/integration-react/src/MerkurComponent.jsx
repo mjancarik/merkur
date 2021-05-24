@@ -3,19 +3,32 @@ import { getMerkur } from '@merkur/core';
 import { loadScriptAssets, loadStyleAssets } from '@merkur/integration';
 
 import WidgetWrapper from './WidgetWrapper';
-import { isClient } from './utils';
+import AbstractMerkurComponent from './AbstractMerkurComponent';
 
 // error event name from @merkur/plugin-error
 const MERKUR_ERROR_EVENT_NAME = '@merkur/plugin-error.error';
 
-export default class MerkurComponent extends React.Component {
+export default class MerkurComponent extends AbstractMerkurComponent {
+  /**
+   * @inheritdoc
+   */
+  get html() {
+    return this.props.widgetProperties?.html;
+  }
+
+  /**
+   * @inheritdoc
+   */
+  get container() {
+    return document?.querySelector(
+      this.props.widgetProperties?.containerSelector
+    );
+  }
+
   constructor(props) {
     super(props);
 
-    this._html = null;
     this._widget = null;
-    this._isMounted = false;
-
     this._handleClientError = this._handleError.bind(this);
 
     this.state = {
@@ -23,25 +36,6 @@ export default class MerkurComponent extends React.Component {
       assetsLoaded: false,
       cachedWidgetMeta: null,
     };
-  }
-
-  /**
-   * Checks if widget has changed, e.g has different name or version.
-   *
-   * @param {{ name: string, version: string }} props
-   * @param {{ name: string, version: string }} nextProps
-   * @return {boolean} true if both inputs have name and version defined and any of them changed.
-   */
-  static hasWidgetChanged(props, nextProps) {
-    return !!(
-      props &&
-      props.name &&
-      props.version &&
-      nextProps &&
-      nextProps.name &&
-      nextProps.version &&
-      (props.version !== nextProps.version || props.name !== nextProps.name)
-    );
   }
 
   /**
@@ -68,7 +62,7 @@ export default class MerkurComponent extends React.Component {
 
       // Replace cached widget meta data with new ones and reset state
       if (
-        MerkurComponent.hasWidgetChanged(
+        AbstractMerkurComponent.hasWidgetChanged(
           prevState.cachedWidgetMeta,
           nextProps.widgetProperties
         )
@@ -105,7 +99,7 @@ export default class MerkurComponent extends React.Component {
       this.state.assetsLoaded !== nextState.assetsLoaded ||
       this.state.encounteredError !== nextState.encounteredError ||
       !this.props.widgetProperties ||
-      MerkurComponent.hasWidgetChanged(
+      AbstractMerkurComponent.hasWidgetChanged(
         this.props.widgetProperties,
         nextProps.widgetProperties
       )
@@ -182,12 +176,12 @@ export default class MerkurComponent extends React.Component {
   }
 
   /**
-   * In case of mounting the component, we allways try to first load
+   * In case of mounting the component, we always try to first load
    * the widget assets. Be it first mount after SSR or mount after
    * first render on client.
    */
   componentDidMount() {
-    this._isMounted = true;
+    super.componentDidMount();
     this._loadWidgetAssets();
   }
 
@@ -238,7 +232,7 @@ export default class MerkurComponent extends React.Component {
      * if it has mounted for the first time.
      */
     if (
-      MerkurComponent.hasWidgetChanged(
+      AbstractMerkurComponent.hasWidgetChanged(
         currentWidgetProperties,
         prevWidgetProperties
       )
@@ -274,7 +268,7 @@ export default class MerkurComponent extends React.Component {
     if (
       !widgetProperties ||
       encounteredError ||
-      (isClient() && !this._isSSRHydrate() && !assetsLoaded)
+      (this._isClient() && !this._isSSRHydrate() && !assetsLoaded)
     ) {
       return this._renderFallback();
     }
@@ -283,26 +277,11 @@ export default class MerkurComponent extends React.Component {
 
     return (
       <>
-        {(!isClient() || this._isSSRHydrate()) && this._renderStyleAssets()}
+        {(!this._isClient() || this._isSSRHydrate()) &&
+          this._renderStyleAssets()}
         <WidgetWrapper className={widgetClassName} html={html} />
       </>
     );
-  }
-
-  /**
-   * @return {React.ReactElement|null}
-   */
-  _renderFallback() {
-    const { children } = this.props;
-    const { encounteredError } = this.state;
-
-    if (typeof children === 'function') {
-      return children({ error: encounteredError });
-    } else if (React.isValidElement(children)) {
-      return children;
-    }
-
-    return null;
   }
 
   /**
@@ -337,19 +316,6 @@ export default class MerkurComponent extends React.Component {
       });
   }
 
-  /**
-   * @return {string} SSR rendered HTML, html from widgetProperties or ''.
-   */
-  _getWidgetHTML() {
-    if (this._html !== null) {
-      return this._html;
-    }
-
-    this._html = this.props.widgetProperties.html || this._getSSRHTML();
-
-    return this._html;
-  }
-
   _handleError(error) {
     if (typeof this.props.onError === 'function') {
       this.props.onError(error);
@@ -378,7 +344,7 @@ export default class MerkurComponent extends React.Component {
 
     this._widget.unmount();
     this._widget = null;
-    this._html = null;
+    this._clearCachedHtml();
   }
 
   /**
@@ -439,37 +405,5 @@ export default class MerkurComponent extends React.Component {
         console.warn(error);
       }
     }
-  }
-
-  /**
-   * Return server-side rendered html, if its the first render on client
-   * after SSR.
-   *
-   * @return {string} server-side rendered html, if it's not available, return empty string.
-   */
-  _getSSRHTML() {
-    if (!this._isMounted && isClient()) {
-      const container = document.querySelector(
-        this.props.widgetProperties.containerSelector
-      );
-
-      return (
-        container &&
-        container.children &&
-        container.children[0] &&
-        container.children[0].outerHTML
-      );
-    }
-
-    return '';
-  }
-
-  /**
-   * Checks if it's the first render after SSR.
-   *
-   * @return {boolean} true in case of a first render after SSR, otherwise false.
-   */
-  _isSSRHydrate() {
-    return this._getSSRHTML().length > 0;
   }
 }
