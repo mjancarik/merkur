@@ -1,9 +1,9 @@
 import React from 'react';
 
 import WidgetWrapper from './WidgetWrapper';
-import AbstractMerkurComponent from './AbstractMerkurComponent';
+import AbstractMerkurWidget from './AbstractMerkurWidget';
 
-export default class MerkurSlot extends AbstractMerkurComponent {
+export default class MerkurSlot extends AbstractMerkurWidget {
   /**
    * Returns access to current slot properties, based on it's name
    * passed in props.
@@ -47,7 +47,7 @@ export default class MerkurSlot extends AbstractMerkurComponent {
   shouldComponentUpdate(nextProps) {
     if (
       !this.props.widgetProperties ||
-      AbstractMerkurComponent.hasWidgetChanged(
+      AbstractMerkurWidget.hasWidgetChanged(
         this.props.widgetProperties,
         nextProps.widgetProperties
       )

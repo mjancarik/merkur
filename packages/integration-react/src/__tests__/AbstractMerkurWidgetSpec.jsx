@@ -6,10 +6,10 @@ import {
   widgetMockCleanup,
   widgetMockInit,
 } from '../__mocks__/widgetMock';
-import AbstractMerkurComponent from '../AbstractMerkurComponent';
+import AbstractMerkurWidget from '../AbstractMerkurWidget';
 
 // Mock extending abstract class
-class MockMerkurComponent extends AbstractMerkurComponent {
+class MockMerkurComponent extends AbstractMerkurWidget {
   get html() {
     return this.props.widgetProperties?.html;
   }
@@ -23,7 +23,7 @@ class MockMerkurComponent extends AbstractMerkurComponent {
   }
 }
 
-describe('AbstractMerkurComponent', () => {
+describe('AbstractMerkurWidget', () => {
   let widgetProperties = null;
   let instance = null;
   let wrapper = null;
@@ -52,7 +52,7 @@ describe('AbstractMerkurComponent', () => {
   describe('html getter', () => {
     it('should throw an error when not overridden', () => {
       expect(() => {
-        new AbstractMerkurComponent().html;
+        new AbstractMerkurWidget().html;
       }).toThrowError();
     });
   });
@@ -60,7 +60,7 @@ describe('AbstractMerkurComponent', () => {
   describe('container getter', () => {
     it('should throw an error when not overridden', () => {
       expect(() => {
-        new AbstractMerkurComponent().container;
+        new AbstractMerkurWidget().container;
       }).toThrowError();
     });
   });
@@ -78,17 +78,15 @@ describe('AbstractMerkurComponent', () => {
 
   describe('static hasWidgetChanged() method', () => {
     it('should return false for invalid inputs', () => {
-      expect(AbstractMerkurComponent.hasWidgetChanged(null, undefined)).toBe(
+      expect(AbstractMerkurWidget.hasWidgetChanged(null, undefined)).toBe(
         false
       );
-      expect(AbstractMerkurComponent.hasWidgetChanged()).toBe(false);
-      expect(AbstractMerkurComponent.hasWidgetChanged('', '')).toBe(false);
-      expect(AbstractMerkurComponent.hasWidgetChanged(1, {})).toBe(false);
-      expect(AbstractMerkurComponent.hasWidgetChanged({ a: 1, b: 2 })).toBe(
-        false
-      );
+      expect(AbstractMerkurWidget.hasWidgetChanged()).toBe(false);
+      expect(AbstractMerkurWidget.hasWidgetChanged('', '')).toBe(false);
+      expect(AbstractMerkurWidget.hasWidgetChanged(1, {})).toBe(false);
+      expect(AbstractMerkurWidget.hasWidgetChanged({ a: 1, b: 2 })).toBe(false);
       expect(
-        AbstractMerkurComponent.hasWidgetChanged(
+        AbstractMerkurWidget.hasWidgetChanged(
           { name: 'name', version: 'version' },
           { a: 4, b: 5 }
         )
@@ -97,7 +95,7 @@ describe('AbstractMerkurComponent', () => {
 
     it('should return false for same widgets', () => {
       expect(
-        AbstractMerkurComponent.hasWidgetChanged(
+        AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todo', version: '1.0.0' },
           { name: 'todo', version: '1.0.0' }
         )
@@ -106,13 +104,13 @@ describe('AbstractMerkurComponent', () => {
 
     it('should return true for different versions of the widget', () => {
       expect(
-        AbstractMerkurComponent.hasWidgetChanged(
+        AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todo', version: '1.0.0' },
           { name: 'todo', version: '0.1.0' }
         )
       ).toBe(true);
       expect(
-        AbstractMerkurComponent.hasWidgetChanged(
+        AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todo', version: '1.1.0' },
           { name: 'todo', version: '1.0.0' }
         )
@@ -121,13 +119,13 @@ describe('AbstractMerkurComponent', () => {
 
     it('should return true for different widgets', () => {
       expect(
-        AbstractMerkurComponent.hasWidgetChanged(
+        AbstractMerkurWidget.hasWidgetChanged(
           { name: 'articles', version: '1.0.0' },
           { name: 'todo', version: '0.1.0' }
         )
       ).toBe(true);
       expect(
-        AbstractMerkurComponent.hasWidgetChanged(
+        AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todos', version: '1.0.0' },
           { name: 'todo', version: '1.0.0' }
         )

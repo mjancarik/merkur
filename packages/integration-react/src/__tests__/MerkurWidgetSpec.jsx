@@ -7,7 +7,7 @@ import {
   widgetMockCleanup,
   widgetMockInit,
 } from '../__mocks__/widgetMock';
-import MerkurComponent from '../MerkurComponent';
+import MerkurWidget from '../MerkurWidget';
 
 jest.mock('../WidgetWrapper', () => {
   const { WidgetWrapperComponent } = jest.requireActual('../WidgetWrapper');
@@ -34,15 +34,11 @@ describe('Merkur component', () => {
     widgetProperties = { ...mockedWidgetProperties };
 
     // Mock basic function so first render can pass
-    jest
-      .spyOn(MerkurComponent.prototype, '_isSSRHydrate')
-      .mockReturnValue(false);
+    jest.spyOn(MerkurWidget.prototype, '_isSSRHydrate').mockReturnValue(false);
 
     // Shallow render component
     wrapper = shallow(
-      <MerkurComponent widgetProperties={widgetProperties}>
-        Fallback
-      </MerkurComponent>
+      <MerkurWidget widgetProperties={widgetProperties}>Fallback</MerkurWidget>
     );
 
     widgetMockInit();
@@ -56,9 +52,9 @@ describe('Merkur component', () => {
   describe('merkur component rendering', () => {
     it('should render fallback for not defined widgetProperties', () => {
       wrapper = shallow(
-        <MerkurComponent>
+        <MerkurWidget>
           <span>Fallback</span>
-        </MerkurComponent>
+        </MerkurWidget>
       );
 
       expect(wrapper.exists()).toBeTruthy();
@@ -70,9 +66,9 @@ describe('Merkur component', () => {
         .mockImplementation(() => Promise.resolve());
 
       wrapper = shallow(
-        <MerkurComponent widgetProperties={widgetProperties}>
+        <MerkurWidget widgetProperties={widgetProperties}>
           <span>Fallback</span>
-        </MerkurComponent>
+        </MerkurWidget>
       );
 
       setImmediate(() => {
@@ -94,12 +90,12 @@ describe('Merkur component', () => {
       const onWidgetUnmounting = jest.fn();
 
       wrapper = shallow(
-        <MerkurComponent
+        <MerkurWidget
           widgetProperties={widgetProperties}
           onWidgetMounted={onWidgetMounted}
           onWidgetUnmounting={onWidgetUnmounting}>
           <span>Fallback</span>
-        </MerkurComponent>
+        </MerkurWidget>
       );
 
       setImmediate(() => {
@@ -123,9 +119,9 @@ describe('Merkur component', () => {
       const onError = jest.fn();
 
       wrapper = shallow(
-        <MerkurComponent widgetProperties={widgetProperties} onError={onError}>
+        <MerkurWidget widgetProperties={widgetProperties} onError={onError}>
           <span>Fallback</span>
-        </MerkurComponent>
+        </MerkurWidget>
       );
 
       setImmediate(() => {
@@ -147,9 +143,9 @@ describe('Merkur component', () => {
         .mockImplementation(() => Promise.resolve());
 
       wrapper = shallow(
-        <MerkurComponent widgetProperties={widgetProperties}>
+        <MerkurWidget widgetProperties={widgetProperties}>
           <span>Fallback</span>
-        </MerkurComponent>
+        </MerkurWidget>
       );
 
       setImmediate(() => {
@@ -182,19 +178,15 @@ describe('Merkur component methods', () => {
       .mockImplementation(() => Promise.resolve());
 
     // Mock basic function so first render can pass
+    jest.spyOn(MerkurWidget.prototype, '_isSSRHydrate').mockReturnValue(false);
+    jest.spyOn(MerkurWidget.prototype, '_isClient').mockReturnValue(true);
     jest
-      .spyOn(MerkurComponent.prototype, '_isSSRHydrate')
-      .mockReturnValue(false);
-    jest.spyOn(MerkurComponent.prototype, '_isClient').mockReturnValue(true);
-    jest
-      .spyOn(MerkurComponent.prototype, '_getWidgetHTML')
+      .spyOn(MerkurWidget.prototype, '_getWidgetHTML')
       .mockReturnValue(widgetProperties.html);
 
     // Shallow render component
     wrapper = shallow(
-      <MerkurComponent widgetProperties={widgetProperties}>
-        Fallback
-      </MerkurComponent>,
+      <MerkurWidget widgetProperties={widgetProperties}>Fallback</MerkurWidget>,
       { disableLifecycleMethods: true }
     );
 
@@ -243,24 +235,24 @@ describe('Merkur component methods', () => {
   describe('static getDerivedStateFromProps() method', () => {
     it('should return null if there are no next widgetProperties', () => {
       expect(
-        MerkurComponent.getDerivedStateFromProps({
+        MerkurWidget.getDerivedStateFromProps({
           color: 'blue',
           size: 'large',
         })
       ).toBe(null);
-      expect(MerkurComponent.getDerivedStateFromProps()).toBe(null);
-      expect(MerkurComponent.getDerivedStateFromProps(null, null)).toBe(null);
+      expect(MerkurWidget.getDerivedStateFromProps()).toBe(null);
+      expect(MerkurWidget.getDerivedStateFromProps(null, null)).toBe(null);
       expect(
-        MerkurComponent.getDerivedStateFromProps(null, { widgetProperties: {} })
+        MerkurWidget.getDerivedStateFromProps(null, { widgetProperties: {} })
       ).toBe(null);
       expect(
-        MerkurComponent.getDerivedStateFromProps({ widgetProperties: {} })
+        MerkurWidget.getDerivedStateFromProps({ widgetProperties: {} })
       ).toBe(null);
     });
 
     it('should cache widget metadata on receiving widget properties for the first time', () => {
       expect(
-        MerkurComponent.getDerivedStateFromProps(
+        MerkurWidget.getDerivedStateFromProps(
           {
             widgetProperties,
           },
@@ -276,7 +268,7 @@ describe('Merkur component methods', () => {
 
     it('should return null for following calls after widget meta are already cached and not changed', () => {
       expect(
-        MerkurComponent.getDerivedStateFromProps(
+        MerkurWidget.getDerivedStateFromProps(
           {
             widgetProperties,
           },
@@ -290,7 +282,7 @@ describe('Merkur component methods', () => {
       });
 
       expect(
-        MerkurComponent.getDerivedStateFromProps(
+        MerkurWidget.getDerivedStateFromProps(
           {
             widgetProperties,
           },
@@ -311,7 +303,7 @@ describe('Merkur component methods', () => {
       };
 
       expect(
-        MerkurComponent.getDerivedStateFromProps(
+        MerkurWidget.getDerivedStateFromProps(
           {
             widgetProperties: newWidgetProperties,
           },

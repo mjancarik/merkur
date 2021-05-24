@@ -3,12 +3,12 @@ import { getMerkur } from '@merkur/core';
 import { loadScriptAssets, loadStyleAssets } from '@merkur/integration';
 
 import WidgetWrapper from './WidgetWrapper';
-import AbstractMerkurComponent from './AbstractMerkurComponent';
+import AbstractMerkurWidget from './AbstractMerkurWidget';
 
 // error event name from @merkur/plugin-error
 const MERKUR_ERROR_EVENT_NAME = '@merkur/plugin-error.error';
 
-export default class MerkurComponent extends AbstractMerkurComponent {
+export default class MerkurWidget extends AbstractMerkurWidget {
   /**
    * @inheritdoc
    */
@@ -66,7 +66,7 @@ export default class MerkurComponent extends AbstractMerkurComponent {
 
       // Replace cached widget meta data with new ones and reset state
       if (
-        AbstractMerkurComponent.hasWidgetChanged(
+        AbstractMerkurWidget.hasWidgetChanged(
           prevState.cachedWidgetMeta,
           nextProps.widgetProperties
         )
@@ -87,7 +87,7 @@ export default class MerkurComponent extends AbstractMerkurComponent {
 
   /**
    * Component should be updated only in these cases:
-   *  1) State of MerkurComponent has changed (excluding { @code this.state.cachedWidgetMeta }).
+   *  1) State of MerkurWidget has changed (excluding { @code this.state.cachedWidgetMeta }).
    *  2) Component has no props.widgetProperties.
    *  3) Widget properties changed (name or version).
    *
@@ -103,7 +103,7 @@ export default class MerkurComponent extends AbstractMerkurComponent {
       this.state.assetsLoaded !== nextState.assetsLoaded ||
       this.state.encounteredError !== nextState.encounteredError ||
       !this.props.widgetProperties ||
-      AbstractMerkurComponent.hasWidgetChanged(
+      AbstractMerkurWidget.hasWidgetChanged(
         this.props.widgetProperties,
         nextProps.widgetProperties
       )
@@ -236,7 +236,7 @@ export default class MerkurComponent extends AbstractMerkurComponent {
      * if it has mounted for the first time.
      */
     if (
-      AbstractMerkurComponent.hasWidgetChanged(
+      AbstractMerkurWidget.hasWidgetChanged(
         currentWidgetProperties,
         prevWidgetProperties
       )

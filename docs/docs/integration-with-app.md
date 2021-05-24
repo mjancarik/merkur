@@ -212,11 +212,11 @@ The last step is to hydrate the widget in your app after the page is loaded:
 
 ## Integration with React
 
-For easy integration with React library we created the `@merkur/integration-react` module. The module is designed for both client-side and server-side use. You can use your own application stack to make the API call for `widgetProperties`. You then pass `widgetClassName` and `widgetProperties` from the API call result to `MerkurComponent`. The component then does all the hard work for you.
+For easy integration with React library we created the `@merkur/integration-react` module. The module is designed for both client-side and server-side use. You can use your own application stack to make the API call for `widgetProperties`. You then pass `widgetClassName` and `widgetProperties` from the API call result to `MerkurWidget`. The component then does all the hard work for you.
 
 ```jsx
 import React from 'react';
-import { MerkurComponent } from '@merkur/integration-react';
+import { MerkurWidget } from '@merkur/integration-react';
 
 // example in browser
 const widgetClassName = 'widget__container';
@@ -229,27 +229,27 @@ let widgetProperties = await fetch(`http://localhost:4000/widget`)
 
 React.render(
   <div className="app">
-    <MerkurComponent
+    <MerkurWidget
         widgetProperties = {widgetProperties}
         widgetClassName = {widgetClassName}>
       <div>
         Fallback for undefined widgetProperties
       </div>
-    </MerkurComponent>
+    </MerkurWidget>
   </div>,
   document.body
 );
 ```
 
-Children component(s) passed to `<MerkurComponent/>` are used as a fallback when the widget is not yet ready or an error happened. To differentiate between loading and error states, pass a function as children.
+Children component(s) passed to `<MerkurWidget />` are used as a fallback when the widget is not yet ready or an error happened. To differentiate between loading and error states, pass a function as children.
 
 ```jsx
 return (
-  <MerkurComponent
+  <MerkurWidget
       widgetProperties = {widgetProperties}
       widgetClassName = {widgetClassName}>
     {({ error} ) => error ? <span>Error happened.</span> : <span>Loading...</span>}
-  </MerkurComponent>
+  </MerkurWidget>
 )
 ```
 
@@ -260,7 +260,7 @@ You can also react to component events through callbacks.
 
 ```jsx
 return (
-  <MerkurComponent
+  <MerkurWidget
       widgetProperties = {widgetProperties}
       widgetClassName = {widgetClassName}
       onWidgetMounted = {widget => this._widgetMounted()}
@@ -269,7 +269,7 @@ return (
     <div>
       Fallback for undefined widgetProperties
     </div>
-  </MerkurComponent>
+  </MerkurWidget>
 );
 ```
 <a href="{{ '/assets/images/merkur-integration-lifecycle.png?v=' | append: site.github.build_revision | relative_url }}" target="_blank" title="Merkur - integration React - lifecycle methods">

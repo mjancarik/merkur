@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class AbstractMerkurComponent extends React.Component {
+export default class AbstractMerkurWidget extends React.Component {
   /**
    * Checks if widget has changed, e.g has different name or version.
    *
