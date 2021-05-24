@@ -23,63 +23,18 @@ export default class MerkurSlot extends AbstractMerkurComponent {
    * @inheritdoc
    */
   get html() {
-    return this.slot?.html;
+    return this.slot?.html || null;
   }
 
   /**
    * @inheritdoc
    */
   get container() {
-    return document?.querySelector(this.slot?.containerSelector);
-  }
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      cachedWidgetMeta: null,
-    };
-  }
-
-  /**
-   * In case widget props change to new widget, we need to reset
-   * state before next render. This enables us to immediately render
-   * fallback without first rendering empty widget wrapper.
-   *
-   * @param {object} nextProps
-   * @param {object} prevState
-   */
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState && nextProps && nextProps.widgetProperties) {
-      const { version, name } = nextProps.widgetProperties;
-
-      // Cache widget meta data (name & version)
-      if (!prevState.cachedWidgetMeta) {
-        return {
-          cachedWidgetMeta: {
-            name,
-            version,
-          },
-        };
-      }
-
-      // Replace cached widget meta data with new ones and reset state
-      if (
-        AbstractMerkurComponent.hasWidgetChanged(
-          prevState.cachedWidgetMeta,
-          nextProps.widgetProperties
-        )
-      ) {
-        return {
-          cachedWidgetMeta: {
-            name,
-            version,
-          },
-        };
-      }
-    }
-
-    return null;
+    return (
+      (this._isClient() &&
+        document?.querySelector(this.slot?.containerSelector)) ||
+      null
+    );
   }
 
   /**
@@ -104,8 +59,7 @@ export default class MerkurSlot extends AbstractMerkurComponent {
   }
 
   /**
-   * After the component has been updated, we still need to handle situations
-   * where either old or new widget properties have changed.
+   * Cleanup when we receive empty widget properties.
    *
    * @param {object} prevProps
    * @param {object} prevState
@@ -114,23 +68,7 @@ export default class MerkurSlot extends AbstractMerkurComponent {
     const { widgetProperties: currentWidgetProperties } = this.props;
     const { widgetProperties: prevWidgetProperties } = prevProps;
 
-    // In case we receive empty new properties, we need to cleanup.
     if (!currentWidgetProperties && prevWidgetProperties) {
-      this._removeSlot();
-      this.setState({
-        cachedWidgetMeta: null,
-      });
-
-      return;
-    }
-
-    // In case widget has changed, first we need to cleanup
-    if (
-      AbstractMerkurComponent.hasWidgetChanged(
-        currentWidgetProperties,
-        prevWidgetProperties
-      )
-    ) {
       this._removeSlot();
 
       return;
@@ -138,7 +76,7 @@ export default class MerkurSlot extends AbstractMerkurComponent {
   }
 
   /**
-   * In case of unmounting we only really need to do the cleanup.
+   * Cleanup when unmounting
    */
   componentWillUnmount() {
     this._removeSlot();
@@ -146,11 +84,10 @@ export default class MerkurSlot extends AbstractMerkurComponent {
 
   /**
    * There are two possible outputs from the render method:
-   *  1) Fallback is rendered only, when assets are not yet loaded
-   *     or there was en error or there are no widget properties.
+   *  1) Fallback is rendered only, when there are no widget properties.
    *  2) WidgetWrapper is rendered in case of SSR (on server-side),
-   *     SSR hydrate, with server-side rendered HTML, when assets
-   *     are loaded with widget HTML, which is later mounted.
+   *     SSR hydrate - with server-side rendered HTML and on client
+   *     (SPA) without HTML.
    *
    * @return {React.ReactElement|null}
    */

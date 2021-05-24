@@ -31,7 +31,7 @@ describe('Merkur component', () => {
 
   beforeEach(() => {
     // Cache mocked widget data
-    widgetProperties = mockedWidgetProperties;
+    widgetProperties = { ...mockedWidgetProperties };
 
     // Mock basic function so first render can pass
     jest
@@ -54,7 +54,7 @@ describe('Merkur component', () => {
   });
 
   describe('merkur component rendering', () => {
-    it('should render nothing for not defined widgetProperties', () => {
+    it('should render fallback for not defined widgetProperties', () => {
       wrapper = shallow(
         <MerkurComponent>
           <span>Fallback</span>
@@ -205,6 +205,39 @@ describe('Merkur component methods', () => {
 
   afterEach(() => {
     jest.clearAllMocks();
+  });
+
+  describe('html getter', () => {
+    it('should return slot SSR html', () => {
+      expect(instance.html).toStrictEqual(widgetProperties.html);
+    });
+
+    it('should return null', () => {
+      wrapper.setProps({ widgetProperties: null });
+
+      expect(instance.html).toBeNull();
+    });
+  });
+
+  describe('container getter', () => {
+    it('should return container element', () => {
+      spyOn(instance, '_isClient').and.returnValue(true);
+
+      delete global.document;
+      global.document = {
+        querySelector: () => 'container-element',
+      };
+
+      expect(instance.container).toBe('container-element');
+    });
+
+    it('should return null on server', () => {
+      spyOn(instance, '_isClient').and.returnValue(false);
+
+      wrapper.setProps({ widgetProperties: null });
+
+      expect(instance.container).toBeNull();
+    });
   });
 
   describe('static getDerivedStateFromProps() method', () => {
@@ -710,6 +743,8 @@ describe('Merkur component methods', () => {
     });
 
     it('should unmount widget and do cleanup', () => {
+      spyOn(instance, '_clearCachedHtml').and.callThrough();
+
       let unmount = jest.fn();
       let widget = { name: 'name', unmount };
       instance._widget = widget;
@@ -722,6 +757,7 @@ describe('Merkur component methods', () => {
 
       expect(unmount).toHaveBeenCalled();
       expect(unmount).toHaveBeenCalledTimes(1);
+      expect(instance._clearCachedHtml).toHaveBeenCalledTimes(1);
       expect(instance._widget).toBe(null);
       expect(instance._html).toBe(null);
     });

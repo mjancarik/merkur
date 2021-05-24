@@ -53,7 +53,7 @@ export default class AbstractMerkurComponent extends React.Component {
    */
   _renderFallback() {
     const { children } = this.props;
-    const { encounteredError = null } = this.state;
+    const { encounteredError = null } = this.state || {};
 
     if (typeof children === 'function') {
       return children({ error: encounteredError });

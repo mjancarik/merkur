@@ -13,15 +13,19 @@ export default class MerkurComponent extends AbstractMerkurComponent {
    * @inheritdoc
    */
   get html() {
-    return this.props.widgetProperties?.html;
+    return this.props.widgetProperties?.html || null;
   }
 
   /**
    * @inheritdoc
    */
   get container() {
-    return document?.querySelector(
-      this.props.widgetProperties?.containerSelector
+    return (
+      (this._isClient() &&
+        document?.querySelector(
+          this.props.widgetProperties?.containerSelector
+        )) ||
+      null
     );
   }
 
