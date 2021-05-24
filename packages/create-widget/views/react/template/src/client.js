@@ -15,12 +15,12 @@ function createWidget(widgetParams) {
       unmountComponentAtNode,
     },
     async mount(widget) {
-      return mapViews(widget, viewFactory, ({ View, container }) => {
+      return mapViews(widget, viewFactory, ({ View, container, isSlot }) => {
         if (!container) {
           return null;
         }
 
-        return (container?.children?.length
+        return (container?.children?.length && !isSlot
           ? widget.$dependencies.hydrate
           : widget.$dependencies.render)(View(widget), container);
       });

@@ -27,7 +27,7 @@ function createWidget(widgetParams) {
               state: widget.state,
               props: widget.props,
             },
-            hydrate: true,
+            hydrate: !!container?.children?.length,
           });
         }
       );
