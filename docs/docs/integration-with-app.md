@@ -15,11 +15,15 @@ At first we must make an API call with your framework of choice. In this example
 // browser
 (async() => {
   const widgetClassName = 'widget__container';
-  const widgetProperties = await fetch(`http://localhost:4000/widget`)
+  const widgetProperties = await fetch(`http://localhost:4444/widget`)
     .then((response) => response.json())
     .then((data) => {
-      // added container selector for our widget
-      data.props.containerSelector = `.${widgetClassName}`;
+      /**
+       * Set containerSelector for our widget. Can already come predefined
+       * in widget response with some defaults, but it's usually overridden
+       * on client, to allow for more control.
+       */
+      data.containerSelector = `.${widgetClassName}`;
 
       return data;
     });
@@ -32,11 +36,9 @@ At first we must make an API call with your framework of choice. In this example
 {
   "name":"my-widget",
   "version":"0.0.1",
-  "props":{
-    "containerSelector": ".widget__container"
-  },
+  "containerSelector": ".widget__container",
   "state":{
-    "counter":0
+    "counter": 0
   },
   "assets":[
     {
@@ -90,11 +92,11 @@ import { getMerkur } from '@merkur/core';
   const widgetClassName = 'widget__container';
 
   // make API call to widget
-  const widgetProperties = await fetch(`http://localhost:4000/widget`)
+  const widgetProperties = await fetch(`http://localhost:4444/widget`)
     .then((response) => response.json())
     .then((data) => {
-      // added container selector for our widget
-      data.props.containerSelector = `.${widgetClassName}`;
+      // define container selector for our widget
+      data.containerSelector = `.${widgetClassName}`;
 
       return data;
     });
@@ -124,11 +126,11 @@ If your application doesn't use npm modules, you can handle assets your own way 
 
 (async() => {
   const widgetClassName = 'widget__container';
-  const widgetProperties = await fetch(`http://localhost:4000/widget`)
+  const widgetProperties = await fetch(`http://localhost:4444/widget`)
     .then((response) => response.json())
     .then((data) => {
       // added container selector for our widget
-      data.props.containerSelector = `.${widgetClassName}`;
+      data.containerSelector = `.${widgetClassName}`;
 
       return data;
     });
@@ -201,7 +203,7 @@ The last step is to hydrate the widget in your app after the page is loaded:
   window.addEventListener('load', () => {
     var widgetProperties = <%- JSON.stringify(body) %>;
     // define widget container selector
-    widgetProperties.props.containerSelector = '.<%= widgetClassName %>';
+    widgetProperties.containerSelector = '.<%= widgetClassName %>';
     __merkur__.create(widgetProperties)
       .then((widget) => {
         widget.mount();
@@ -212,7 +214,9 @@ The last step is to hydrate the widget in your app after the page is loaded:
 
 ## Integration with React
 
-For easy integration with React library we created the `@merkur/integration-react` module. The module is designed for both client-side and server-side use. You can use your own application stack to make the API call for `widgetProperties`. You then pass `widgetClassName` and `widgetProperties` from the API call result to `MerkurWidget`. The component then does all the hard work for you.
+For easy integration with React library we created the `@merkur/integration-react` module. The module is designed for both client-side and server-side use.
+
+You can use your own application stack to make the API call for `widgetProperties`. You then pass `widgetProperties` from the API call result to `MerkurWidget`. The component then automatically generates `div` container with appropriate selector (currently onl `id` and `className` are supported), based on the one defined in widget properties and takes care of all the hard work for you.
 
 ```jsx
 import React from 'react';
@@ -220,18 +224,16 @@ import { MerkurWidget } from '@merkur/integration-react';
 
 // example in browser
 const widgetClassName = 'widget__container';
-let widgetProperties = await fetch(`http://localhost:4000/widget`)
+let widgetProperties = await fetch(`http://localhost:4444/widget`)
   .then((response) => response.json())
   .then((data) => {
-    data.props.containerSelector = `.${widgetClassName}`;
+    data.containerSelector = `.${widgetClassName}`;
     return data;
   })
 
 React.render(
   <div className="app">
-    <MerkurWidget
-        widgetProperties = {widgetProperties}
-        widgetClassName = {widgetClassName}>
+    <MerkurWidget widgetProperties={widgetProperties}>
       <div>
         Fallback for undefined widgetProperties
       </div>
@@ -241,14 +243,12 @@ React.render(
 );
 ```
 
-Children component(s) passed to `<MerkurWidget />` are used as a fallback when the widget is not yet ready or an error happened. To differentiate between loading and error states, pass a function as children.
+Children component(s) passed to `<MerkurWidget />` are used as a fallback when the widget is not yet ready or an error happened. This can be used to display loading placeholders or error messages. To differentiate between loading and error states, pass a function as children.
 
 ```jsx
 return (
-  <MerkurWidget
-      widgetProperties = {widgetProperties}
-      widgetClassName = {widgetClassName}>
-    {({ error} ) => error ? <span>Error happened.</span> : <span>Loading...</span>}
+  <MerkurWidget widgetProperties={widgetProperties}>
+    {({ error} ) => error ? <span>Error happened.</span> : <span>Loading...</span>}
   </MerkurWidget>
 )
 ```
@@ -261,17 +261,43 @@ You can also react to component events through callbacks.
 ```jsx
 return (
   <MerkurWidget
-      widgetProperties = {widgetProperties}
-      widgetClassName = {widgetClassName}
-      onWidgetMounted = {widget => this._widgetMounted()}
-      onWidgetUnmouting = {widget => this._widgetUnmounting()}
-      onError = {error => this._handleError(error)}>
+      widgetProperties={widgetProperties}
+      onWidgetMounted={widget => this._widgetMounted()}
+      onWidgetUnmouting={widget => this._widgetUnmounting()}
+      onError={error => this._handleError(error)}>
     <div>
       Fallback for undefined widgetProperties
     </div>
   </MerkurWidget>
 );
 ```
+
+Below you can see visualization of how the react component handles synchronization with widget's own lifecycle.
+
 <a href="{{ '/assets/images/merkur-integration-lifecycle.png?v=' | append: site.github.build_revision | relative_url }}" target="_blank" title="Merkur - integration React - lifecycle methods">
   <img class="responsive" src="{{ '/assets/images/merkur-integration-lifecycle.png?v=' | append: site.github.build_revision | relative_url }}" alt="Merkur - integration React - lifecycle methods" />
 </a>
+
+
+### Slots
+
+There's also React component to handle Merkur slots - `MerkurSlot`. It has largely simplified api requiring only `widgetProperties` and `slotName` upon creation, where:
+
+ - `slotName` - represents the name of the slot, fetched from the API, that should be rendered here.
+ - `widgetProperties` - the same widget properties passed to the main react `MerkurWidget` component.
+
+It also supports rendering of fallback (loader/error) the same way the main component does. However there's no error handling in this component, this means that you can still pass function as a children, but the received `error` object will always contain `{ error: null }` no matter the situation.
+
+The `MerkurSlot` component doesn't handle the widget's lifecycle the same way as the `MerkurWidget` does, this means that it's expecting that the `MerkurWidget` component is also used, which takes care of the widget lifecycle. `MerkurSlot` component can't be used on it's own without using `MerkurWidget` anywhere else in the React component tree.
+
+```jsx
+return (
+  <MerkurSlot
+    slotName={'headline'}
+    widgetProperties={widgetProperties}>
+    <div>
+      Fallback for undefined widgetProperties
+    </div>
+  </MerkurSlot>
+)
+```

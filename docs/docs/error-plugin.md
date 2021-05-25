@@ -8,7 +8,7 @@ title: Error plugin - Merkur
 A plugin for [Merkur](https://merkur.js.org/) is tiny extensible javascript library for front-end microservices.
 
 
-@merkur/plugin-error adds semi-automatic error handling to your Merkur widget: 
+@merkur/plugin-error adds semi-automatic error handling to your Merkur widget:
 
   * Return a custom HTTP status based on thrown error
   * Render valid JSON with error code and message
@@ -68,7 +68,7 @@ const { playgroundErrorMiddleware } = require('@merkur/plugin-error/server');
 // ...
 
 const router = express.Router();
-const container = 'container';
+const containerSelector = '.container';
 
 router
   .get(
@@ -77,17 +77,17 @@ router
       // ....
       res
         .status(200)
-        .send(playgroundTemplate({ widgetProperties, html, container }));
+        .send(playgroundTemplate({ widgetProperties, html, containerSelector }));
     })
   )
-  .use(playgroundErrorMiddleware({ renderPlayground: playgroundTemplate, container }))
+  .use(playgroundErrorMiddleware({ renderPlayground: playgroundTemplate, containerSelector }))
 ```
 
 ## Operation
 
 When an error is thrown, the plugin does the following:
 
-* saves the error status and message on the widget object: 
+* saves the error status and message on the widget object:
   ```javascript
     widget.error = {
       status: error.status || 500,
@@ -101,5 +101,4 @@ The error object is available everywhere in the widget, as well as to the host a
 
 ## Limitations
 
-The plugin can't handle errors occurring outside of lifecycle functions. 
-
+The plugin can't handle errors occurring outside of lifecycle functions.
