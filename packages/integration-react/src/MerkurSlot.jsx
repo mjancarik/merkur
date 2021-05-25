@@ -47,6 +47,7 @@ export default class MerkurSlot extends AbstractMerkurWidget {
   shouldComponentUpdate(nextProps) {
     if (
       !this.props.widgetProperties ||
+      !nextProps.widgetProperties ||
       AbstractMerkurWidget.hasWidgetChanged(
         this.props.widgetProperties,
         nextProps.widgetProperties
@@ -98,22 +99,11 @@ export default class MerkurSlot extends AbstractMerkurWidget {
       return this._renderFallback();
     }
 
-    /**
-     * In case of SPA rendering, we render fallback (which can also display
-     * loading placeholders) inside the component wrapper, until the widget
-     * assets are loaded and mounted, which results in overriding the contents
-     * of the wrapper (containing fallback) with slot markup. In case of SPA
-     * we also don't want to render html to prevent FOUC.
-     */
-    const isInitialSPARender = this._isClient() && !this._isSSRHydrate();
-    const html = isInitialSPARender ? '' : this._getWidgetHTML();
-
     return (
       <WidgetWrapper
         containerSelector={this.slot.containerSelector}
-        html={html}>
-        {isInitialSPARender && this._renderFallback()}
-      </WidgetWrapper>
+        html={this._getWidgetHTML()}
+      />
     );
   }
 

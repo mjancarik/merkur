@@ -103,6 +103,7 @@ export default class MerkurWidget extends AbstractMerkurWidget {
       this.state.assetsLoaded !== nextState.assetsLoaded ||
       this.state.encounteredError !== nextState.encounteredError ||
       !this.props.widgetProperties ||
+      !nextProps.widgetProperties ||
       AbstractMerkurWidget.hasWidgetChanged(
         this.props.widgetProperties,
         nextProps.widgetProperties
@@ -233,9 +234,10 @@ export default class MerkurWidget extends AbstractMerkurWidget {
     /**
      * 2.3) In case widget has changed, first we need to cleanup (remove previous widget),
      * and then we again try to initialize the new widget same way as
-     * if it has mounted for the first time.
+     * if it has mounted for the first time (if there are any new widget properties).
      */
     if (
+      (prevWidgetProperties && !currentWidgetProperties) ||
       AbstractMerkurWidget.hasWidgetChanged(
         currentWidgetProperties,
         prevWidgetProperties
