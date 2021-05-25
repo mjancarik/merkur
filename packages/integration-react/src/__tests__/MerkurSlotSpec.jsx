@@ -211,24 +211,8 @@ describe('MerkurSlot component methods', () => {
       ).toBe(false);
       expect(
         instance.shouldComponentUpdate(
-          { a: 'test', b: 'new props' },
-          defaultState
-        )
-      ).toBe(false);
-      expect(
-        instance.shouldComponentUpdate(
-          {},
           {
-            ...defaultState,
-            newStateKey: 1,
-            thisShouldBeIgnored: true,
-          }
-        )
-      ).toBe(false);
-      expect(
-        instance.shouldComponentUpdate(
-          {
-            ...widgetProperties,
+            widgetProperties,
             sameProps: 'with new keys and values',
             butStill: 'the same name or version',
           },
@@ -241,6 +225,10 @@ describe('MerkurSlot component methods', () => {
       wrapper.setProps({ widgetProperties: null });
 
       expect(instance.shouldComponentUpdate({}, wrapper.state())).toBe(true);
+    });
+
+    it('should return true when widgetProperties are being deleted', () => {
+      expect(instance.shouldComponentUpdate({})).toBe(true);
     });
   });
 

@@ -99,7 +99,7 @@ export default class AbstractMerkurWidget extends React.Component {
    */
   _getSSRHTML() {
     if (!this._isMounted && this._isClient()) {
-      return this.container?.children?.[0]?.outerHTML;
+      return this.container?.children?.[0]?.outerHTML || '';
     }
 
     return '';

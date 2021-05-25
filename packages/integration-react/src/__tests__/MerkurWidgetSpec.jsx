@@ -334,13 +334,7 @@ describe('Merkur component methods', () => {
       ).toBe(false);
       expect(
         instance.shouldComponentUpdate(
-          { a: 'test', b: 'new props' },
-          defaultState
-        )
-      ).toBe(false);
-      expect(
-        instance.shouldComponentUpdate(
-          {},
+          { widgetProperties },
           {
             ...defaultState,
             newStateKey: 1,
@@ -351,7 +345,7 @@ describe('Merkur component methods', () => {
       expect(
         instance.shouldComponentUpdate(
           {
-            ...widgetProperties,
+            widgetProperties,
             sameProps: 'with new keys and values',
             butStill: 'the same name or version',
           },
@@ -363,6 +357,10 @@ describe('Merkur component methods', () => {
     it('should return true when widgetProperties are not defined', () => {
       wrapper.setProps({ widgetProperties: null });
 
+      expect(instance.shouldComponentUpdate({}, wrapper.state())).toBe(true);
+    });
+
+    it('should return true when widgetProperties are being deleted', () => {
       expect(instance.shouldComponentUpdate({}, wrapper.state())).toBe(true);
     });
 
