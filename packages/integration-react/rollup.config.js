@@ -15,6 +15,7 @@ let extendedPlugins = [
   babel({
     configFile: false,
     presets: ['@babel/preset-react'],
+    plugins: ['@babel/plugin-proposal-optional-chaining'],
   }),
 ];
 
