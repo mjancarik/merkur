@@ -1,7 +1,7 @@
 import { h } from 'preact'; // eslint-disable-line no-unused-vars
-import Welcome from '../component/Welcome';
-import WidgetDescription from '../component/WidgetDescription';
-import WidgetContext from '../component/WidgetContext';
+import Welcome from '../components/Welcome';
+import WidgetDescription from '../components/WidgetDescription';
+import WidgetContext from '../components/WidgetContext';
 
 async function headlineSlotFactory() {
   return {

@@ -1,5 +1,5 @@
-import Counter from '../component/Counter';
-import ErrorView from '../component/ErrorView';
+import Counter from '../components/Counter';
+import ErrorView from './ErrorView';
 import { headlineSlotFactory } from '../slots/HeadlineSlot';
 
 async function viewFactory(widget) {

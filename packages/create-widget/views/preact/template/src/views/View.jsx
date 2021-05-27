@@ -1,7 +1,7 @@
 import { h } from 'preact'; // eslint-disable-line no-unused-vars
-import WidgetContext from '../component/WidgetContext';
-import Counter from '../component/Counter';
-import ErrorView from '../component/ErrorView';
+import WidgetContext from '../components/WidgetContext';
+import Counter from '../components/Counter';
+import ErrorView from './ErrorView';
 import { headlineSlotFactory } from '../slots/HeadlineSlot';
 
 async function viewFactory(widget) {

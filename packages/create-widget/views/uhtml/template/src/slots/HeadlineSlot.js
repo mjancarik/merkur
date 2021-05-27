@@ -1,6 +1,6 @@
-import Welcome from '../component/Welcome';
-import WidgetDescription from '../component/WidgetDescription';
-import ErrorView from '../component/ErrorView';
+import Welcome from '../components/Welcome';
+import WidgetDescription from '../components/WidgetDescription';
+import ErrorView from '../views/ErrorView';
 
 async function headlineSlotFactory() {
   return {

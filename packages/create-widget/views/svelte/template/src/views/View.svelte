@@ -2,8 +2,8 @@
   import { setContext } from 'svelte';
   import { writable } from 'svelte/store';
 
-  import Counter from '../component/Counter.svelte';
-  import ErrorView from '../component/ErrorView.svelte';
+  import Counter from '../components/Counter.svelte';
+  import ErrorView from '../components/ErrorView.svelte';
 
   export let widget;
   export let state;

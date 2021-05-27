@@ -1,5 +1,5 @@
-import Welcome from '../component/Welcome';
-import WidgetDescription from '../component/WidgetDescription';
+import Welcome from '../components/Welcome';
+import WidgetDescription from '../components/WidgetDescription';
 
 async function headlineSlotFactory() {
   return {

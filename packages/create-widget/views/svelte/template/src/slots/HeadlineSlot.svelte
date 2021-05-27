@@ -2,9 +2,9 @@
   import { setContext } from 'svelte';
   import { writable } from 'svelte/store';
 
-  import Welcome from '../component/Welcome.svelte';
-  import WidgetDescription from '../component/WidgetDescription.svelte';
-  import ErrorView from '../component/ErrorView.svelte';
+  import Welcome from '../components/Welcome.svelte';
+  import WidgetDescription from '../components/WidgetDescription.svelte';
+  import ErrorView from '../components/ErrorView.svelte';
 
   export let widget;
   export let state;
