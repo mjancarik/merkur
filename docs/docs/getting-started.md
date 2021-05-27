@@ -47,11 +47,14 @@ If you take a look inside the created widget, you'll see this file structure:
 │   │   widget.js
 │   │   client.js
 │   │   server.js
+│   └── lib
+│       │   utils.js
 │   └── views
 │       │   View.jsx
+│       │   ErrorView.jsx
 │   └── slots
 │       │   HeadlineSlot.jsx
-│   └── component
+│   └── components
 │       │   Counter.jsx
 │       │   MerkurIcon.jsx
 │       │   Welcome.jsx
