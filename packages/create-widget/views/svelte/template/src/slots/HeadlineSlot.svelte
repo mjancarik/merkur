@@ -4,7 +4,7 @@
 
   import Welcome from '../components/Welcome.svelte';
   import WidgetDescription from '../components/WidgetDescription.svelte';
-  import ErrorView from '../components/ErrorView.svelte';
+  import ErrorView from '../views/ErrorView.svelte';
 
   export let widget;
   export let state;

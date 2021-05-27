@@ -3,7 +3,7 @@
   import { writable } from 'svelte/store';
 
   import Counter from '../components/Counter.svelte';
-  import ErrorView from '../components/ErrorView.svelte';
+  import ErrorView from '../views/ErrorView.svelte';
 
   export let widget;
   export let state;
