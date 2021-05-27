@@ -3,8 +3,15 @@ import { shallow } from 'enzyme';
 
 import {
   selectorToAttribute,
+  SelectorIdentifierMap,
   WidgetWrapperComponent as WidgetWrapper,
 } from '../WidgetWrapper';
+
+describe('SelectorIdentifierMap', () => {
+  it('should match snapshot', () => {
+    expect(SelectorIdentifierMap).toMatchSnapshot();
+  });
+});
 
 describe('selectorToAttribute()', () => {
   it.each([
@@ -14,6 +21,8 @@ describe('selectorToAttribute()', () => {
     [false, {}],
     ['#container', { id: 'container' }],
     ['.container', { className: 'container' }],
+    ['.e_dU.atm-list-ul.d_gX.container', { className: 'container' }],
+    ['.e_dU#atm-list-ul...d_gX#d', { id: 'd' }],
     [
       '#main:first-child > div > div & pre .container',
       { className: 'container' },

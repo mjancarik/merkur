@@ -1,5 +1,10 @@
 import React from 'react';
 
+const SelectorIdentifierMap = Object.freeze({
+  '#': 'id',
+  '.': 'className',
+});
+
 /**
  * Parses container selector into element property. Currently
  * only works with IDs and classnames.
@@ -12,10 +17,20 @@ function selectorToAttribute(containerSelector = '') {
     return {};
   }
 
-  const lastPart = containerSelector.split(' ').pop();
+  let lastIdentifierIndex = -1;
+  for (let identifierKey in SelectorIdentifierMap) {
+    let curLastIndex = containerSelector.lastIndexOf(identifierKey);
+
+    if (lastIdentifierIndex < curLastIndex) {
+      lastIdentifierIndex = curLastIndex;
+    }
+  }
+
+  const identifier = containerSelector[lastIdentifierIndex];
+  const selectorName = containerSelector.substr(lastIdentifierIndex + 1);
 
   return {
-    [lastPart[0] === '#' ? 'id' : 'className']: lastPart.substr(1),
+    [SelectorIdentifierMap[identifier]]: selectorName,
   };
 }
 
