@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.24.0](https://github.com/mjancarik/merkur/compare/v0.23.12...v0.24.0) (2021-05-28)
+
+
+### Bug Fixes
+
+* 🐛 Fixed svelte template ([d7356f1](https://github.com/mjancarik/merkur/commit/d7356f1e578e90c8d662a9e885504f8bc065fde4))
+* 🐛 Merkur template fixes ([cd6f85d](https://github.com/mjancarik/merkur/commit/cd6f85d3d2f7be475102db597ab4816fe987b44c))
+
+
+### Features
+
+* 🎸 Added support for slots ([19d5451](https://github.com/mjancarik/merkur/commit/19d5451850b5264c3649bfb5536c62f2d4149706))
+
+
+
+
+
 ## [0.23.12](https://github.com/mjancarik/merkur/compare/v0.23.11...v0.23.12) (2021-04-16)
 
 **Note:** Version bump only for package @merkur/create-widget

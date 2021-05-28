@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.24.0](https://github.com/mjancarik/merkur/compare/v0.23.12...v0.24.0) (2021-05-28)
+
+
+### Features
+
+* 🎸 Added MerkurSlot component to integration-react ([6f1b05f](https://github.com/mjancarik/merkur/commit/6f1b05f1dffc523540a7340bef38ececb520207d))
+
+
+
+
+
 ## [0.23.12](https://github.com/mjancarik/merkur/compare/v0.23.11...v0.23.12) (2021-04-16)
 
 **Note:** Version bump only for package @merkur/integration-react
