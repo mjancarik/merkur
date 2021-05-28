@@ -1,5 +1,7 @@
 import { createMerkurWidget, createMerkur } from '@merkur/core';
-import { widgetProperties } from './widget';
+import widgetProperties from './widget';
+import { viewFactory } from './views/View';
+import { mapViews } from './lib/utils';
 import style from './style.css'; // eslint-disable-line no-unused-vars
 
 function createWidget(widgetParams) {
@@ -7,20 +9,43 @@ function createWidget(widgetParams) {
     ...widgetProperties,
     ...widgetParams,
     $dependencies: {},
-    mount(widget) {
-      document.getElementById('increase').addEventListener('click', () => {
-        widget.onClick();
-      });
+    async mount(widget) {
+      mapViews(widget, viewFactory, ({ container }) => {
+        if (!container) {
+          return;
+        }
 
-      document.getElementById('reset').addEventListener('click', () => {
-        widget.onReset();
+        container
+          .querySelector(`[data-merkur="on-increase"]`)
+          ?.addEventListener('click', () => {
+            widget.onClick();
+          });
+
+        container
+          .querySelector(`[data-merkur="on-reset"]`)
+          ?.addEventListener('click', () => {
+            widget.onReset();
+          });
       });
     },
-    unmount(widget) {
-      document.querySelector(widget.props.containerSelector).innerHTML = '';
+    async unmount(widget) {
+      mapViews(widget, viewFactory, ({ container }) => {
+        if (!container) {
+          return;
+        }
+
+        container.innerHTML = '';
+      });
     },
-    update(widget) {
-      document.getElementById('counter').innerText = widget.state.counter;
+    async update(widget) {
+      mapViews(widget, viewFactory, ({ container }) => {
+        if (!container) {
+          return;
+        }
+
+        container.querySelector(`[data-merkur="counter"]`).innerText =
+          widget.state.counter;
+      });
     },
   });
 }

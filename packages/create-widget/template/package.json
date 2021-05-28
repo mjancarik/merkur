@@ -30,7 +30,8 @@
     "express": "^4.17.1",
     "express-static-gzip": "^2.1.1",
     "got": "^11.8.2",
-    "helmet": "^3.23.3"
+    "helmet": "^3.23.3",
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@merkur/tools": "0.23.12",

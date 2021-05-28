@@ -72,6 +72,7 @@ describe('createWidget method with router plugin', () => {
           },
         ],
         "bootstrap": [Function],
+        "containerSelector": null,
         "create": [Function],
         "emit": [Function],
         "info": [Function],

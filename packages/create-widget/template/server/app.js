@@ -2,6 +2,7 @@ const path = require('path');
 
 const express = require('express');
 const compression = require('compression');
+const morgan = require('morgan');
 const helmet = require('helmet');
 const cors = require('cors');
 const expressStaticGzip = require('express-static-gzip');
@@ -21,16 +22,17 @@ const expressStaticConfig = {
 const app = express();
 app.set('view engine', 'ejs');
 
-const playgroundRouterFactory = require('./router/playground');
-const playground = playgroundRouterFactory();
+const playgroundRouteFactory = require('./routes/playground');
+const playground = playgroundRouteFactory();
 
-const errorRouterFactory = require('./router/error');
-const error = errorRouterFactory();
+const errorRouteFactory = require('./routes/error');
+const error = errorRouteFactory();
 
-const widgetAPIRouterFactory = require('./router/widgetAPI');
-const widgetAPI = widgetAPIRouterFactory();
+const widgetAPIRouteFactory = require('./routes/widgetAPI');
+const widgetAPI = widgetAPIRouteFactory();
 
 app
+  .use(morgan('dev'))
   .use(
     helmet({
       contentSecurityPolicy: false,

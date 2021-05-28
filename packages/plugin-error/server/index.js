@@ -68,11 +68,14 @@ function logErrorMiddleware() {
  *
  * @param {object} config
  * @param {playgroundRenderer} config.renderPlayground
- * @param {string} config.container
+ * @param {string} config.containerSelector
  * @returns {function}
  */
 // eslint-disable-next-line no-unused-vars
-function playgroundErrorMiddleware({ renderPlayground, container } = {}) {
+function playgroundErrorMiddleware({
+  renderPlayground,
+  containerSelector,
+} = {}) {
   //eslint-disable-next-line no-unused-vars
   return (error, req, res, next) => {
     // error handling for playground page
@@ -95,9 +98,9 @@ function playgroundErrorMiddleware({ renderPlayground, container } = {}) {
 
     try {
       delete widgetProperties.html;
-      widgetProperties.props.containerSelector = `.${container}`;
+      widgetProperties.containerSelector = `.${containerSelector}`;
 
-      output = renderPlayground({ widgetProperties, html, container });
+      output = renderPlayground({ widgetProperties, html, containerSelector });
       res.status(errorStatus).send(output);
     } catch (e) {
       console.error(e);

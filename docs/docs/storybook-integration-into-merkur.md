@@ -88,7 +88,7 @@ You can use every [format](https://storybook.js.org/docs/react/writing-stories/i
 
 ```javascript
 // /src/component/Counter.jsx
-import { h } from 'preact'; // eslint-disable-line no-unused-vars
+import { h } from 'preact';
 import { useContext } from 'preact/hooks';
 import WidgetContext from './WidgetContext';
 

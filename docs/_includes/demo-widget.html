@@ -37,7 +37,7 @@
         document.getElementById('description').innerHTML = widget.name + '@' + widget.version;
       },
       unmount: function (widget) {
-        document.querySelector(widget.props.containerSelector).innerHTML = '';
+        document.querySelector(widget.containerSelector).innerHTML = '';
       },
       update: function (widget) {
         document.getElementById('counter').innerText = widget.state.counter;
