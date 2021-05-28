@@ -15,7 +15,7 @@ async function viewFactory(widget) {
   );
 
   return {
-    View: View,
+    View,
     slots,
   };
 }
