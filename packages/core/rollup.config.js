@@ -1,11 +1,16 @@
 import {
-  createRollupESConfig,
-  createRollupES5Config,
-  createRollupUMDConfig,
+  // createRollupESConfig,
+  // createRollupES5Config,
+  // createRollupUMDConfig,
+  createRollupTypescriptConfig,
 } from '../../createRollupConfig';
 
-let esConfig = createRollupESConfig();
-let es5Config = createRollupES5Config();
-let umdConfig = createRollupUMDConfig();
+let typescriptConfig = createRollupTypescriptConfig({ watchMode: true });
 
-export default [esConfig, es5Config, umdConfig];
+export default [typescriptConfig];
+
+// let esConfig = createRollupESConfig();
+// let es5Config = createRollupES5Config();
+// let umdConfig = createRollupUMDConfig();
+
+// export default [esConfig, es5Config, umdConfig];
