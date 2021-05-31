@@ -54,11 +54,12 @@
     "rollup": "^2.45.2"
   },
   "peerDependencies": {
-    "@merkur/core": "^0.23.9"
+    "@merkur/core": "^0.23.9",
+    "postcss": "^8.3.0",
+    "postcss-loader": "^5.2.0"
   },
   "dependencies": {
     "classnames": "^2.3.1",
-    "postcss": "^8.3.0",
     "postcss-selector-parser": "^6.0.6"
   }
 }

@@ -9,13 +9,31 @@
 
 ```
 npm i --save @merkur/plugin-css-scrambler
+npm i --save-dev postcss postcss-loader
 ```
 
-Add postcss to your webpack build process and register postcss plugin.
+### 1. Generate hashtable at build time
+
+This can be achieved by extending webpack config with provided drop-in function. This function will find existing `postcss-loader` and extend it's config to use scrambling plugin or will define `postcss-loader` for default CSS rule.
+
+```diff
++ const { applyPostCssScramblePlugin } = require('@merkur/plugin-css-scrambler/postcss');
+
+module.exports = Promise.all([
+-  pipe(createWebConfig, applyBabelLoader)(),
++  pipe(createWebConfig, applyBabelLoader, applyPostCssScramblePlugin)(),
+-  pipe(createWebConfig, applyBabelLoader, applyES5Transformation)(),
++  pipe(createWebConfig, applyBabelLoader, applyES5Transformation, applyPostCssScramblePlugin)(),
+  pipe(createNodeConfig, applyBabelLoader)(),
+]);
+```
+
+If you have custom webpack configuration you can just define `postcss-loader` for your styles rule and then call `applyPostCssScramblePlugin` or you can apply the scramler plugin manually.
+
 
 ```javascript
-const postCssScrambler = require('@merkur/plugin-css-scrambler/postcss');
 const path = require('path');
+const { postCssScrambler } = require('@merkur/plugin-css-scrambler/postcss');
 
 {
     loader: 'postcss-loader',
@@ -35,7 +53,7 @@ const path = require('path');
 }
 ```
 
-Load generated hashtable in widget router
+### 2. Load generated hashtable in widget router
 
 ```javascript
 const { loadClassnameHashtable } = require('@merkur/plugin-css-scrambler/server');
@@ -56,7 +74,7 @@ router.get('/widget', asyncMiddleware(async (req, res) => {
 }));
 ```
 
-Register plugin in your `widget.js`.
+### 3. Register plugin in your `widget.js`.
 
 ```javascript
 import { cssScramblePlugin } from '@merkur/plugin-css-scrambler';
