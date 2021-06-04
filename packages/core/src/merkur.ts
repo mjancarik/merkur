@@ -1,15 +1,27 @@
+import {
+  Merkur,
+  Plugin,
+  RegisterFunction,
+  CreateFunction,
+  Widget,
+} from './types';
 import { isFunction } from './utils';
 
-function register({ name, version, createWidget }) {
+const register: RegisterFunction = ({ name, version, createWidget }) => {
   const merkur = getMerkur();
 
   merkur.$in.widgetFactory[name + version] = createWidget;
-}
+};
 
-function create(widgetProperties = {}) {
+const create: CreateFunction = (
+  widgetProperties = {
+    name: '',
+    version: '',
+  }
+) => {
   const merkur = getMerkur();
   const { name, version } = widgetProperties;
-  const factory = merkur.$in.widgetFactory[name + version];
+  const factory = merkur.$in.widgetFactory[name + version] as CreateFunction;
 
   if (!isFunction(factory)) {
     throw new Error(
@@ -19,10 +31,12 @@ function create(widgetProperties = {}) {
     );
   }
 
-  return factory(widgetProperties);
-}
+  return factory(widgetProperties) as Promise<Widget>;
+};
 
-export function createMerkur({ $plugins = [] } = {}) {
+export function createMerkur(
+  { $plugins }: { $plugins: Array<Plugin> } = { $plugins: [] }
+): Merkur {
   const merkur = getMerkur();
 
   $plugins.forEach((plugin) => {
@@ -34,13 +48,13 @@ export function createMerkur({ $plugins = [] } = {}) {
   return merkur;
 }
 
-export function removeMerkur() {
+export function removeMerkur(): void {
   const globalContext = getGlobalContext();
 
   delete globalContext.__merkur__;
 }
 
-export function getMerkur() {
+export function getMerkur(): Merkur {
   const globalContext = getGlobalContext();
 
   if (!globalContext.__merkur__) {
@@ -51,26 +65,27 @@ export function getMerkur() {
       },
       $external: {},
       $dependencies: {},
+      $plugins: [],
       register,
       create,
     };
   }
 
-  return globalContext.__merkur__;
+  return globalContext.__merkur__ as Merkur;
 }
 
-function getGlobalContext() {
+function getGlobalContext(): Partial<GlobalContext> {
   if (typeof globalThis !== 'undefined') {
-    return globalThis;
+    return globalThis as Partial<GlobalContext>;
   }
   if (typeof self !== 'undefined') {
-    return self;
+    return self as Partial<GlobalContext>;
   }
   if (typeof window !== 'undefined') {
-    return window;
+    return window as Partial<GlobalContext>;
   }
   if (typeof global !== 'undefined') {
-    return global;
+    return global as Partial<GlobalContext>;
   }
 
   return {};

@@ -1,20 +1,33 @@
 import {
+  Widget,
+  WidgetDefintition,
+  CreateFunction,
+  WidgetFunction,
+} from './types';
+
+import {
   setDefaultValueForUndefined,
   bindWidgetToFunctions,
   isFunction,
 } from './utils';
 
-async function callPluginMethod(widget, method, args) {
-  for (const plugin of widget.$plugins) {
+async function callPluginMethod(
+  widget: Partial<Widget>,
+  method: string,
+  args: unknown[]
+): Promise<Widget> {
+  for (const plugin of widget.$plugins || []) {
     if (isFunction(plugin[method])) {
-      widget = await plugin[method](widget, ...args);
+      widget = await (plugin[method] as WidgetFunction)(widget, ...args);
     }
   }
 
-  return widget;
+  return widget as Widget;
 }
 
-export async function createMerkurWidget(widgetDefinition = {}) {
+export async function createMerkurWidget(
+  widgetDefinition: Partial<WidgetDefintition> = {}
+): Promise<Widget> {
   widgetDefinition = setDefaultValueForUndefined(widgetDefinition, [
     '$dependencies',
     '$external',
@@ -25,9 +38,15 @@ export async function createMerkurWidget(widgetDefinition = {}) {
     (widget) => widget
   );
 
-  const { setup, create } = widgetDefinition;
+  const { setup, create } = widgetDefinition as {
+    setup: WidgetFunction;
+    create: CreateFunction;
+  };
 
-  let widget = {
+  let widget: Partial<Widget> & {
+    setup: WidgetFunction;
+    create: CreateFunction;
+  } = {
     async setup(widget, ...rest) {
       widget = await callPluginMethod(widget, 'setup', rest);
 
@@ -39,6 +58,7 @@ export async function createMerkurWidget(widgetDefinition = {}) {
       return create(widget, ...rest);
     },
     $plugins: (widgetDefinition.$plugins || []).map((pluginFactory) =>
+      // kdyby se tu davaly primo provolane pluginy, tak by byl type match na "Widget"
       pluginFactory()
     ),
   };
@@ -48,7 +68,10 @@ export async function createMerkurWidget(widgetDefinition = {}) {
   widget.version = widgetDefinition.version;
   widget.$dependencies = widgetDefinition.$dependencies;
   widget.$external = widgetDefinition.$external;
-  widget.$in = {};
+  widget.$in = {
+    widgets: [],
+    widgetFactory: {},
+  };
 
   delete widgetDefinition.name;
   delete widgetDefinition.version;
@@ -60,10 +83,10 @@ export async function createMerkurWidget(widgetDefinition = {}) {
   delete widgetDefinition.create;
 
   widget = await widget.setup(widget, widgetDefinition);
-  widget = await widget.create(widget, widgetDefinition);
+  widget = await widget.create(widget as Widget, widgetDefinition);
 
-  bindWidgetToFunctions(widget);
+  bindWidgetToFunctions(widget as Widget);
   Object.seal(widget);
 
-  return widget;
+  return widget as Widget;
 }

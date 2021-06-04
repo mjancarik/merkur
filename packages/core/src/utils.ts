@@ -1,8 +1,9 @@
-type AnyFn = (...args: unknown[]) => unknown;
-type AnyObj = Record<string, unknown>;
-type Widget = AnyObj; // TODO
+import { AnyObj, AnyFn, Widget } from './types';
 
-function createBoundedFunction(widget: Widget, originalFunction: AnyFn): AnyFn {
+function createBoundedFunction(
+  widget: unknown, // NOTE: argument se jmenuje "widget", ale technicky vzato to muze byt cokoliv?
+  originalFunction: AnyFn
+): AnyFn {
   return (...rest: unknown[]) => {
     return originalFunction(widget, ...rest);
   };
@@ -16,7 +17,7 @@ export function setDefaultValueForUndefined(
   const objectClone = { ...object };
 
   keys.forEach((key) => {
-    objectClone[key] = objectClone[key] || value;
+    objectClone[key] = objectClone[key] || value; // FIXME: tady by mela byt kontrola undefined, protoze to prepise falsy hodnoty?
   });
 
   return objectClone;
