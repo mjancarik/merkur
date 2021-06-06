@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-css-scrambler",
-  "version": "0.1.0",
+  "version": "0.24.0",
   "description": "Merkur plugin for scrambling CSS classes.",
   "main": "lib/index",
   "module": "lib/index",
@@ -37,7 +37,8 @@
   "keywords": [
     "merkur",
     "plugin",
-    "error"
+    "css",
+    "scrambler"
   ],
   "author": "Vojtěch Šimko",
   "license": "ISC",
