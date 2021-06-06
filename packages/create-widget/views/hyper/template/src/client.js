@@ -24,9 +24,8 @@ function createWidget(widgetParams) {
             return;
           }
 
-          widget.$external.render[
-            containerSelector
-          ] = widget.$dependencies.bind(container);
+          widget.$external.render[containerSelector] =
+            widget.$dependencies.bind(container);
 
           View(widget, widget.$external.render[containerSelector]);
         }

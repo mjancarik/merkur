@@ -20,9 +20,11 @@ function createWidget(widgetParams) {
           return null;
         }
 
-        return (container?.children?.length && !isSlot
-          ? widget.$dependencies.hydrate
-          : widget.$dependencies.render)(View(widget), container);
+        return (
+          container?.children?.length && !isSlot
+            ? widget.$dependencies.hydrate
+            : widget.$dependencies.render
+        )(View(widget), container);
       });
     },
     async unmount(widget) {

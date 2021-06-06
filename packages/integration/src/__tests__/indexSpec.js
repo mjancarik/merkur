@@ -30,10 +30,8 @@ describe('Merkur component', () => {
         name: 'widget.js',
         type: 'script',
         source: {
-          es9:
-            'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js',
-          es5:
-            'http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js',
+          es9: 'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js',
+          es5: 'http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js',
         },
         attr: {
           async: true,
@@ -46,10 +44,8 @@ describe('Merkur component', () => {
         test: 'return typeof window !== "undefined"',
         type: 'script',
         source: {
-          es9:
-            'http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js',
-          es5:
-            'http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js',
+          es9: 'http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js',
+          es5: 'http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js',
         },
       },
       {
@@ -57,8 +53,7 @@ describe('Merkur component', () => {
         type: 'script',
         source: {
           es9: undefined,
-          es5:
-            'http://localhost:4444/static/es5/undefined.6961af42bfa3596bb147.js',
+          es5: 'http://localhost:4444/static/es5/undefined.6961af42bfa3596bb147.js',
         },
       },
       {
