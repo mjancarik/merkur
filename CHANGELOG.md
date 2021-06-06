@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.24.1](https://github.com/mjancarik/merkur/compare/v0.24.0...v0.24.1) (2021-06-06)
+
+
+### Features
+
+* 🎸 css scramble plugin ([#85](https://github.com/mjancarik/merkur/issues/85)) ([bfeff1e](https://github.com/mjancarik/merkur/commit/bfeff1ef15009ff9cf7dc81564af573526042a7a))
+
+
+
+
+
 # [0.24.0](https://github.com/mjancarik/merkur/compare/v0.23.12...v0.24.0) (2021-05-28)
 
 
