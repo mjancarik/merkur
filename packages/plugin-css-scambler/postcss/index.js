@@ -16,6 +16,12 @@ function postCssScrambler(options) {
       if (options.generateHashTable) {
         const tableData = generateHashTable(root);
         [prefixesTable, mainPartsTable] = tableData;
+
+        const directory = path.dirname(options.hashTable);
+        if (!fs.existsSync(directory)) {
+          fs.mkdirSync(directory, { recursive: true });
+        }
+
         fs.writeFileSync(options.hashTable, JSON.stringify(tableData));
       } else {
         [prefixesTable, mainPartsTable] = JSON.parse(
