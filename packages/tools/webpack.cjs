@@ -3,8 +3,8 @@ const zlib = require('zlib');
 const WebpackShellPlugin = require('webpack-shell-plugin-next');
 const nodeExternals = require('webpack-node-externals');
 const WebpackModules = require('webpack-modules');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
-  .BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin =
+  require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -145,6 +145,7 @@ function createNodeConfig(options = {}) {
   return {
     target: 'node',
     externals: [nodeExternals()],
+    externalsPresets: { node: true },
     mode: webpackMode,
     devtool: environment === PRODUCTION ? false : 'eval-source-map',
     resolve: { ...resolve, ...{ mainFields: ['module', 'main'] } },

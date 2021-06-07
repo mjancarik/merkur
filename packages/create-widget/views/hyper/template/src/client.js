@@ -1,6 +1,8 @@
 import hyper from 'hyperhtml';
 import { createMerkurWidget, createMerkur } from '@merkur/core';
-import { widgetProperties } from './widget';
+import { viewFactory } from './views/View';
+import widgetProperties from './widget';
+import { mapViews } from './lib/utils';
 import style from './style.css'; // eslint-disable-line no-unused-vars
 
 function createWidget(widgetParams) {
@@ -12,16 +14,44 @@ function createWidget(widgetParams) {
       wire: hyper.wire,
     },
     mount(widget) {
-      widget.$external.render = widget.$dependencies.bind(
-        document.querySelector(widget.props.containerSelector)
+      widget.$external.render = {};
+
+      return mapViews(
+        widget,
+        viewFactory,
+        ({ View, containerSelector, container }) => {
+          if (!container) {
+            return;
+          }
+
+          widget.$external.render[containerSelector] =
+            widget.$dependencies.bind(container);
+
+          View(widget, widget.$external.render[containerSelector]);
+        }
       );
-      return widget.View(widget.$external.render);
     },
     unmount(widget) {
-      document.querySelector(widget.props.containerSelector).innerHTML = '';
+      mapViews(widget, viewFactory, ({ container }) => {
+        if (!container) {
+          return;
+        }
+
+        container.innerHTML = '';
+      });
     },
     update(widget) {
-      widget.View(widget.$external.render);
+      mapViews(
+        widget,
+        viewFactory,
+        ({ View, containerSelector, container }) => {
+          if (!container) {
+            return;
+          }
+
+          View(widget, widget.$external.render[containerSelector]);
+        }
+      );
     },
   });
 }

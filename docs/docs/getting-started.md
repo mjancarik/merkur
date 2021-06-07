@@ -29,29 +29,34 @@ If you take a look inside the created widget, you'll see this file structure:
 <name>
 │   package.json
 │   webpack.config.js
-└───server
-│   └───config
+└── server
+│   └── config
 │       │   default.json
 │       │   production.json
 │       │   test.json
-│   └───router
-│       └───error
-│       └───playground
-│       └───widgetAPI
+│   └── router
+│       └── error
+│       └── playground
+│       └── widgetAPI
 │   │   app.js
 │   │   server.js
-│   └───static
+│   └── static
 │   │   // static files for serving from server
-└───src
+└── src
 │   │   style.css
 │   │   widget.js
 │   │   client.js
 │   │   server.js
-│   │
-│   └───component
+│   └── lib
+│       │   utils.js
+│   └── views
+│       │   View.jsx
+│       │   ErrorView.jsx
+│   └── slots
+│       │   HeadlineSlot.jsx
+│   └── components
 │       │   Counter.jsx
 │       │   MerkurIcon.jsx
-│       │   View.jsx
 │       │   Welcome.jsx
 │       │   WidgetDescription.jsx
 ```
@@ -85,4 +90,4 @@ This contains individual [Express](https://expressjs.com/en/guide/routing.html) 
 
 ### app.js
 
-This contains a basic [Express](https://expressjs.com/) server with predefined middleware. 
+This contains a basic [Express](https://expressjs.com/) server with predefined middleware.

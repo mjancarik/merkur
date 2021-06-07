@@ -4,12 +4,11 @@ import { createMerkur, createMerkurWidget, removeMerkur } from '@merkur/core';
 import { componentPlugin } from '@merkur/plugin-component';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 
-const mockedWidgetClassName = 'container';
 const mockedWidgetProperties = {
   name: 'my-widget',
   version: '0.0.1',
   props: {
-    containerSelector: `.${mockedWidgetClassName}`,
+    containerSelector: '.container',
   },
   assets: [
     {
@@ -32,6 +31,13 @@ const mockedWidgetProperties = {
     },
   ],
   html: '<div class="merkur__page"></div>',
+  slots: {
+    headline: {
+      name: 'headline',
+      containerSelector: '.headline',
+      html: '<div class="merkur__headline"></div>',
+    },
+  },
 };
 
 function widgetMockInit() {
@@ -70,9 +76,4 @@ function widgetMockCleanup() {
   removeMerkur();
 }
 
-export {
-  mockedWidgetClassName,
-  mockedWidgetProperties,
-  widgetMockCleanup,
-  widgetMockInit,
-};
+export { mockedWidgetProperties, widgetMockCleanup, widgetMockInit };

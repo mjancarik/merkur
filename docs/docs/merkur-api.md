@@ -65,7 +65,7 @@ console.log(getMerkur());
 // };
 ```
 
-Other important part of the Merkur instance are methods `register` and `create`. The `register` method register widget to Merkur with a `name`, `version` and `createWidget` properties. The `create` method returns a new instace of the registered widget with defined properties.
+Other important part of the Merkur instance are methods `register` and `create`. The `register` method register widget to Merkur with a `name`, `version` and `createWidget` properties. The `create` method returns a new instance of the registered widget with defined properties.
 
 ```javascript
 import { getMerkur } from '@merkur/core';

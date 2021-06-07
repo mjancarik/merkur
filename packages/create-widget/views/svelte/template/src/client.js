@@ -1,31 +1,56 @@
 import { createMerkurWidget, createMerkur } from '@merkur/core';
-import { widgetProperties } from './widget';
+import widgetProperties from './widget';
+import { viewFactory } from './views/viewFactory';
+import { mapViews } from './lib/utils';
 import style from './style.css'; // eslint-disable-line no-unused-vars
-import View from './component/View.svelte'; // eslint-disable-line no-unused-vars
 
 function createWidget(widgetParams) {
   return createMerkurWidget({
     ...widgetProperties,
     ...widgetParams,
     $dependencies: {},
-    mount(widget) {
-      widget.$external.app = new View({
-        target: document.querySelector(widget.props.containerSelector),
-        props: {
-          widget,
-          state: widget.state,
-          props: widget.props,
-        },
-        hydrate: true,
+    async mount(widget) {
+      widget.$external.app = {};
+
+      mapViews(
+        widget,
+        viewFactory,
+        ({ containerSelector, container, View }) => {
+          if (!container) {
+            return;
+          }
+
+          widget.$external.app[containerSelector] = new View({
+            target: document.querySelector(containerSelector),
+            props: {
+              widget,
+              state: widget.state,
+              props: widget.props,
+            },
+            hydrate: !!container?.children?.length,
+          });
+        }
+      );
+    },
+    async unmount(widget) {
+      mapViews(widget, viewFactory, ({ containerSelector }) => {
+        if (!widget.$external.app[containerSelector]) {
+          return;
+        }
+
+        widget.$external.app[containerSelector].$destroy();
       });
     },
-    unmount(widget) {
-      widget.$external.app.$destroy();
-    },
-    update(widget) {
-      widget.$external.app.$set({
-        state: widget.state,
-        props: widget.props,
+    async update(widget) {
+      mapViews(widget, viewFactory, ({ containerSelector }) => {
+        if (!widget.$external.app[containerSelector]) {
+          return;
+        }
+
+        widget.$external.app[containerSelector].$set({
+          state: widget.state,
+          props: widget.props,
+        });
       });
     },
   });

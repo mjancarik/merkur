@@ -1,6 +1,6 @@
 {
   "name": "@merkur/core",
-  "version": "0.23.12",
+  "version": "0.24.1",
   "description": "Merkur is tiny and extensible library for creating front-end microservices.",
   "main": "lib/index",
   "module": "lib/index",
@@ -47,6 +47,6 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "rollup": "^2.45.2"
+    "rollup": "^2.51.0"
   }
 }

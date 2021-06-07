@@ -1,7 +1,9 @@
 import { render, hydrate } from 'preact';
 import { unmountComponentAtNode } from 'preact/compat';
 import { createMerkurWidget, createMerkur } from '@merkur/core';
-import { widgetProperties } from './widget';
+import { viewFactory } from './views/View.jsx';
+import widgetProperties from './widget';
+import { mapViews } from './lib/utils';
 import style from './style.css'; // eslint-disable-line no-unused-vars
 
 function createWidget(widgetParams) {
@@ -13,26 +15,33 @@ function createWidget(widgetParams) {
       hydrate,
       unmountComponentAtNode,
     },
-    mount(widget) {
-      const View = widget.View();
-      const container = document.querySelector(widget.props.containerSelector);
+    async mount(widget) {
+      return mapViews(widget, viewFactory, ({ View, container, isSlot }) => {
+        if (!container) {
+          return null;
+        }
 
-      if (container && container.children.length) {
-        return widget.$dependencies.hydrate(View, container);
-      }
-
-      return widget.$dependencies.render(View, container);
+        return (
+          container?.children?.length && !isSlot
+            ? widget.$dependencies.hydrate
+            : widget.$dependencies.render
+        )(View(widget), container);
+      });
     },
-    unmount(widget) {
-      const container = document.querySelector(widget.props.containerSelector);
-
-      return widget.$dependencies.unmountComponentAtNode(container);
+    async unmount(widget) {
+      mapViews(widget, viewFactory, ({ container }) => {
+        if (container) {
+          widget.$dependencies.unmountComponentAtNode(container);
+        }
+      });
     },
-    update(widget) {
-      const View = widget.View();
-      const container = document.querySelector(widget.props.containerSelector);
-
-      return widget.$dependencies.render(View, container);
+    async update(widget) {
+      return mapViews(
+        widget,
+        viewFactory,
+        ({ View, container }) =>
+          container && widget.$dependencies.render(View(widget), container)
+      );
     },
   });
 }

@@ -7,9 +7,9 @@ describe('createWidget method with component plugin', () => {
       $plugins: [componentPlugin],
       name: 'my-widget',
       version: '1.0.0',
+      containerSelector: '.container',
       props: {
         param: 1,
-        containerSelector: '.container',
       },
       assets: [
         {
@@ -50,13 +50,13 @@ describe('createWidget method with component plugin', () => {
           },
         ],
         "bootstrap": [Function],
+        "containerSelector": ".container",
         "create": [Function],
         "info": [Function],
         "load": [Function],
         "mount": [Function],
         "name": "my-widget",
         "props": Object {
-          "containerSelector": ".container",
           "param": 1,
         },
         "setProps": [Function],
@@ -75,9 +75,9 @@ describe('createWidget method with component plugin', () => {
       $plugins: [componentPlugin],
       name: 'my-widget',
       version: '1.0.0',
+      containerSelector: '.container',
       props: {
         param: 1,
-        containerSelector: '.container',
       },
       assets: [
         {
@@ -97,9 +97,9 @@ describe('createWidget method with component plugin', () => {
             "type": "script",
           },
         ],
+        "containerSelector": ".container",
         "name": "my-widget",
         "props": Object {
-          "containerSelector": ".container",
           "param": 1,
         },
         "state": Object {},

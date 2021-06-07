@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script src="/@merkur/tools/static/livereload.js"></script>
+  <% assets.forEach((asset) => { %>
+    <%if (asset.type === 'stylesheet') { %>
+      <link rel='stylesheet' href='<%= asset.source %>' />
+    <% } %>
+    <%if (asset.type === 'script') { %>
+      <%if (typeof asset.source === 'string') { %>
+        <script src='<%= asset.source %>' defer='true'></script>
+      <% } %>
+      <%if (typeof asset.source === 'object') { %>
+        <script src='<%= asset.source.es9 %>' defer='true'></script>
+      <% } %>
+    <% } %>
+  <% }); %>
+  <title>MERKUR - widget</title>
+</head>
+
+<body>
+  <div class="headline-view"><%- widgetProperties && widgetProperties.slots && widgetProperties.slots.headline.html %></div>
+  <div class="merkur-view"><%- html %></div>
+  <script>
+    window.addEventListener('load', function () {
+      __merkur__.create(<%- JSON.stringify(widgetProperties) %>)
+        .then(function (widget) {
+          widget.containerSelector = '.merkur-view';
+          widget.slots.headline.containerSelector = '.headline-view';
+
+          widget.mount();
+        });
+    });
+  </script>
+</body>
+
+</html>

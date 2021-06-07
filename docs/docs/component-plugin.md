@@ -46,10 +46,10 @@ All new available methods are asynchronous and we define their returning value i
 
 ### info
 
-The `info` method returns information about the widget such as name, version, props, state, assets, etc. It is primary useful for server-side rendering, where we need to collect important values for hydrating the widget in the browser.
+The `info` method returns information about the widget such as name, version, props, state, assets, containerSelector, etc. It is primary useful for server-side rendering, where we need to collect important values for hydrating the widget in the browser.
 
 ```javascript
-const { name, version, props, state, assets } = await widget.info();
+const { name, version, props, state, assets, containerSelector } = await widget.info();
 ```
 
 ### bootstrap
