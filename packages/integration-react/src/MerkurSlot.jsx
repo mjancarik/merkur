@@ -11,12 +11,7 @@ export default class MerkurSlot extends AbstractMerkurWidget {
   get slot() {
     const { widgetProperties, slotName } = this.props;
 
-    return (
-      (widgetProperties &&
-        widgetProperties.slots &&
-        widgetProperties.slots[slotName]) ||
-      null
-    );
+    return widgetProperties?.slots?.[slotName] ?? null;
   }
 
   /**
@@ -95,7 +90,10 @@ export default class MerkurSlot extends AbstractMerkurWidget {
   render() {
     const { widgetProperties } = this.props;
 
-    if (!widgetProperties || !this.slot) {
+    if (
+      !AbstractMerkurWidget.validateWidgetProperties(widgetProperties) ||
+      !this.slot
+    ) {
       return this._renderFallback();
     }
 

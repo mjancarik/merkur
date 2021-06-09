@@ -133,6 +133,24 @@ describe('AbstractMerkurWidget', () => {
     });
   });
 
+  describe('static validateWidgetProperties() method', () => {
+    it.each([
+      [undefined, false],
+      [null, false],
+      [{}, false],
+      [{ a: 'b' }, false],
+      [{ name: 'foo' }, false],
+      [{ version: '0.0.1' }, false],
+      [{ name: 'foo', version: '0.0.1' }, true],
+      [{ hi: 'hello', name: 'foo', version: '0.0.1' }, true],
+      [{ props: {}, name: 'foo', version: '0.0.1' }, true],
+    ])('should validate %j input as %b', (input, expected) => {
+      expect(AbstractMerkurWidget.validateWidgetProperties(input)).toBe(
+        expected
+      );
+    });
+  });
+
   describe('_renderFallback() method', () => {
     it('should return null if no children are given', () => {
       wrapper.setProps({ children: undefined });

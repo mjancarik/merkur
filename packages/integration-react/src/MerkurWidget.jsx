@@ -272,7 +272,7 @@ export default class MerkurWidget extends AbstractMerkurWidget {
     const { encounteredError, assetsLoaded } = this.state;
 
     if (
-      !widgetProperties ||
+      !AbstractMerkurWidget.validateWidgetProperties(widgetProperties) ||
       encounteredError ||
       (this._isClient() && !this._isSSRHydrate() && !assetsLoaded)
     ) {
@@ -362,7 +362,10 @@ export default class MerkurWidget extends AbstractMerkurWidget {
   _loadWidgetAssets() {
     const { widgetProperties } = this.props;
 
-    if (!widgetProperties || this._widget) {
+    if (
+      !AbstractMerkurWidget.validateWidgetProperties(widgetProperties) ||
+      this._widget
+    ) {
       return;
     }
 
@@ -392,7 +395,10 @@ export default class MerkurWidget extends AbstractMerkurWidget {
   async _mountWidget() {
     const { widgetProperties, onWidgetMounted, debug = false } = this.props;
 
-    if (!widgetProperties || this._widget) {
+    if (
+      !AbstractMerkurWidget.validateWidgetProperties(widgetProperties) ||
+      this._widget
+    ) {
       return;
     }
 
