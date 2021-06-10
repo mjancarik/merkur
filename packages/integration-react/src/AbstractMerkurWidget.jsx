@@ -26,10 +26,9 @@ export default class AbstractMerkurWidget extends React.Component {
    * @param {object} widgetProperties
    * @return {boolean} validation result.
    */
-  static validateWidgetProperties(widgetProperties) {
+  static validateProperties(widgetProperties) {
     return !!(
       widgetProperties &&
-      Object.keys(widgetProperties).length > 0 &&
       widgetProperties.name &&
       widgetProperties.version
     );

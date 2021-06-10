@@ -133,7 +133,7 @@ describe('AbstractMerkurWidget', () => {
     });
   });
 
-  describe('static validateWidgetProperties() method', () => {
+  describe('static validateProperties() method', () => {
     it.each([
       [undefined, false],
       [null, false],
@@ -145,9 +145,7 @@ describe('AbstractMerkurWidget', () => {
       [{ hi: 'hello', name: 'foo', version: '0.0.1' }, true],
       [{ props: {}, name: 'foo', version: '0.0.1' }, true],
     ])('should validate %j input as %b', (input, expected) => {
-      expect(AbstractMerkurWidget.validateWidgetProperties(input)).toBe(
-        expected
-      );
+      expect(AbstractMerkurWidget.validateProperties(input)).toBe(expected);
     });
   });
 
