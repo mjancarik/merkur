@@ -6,11 +6,12 @@ import numberToCssClass from './numberToCssClass';
  * @return {function(...?(string|Object<string, boolean>))}
  */
 export default function scramblerFactory(hashingTable) {
+  let uniqueHash, prefixes, mainParts;
   const prefixTable = hashingTable && new Map();
   const mainPartTable = hashingTable && new Map();
 
   if (hashingTable) {
-    const [prefixes, mainParts] = hashingTable;
+    [uniqueHash, prefixes, mainParts] = hashingTable;
     for (let i = 0; i < prefixes.length; i++) {
       prefixTable.set(prefixes[i], numberToCssClass(i));
     }
@@ -37,7 +38,9 @@ export default function scramblerFactory(hashingTable) {
           return className;
         }
 
-        return `${prefixTable.get(prefix)}_${mainPartTable.get(mainPart)}`;
+        return `${prefixTable.get(prefix)}_${mainPartTable.get(
+          mainPart
+        )}_${uniqueHash}`;
       })
       .join(' ');
 

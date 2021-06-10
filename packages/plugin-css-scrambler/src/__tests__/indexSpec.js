@@ -7,7 +7,7 @@ describe('createWidget method with cssScramble plugin', () => {
       $plugins: [cssScramblePlugin],
       name: 'my-widget',
       version: '1.0.0',
-      classnameHashtable: [['szn'], ['view', 'component']],
+      classnameHashtable: ['gfgfg', ['szn'], ['view', 'component']],
       props: {
         param: 1,
       },

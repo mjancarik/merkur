@@ -10,12 +10,11 @@ function postCssScrambler(options) {
   return {
     postcssPlugin: 'css-scrambler',
     Once(root) {
-      let prefixesTable;
-      let mainPartsTable;
+      let uniqueHash, prefixesTable, mainPartsTable;
 
       if (options.generateHashTable) {
-        const tableData = generateHashTable(root);
-        [prefixesTable, mainPartsTable] = tableData;
+        const tableData = generateHashTable(root, options.uniqueIdentifier);
+        [uniqueHash, prefixesTable, mainPartsTable] = tableData;
 
         const directory = path.dirname(options.hashTable);
         if (!fs.existsSync(directory)) {
@@ -52,7 +51,7 @@ function postCssScrambler(options) {
 
           const scrambledPrefix = numberToCssClass(prefixIndex);
           const scrambledMainPart = numberToCssClass(mainPartIndex);
-          classNameNode.value = `${scrambledPrefix}_${scrambledMainPart}`;
+          classNameNode.value = `${scrambledPrefix}_${scrambledMainPart}_${uniqueHash}`;
         });
       });
       root.walkRules((rule) => {
@@ -71,7 +70,7 @@ function postCssScrambler(options) {
 
 postCssScrambler.postcss = true;
 
-function generateHashTable(css) {
+function generateHashTable(css, uniqueIdentifier = '') {
   const prefixes = new Set();
   const mainParts = new Set();
 
@@ -97,81 +96,99 @@ function generateHashTable(css) {
     populatingParser.process(rule.selector);
   });
 
-  return [[...prefixes], [...mainParts]];
+  return [
+    generateIdentifierHash(uniqueIdentifier),
+    [...prefixes],
+    [...mainParts],
+  ];
 }
 
-function applyPostCssScramblePlugin(config) {
-  if (process.env.NODE_ENV === 'development') {
-    return config;
+function generateIdentifierHash(identifier) {
+  let hash = 5381,
+    index = identifier.length;
+
+  while (index) {
+    hash = (hash * 33) ^ identifier.charCodeAt(--index);
   }
 
-  const postCssScramblePlugin = postCssScrambler({
-    generateHashTable: true,
-    hashTable: path.resolve(
-      process.env.WIDGET_DIRNAME,
-      './build/static/hashtable.json'
-    ),
-  });
+  return (hash >>> 0).toString(32);
+}
 
-  // try to find existing postcss loader
-  for (const rule of config.module.rules) {
-    if (!rule.use) {
-      continue;
-    }
-
-    const postCssUseEntryIndex = rule.use.findIndex(
-      (useEntry) =>
-        useEntry === 'postcss-loader' || useEntry.loader === 'postcss-loader'
-    );
-
-    if (~postCssUseEntryIndex) {
-      const postCssLoader = rule.use[postCssUseEntryIndex];
-
-      if (typeof postCssLoader === 'string') {
-        // convert string loader to object definition
-        rule.use[postCssUseEntryIndex] = {
-          loader: 'postcss-loader',
-          options: {
-            postcssOptions: {
-              plugins: [postCssScramblePlugin],
-            },
-          },
-        };
-      } else {
-        // extend options of object defined loader
-        rule.use[postCssUseEntryIndex].options = {
-          ...postCssLoader.options,
-          postcssOptions: {
-            ...postCssLoader.options.postcssOptions,
-            plugins: [
-              ...postCssLoader.options.postcssOptions.plugins,
-              postCssScramblePlugin,
-            ],
-          },
-        };
-      }
-
+function applyPostCssScramblePlugin(options) {
+  return (config) => {
+    if (process.env.NODE_ENV === 'development') {
       return config;
     }
-  }
 
-  // add postcss loader to rule matching css files
-  const cssRuleIndex = config.module.rules.findIndex((rule) =>
-    rule.test.test('.css')
-  );
-
-  if (~cssRuleIndex) {
-    config.module.rules[cssRuleIndex].use.push({
-      loader: 'postcss-loader',
-      options: {
-        postcssOptions: {
-          plugins: [postCssScramblePlugin],
-        },
-      },
+    const postCssScramblePlugin = postCssScrambler({
+      generateHashTable: true,
+      hashTable: path.resolve(
+        process.env.WIDGET_DIRNAME,
+        './build/static/hashtable.json'
+      ),
+      ...options,
     });
-  }
 
-  return config;
+    // try to find existing postcss loader
+    for (const rule of config.module.rules) {
+      if (!rule.use) {
+        continue;
+      }
+
+      const postCssUseEntryIndex = rule.use.findIndex(
+        (useEntry) =>
+          useEntry === 'postcss-loader' || useEntry.loader === 'postcss-loader'
+      );
+
+      if (~postCssUseEntryIndex) {
+        const postCssLoader = rule.use[postCssUseEntryIndex];
+
+        if (typeof postCssLoader === 'string') {
+          // convert string loader to object definition
+          rule.use[postCssUseEntryIndex] = {
+            loader: 'postcss-loader',
+            options: {
+              postcssOptions: {
+                plugins: [postCssScramblePlugin],
+              },
+            },
+          };
+        } else {
+          // extend options of object defined loader
+          rule.use[postCssUseEntryIndex].options = {
+            ...postCssLoader.options,
+            postcssOptions: {
+              ...postCssLoader.options.postcssOptions,
+              plugins: [
+                ...postCssLoader.options.postcssOptions.plugins,
+                postCssScramblePlugin,
+              ],
+            },
+          };
+        }
+
+        return config;
+      }
+    }
+
+    // add postcss loader to rule matching css files
+    const cssRuleIndex = config.module.rules.findIndex((rule) =>
+      rule.test.test('.css')
+    );
+
+    if (~cssRuleIndex) {
+      config.module.rules[cssRuleIndex].use.push({
+        loader: 'postcss-loader',
+        options: {
+          postcssOptions: {
+            plugins: [postCssScramblePlugin],
+          },
+        },
+      });
+    }
+
+    return config;
+  };
 }
 
 module.exports = {
