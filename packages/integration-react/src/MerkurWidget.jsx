@@ -51,7 +51,11 @@ export default class MerkurWidget extends AbstractMerkurWidget {
    * @param {object} prevState
    */
   static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState && nextProps && nextProps.widgetProperties) {
+    if (
+      prevState &&
+      nextProps &&
+      AbstractMerkurWidget.validateProperties(nextProps.widgetProperties)
+    ) {
       const { version, name } = nextProps.widgetProperties;
 
       // Cache widget meta data (name & version)
@@ -102,8 +106,7 @@ export default class MerkurWidget extends AbstractMerkurWidget {
     if (
       this.state.assetsLoaded !== nextState.assetsLoaded ||
       this.state.encounteredError !== nextState.encounteredError ||
-      !this.props.widgetProperties ||
-      !nextProps.widgetProperties ||
+      !AbstractMerkurWidget.validateProperties(this.props.widgetProperties) ||
       AbstractMerkurWidget.hasWidgetChanged(
         this.props.widgetProperties,
         nextProps.widgetProperties
@@ -211,7 +214,10 @@ export default class MerkurWidget extends AbstractMerkurWidget {
     }
 
     // 2.1) In case we receive empty new properties, we need to cleanup.
-    if (!currentWidgetProperties && prevWidgetProperties) {
+    if (
+      !AbstractMerkurWidget.validateProperties(currentWidgetProperties) &&
+      AbstractMerkurWidget.validateProperties(prevWidgetProperties)
+    ) {
       this._removeWidget();
       this.setState({
         encounteredError: false,
@@ -227,7 +233,10 @@ export default class MerkurWidget extends AbstractMerkurWidget {
      * initialize widget first by doing the same as if it first mounted
      * (loading assets into the DOM).
      */
-    if (currentWidgetProperties && !prevWidgetProperties) {
+    if (
+      AbstractMerkurWidget.validateProperties(currentWidgetProperties) &&
+      !AbstractMerkurWidget.validateProperties(prevWidgetProperties)
+    ) {
       return this._loadWidgetAssets();
     }
 
@@ -237,7 +246,6 @@ export default class MerkurWidget extends AbstractMerkurWidget {
      * if it has mounted for the first time (if there are any new widget properties).
      */
     if (
-      (prevWidgetProperties && !currentWidgetProperties) ||
       AbstractMerkurWidget.hasWidgetChanged(
         currentWidgetProperties,
         prevWidgetProperties
@@ -272,11 +280,15 @@ export default class MerkurWidget extends AbstractMerkurWidget {
     const { encounteredError, assetsLoaded } = this.state;
 
     if (
-      !widgetProperties ||
+      !AbstractMerkurWidget.validateProperties(widgetProperties) ||
       encounteredError ||
       (this._isClient() && !this._isSSRHydrate() && !assetsLoaded)
     ) {
       return this._renderFallback();
+    }
+
+    if (!widgetProperties.containerSelector) {
+      throw new Error(`The widgetProperties.containerSelector is not defined`);
     }
 
     const html = this._getWidgetHTML();
@@ -301,8 +313,9 @@ export default class MerkurWidget extends AbstractMerkurWidget {
    */
   _renderStyleAssets() {
     const { widgetProperties } = this.props;
-    const assets =
-      (Array.isArray(widgetProperties.assets) && widgetProperties.assets) || [];
+    const assets = Array.isArray(widgetProperties?.assets)
+      ? widgetProperties.assets
+      : [];
 
     return assets
       .filter(
@@ -362,7 +375,10 @@ export default class MerkurWidget extends AbstractMerkurWidget {
   _loadWidgetAssets() {
     const { widgetProperties } = this.props;
 
-    if (!widgetProperties || this._widget) {
+    if (
+      !AbstractMerkurWidget.validateProperties(widgetProperties) ||
+      this._widget
+    ) {
       return;
     }
 
@@ -392,7 +408,10 @@ export default class MerkurWidget extends AbstractMerkurWidget {
   async _mountWidget() {
     const { widgetProperties, onWidgetMounted, debug = false } = this.props;
 
-    if (!widgetProperties || this._widget) {
+    if (
+      !AbstractMerkurWidget.validateProperties(widgetProperties) ||
+      this._widget
+    ) {
       return;
     }
 

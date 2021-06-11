@@ -7,9 +7,7 @@ import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 const mockedWidgetProperties = {
   name: 'my-widget',
   version: '0.0.1',
-  props: {
-    containerSelector: '.container',
-  },
+  containerSelector: '.container',
   assets: [
     {
       name: 'widget.js',

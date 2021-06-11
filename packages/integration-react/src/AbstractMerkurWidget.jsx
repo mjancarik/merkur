@@ -21,6 +21,20 @@ export default class AbstractMerkurWidget extends React.Component {
   }
 
   /**
+   * Validates widget properties, widget properties should not be an empty object.
+   *
+   * @param {object} widgetProperties
+   * @return {boolean} validation result.
+   */
+  static validateProperties(widgetProperties) {
+    return !!(
+      widgetProperties &&
+      widgetProperties.name &&
+      widgetProperties.version
+    );
+  }
+
+  /**
    * Widget SSR rendered html (from server response).
    */
   get html() {

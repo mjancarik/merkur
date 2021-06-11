@@ -76,6 +76,7 @@ describe('Merkur component', () => {
         expect(wrapper).toMatchInlineSnapshot(`
           <Fragment>
             <WidgetWrapper
+              containerSelector=".container"
               html="<div class=\\"merkur__page\\"></div>"
             />
           </Fragment>
@@ -354,14 +355,15 @@ describe('Merkur component methods', () => {
       ).toBe(false);
     });
 
-    it('should return true when widgetProperties are not defined', () => {
+    it('should return true when widgetProperties are invalid', () => {
       wrapper.setProps({ widgetProperties: null });
 
-      expect(instance.shouldComponentUpdate({}, wrapper.state())).toBe(true);
-    });
-
-    it('should return true when widgetProperties are being deleted', () => {
-      expect(instance.shouldComponentUpdate({}, wrapper.state())).toBe(true);
+      expect(
+        instance.shouldComponentUpdate(
+          { widgetProperties: {} },
+          wrapper.state()
+        )
+      ).toBe(true);
     });
 
     it('should return true when encounteredError flag changes', () => {

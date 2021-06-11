@@ -15,7 +15,10 @@ let extendedPlugins = [
   babel({
     configFile: false,
     presets: ['@babel/preset-react'],
-    plugins: ['@babel/plugin-proposal-optional-chaining'],
+    plugins: [
+      '@babel/plugin-proposal-optional-chaining',
+      '@babel/plugin-proposal-nullish-coalescing-operator',
+    ],
   }),
 ];
 

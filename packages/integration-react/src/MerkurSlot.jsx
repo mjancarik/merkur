@@ -11,12 +11,7 @@ export default class MerkurSlot extends AbstractMerkurWidget {
   get slot() {
     const { widgetProperties, slotName } = this.props;
 
-    return (
-      (widgetProperties &&
-        widgetProperties.slots &&
-        widgetProperties.slots[slotName]) ||
-      null
-    );
+    return widgetProperties?.slots?.[slotName] ?? null;
   }
 
   /**
@@ -46,8 +41,8 @@ export default class MerkurSlot extends AbstractMerkurWidget {
    */
   shouldComponentUpdate(nextProps) {
     if (
-      !this.props.widgetProperties ||
-      !nextProps.widgetProperties ||
+      !AbstractMerkurWidget.validateProperties(this.props.widgetProperties) ||
+      !AbstractMerkurWidget.validateProperties(nextProps.widgetProperties) ||
       AbstractMerkurWidget.hasWidgetChanged(
         this.props.widgetProperties,
         nextProps.widgetProperties
@@ -69,7 +64,10 @@ export default class MerkurSlot extends AbstractMerkurWidget {
     const { widgetProperties: currentWidgetProperties } = this.props;
     const { widgetProperties: prevWidgetProperties } = prevProps;
 
-    if (!currentWidgetProperties && prevWidgetProperties) {
+    if (
+      !AbstractMerkurWidget.validateProperties(currentWidgetProperties) &&
+      AbstractMerkurWidget.validateProperties(prevWidgetProperties)
+    ) {
       this._removeSlot();
 
       return;
@@ -95,8 +93,15 @@ export default class MerkurSlot extends AbstractMerkurWidget {
   render() {
     const { widgetProperties } = this.props;
 
-    if (!widgetProperties || !this.slot) {
+    if (
+      !AbstractMerkurWidget.validateProperties(widgetProperties) ||
+      !this.slot
+    ) {
       return this._renderFallback();
+    }
+
+    if (!this.slot['containerSelector']) {
+      throw new Error(`The ${this.slot.name}.containerSelector is not defined`);
     }
 
     /**
