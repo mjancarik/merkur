@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.24.4](https://github.com/mjancarik/merkur/compare/v0.24.3...v0.24.4) (2021-06-11)
+
+
+### Bug Fixes
+
+* 🐛 Fixed issue, where Components might receive empty object in widgetProperties ([#87](https://github.com/mjancarik/merkur/issues/87)) ([5d9b8c5](https://github.com/mjancarik/merkur/commit/5d9b8c5db4407b1078cf39cfc9a15ca4a5d66989))
+
+
+
+
+
 ## [0.24.1](https://github.com/mjancarik/merkur/compare/v0.24.0...v0.24.1) (2021-06-06)
 
 **Note:** Version bump only for package @merkur/integration-react
