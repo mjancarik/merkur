@@ -11,7 +11,7 @@ const IGNORED_PACKAGES = [
   'plugin-http-client',
   'plugin-router',
   'plugin-error',
-  'plugin-css-scarmbler',
+  'plugin-css-scrambler',
   'tool-storybook',
 ];
 
