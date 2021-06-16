@@ -1,47 +1,93 @@
-<p align="center">
-  <a href="https://merkur.js.org/docs/getting-started" title="Getting started">
-    <img src="https://raw.githubusercontent.com/mjancarik/merkur/master/images/merkur-illustration.png" width="100px" height="100px" alt="Merkur illustration"/>
-  </a>
-</p>
+# Merkur - plugin-css-scrambler
 
-# Merkur
-
-[![Build Status](https://github.com/mjancarik/merkur/workflows/CI/badge.svg)](https://github.com/mjancarik/merkur/actions/workflows/ci.yml)
-[![NPM package version](https://img.shields.io/npm/v/@merkur/core/latest.svg)](https://www.npmjs.com/package/@merkur/core)
-![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@merkur/core/latest)
+[![Build Status](https://github.com/mjancarik/merkur/workflows/CI/badge.svg)](https://travis-ci.com/mjancarik/merkur)
+[![NPM package version](https://img.shields.io/npm/v/@merkur/plugin-css-scrambler/latest.svg)](https://www.npmjs.com/package/@merkur/plugin-css-scrambler)
+![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@merkur/plugin-css-scrambler/latest)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-The [Merkur](https://merkur.js.org/) is tiny extensible javascript library for front-end microservices(micro frontends). It allows by default server side rendering for loading performance boost. You can connect it with other frameworks or languages because merkur defines easy API. You can use one of six predefined template's library [React](https://reactjs.org/), [Preact](https://preactjs.com/), [hyperHTML](https://viperhtml.js.org/hyper.html), [µhtml](https://github.com/WebReflection/uhtml#readme), [Svelte](https://svelte.dev/) and [vanilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) but you can easily extend for others.
-
-## Features
- - Flexible templating engine
- - Usable with all tech stacks
- - SSR-ready by default
- - Easy extensible with plugins
- - Tiny - 1 KB minified + gzipped 
-
-## Getting started
-
-```bash
-npx @merkur/create-widget <name>
-
-cd name
-
-npm run dev // Point your browser at http://localhost:4444/
+`merkur/plugin-css-scrambler` scrambles css classes for production build.
 ```
-![alt text](https://raw.githubusercontent.com/mjancarik/merkur/master/images/hello-widget.png "Merkur example, hello widget")
-## Documentation
+npm i --save @merkur/plugin-css-scrambler
+npm i --save-dev postcss postcss-loader
+```
+### 1. Generate hashtable at build time
+This can be achieved by extending webpack config with provided drop-in function. This function will find existing `postcss-loader` and extend it's config to use scrambling plugin or will define `postcss-loader` for default CSS rule.
+```diff
++ const { applyPostCssScramblePlugin } = require('@merkur/plugin-css-scrambler/postcss');
+module.exports = Promise.all([
+-  pipe(createWebConfig, applyBabelLoader)(),
++  pipe(createWebConfig, applyBabelLoader, applyPostCssScramblePlugin)(),
+-  pipe(createWebConfig, applyBabelLoader, applyES5Transformation)(),
++  pipe(createWebConfig, applyBabelLoader, applyES5Transformation, applyPostCssScramblePlugin)(),
+  pipe(createNodeConfig, applyBabelLoader)(),
+]);
+```
+If you have custom webpack configuration you can just define `postcss-loader` for your styles rule and then call `applyPostCssScramblePlugin` or you can apply the scramler plugin manually.
+```javascript
+const path = require('path');
+const { postCssScrambler } = require('@merkur/plugin-css-scrambler/postcss');
+{
+    loader: 'postcss-loader',
+    options: {
+        postcssOptions: {
+            plugins: [
+                postCssScrambler({
+                    generateHashTable: true,
+                    hashTable: path.resolve(
+                        process.env.WIDGET_DIRNAME,
+                        './build/static/hashtable.json'
+                    ),
+                }),
+            ],
+        },
+    },
+}
+```
+### 2. Load generated hashtable in widget router
+```javascript
+const { loadClassnameHashtable } = require('@merkur/plugin-css-scrambler/server');
+const merkurModule = require('../../../build/widget.cjs');
+const classnameHashtable = loadClassnameHashtable(
+    path.resolve(__dirname, '../../build/static/hashtable.json')
+);
+router.get('/widget', asyncMiddleware(async (req, res) => {
+    const widget = await merkurModule.createWidget({
+        classnameHashtable
+        props: {
+            // ...
+        }
+    });
+    // ...
+}));
+```
+### 3. Register plugin in your `widget.js`.
+```javascript
+import { cssScramblePlugin } from '@merkur/plugin-css-scrambler';
+export const widgetProperties = {
+    // ...
+    $plugins: [
+        // ...
+        cssScramblePlugin,
+    ]
+}
+```
+Now you should use `cn` function from widget object instead of `classname` package directly.
+```jsx
+import WidgetContext from './WidgetContext';
+export default function Counter({ counter }) {
+  const widget = useContext(WidgetContext);
+  const [visible, setVisibility] = useState(false);
+  return (
+    <div className={widget.cn({
+        counter: true,
+        'counter--visible': visible
+    })}>
+        {* ... *}
+    </div>
+  );
+}
+```
 
-To check out [live demo](https://merkur.js.org/demo) and [docs](https://merkur.js.org/doc), visit [https://merkur.js.org](https://merkur.js.org).
+## About Merkur
 
-## Contribution
-
-Contribute to this project via [Pull-Requests](https://github.com/mjancarik/merkur/pulls).
-
-We are following [Conventional Commits Specification](https://www.conventionalcommits.org/en/v1.0.0/#summary). To simplify the commit process, you can use `npm run commit` command. It opens an interactive interface, which should help you with commit message composition.
-
-Thank you to all the people who already contributed to Merkur!
-
-<a href="https://github.com/mjancarik/merkur/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=mjancarik/merkur" />
-</a>
+The [Merkur](https://merkur.js.org/) is tiny extensible javascript library for front-end microservices(micro frontends). It allows by default server side rendering for loading performance boost. You can connect it with other frameworks or languages because merkur defines easy API. You can use one of six predefined template's library [React](https://reactjs.org/), [Preact](https://preactjs.com/), [hyperHTML](https://viperhtml.js.org/hyper.html), [µhtml](https://github.com/WebReflection/uhtml#readme), [Svelte](https://svelte.dev/) and [vanilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) but you can easily extend for others.
