@@ -2,9 +2,15 @@ import testScript from '../testScript';
 
 describe('Merkur component', () => {
   describe('isES9Supported() function', () => {
-    it('should return true', () => {
-      spyOn(testScript, 'test').and.callThrough();
+    beforeEach(() => {
+      jest.spyOn(testScript, 'test');
+    });
 
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should return true', () => {
       const isES9Supported = testScript.isES9Supported();
 
       expect(isES9Supported).toEqual(true);
@@ -12,8 +18,6 @@ describe('Merkur component', () => {
     });
 
     it('should return true but not test again', () => {
-      spyOn(testScript, 'test').and.callThrough();
-
       const isES9Supported = testScript.isES9Supported();
 
       expect(isES9Supported).toEqual(true);

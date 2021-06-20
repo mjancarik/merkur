@@ -103,6 +103,7 @@ describe('MerkurSlot component', () => {
 
     it('should render on SPA without html', () => {
       jest.spyOn(MerkurSlot.prototype, '_isSSRHydrate').mockReturnValue(false);
+      jest.spyOn(MerkurSlot.prototype, '_isClient').mockReturnValue(true);
 
       expect(
         shallow(
@@ -183,7 +184,7 @@ describe('MerkurSlot component methods', () => {
 
   describe('container getter', () => {
     it('should return container element', () => {
-      spyOn(instance, '_isClient').and.returnValue(true);
+      jest.spyOn(instance, '_isClient').mockReturnValue(true);
 
       delete global.document;
       global.document = {
@@ -194,7 +195,7 @@ describe('MerkurSlot component methods', () => {
     });
 
     it('should return null on server', () => {
-      spyOn(instance, '_isClient').and.returnValue(false);
+      jest.spyOn(instance, '_isClient').mockReturnValue(false);
 
       wrapper.setProps({ widgetProperties: null });
 
@@ -234,7 +235,7 @@ describe('MerkurSlot component methods', () => {
 
   describe('componentDidUpdate()', () => {
     beforeEach(() => {
-      spyOn(instance, '_removeSlot');
+      jest.spyOn(instance, '_removeSlot').mockImplementation();
     });
 
     it('should cleanup when receives empty widgetProperties', () => {
@@ -248,7 +249,7 @@ describe('MerkurSlot component methods', () => {
 
   describe('componentWillUnmount()', () => {
     it('should remove slot from dom', () => {
-      spyOn(instance, '_removeSlot');
+      jest.spyOn(instance, '_removeSlot').mockImplementation();
 
       instance.componentWillUnmount();
 
@@ -258,7 +259,7 @@ describe('MerkurSlot component methods', () => {
 
   describe('_removeSlot()', () => {
     it('should clear cached html', () => {
-      spyOn(instance, '_clearCachedHtml');
+      jest.spyOn(instance, '_clearCachedHtml').mockImplementation();
 
       instance._removeSlot();
 

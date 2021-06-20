@@ -46,7 +46,7 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@merkur/core": "^0.24.1",
-    "rollup": "^2.51.0"
+    "rollup": "^2.52.1"
   },
   "peerDependencies": {
     "@merkur/core": "*"

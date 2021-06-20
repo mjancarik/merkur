@@ -35,6 +35,7 @@ describe('Merkur component', () => {
 
     // Mock basic function so first render can pass
     jest.spyOn(MerkurWidget.prototype, '_isSSRHydrate').mockReturnValue(false);
+    jest.spyOn(MerkurWidget.prototype, '_isClient').mockReturnValue(true);
 
     // Shallow render component
     wrapper = shallow(
@@ -71,7 +72,7 @@ describe('Merkur component', () => {
         </MerkurWidget>
       );
 
-      setImmediate(() => {
+      setTimeout(() => {
         expect(MerkurIntegration.loadScriptAssets).toHaveBeenCalled();
         expect(wrapper).toMatchInlineSnapshot(`
           <Fragment>
@@ -83,7 +84,7 @@ describe('Merkur component', () => {
         `);
 
         done();
-      });
+      }, 0);
     });
 
     it('should call onWidgetMounted and onWidgetUnmouting callback', (done) => {
@@ -99,17 +100,17 @@ describe('Merkur component', () => {
         </MerkurWidget>
       );
 
-      setImmediate(() => {
+      setTimeout(() => {
         const widget = wrapper.instance()._widget;
         expect(onWidgetMounted).toHaveBeenCalledWith(widget);
 
         wrapper.unmount();
 
-        setImmediate(() => {
+        setTimeout(() => {
           expect(onWidgetUnmounting).toHaveBeenCalledWith(widget);
           done();
-        });
-      });
+        }, 0);
+      }, 0);
     });
 
     it('should call onError callback and render fallback when script loading fails.', (done) => {
@@ -125,7 +126,7 @@ describe('Merkur component', () => {
         </MerkurWidget>
       );
 
-      setImmediate(() => {
+      setTimeout(() => {
         expect(onError).toHaveBeenCalled();
 
         expect(wrapper).toMatchInlineSnapshot(`
@@ -135,7 +136,7 @@ describe('Merkur component', () => {
         `);
 
         done();
-      });
+      }, 0);
     });
 
     it('should load style assets on unmount', (done) => {
@@ -149,14 +150,14 @@ describe('Merkur component', () => {
         </MerkurWidget>
       );
 
-      setImmediate(() => {
+      setTimeout(() => {
         wrapper.unmount();
 
-        setImmediate(() => {
+        setTimeout(() => {
           expect(MerkurIntegration.loadStyleAssets).toHaveBeenCalled();
           done();
-        });
-      });
+        }, 0);
+      }, 0);
     });
   });
 });
@@ -214,7 +215,7 @@ describe('Merkur component methods', () => {
 
   describe('container getter', () => {
     it('should return container element', () => {
-      spyOn(instance, '_isClient').and.returnValue(true);
+      jest.spyOn(instance, '_isClient').mockReturnValue(true);
 
       delete global.document;
       global.document = {
@@ -225,7 +226,7 @@ describe('Merkur component methods', () => {
     });
 
     it('should return null on server', () => {
-      spyOn(instance, '_isClient').and.returnValue(false);
+      jest.spyOn(instance, '_isClient').mockReturnValue(false);
 
       wrapper.setProps({ widgetProperties: null });
 
@@ -438,7 +439,7 @@ describe('Merkur component methods', () => {
 
   describe('componentDidMount() method', () => {
     it('should load widget assets upon mounting', () => {
-      spyOn(instance, '_loadWidgetAssets');
+      jest.spyOn(instance, '_loadWidgetAssets');
 
       instance.componentDidMount();
 
@@ -448,10 +449,10 @@ describe('Merkur component methods', () => {
 
   describe('componentDidUpdate() method', () => {
     beforeEach(() => {
-      spyOn(instance, '_mountWidget').and.stub();
-      spyOn(instance, '_removeWidget').and.stub();
-      spyOn(instance, '_loadWidgetAssets').and.stub();
-      spyOn(instance, 'setState').and.callThrough();
+      jest.spyOn(instance, '_mountWidget').mockImplementation();
+      jest.spyOn(instance, '_removeWidget').mockImplementation();
+      jest.spyOn(instance, '_loadWidgetAssets').mockImplementation();
+      jest.spyOn(instance, 'setState');
     });
 
     it('should try to mount the widget if assets have been loaded', () => {
@@ -573,7 +574,7 @@ describe('Merkur component methods', () => {
 
   describe('componentWillUnmount() method', () => {
     it('should remove widget on unmounting', () => {
-      spyOn(instance, '_removeWidget');
+      jest.spyOn(instance, '_removeWidget');
 
       instance.componentWillUnmount();
 
@@ -671,7 +672,7 @@ describe('Merkur component methods', () => {
     let onError = jest.fn();
 
     beforeEach(() => {
-      spyOn(instance, 'setState').and.callThrough();
+      jest.spyOn(instance, 'setState');
       wrapper.setProps({
         onError,
       });
@@ -735,7 +736,7 @@ describe('Merkur component methods', () => {
     });
 
     it('should unmount widget and do cleanup', () => {
-      spyOn(instance, '_clearCachedHtml').and.callThrough();
+      jest.spyOn(instance, '_clearCachedHtml');
 
       let unmount = jest.fn();
       let widget = { name: 'name', unmount };
@@ -757,8 +758,8 @@ describe('Merkur component methods', () => {
 
   describe('_loadWidgetAssets() method', () => {
     beforeEach(() => {
-      spyOn(instance, '_handleError').and.stub();
-      spyOn(instance, 'setState').and.callThrough();
+      jest.spyOn(instance, '_handleError').mockImplementation();
+      jest.spyOn(instance, 'setState');
     });
 
     it('should return if there are no widget properties', async () => {
@@ -795,29 +796,29 @@ describe('Merkur component methods', () => {
     });
 
     it('should handle error occured during script asset loading', async () => {
-      spyOn(MerkurIntegration, 'loadScriptAssets').mockImplementation(() =>
-        Promise.reject('failed to load')
-      );
+      jest
+        .spyOn(MerkurIntegration, 'loadScriptAssets')
+        .mockImplementation(() => Promise.reject('failed to load'));
 
       await instance._loadWidgetAssets();
 
       expect(instance.props.widgetProperties).toBe(widgetProperties);
       expect(MerkurIntegration.loadStyleAssets).toHaveBeenCalledTimes(1);
-      expect(MerkurIntegration.loadScriptAssets).toHaveBeenCalledTimes(0);
+      expect(MerkurIntegration.loadScriptAssets).toHaveBeenCalledTimes(1);
       expect(instance.setState).not.toHaveBeenCalled();
       expect(instance._handleError).toHaveBeenCalledTimes(1);
       expect(instance._handleError).toHaveBeenCalledWith('failed to load');
     });
 
     it('should handle error occured during asset loading', async () => {
-      spyOn(MerkurIntegration, 'loadStyleAssets').mockImplementation(() =>
-        Promise.reject('failed to load')
-      );
+      jest
+        .spyOn(MerkurIntegration, 'loadStyleAssets')
+        .mockImplementation(() => Promise.reject('failed to load'));
 
       await instance._loadWidgetAssets();
 
       expect(instance.props.widgetProperties).toBe(widgetProperties);
-      expect(MerkurIntegration.loadStyleAssets).toHaveBeenCalledTimes(0);
+      expect(MerkurIntegration.loadStyleAssets).toHaveBeenCalledTimes(1);
       expect(MerkurIntegration.loadScriptAssets).toHaveBeenCalledTimes(1);
       expect(instance.setState).not.toHaveBeenCalled();
       expect(instance._handleError).toHaveBeenCalledTimes(1);

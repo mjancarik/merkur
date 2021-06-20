@@ -63,7 +63,7 @@ describe('Merkur tool storybook', () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
       let { widget } = await loader(storyArgs);
-      spyOn(widget, 'unmount');
+      jest.spyOn(widget, 'unmount');
       storyArgs.story = 'AnotherStory';
       await loader(storyArgs);
 
