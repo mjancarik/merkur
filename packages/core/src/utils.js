@@ -39,7 +39,13 @@ export function hookMethod(widget, path, handler) {
 function parsePath(widget, path = '') {
   const paths = path.split('.');
   const methodName = paths.pop();
-  const target = paths.reduce((target, path) => target[path], widget);
+  const target = paths.reduce((target, path) => target[path] || {}, widget);
+
+  if (!isFunction(target[methodName])) {
+    throw new Error(
+      `Defined path '${path}' is incorrect. Check your widget structure.`
+    );
+  }
 
   return { target, methodName };
 }

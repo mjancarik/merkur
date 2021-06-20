@@ -1,4 +1,9 @@
-import { bindWidgetToFunctions, hookMethod, isFunction } from '@merkur/core';
+import {
+  bindWidgetToFunctions,
+  setDefaultValueForUndefined,
+  hookMethod,
+  isFunction,
+} from '@merkur/core';
 
 import UniversalRouter from 'universal-router';
 import generateUrls from 'universal-router/generateUrls';
@@ -32,7 +37,6 @@ export function routerPlugin() {
         isMounting: false,
         isRouteActivated: false,
         isBootstrapCalled: false,
-        originalFunctions: {},
       };
 
       bindWidgetToFunctions(widget, widget.router);
@@ -54,6 +58,11 @@ export function routerPlugin() {
         }
       }
 
+      widget.$in.component.lifeCycle = setDefaultValueForUndefined(
+        widget.$in.component.lifeCycle,
+        ['load'],
+        () => {}
+      );
       hookMethod(widget, '$in.component.lifeCycle.load', loadHook);
       hookMethod(widget, 'bootstrap', bootstrapHook);
       hookMethod(widget, 'mount', mountHook);

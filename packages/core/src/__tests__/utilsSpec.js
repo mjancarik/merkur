@@ -133,5 +133,46 @@ describe('utils function', () => {
       expect(widget.c.e('e')).toEqual('c.ee');
       expect(widget.d).toEqual('string');
     });
+
+    it('hook deep defined method on widget', () => {
+      hookMethod(
+        widget,
+        'c.e',
+        (widget, originalMethod, ...rest) => 'c.e' + originalMethod(...rest)
+      );
+      bindWidgetToFunctions(widget);
+      bindWidgetToFunctions(widget.c);
+
+      expect(widget.a('a')).toEqual('a');
+      expect(widget.b('b')).toEqual('b');
+      expect(widget.c.e('e')).toEqual('c.ee');
+      expect(widget.d).toEqual('string');
+    });
+
+    it('hook throw error for bad path', () => {
+      expect.assertions(1);
+      try {
+        hookMethod(widget, 'x.y.z', (widget, originalMethod, ...rest) =>
+          originalMethod(...rest)
+        );
+      } catch (e) {
+        expect(e.message).toMatchInlineSnapshot(
+          `"Defined path 'x.y.z' is incorrect. Check your widget structure."`
+        );
+      }
+    });
+
+    it('hook throw error for path not resolving as method', () => {
+      expect.assertions(1);
+      try {
+        hookMethod(widget, 'd', (widget, originalMethod, ...rest) =>
+          originalMethod(...rest)
+        );
+      } catch (e) {
+        expect(e.message).toMatchInlineSnapshot(
+          `"Defined path 'd' is incorrect. Check your widget structure."`
+        );
+      }
+    });
   });
 });
