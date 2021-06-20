@@ -79,7 +79,11 @@ describe('utils function', () => {
         b: function (widget, b) {
           return b;
         },
-        c: {},
+        c: {
+          e: function (widget, e) {
+            return e;
+          },
+        },
         d: 'string',
       };
     });
@@ -112,6 +116,21 @@ describe('utils function', () => {
 
       expect(widget.a('a')).toEqual('baa');
       expect(widget.b('b')).toEqual('b');
+      expect(widget.d).toEqual('string');
+    });
+
+    it('hook deep defined method on widget', () => {
+      hookMethod(
+        widget,
+        'c.e',
+        (widget, originalMethod, ...rest) => 'c.e' + originalMethod(...rest)
+      );
+      bindWidgetToFunctions(widget);
+      bindWidgetToFunctions(widget.c);
+
+      expect(widget.a('a')).toEqual('a');
+      expect(widget.b('b')).toEqual('b');
+      expect(widget.c.e('e')).toEqual('c.ee');
       expect(widget.d).toEqual('string');
     });
   });
