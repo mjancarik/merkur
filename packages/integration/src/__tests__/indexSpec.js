@@ -80,27 +80,29 @@ describe('Merkur component', () => {
     ];
 
     fakeAssetObjects = [];
+
+    jest
+      .spyOn(document, 'createElement')
+      .mockImplementation(fakeAssetObjectGenerator);
+    jest.spyOn(document.head, 'appendChild').mockImplementation();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
+    jest.restoreAllMocks();
   });
 
   describe('loadStyleAssets() function', () => {
     it('should create style elements for style assets', (done) => {
-      jest
-        .spyOn(document, 'createElement')
-        .mockImplementation(fakeAssetObjectGenerator);
-      spyOn(document.head, 'appendChild');
+      loadStyleAssets(assets)
+        .then(() => {
+          expect(document.createElement).toHaveBeenCalledTimes(2);
+          expect(document.createElement).toHaveBeenNthCalledWith(1, 'link');
+          expect(document.createElement).toHaveBeenNthCalledWith(2, 'style');
+          expect(document.head.appendChild).toHaveBeenCalledTimes(2);
 
-      loadStyleAssets(assets).then(() => {
-        expect(document.createElement).toHaveBeenCalledTimes(2);
-        expect(document.createElement).toHaveBeenNthCalledWith(1, 'link');
-        expect(document.createElement).toHaveBeenNthCalledWith(2, 'style');
-        expect(document.head.appendChild).toHaveBeenCalledTimes(2);
-
-        done();
-      });
+          done();
+        })
+        .catch(done);
 
       resolveFakeAssets();
 
@@ -108,16 +110,13 @@ describe('Merkur component', () => {
     });
 
     it('should return promise that resolves after the styles are loaded', (done) => {
-      jest
-        .spyOn(document, 'createElement')
-        .mockImplementation(fakeAssetObjectGenerator);
-      spyOn(document.head, 'appendChild');
+      const stylePromise = loadStyleAssets(assets)
+        .then(() => {
+          expect(stylePromise).toBeInstanceOf(Promise);
 
-      const stylePromise = loadStyleAssets(assets).then(() => {
-        expect(stylePromise).toBeInstanceOf(Promise);
-
-        done();
-      });
+          done();
+        })
+        .catch(done);
 
       resolveFakeAssets();
     });
@@ -125,17 +124,14 @@ describe('Merkur component', () => {
 
   describe('loadScriptAssets() function', () => {
     it('should create script elements for script assets', (done) => {
-      jest
-        .spyOn(document, 'createElement')
-        .mockImplementation(fakeAssetObjectGenerator);
-      spyOn(document.head, 'appendChild');
+      loadScriptAssets(assets)
+        .then(() => {
+          expect(document.createElement).toHaveBeenCalledTimes(3);
+          expect(document.head.appendChild).toHaveBeenCalledTimes(3);
 
-      loadScriptAssets(assets).then(() => {
-        expect(document.createElement).toHaveBeenCalledTimes(3);
-        expect(document.head.appendChild).toHaveBeenCalledTimes(3);
-
-        done();
-      });
+          done();
+        })
+        .catch(done);
 
       resolveFakeAssets();
 
@@ -143,16 +139,13 @@ describe('Merkur component', () => {
     });
 
     it('should return promise that resolves after the scripts are loaded', (done) => {
-      jest
-        .spyOn(document, 'createElement')
-        .mockImplementation(fakeAssetObjectGenerator);
-      spyOn(document.head, 'appendChild');
+      const scriptsPromise = loadScriptAssets(assets)
+        .then(() => {
+          expect(scriptsPromise).toBeInstanceOf(Promise);
 
-      const scriptsPromise = loadScriptAssets(assets).then(() => {
-        expect(scriptsPromise).toBeInstanceOf(Promise);
-
-        done();
-      });
+          done();
+        })
+        .catch(done);
 
       resolveFakeAssets();
     });

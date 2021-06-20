@@ -219,7 +219,7 @@ describe('AbstractMerkurWidget', () => {
 
   describe('_getWidgetHTML() method', () => {
     beforeEach(() => {
-      spyOn(instance, '_getSSRHTML').and.returnValue('SSR HTML');
+      jest.spyOn(instance, '_getSSRHTML').mockReturnValue('SSR HTML');
     });
 
     it('should return SSR rendered HTML', () => {
@@ -273,21 +273,21 @@ describe('AbstractMerkurWidget', () => {
 
     it('return empty string if component is already mounted', () => {
       instance._isMounted = true;
-      spyOn(instance, '_isClient').and.returnValue(true);
+      jest.spyOn(instance, '_isClient').mockReturnValue(true);
 
       expect(instance._getSSRHTML()).toBe('');
     });
 
     it('return empty string if we are not on client', () => {
       instance._isMounted = false;
-      spyOn(instance, '_isClient').and.returnValue(false);
+      jest.spyOn(instance, '_isClient').mockReturnValue(false);
 
       expect(instance._getSSRHTML()).toBe('');
     });
 
     it('return html widget content from document', () => {
       instance._isMounted = false;
-      spyOn(instance, '_isClient').and.returnValue(true);
+      jest.spyOn(instance, '_isClient').mockReturnValue(true);
 
       expect(instance._getSSRHTML()).toBe('outerHTML');
     });
@@ -295,13 +295,13 @@ describe('AbstractMerkurWidget', () => {
 
   describe('_isSSRHydrate() method', () => {
     it("should return true if there's some server side rendered html", () => {
-      spyOn(instance, '_getSSRHTML').and.returnValue('html');
+      jest.spyOn(instance, '_getSSRHTML').mockReturnValue('html');
 
       expect(instance._isSSRHydrate()).toBe(true);
     });
 
     it('should return false, if SSR renderd html is empty', () => {
-      spyOn(instance, '_getSSRHTML').and.returnValue('');
+      jest.spyOn(instance, '_getSSRHTML').mockReturnValue('');
 
       expect(instance._isSSRHydrate()).toBe(false);
     });

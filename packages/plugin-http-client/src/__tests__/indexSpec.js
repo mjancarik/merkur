@@ -181,7 +181,7 @@ describe('createWidget method with http client plugin', () => {
       expect(request.body).toMatchInlineSnapshot(`"{\\"a\\":\\"b\\"}"`);
     });
 
-    it('should timeout request which exceed predefined timeout limit', async (done) => {
+    it('should timeout request which exceed predefined timeout limit', async () => {
       widget.$dependencies.fetch = jest.fn((url, request) => {
         return new Promise((resolve, reject) => {
           setTimeout(() => {
@@ -198,7 +198,6 @@ describe('createWidget method with http client plugin', () => {
       } catch (error) {
         expect(error.message).toEqual('Timeout');
         expect(widget.$dependencies.fetch).toHaveBeenCalled();
-        done();
       }
     });
   });
