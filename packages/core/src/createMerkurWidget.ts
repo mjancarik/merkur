@@ -1,9 +1,4 @@
-import {
-  Widget,
-  WidgetDefintition,
-  CreateFunction,
-  WidgetFunction,
-} from './types';
+import { Widget, WidgetDefintition, WidgetFunction } from './types';
 
 import {
   setDefaultValueForUndefined,
@@ -12,7 +7,7 @@ import {
 } from './utils';
 
 async function callPluginMethod(
-  widget: Partial<Widget>,
+  widget: Widget,
   method: string,
   args: unknown[]
 ): Promise<Widget> {
@@ -22,11 +17,11 @@ async function callPluginMethod(
     }
   }
 
-  return widget as Widget;
+  return widget;
 }
 
 export async function createMerkurWidget(
-  widgetDefinition: Partial<WidgetDefintition> = {}
+  widgetDefinition: WidgetDefintition
 ): Promise<Widget> {
   widgetDefinition = setDefaultValueForUndefined(widgetDefinition, [
     '$dependencies',
@@ -38,15 +33,17 @@ export async function createMerkurWidget(
     (widget) => widget
   );
 
-  const { setup, create } = widgetDefinition as {
-    setup: WidgetFunction;
-    create: CreateFunction;
-  };
+  const { setup, create } = widgetDefinition;
 
-  let widget: Partial<Widget> & {
-    setup: WidgetFunction;
-    create: CreateFunction;
-  } = {
+  let widget: Widget = {
+    name: widgetDefinition.name,
+    version: widgetDefinition.version,
+    $dependencies: widgetDefinition.$dependencies,
+    $external: widgetDefinition.$external,
+    $in: {
+      widgets: [],
+      widgetFactory: {},
+    },
     async setup(widget, ...rest) {
       widget = await callPluginMethod(widget, 'setup', rest);
 
@@ -64,29 +61,30 @@ export async function createMerkurWidget(
   };
 
   // TODO refactoring
-  widget.name = widgetDefinition.name;
-  widget.version = widgetDefinition.version;
-  widget.$dependencies = widgetDefinition.$dependencies;
-  widget.$external = widgetDefinition.$external;
-  widget.$in = {
-    widgets: [],
-    widgetFactory: {},
-  };
+  // widget.name = widgetDefinition.name;
+  // widget.version = widgetDefinition.version;
+  // widget.$dependencies = widgetDefinition.$dependencies;
+  // widget.$external = widgetDefinition.$external;
+  // widget.$in = {
+  //   widgets: [],
+  //   widgetFactory: {},
+  // };
 
-  delete widgetDefinition.name;
-  delete widgetDefinition.version;
-  delete widgetDefinition.$dependencies;
-  delete widgetDefinition.$external;
-  delete widgetDefinition.$plugins;
+  // vse by muselo byt optional
+  // delete widgetDefinition.name;
+  // delete widgetDefinition.version;
+  // delete widgetDefinition.$dependencies;
+  // delete widgetDefinition.$external;
+  // delete widgetDefinition.$plugins;
 
-  delete widgetDefinition.setup;
-  delete widgetDefinition.create;
+  // delete widgetDefinition.setup;
+  // delete widgetDefinition.create;
 
   widget = await widget.setup(widget, widgetDefinition);
-  widget = await widget.create(widget as Widget, widgetDefinition);
+  widget = await widget.create(widget, widgetDefinition);
 
-  bindWidgetToFunctions(widget as Widget);
+  bindWidgetToFunctions(widget);
   Object.seal(widget);
 
-  return widget as Widget;
+  return widget;
 }

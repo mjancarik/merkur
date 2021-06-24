@@ -9,11 +9,11 @@ function createBoundedFunction(
   };
 }
 
-export function setDefaultValueForUndefined(
-  object: AnyObj,
+export function setDefaultValueForUndefined<T>(
+  object: T,
   keys: string[],
   value: unknown = {}
-): AnyObj {
+): T {
   const objectClone = { ...object };
 
   keys.forEach((key) => {

@@ -15,7 +15,7 @@ export type RegisterFunction = ({
 }: {
   name: string;
   version: string;
-  createWidget: AnyFn;
+  createWidget: CreateFunction;
 }) => void;
 
 export type Plugin = {
@@ -30,13 +30,13 @@ export type WidgetProperties = {
 export type Merkur = {
   $in: {
     widgets: Array<Merkur>;
-    widgetFactory: AnyObj;
+    widgetFactory: Record<string, CreateFunction>;
   };
   $external: AnyObj;
   $dependencies: AnyObj;
   $plugins: Array<() => Plugin>;
-  register: RegisterFunction;
-  create: CreateFunction;
+  register?: RegisterFunction;
+  create: WidgetFunction;
 };
 
 export type Widget = WidgetProperties &
@@ -48,7 +48,7 @@ export type Widget = WidgetProperties &
 export type WidgetDefintition = Omit<Widget, '$plugins'> & Merkur;
 
 export type WidgetFunction = (
-  widget: Partial<Widget>,
+  widget: Widget,
   ...args: unknown[]
 ) => Promise<Widget>;
 

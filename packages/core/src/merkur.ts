@@ -1,10 +1,4 @@
-import {
-  Merkur,
-  Plugin,
-  RegisterFunction,
-  CreateFunction,
-  Widget,
-} from './types';
+import { Merkur, Plugin, RegisterFunction, CreateFunction } from './types';
 import { isFunction } from './utils';
 
 const register: RegisterFunction = ({ name, version, createWidget }) => {
@@ -21,7 +15,7 @@ const create: CreateFunction = (
 ) => {
   const merkur = getMerkur();
   const { name, version } = widgetProperties;
-  const factory = merkur.$in.widgetFactory[name + version] as CreateFunction;
+  const factory = merkur.$in.widgetFactory[name + version];
 
   if (!isFunction(factory)) {
     throw new Error(
@@ -31,7 +25,7 @@ const create: CreateFunction = (
     );
   }
 
-  return factory(widgetProperties) as Promise<Widget>;
+  return factory(widgetProperties);
 };
 
 export function createMerkur(
@@ -68,10 +62,10 @@ export function getMerkur(): Merkur {
       $plugins: [],
       register,
       create,
-    };
+    } as Merkur;
   }
 
-  return globalContext.__merkur__ as Merkur;
+  return globalContext.__merkur__;
 }
 
 function getGlobalContext(): Partial<GlobalContext> {
