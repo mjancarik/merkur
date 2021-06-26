@@ -1,4 +1,9 @@
-import { bindWidgetToFunctions, hookMethod, isFunction } from '@merkur/core';
+import {
+  bindWidgetToFunctions,
+  setDefaultValueForUndefined,
+  hookMethod,
+  isFunction,
+} from '@merkur/core';
 
 import UniversalRouter from 'universal-router';
 import generateUrls from 'universal-router/generateUrls';
@@ -32,7 +37,6 @@ export function routerPlugin() {
         isMounting: false,
         isRouteActivated: false,
         isBootstrapCalled: false,
-        originalFunctions: {},
       };
 
       bindWidgetToFunctions(widget, widget.router);
@@ -54,10 +58,12 @@ export function routerPlugin() {
         }
       }
 
-      widget.$in.router.originalFunctions.load =
-        widget.$in.component.lifeCycle.load;
-      widget.$in.component.lifeCycle.load = loadHook;
-
+      widget.$in.component.lifeCycle = setDefaultValueForUndefined(
+        widget.$in.component.lifeCycle,
+        ['load'],
+        () => {}
+      );
+      hookMethod(widget, '$in.component.lifeCycle.load', loadHook);
       hookMethod(widget, 'bootstrap', bootstrapHook);
       hookMethod(widget, 'mount', mountHook);
       hookMethod(widget, 'unmount', unmountHook);
@@ -95,7 +101,7 @@ async function bootstrapHook(widget, originalBootstrap, ...rest) {
 }
 
 // hook Component
-async function loadHook(widget, ...rest) {
+async function loadHook(widget, originalLoad, ...rest) {
   const plugin = widget.$in.router;
 
   if (!plugin.isMounting && widget.props.pathname !== plugin.pathname) {
@@ -108,8 +114,8 @@ async function loadHook(widget, ...rest) {
     throw new Error('The load method is mandatory.');
   }
 
-  const globalStatePromise = isFunction(plugin.originalFunctions.load)
-    ? plugin.originalFunctions.load(widget, ...rest)
+  const globalStatePromise = isFunction(originalLoad)
+    ? originalLoad(widget, ...rest)
     : Promise.resolve({});
   const routeStatePromise = plugin.route.load(widget, {
     route: plugin.route,

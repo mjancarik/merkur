@@ -25,14 +25,29 @@ export function bindWidgetToFunctions(widget, target) {
   });
 }
 
-export function hookMethod(widget, methodName, handler) {
-  const originalFunction = createBoundedFunction(widget, widget[methodName]);
+export function hookMethod(widget, path, handler) {
+  const { target, methodName } = parsePath(widget, path);
+  const originalFunction = createBoundedFunction(widget, target[methodName]);
 
-  widget[methodName] = function (widget, ...rest) {
+  target[methodName] = function (widget, ...rest) {
     return handler(widget, originalFunction, ...rest);
   };
 
   return originalFunction;
+}
+
+function parsePath(widget, path = '') {
+  const paths = path.split('.');
+  const methodName = paths.pop();
+  const target = paths.reduce((target, path) => target[path] || {}, widget);
+
+  if (!isFunction(target[methodName])) {
+    throw new Error(
+      `Defined path '${path}' is incorrect. Check your widget structure.`
+    );
+  }
+
+  return { target, methodName };
 }
 
 export function isFunction(value) {
