@@ -1,4 +1,9 @@
-import { Widget, WidgetDefintition, WidgetFunction } from './types';
+import {
+  Widget,
+  WidgetDefintition,
+  WidgetFunction,
+  CreateFunction,
+} from './types';
 
 import {
   setDefaultValueForUndefined,
@@ -21,7 +26,7 @@ async function callPluginMethod(
 }
 
 export async function createMerkurWidget(
-  widgetDefinition: WidgetDefintition
+  widgetDefinition: Partial<WidgetDefintition>
 ): Promise<Widget> {
   widgetDefinition = setDefaultValueForUndefined(widgetDefinition, [
     '$dependencies',
@@ -33,17 +38,12 @@ export async function createMerkurWidget(
     (widget) => widget
   );
 
-  const { setup, create } = widgetDefinition;
+  const { setup, create } = widgetDefinition as {
+    setup: WidgetFunction;
+    create: CreateFunction;
+  };
 
-  let widget: Widget = {
-    name: widgetDefinition.name,
-    version: widgetDefinition.version,
-    $dependencies: widgetDefinition.$dependencies,
-    $external: widgetDefinition.$external,
-    $in: {
-      widgets: [],
-      widgetFactory: {},
-    },
+  const partialWidget: Partial<Widget> = {
     async setup(widget, ...rest) {
       widget = await callPluginMethod(widget, 'setup', rest);
 
@@ -55,30 +55,27 @@ export async function createMerkurWidget(
       return create(widget, ...rest);
     },
     $plugins: (widgetDefinition.$plugins || []).map((pluginFactory) =>
-      // kdyby se tu davaly primo provolane pluginy, tak by byl type match na "Widget"
       pluginFactory()
     ),
   };
 
   // TODO refactoring
-  // widget.name = widgetDefinition.name;
-  // widget.version = widgetDefinition.version;
-  // widget.$dependencies = widgetDefinition.$dependencies;
-  // widget.$external = widgetDefinition.$external;
-  // widget.$in = {
-  //   widgets: [],
-  //   widgetFactory: {},
-  // };
+  partialWidget.name = widgetDefinition.name;
+  partialWidget.version = widgetDefinition.version;
+  partialWidget.$dependencies = widgetDefinition.$dependencies;
+  partialWidget.$external = widgetDefinition.$external;
+  partialWidget.$in = {};
 
-  // vse by muselo byt optional
-  // delete widgetDefinition.name;
-  // delete widgetDefinition.version;
-  // delete widgetDefinition.$dependencies;
-  // delete widgetDefinition.$external;
-  // delete widgetDefinition.$plugins;
+  delete widgetDefinition.name;
+  delete widgetDefinition.version;
+  delete widgetDefinition.$dependencies;
+  delete widgetDefinition.$external;
+  delete widgetDefinition.$plugins;
 
-  // delete widgetDefinition.setup;
-  // delete widgetDefinition.create;
+  delete widgetDefinition.setup;
+  delete widgetDefinition.create;
+
+  let widget = partialWidget as Widget;
 
   widget = await widget.setup(widget, widgetDefinition);
   widget = await widget.create(widget, widgetDefinition);

@@ -1,4 +1,9 @@
-import { Merkur, Plugin, RegisterFunction, CreateFunction } from './types';
+import {
+  Merkur,
+  MerkurPlugin,
+  RegisterFunction,
+  CreateFunction,
+} from './types';
 import { isFunction } from './utils';
 
 const register: RegisterFunction = ({ name, version, createWidget }) => {
@@ -29,7 +34,7 @@ const create: CreateFunction = (
 };
 
 export function createMerkur(
-  { $plugins }: { $plugins: Array<Plugin> } = { $plugins: [] }
+  { $plugins }: { $plugins: Array<MerkurPlugin> } = { $plugins: [] }
 ): Merkur {
   const merkur = getMerkur();
 
