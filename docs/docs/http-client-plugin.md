@@ -42,10 +42,10 @@ function transformDebug() {
       console.log(response);
       return [request, response];
     },
-    async transformRequest(widget, request) {
+    async transformRequest(widget, request, response) {
       console.log(request);
 
-      return [request];
+      return [request, response];
     },
   };
 }
@@ -74,8 +74,22 @@ export const widgetProperties = {
 The `request` method makes API call to your service throught native browser fetch.
 
 ```javascript
-const { response } = await widget.http.request({ path: '/detail/1' });
+try {
+  const { response, request } = await widget.http.request({ path: '/detail/1' });
 
-console.log(response.status); // 200
-console.log(response.body); // { data: 'value' }
+  console.log(request.url); // http://www.example.com/detail/1
+  console.log(response.status); // 200
+  console.log(response.body); // { data: 'value' }
+} catch(error) {
+   if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(error.request.url); // http://www.example.com/detail/1
+      console.log(error.response.status); // 500
+      console.log(error.response.body); // { data: 'error message' }
+    } else {
+      // Something happened in the request
+      console.log('Error', error.message);
+    }
+}
 ```

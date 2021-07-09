@@ -10,10 +10,13 @@ export function setDefaultConfig(widget, newDefaultConfig) {
   };
 }
 
-export function getDefaultTransformers() {
-  return [transformBody(), transformQuery(), transformTimeout()];
+export function getDefaultTransformers(widget) {
+  return [
+    transformBody(widget),
+    transformQuery(widget),
+    transformTimeout(widget),
+  ];
 }
-
 export function httpClientPlugin() {
   return {
     async setup(widget) {
@@ -46,20 +49,24 @@ function httpClientAPI() {
   return {
     http: {
       async request(widget, requestConfig) {
+        let response = null;
         let request = {
           ...widget.$in.httpClient.defaultConfig,
           ...requestConfig,
         };
         const transformers = request.transformers;
 
-        [request] = await runTransformers(
+        [request, response] = await runTransformers(
           widget,
           transformers,
           'transformRequest',
-          request
+          request,
+          response
         );
 
-        let response = await widget.$dependencies.fetch(request.url, request);
+        response = !response
+          ? await widget.$dependencies.fetch(request.url, request)
+          : response;
 
         [request, response] = await runTransformers(
           widget,
@@ -68,6 +75,10 @@ function httpClientAPI() {
           request,
           response
         );
+
+        if (!response.ok) {
+          return Promise.reject({ request, response });
+        }
 
         return { request, response };
       },
@@ -95,7 +106,7 @@ function getFetchAPI() {
 
 export function transformQuery() {
   return {
-    async transformRequest(widget, request) {
+    async transformRequest(widget, request, response) {
       let newRequest = { ...request };
       let { baseUrl = '', path = '/' } = request;
 
@@ -122,7 +133,7 @@ export function transformQuery() {
         newRequest.url += queryString ? `?${queryString}` : '';
       }
 
-      return [newRequest];
+      return [newRequest, response];
     },
   };
 }
@@ -146,7 +157,7 @@ export function transformBody() {
 
       return [request, newResponse];
     },
-    async transformRequest(widget, request) {
+    async transformRequest(widget, request, response) {
       if (
         request.body &&
         request.headers['Content-Type'] === 'application/json' &&
@@ -154,17 +165,17 @@ export function transformBody() {
       ) {
         let newRequest = { ...request, body: JSON.stringify(request.body) };
 
-        return [newRequest];
+        return [newRequest, response];
       }
 
-      return [request];
+      return [request, response];
     },
   };
 }
 
 export function transformTimeout() {
   return {
-    async transformRequest(widget, request) {
+    async transformRequest(widget, request, response) {
       let newRequest = { ...request };
 
       if ('timeout' in request) {
@@ -176,7 +187,7 @@ export function transformTimeout() {
         }, request.timeout);
       }
 
-      return [newRequest];
+      return [newRequest, response];
     },
     async transformResponse(widget, request, response) {
       if ('timeoutTimer' in request) {
@@ -188,7 +199,7 @@ export function transformTimeout() {
   };
 }
 
-function copyResponse(response) {
+export function copyResponse(response) {
   const {
     body,
     headers,

@@ -1,5 +1,9 @@
 import { createMerkurWidget } from '@merkur/core';
-import { httpClientPlugin, setDefaultConfig } from '../index';
+import {
+  httpClientPlugin,
+  setDefaultConfig,
+  getDefaultTransformers,
+} from '../index';
 
 describe('createWidget method with http client plugin', () => {
   let widget = null;
@@ -22,8 +26,39 @@ describe('createWidget method with http client plugin', () => {
       ],
     });
 
+    function transformInCache(widget) {
+      widget.$in.httpClient.cache = {};
+      return {
+        async transformResponse(widget, request, response) {
+          if (request.cache) {
+            widget.$in.httpClient.cache[request.url] = response;
+          }
+
+          return [request, response];
+        },
+      };
+    }
+
+    function transformOutCache(widget) {
+      widget.$in.httpClient.cache = {};
+      return {
+        async transformRequest(widget, request, response) {
+          if (!widget.$in.httpClient.cache[request.url] || !request.cache) {
+            return [request, response];
+          }
+
+          return [request, widget.$in.httpClient.cache[request.url]];
+        },
+      };
+    }
+
     setDefaultConfig(widget, {
       baseUrl: 'http://localhost:4444',
+      transformers: [
+        transformInCache(widget),
+        ...getDefaultTransformers(),
+        transformOutCache(widget),
+      ],
     });
 
     Response = {
@@ -53,6 +88,7 @@ describe('createWidget method with http client plugin', () => {
         },
         "$in": Object {
           "httpClient": Object {
+            "cache": Object {},
             "defaultConfig": Object {
               "baseUrl": "http://localhost:4444",
               "headers": Object {},
@@ -61,6 +97,9 @@ describe('createWidget method with http client plugin', () => {
               "timeout": 15000,
               "transformers": Array [
                 Object {
+                  "transformResponse": [Function],
+                },
+                Object {
                   "transformRequest": [Function],
                   "transformResponse": [Function],
                 },
@@ -70,6 +109,9 @@ describe('createWidget method with http client plugin', () => {
                 Object {
                   "transformRequest": [Function],
                   "transformResponse": [Function],
+                },
+                Object {
+                  "transformRequest": [Function],
                 },
               ],
             },
@@ -203,9 +245,11 @@ describe('createWidget method with http client plugin', () => {
   });
 
   describe('API response', () => {
-    it('should add parsed body to response', async () => {
+    beforeEach(() => {
       widget.$dependencies.fetch = jest.fn(() => Promise.resolve(Response));
+    });
 
+    it('should add parsed body to response', async () => {
       const { response } = await widget.http.request({
         path: '/path',
       });
@@ -215,6 +259,55 @@ describe('createWidget method with http client plugin', () => {
           "message": "text",
         }
       `);
+    });
+
+    it('should intercept request and return response from request transformer', async () => {
+      const { response } = await widget.http.request({
+        path: '/path',
+        cache: true,
+      });
+      const { response: cachedResponse } = await widget.http.request({
+        path: '/path',
+        cache: true,
+      });
+
+      expect(response).toEqual(cachedResponse);
+      expect(widget.$dependencies.fetch.mock.calls.length).toEqual(1);
+    });
+
+    it('should reject promise for status code greater than 299', async () => {
+      widget.$dependencies.fetch = jest.fn(() =>
+        Promise.resolve({ ...Response, ...{ ok: false } })
+      );
+
+      try {
+        await widget.http.request({
+          path: '/path',
+          cache: true,
+        });
+      } catch ({ response, request }) {
+        expect(request.url).toMatchInlineSnapshot(
+          `"http://localhost:4444/path"`
+        );
+        expect(response).toMatchInlineSnapshot(`
+          Object {
+            "body": Object {
+              "message": "text",
+            },
+            "headers": Object {
+              "get": [Function],
+            },
+            "ok": false,
+            "redirected": undefined,
+            "status": 200,
+            "statusText": undefined,
+            "trailers": undefined,
+            "type": undefined,
+            "url": undefined,
+            "useFinalURL": undefined,
+          }
+        `);
+      }
     });
   });
 });
