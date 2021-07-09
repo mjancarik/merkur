@@ -32,7 +32,7 @@ npm run dev // Point your browser at http://localhost:4444/
 ![alt text](https://raw.githubusercontent.com/mjancarik/merkur/master/images/hello-widget.png "Merkur example, hello widget")
 ## Documentation
 
-To check out [live demo](https://merkur.js.org/demo) and [docs](https://merkur.js.org/doc), visit [https://merkur.js.org](https://merkur.js.org).
+To check out [live demo](https://merkur.js.org/demo) and [docs](https://merkur.js.org/docs), visit [https://merkur.js.org](https://merkur.js.org).
 
 ## Contribution
 
