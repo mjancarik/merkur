@@ -1,6 +1,7 @@
 import defaultCssDeclaration from './defaultCssDeclaration';
 
-const GENERIC_SELECTOR_REGEX = /\s[.#]{0}([\w\-:()]+(?::not\([\w\-:.#()]+\))*)(?:,|$)/;
+const GENERIC_SELECTOR_REGEX =
+  /\s[.#]{0}([\w\-:()]+(?::not\([\w\-:.#()]+\))*)(?:,|$)/;
 
 /**
  *
@@ -122,9 +123,8 @@ function cssRulesToDeclarations(cssRules) {
 
     for (let x = 0; x < cssDeclaration.length; x++) {
       const propertyName = cssDeclaration[x];
-      cssDeclarationMap[propertyName] = cssDeclaration.getPropertyValue(
-        propertyName
-      );
+      cssDeclarationMap[propertyName] =
+        cssDeclaration.getPropertyValue(propertyName);
     }
   }
 
