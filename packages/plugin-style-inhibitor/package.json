@@ -1,0 +1,48 @@
+{
+  "name": "@merkur/plugin-style-inhibitor",
+  "version": "1.0.0",
+  "description": "Merkur plugin for inhibiting influence of styles outside of merkur plugin",
+  "main": "lib/index",
+  "module": "lib/index",
+  "unpkg": "lib/index.umd.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs"
+    }
+  },
+  "browser": {
+    "./lib/index.js": "./lib/index.es5.js",
+    "./lib/index.cjs": "./lib/index.es5.js",
+    "./lib/index.mjs": "./lib/index.mjs"
+  },
+  "scripts": {
+    "preversion": "npm test",
+    "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check --module es9 ./lib/index.mjs",
+    "build": "node_modules/.bin/rollup -c",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "author": "Vojtěch Šimko <SimkoVojta@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "devDependencies": {
+    "@merkur/core": "^0.23.12",
+    "rollup": "^2.52.1"
+  },
+  "peerDependencies": {
+    "@merkur/core": "^0.24.1"
+  }
+}
