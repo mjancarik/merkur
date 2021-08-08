@@ -110,7 +110,7 @@ function createWebConfig(options = {}) {
       widget: './src/client.js',
     },
     output: {
-      path: path.resolve(DIR, './build/static/es9/'),
+      path: path.resolve(DIR, './build/static/es11/'),
       filename: '[name].[contenthash].js',
     },
     plugins: getPlugins(options.plugins).webPlugins,
@@ -197,6 +197,87 @@ function applyBundleAnalyzer(config, options = {}) {
       ...config.optimization,
     };
   }
+
+  return config;
+}
+
+function applyES9Transformation(config, options = {}) {
+  const nodeModulesDir = options.nodeModulesDir
+    ? options.nodeModulesDir
+    : path.resolve(DIR, 'node_modules');
+
+  config.entry.polyfill = './src/polyfill.es9.js';
+
+  config.resolve.alias = {
+    ...config.resolve.alias,
+    ...{
+      '@merkur/core': path.resolve(
+        nodeModulesDir,
+        '@merkur/core/lib/index.es9.mjs'
+      ),
+      '@merkur/plugin-component': path.resolve(
+        nodeModulesDir,
+        '@merkur/plugin-component/lib/index.es9.mjs'
+      ),
+      '@merkur/plugin-event-emitter': path.resolve(
+        nodeModulesDir,
+        '@merkur/plugin-event-emitter/lib/index.es9.mjs'
+      ),
+      '@merkur/plugin-http-client': path.resolve(
+        nodeModulesDir,
+        '@merkur/plugin-http-client/lib/index.es9.mjs'
+      ),
+      '@merkur/plugin-error': path.resolve(
+        nodeModulesDir,
+        '@merkur/plugin-error/lib/index.es9.mjs'
+      ),
+      '@merkur/plugin-router': path.resolve(
+        nodeModulesDir,
+        '@merkur/plugin-router/lib/index.es9.mjs'
+      ),
+    },
+  };
+
+  const loader = 'babel-loader';
+  const babelLoaders = findLoaders(config.module.rules, loader);
+  const babelPresetEnv = [
+    '@babel/preset-env',
+    {
+      targets: {
+        node: '12',
+      },
+      modules: 'auto',
+      useBuiltIns: 'usage',
+      corejs: { version: 3, proposals: false },
+    },
+  ];
+
+  if (babelLoaders.length === 0) {
+    config.module.rules.push({
+      test: /\.(js|jsx|ts|tsx)$/,
+      exclude: /node_modules/,
+      use: {
+        loader: loader,
+        options: options?.babel?.options ?? {
+          presets: [...(options?.babel?.presets ?? []), babelPresetEnv],
+          plugins: [...(options?.babel?.plugins ?? [])],
+        },
+      },
+    });
+  } else {
+    babelLoaders.forEach((use) => {
+      use.options.presets = [...(use?.options?.presets ?? []), babelPresetEnv];
+    });
+  }
+
+  config.output.path = path.resolve(config.output.path, '../es9/');
+  config.output.environment = {
+    ...{
+      bigIntLiteral: false,
+      dynamicImport: false,
+    },
+    ...config.output.environment,
+  };
 
   return config;
 }
@@ -297,6 +378,7 @@ module.exports = {
   createWebConfig,
   createNodeConfig,
   applyES5Transformation,
+  applyES9Transformation,
   applyBundleAnalyzer,
   findLoaders,
   pipe,

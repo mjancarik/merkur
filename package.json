@@ -2,30 +2,30 @@
   "name": "merkur-monorepo",
   "description": "Merkur is library for creating micro frontend with server side rendering.",
   "devDependencies": {
-    "@babel/core": "^7.14.6",
-    "@babel/eslint-parser": "7.14.5",
-    "@babel/plugin-transform-modules-commonjs": "^7.14.5",
-    "@babel/preset-env": "^7.14.5",
-    "@commitlint/cli": "^12.1.4",
-    "@commitlint/config-conventional": "^12.1.4",
+    "@babel/core": "^7.15.0",
+    "@babel/eslint-parser": "7.15.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@commitlint/cli": "^13.1.0",
+    "@commitlint/config-conventional": "^13.1.0",
     "@rollup/plugin-babel": "^5.3.0",
-    "@rollup/plugin-node-resolve": "^13.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
     "commitizen": "^4.2.4",
-    "coveralls": "^3.1.0",
-    "es-check": "^5.2.3",
-    "eslint": "^7.29.0",
+    "coveralls": "^3.1.1",
+    "es-check": "^6.0.0",
+    "eslint": "^7.32.0",
     "eslint-config-last": "^0.0.5",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-jasmine": "^4.1.2",
-    "eslint-plugin-jest": "^24.3.6",
+    "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "git-cz": "^4.7.6",
-    "husky": "^6.0.0",
-    "jest": "^27.0.4",
+    "husky": "^7.0.1",
+    "jest": "^27.0.6",
     "lerna": "^4.0.0",
-    "lint-staged": "^11.0.0",
-    "prettier": "^2.3.1",
+    "lint-staged": "^11.1.2",
+    "prettier": "^2.3.2",
     "rollup-plugin-terser": "^7.0.2",
     "to-mock": "^1.6.2"
   },
@@ -67,5 +67,7 @@
       "commit-msg": "bash -c \"if [[ `git rev-parse --abbrev-ref HEAD` =~ ^(master|next)$ ]] ; then commitlint -E HUSKY_GIT_PARAMS ; fi\""
     }
   },
-  "dependencies": {}
+  "dependencies": {
+    "acorn": "^8.4.1"
+  }
 }
