@@ -48,9 +48,5 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "rollup": "^2.52.1"
-  },
-  "dependencies": {
-    "acorn": "^8.4.1",
-    "es-check": "^5.2.4"
   }
 }

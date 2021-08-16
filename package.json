@@ -67,7 +67,5 @@
       "commit-msg": "bash -c \"if [[ `git rev-parse --abbrev-ref HEAD` =~ ^(master|next)$ ]] ; then commitlint -E HUSKY_GIT_PARAMS ; fi\""
     }
   },
-  "dependencies": {
-    "acorn": "^8.4.1"
-  }
+  "dependencies": {}
 }
