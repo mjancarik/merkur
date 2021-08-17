@@ -54,7 +54,6 @@ describe('createWidget method with error plugin', () => {
           },
         ],
         "bootstrap": [Function],
-        "containerSelector": null,
         "create": [Function],
         "error": Object {
           "message": null,
