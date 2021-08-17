@@ -235,6 +235,10 @@ function applyES9Transformation(config, options = {}) {
         nodeModulesDir,
         '@merkur/plugin-router/lib/index.es9.mjs'
       ),
+      '@merkur/plugin-css-scrambler': path.resolve(
+        nodeModulesDir,
+        '@merkur/plugin-router/lib/index.es9.mjs'
+      ),
     },
   };
 
@@ -313,6 +317,10 @@ function applyES5Transformation(config, options = {}) {
         '@merkur/plugin-error/lib/index.es5'
       ),
       '@merkur/plugin-router': path.resolve(
+        nodeModulesDir,
+        '@merkur/plugin-router/lib/index.es5'
+      ),
+      '@merkur/plugin-css-scrambler': path.resolve(
         nodeModulesDir,
         '@merkur/plugin-router/lib/index.es5'
       ),
