@@ -68,6 +68,12 @@ const babelUMDConfig = {
           ),
           '@merkur/plugin-error': getGlobalName('@merkur/plugin-error'),
           '@merkur/integration': getGlobalName('@merkur/integration'),
+          '@merkur/integration-react': getGlobalName(
+            '@merkur/integration-react'
+          ),
+          '@merkur/plugin-css-scrambler': getGlobalName(
+            '@merkur/plugin-css-scrambler'
+          ),
           'node-fetch': 'fetch',
         },
         exactGlobals: true,
