@@ -1,6 +1,6 @@
 import testScript from './testScript';
 
-function _loadScript(asset) {
+function _loadScript(asset, root) {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
 
@@ -31,11 +31,11 @@ function _loadScript(asset) {
       resolve();
     }
 
-    document.head.appendChild(script);
+    root.appendChild(script);
   });
 }
 
-function _loadStyle(asset) {
+function _loadStyle(asset, root) {
   return new Promise((resolve, reject) => {
     if (asset.type === 'stylesheet') {
       const link = document.createElement('link');
@@ -44,24 +44,24 @@ function _loadStyle(asset) {
       link.rel = 'stylesheet';
       link.href = asset.source;
 
-      document.head.appendChild(link);
+      root.appendChild(link);
     } else {
       const style = document.createElement('style');
       style.innerHTML = asset.source;
 
-      document.head.appendChild(style);
+      root.appendChild(style);
       resolve();
     }
   });
 }
 
-function loadStyleAssets(assets) {
-  const styleElements = document.head.getElementsByTagName('style');
+function loadStyleAssets(assets, root = document.head) {
+  const styleElements = root.querySelectorAll('style');
   const stylesToRender = assets.filter(
     (asset) =>
       asset.source &&
       ((asset.type === 'stylesheet' &&
-        !document.head.querySelector(`link[href='${asset.source}']`)) ||
+        !root.querySelector(`link[href='${asset.source}']`)) ||
         (asset.type === 'inlineStyle' &&
           Array.from(styleElements).reduce((acc, cur) => {
             if (cur.innerHTML === asset.source) {
@@ -72,11 +72,11 @@ function loadStyleAssets(assets) {
           }, true)))
   );
 
-  return Promise.all(stylesToRender.map((asset) => _loadStyle(asset)));
+  return Promise.all(stylesToRender.map((asset) => _loadStyle(asset, root)));
 }
 
-function loadScriptAssets(assets) {
-  const scriptElements = document.getElementsByTagName('script');
+function loadScriptAssets(assets, root = document.head) {
+  const scriptElements = root.querySelectorAll('script');
   const scriptsToRender = assets.reduce((scripts, asset) => {
     const { source } = asset;
     const _asset = Object.assign({}, asset);
@@ -97,7 +97,7 @@ function loadScriptAssets(assets) {
     }
 
     if (
-      document.querySelector(`script[src='${_asset.source}']`) ||
+      root.querySelector(`script[src='${_asset.source}']`) ||
       Array.from(scriptElements).reduce((acc, cur) => {
         if (cur.text === _asset.source) {
           return true;
@@ -117,11 +117,14 @@ function loadScriptAssets(assets) {
     return scripts;
   }, []);
 
-  return Promise.all(scriptsToRender.map((asset) => _loadScript(asset)));
+  return Promise.all(scriptsToRender.map((asset) => _loadScript(asset, root)));
 }
 
-function loadAssets(assets) {
-  return Promise.all([loadScriptAssets(assets), loadStyleAssets(assets)]);
+function loadAssets(assets, root) {
+  return Promise.all([
+    loadScriptAssets(assets, root),
+    loadStyleAssets(assets, root),
+  ]);
 }
 
 export { testScript, loadAssets, loadStyleAssets, loadScriptAssets };

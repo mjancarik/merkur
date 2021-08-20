@@ -5,6 +5,7 @@ global.console.warn = jest.fn();
 describe('Merkur component', () => {
   let assets = [];
   let fakeAssetObjects = [];
+  let rootElement = null;
 
   const fakeAssetObjectGenerator = () => {
     const fakeAssetObject = {
@@ -85,6 +86,12 @@ describe('Merkur component', () => {
       .spyOn(document, 'createElement')
       .mockImplementation(fakeAssetObjectGenerator);
     jest.spyOn(document.head, 'appendChild').mockImplementation();
+
+    rootElement = {
+      querySelectorAll: jest.fn(() => []),
+      querySelector: jest.fn(() => null),
+      appendChild: jest.fn(),
+    };
   });
 
   afterEach(() => {
@@ -120,6 +127,17 @@ describe('Merkur component', () => {
 
       resolveFakeAssets();
     });
+
+    it('should append style assets to specified element', (done) => {
+      loadStyleAssets(assets, rootElement)
+        .then(() => {
+          expect(rootElement.appendChild).toHaveBeenCalledTimes(2);
+          done();
+        })
+        .catch(done);
+
+      resolveFakeAssets();
+    });
   });
 
   describe('loadScriptAssets() function', () => {
@@ -142,6 +160,19 @@ describe('Merkur component', () => {
       const scriptsPromise = loadScriptAssets(assets)
         .then(() => {
           expect(scriptsPromise).toBeInstanceOf(Promise);
+
+          done();
+        })
+        .catch(done);
+
+      resolveFakeAssets();
+    });
+
+    it('should append script assets to specified element', (done) => {
+      loadScriptAssets(assets, rootElement)
+        .then(() => {
+          expect(document.createElement).toHaveBeenCalledTimes(3);
+          expect(rootElement.appendChild).toHaveBeenCalledTimes(3);
 
           done();
         })
