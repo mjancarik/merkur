@@ -26,7 +26,8 @@ function createServer(options = {}) {
     server = new WebSocket.Server(options);
 
     server.on('connection', function connection(ws) {
-      ws.on('message', function incoming(data) {
+      ws.on('message', function incoming(data, isBinary) {
+        data = isBinary ? data : data.toString();
         broadcastMessage(server, ws, data);
       });
     });
