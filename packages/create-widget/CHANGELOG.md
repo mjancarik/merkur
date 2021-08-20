@@ -3,6 +3,44 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.25.0](https://github.com/mjancarik/merkur/compare/v0.24.4...v0.25.0) (2021-08-20)
+
+
+### chore
+
+* 🤖 update dependencies ([#89](https://github.com/mjancarik/merkur/issues/89)) ([ab1e063](https://github.com/mjancarik/merkur/commit/ab1e063fd72441f8e81d576d0a2a57122129f08d))
+
+
+### Features
+
+* 🎸 set es11 as default for esm modules ([#94](https://github.com/mjancarik/merkur/issues/94)) ([e841b89](https://github.com/mjancarik/merkur/commit/e841b89a601e139b803e585749991b992af8e70f))
+
+
+### BREAKING CHANGES
+
+* 🧨 Change default for ems modules from es9 to es11.
+
+* feat: 🎸 add polyfill for es9 version
+
+* feat: 🎸 add isES11Supported method to testScript
+
+* docs: ✏️ add es11 build to widget endpoint
+
+* chore: 🤖 remove useless dependencies
+
+* fix: 🐛 add webpack alias for plugin-css-scrambler to es5,es9
+
+* feat: 🎸 add lib/index.es9.mjs to exports
+
+* feat: 🎸 add missing modules for umd config
+
+* chore: 🤖 update dependencies
+* 🧨 Jest@27 https://github.com/facebook/jest/blob/master/CHANGELOG.md#2700
+
+
+
+
+
 ## [0.24.4](https://github.com/mjancarik/merkur/compare/v0.24.3...v0.24.4) (2021-06-11)
 
 **Note:** Version bump only for package @merkur/create-widget
