@@ -7,7 +7,7 @@
 
 The module enables integration of [Storybook](https://storybook.js.org/) into [Merkur](https://merkur.js.org/).
 
-**[Documentation for @merkur/tool-storybook](https://merkur.js.org/docs/tool-storybook).**
+**[Documentation for @merkur/tool-storybook](https://merkur.js.org/docs/storybook-integration-into-merkur).**
 
 ## About Merkur
 
