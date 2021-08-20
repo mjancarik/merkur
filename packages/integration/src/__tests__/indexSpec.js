@@ -31,6 +31,7 @@ describe('Merkur component', () => {
         name: 'widget.js',
         type: 'script',
         source: {
+          es11: 'http://localhost:4444/static/es11/widget.6541af42bfa3596bb129.js',
           es9: 'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js',
           es5: 'http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js',
         },

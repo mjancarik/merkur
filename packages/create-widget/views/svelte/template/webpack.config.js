@@ -3,6 +3,7 @@ const {
   createWebConfig,
   createNodeConfig,
   applyES5Transformation,
+  applyES9Transformation,
   pipe,
   webpackMode,
 } = require('@merkur/tools/webpack.cjs');
@@ -51,5 +52,6 @@ function applySvelteNode(config) {
 module.exports = Promise.all([
   pipe(createWebConfig, applySvelteWeb)(),
   pipe(createWebConfig, applySvelteWeb, applyES5Transformation)(),
+  pipe(createWebConfig, applySvelteWeb, applyES9Transformation)(),
   pipe(createNodeConfig, applySvelteNode)(),
 ]);

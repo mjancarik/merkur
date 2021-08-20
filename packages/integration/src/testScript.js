@@ -1,4 +1,5 @@
 let _isES9Supported;
+let _isES11Supported;
 
 function isES9Supported() {
   if (_isES9Supported === undefined) {
@@ -9,6 +10,20 @@ function isES9Supported() {
   }
 
   return _isES9Supported;
+}
+
+function isES11Supported() {
+  if (_isES11Supported === undefined) {
+    _isES11Supported =
+      exported.test(
+        'return (() => { const o = { t: { q: true } }; return o?.t?.q && (o?.a?.q ?? true); })()'
+      ) &&
+      exported.test('return typeof Promise.allSettled === "function"') &&
+      exported.test('return typeof globalThis !== "undefined"') &&
+      exported.test('return typeof 9007199254740991n === "bigint"');
+  }
+
+  return _isES11Supported;
 }
 
 function test(snippet) {
@@ -24,6 +39,7 @@ function test(snippet) {
 
 const exported = {
   isES9Supported,
+  isES11Supported,
   test,
 };
 

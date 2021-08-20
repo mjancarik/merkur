@@ -7,18 +7,22 @@
   "unpkg": "lib/index.umd.js",
   "sideEffects": false,
   "exports": {
-    "import": "./lib/index.mjs",
-    "require": "./lib/index.cjs"
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs"
+    },
+    "./lib/index.es9.mjs": "./lib/index.es9.mjs"
   },
   "browser": {
     "./lib/index.js": "./lib/index.es5.js",
     "./lib/index.cjs": "./lib/index.es5.js",
-    "./lib/index.mjs": "./lib/index.mjs"
+    "./lib/index.mjs": "./lib/index.mjs",
+    "./lib/index.es9.mjs": "./lib/index.es9.mjs"
   },
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
-    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check --module es9 ./lib/index.mjs",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check --module es11 ./lib/index.mjs && ../../node_modules/.bin/es-check --module es9 ./lib/index.es9.mjs",
     "build": "node_modules/.bin/rollup -c",
     "prepare": "npm run build"
   },
@@ -47,6 +51,6 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "rollup": "^2.52.1"
+    "rollup": "^2.56.2"
   }
 }

@@ -86,7 +86,11 @@ function loadScriptAssets(assets, root = document.head) {
     }
 
     if (source === Object(source)) {
-      _asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
+      if (testScript.isES11Supported()) {
+        _asset.source = source.es11;
+      } else {
+        _asset.source = testScript.isES9Supported() ? source.es9 : source.es5;
+      }
 
       if (!_asset.source) {
         console.warn(
