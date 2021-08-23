@@ -21,7 +21,13 @@
     },
     {
       "title": "Widget API",
-      "url": "/docs/merkur-widget-api"
+      "url": "/docs/merkur-widget-api",
+      "submenu": [
+        {
+          "title": "Slots",
+          "url": "/docs/merkur-widget-api#slots"
+        }
+      ]
     },
     {
       "title": "Merkur API",
