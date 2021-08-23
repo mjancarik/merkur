@@ -11,7 +11,7 @@ export default class MerkurSlot extends AbstractMerkurWidget {
   get slot() {
     const { widgetProperties, slotName } = this.props;
 
-    return widgetProperties?.slots?.[slotName] ?? null;
+    return widgetProperties?.slot?.[slotName] ?? null;
   }
 
   /**

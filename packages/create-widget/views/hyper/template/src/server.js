@@ -12,15 +12,15 @@ export function createWidget(widgetParams) {
       wire: viper.wire,
     },
     async mount(widget) {
-      const { View, slots = {} } = await viewFactory(widget);
+      const { View, slot = {} } = await viewFactory(widget);
       const render = widget.$dependencies.bind(widget.state);
 
       return {
         html: View(widget, render).toString(),
-        slots: Object.keys(slots).reduce((acc, cur) => {
+        slot: Object.keys(slot).reduce((acc, cur) => {
           acc[cur] = {
-            name: slots[cur].name,
-            html: slots[cur].View(widget, render).toString(),
+            name: slot[cur].name,
+            html: slot[cur].View(widget, render).toString(),
           };
 
           return acc;

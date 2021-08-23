@@ -2,10 +2,10 @@ import { h } from 'preact'; // eslint-disable-line no-unused-vars
 import WidgetContext from '../components/WidgetContext';
 import Counter from '../components/Counter';
 import ErrorView from './ErrorView';
-import { headlineSlotFactory } from '../slots/HeadlineSlot';
+import { headlineSlotFactory } from '../slot/HeadlineSlot';
 
 async function viewFactory(widget) {
-  const slots = (await Promise.all([headlineSlotFactory(widget)])).reduce(
+  const slot = (await Promise.all([headlineSlotFactory(widget)])).reduce(
     (acc, cur) => {
       acc[cur.name] = cur;
 
@@ -16,7 +16,7 @@ async function viewFactory(widget) {
 
   return {
     View,
-    slots,
+    slot,
   };
 }
 

@@ -139,7 +139,7 @@ async function headlineSlotFactory() {
 }
 
 async function viewFactory(widget) {
-  const slots = (await Promise.all([headlineSlotFactory(widget)])).reduce(
+  const slot = (await Promise.all([headlineSlotFactory(widget)])).reduce(
     (acc, cur) => {
       acc[cur.name] = cur;
 
@@ -151,7 +151,7 @@ async function viewFactory(widget) {
   return {
     containerSelector: '.merkur-view', // optional, usually is redefined on client anyway
     View: View, // Main widget view component
-    slots,
+    slot,
   };
 }
 
@@ -163,7 +163,7 @@ which is used to generate following structure:
 {
   "view": "<main_view_function>",
   "containerSelector": ".merkur-view", // optional
-  "slots": {
+  "slot": {
     "headline": {
       "name": "headline",
       "view": "<slot_view_function>",
@@ -180,14 +180,14 @@ this factory function is then used in lifecycle methods in `client.js` and `serv
 {
   // ...
   async mount(widget) {
-    const { View, slots = {} } = await viewFactory(widget);
+    const { View, slot = {} } = await viewFactory(widget);
 
     return {
       html: widget.$dependencies.render(View(widget)),
-      slots: Object.keys(slots).reduce((acc, cur) => {
+      slot: Object.keys(slot).reduce((acc, cur) => {
         acc[cur] = {
-          name: slots[cur].name,
-          html: widget.$dependencies.render(slots[cur].View(widget)),
+          name: slot[cur].name,
+          html: widget.$dependencies.render(slot[cur].View(widget)),
         };
 
         return acc;

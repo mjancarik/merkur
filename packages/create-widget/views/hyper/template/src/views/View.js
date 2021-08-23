@@ -3,7 +3,7 @@ import ErrorView from './ErrorView';
 import { headlineSlotFactory } from '../slots/HeadlineSlot';
 
 async function viewFactory(widget) {
-  const slots = (await Promise.all([headlineSlotFactory(widget)])).reduce(
+  const slot = (await Promise.all([headlineSlotFactory(widget)])).reduce(
     (acc, cur) => {
       acc[cur.name] = cur;
 
@@ -14,7 +14,7 @@ async function viewFactory(widget) {
 
   return {
     View,
-    slots,
+    slot,
   };
 }
 

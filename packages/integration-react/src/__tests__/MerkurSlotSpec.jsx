@@ -139,7 +139,7 @@ describe('MerkurSlot component methods', () => {
     jest.spyOn(MerkurSlot.prototype, '_isClient').mockReturnValue(true);
     jest
       .spyOn(MerkurSlot.prototype, '_getWidgetHTML')
-      .mockReturnValue(widgetProperties.slots.headline.html);
+      .mockReturnValue(widgetProperties.slot.headline.html);
 
     // Shallow render component
     wrapper = shallow(
@@ -160,7 +160,7 @@ describe('MerkurSlot component methods', () => {
 
   describe('slot getter', () => {
     it('should return slot properties', () => {
-      expect(instance.slot).toStrictEqual(widgetProperties.slots.headline);
+      expect(instance.slot).toStrictEqual(widgetProperties.slot.headline);
     });
 
     it('should return null', () => {
@@ -172,7 +172,7 @@ describe('MerkurSlot component methods', () => {
 
   describe('html getter', () => {
     it('should return slot SSR html', () => {
-      expect(instance.html).toStrictEqual(widgetProperties.slots.headline.html);
+      expect(instance.html).toStrictEqual(widgetProperties.slot.headline.html);
     });
 
     it('should return null', () => {
