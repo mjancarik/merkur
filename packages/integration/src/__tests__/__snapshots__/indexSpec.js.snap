@@ -17,6 +17,14 @@ Array [
     "onload": [Function],
     "removeAttribute": [Function],
     "setAttribute": [Function],
+    "src": "http://localhost:4444/static/es5/undefined.6961af42bfa3596bb147.js",
+  },
+  Object {
+    "defer": true,
+    "onerror": [Function],
+    "onload": [Function],
+    "removeAttribute": [Function],
+    "setAttribute": [Function],
     "src": "http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js",
   },
   Object {
@@ -50,7 +58,7 @@ Array [
     "setAttribute": [Function],
   },
   Object {
-    "innerHTML": ".cssClass { margin-top: 5px; }",
+    "innerHTML": ".cssClass { margin-top: 5px; }",
     "onerror": [MockFunction],
     "onload": [MockFunction] {
       "calls": Array [

@@ -77,7 +77,7 @@ describe('Merkur component', () => {
       },
       {
         type: 'inlineStyle',
-        source: '.cssClass { margin-top: 5px; }',
+        source: '.cssClass { margin-top: 5px; }',
       },
     ];
 
@@ -145,8 +145,8 @@ describe('Merkur component', () => {
     it('should create script elements for script assets', (done) => {
       loadScriptAssets(assets)
         .then(() => {
-          expect(document.createElement).toHaveBeenCalledTimes(3);
-          expect(document.head.appendChild).toHaveBeenCalledTimes(3);
+          expect(document.createElement).toHaveBeenCalledTimes(4);
+          expect(document.head.appendChild).toHaveBeenCalledTimes(4);
 
           done();
         })
@@ -172,8 +172,8 @@ describe('Merkur component', () => {
     it('should append script assets to specified element', (done) => {
       loadScriptAssets(assets, rootElement)
         .then(() => {
-          expect(document.createElement).toHaveBeenCalledTimes(3);
-          expect(rootElement.appendChild).toHaveBeenCalledTimes(3);
+          expect(document.createElement).toHaveBeenCalledTimes(4);
+          expect(rootElement.appendChild).toHaveBeenCalledTimes(4);
 
           done();
         })
