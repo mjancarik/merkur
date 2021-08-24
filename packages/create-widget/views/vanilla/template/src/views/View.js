@@ -1,6 +1,6 @@
 import Counter from '../components/Counter';
 import ErrorView from './ErrorView';
-import { headlineSlotFactory } from '../slot/HeadlineSlot';
+import { headlineSlotFactory } from '../slots/HeadlineSlot';
 
 async function viewFactory(widget) {
   const slot = (await Promise.all([headlineSlotFactory(widget)])).reduce(
