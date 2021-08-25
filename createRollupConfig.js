@@ -156,7 +156,15 @@ function createRollupES9Config() {
 
   config.output = [
     {
-      file: `./lib/index.es9.mjs`,
+      dir: './lib',
+      entryFileNames: '[name].es9.cjs',
+      format: 'cjs',
+      exports: 'named',
+      plugins: [getBabelOutputPlugin(babelES9BaseConfig)],
+    },
+    {
+      dir: './lib',
+      entryFileNames: '[name].es9.mjs',
       format: 'esm',
       exports: 'named',
       plugins: [getBabelOutputPlugin(babelES9BaseConfig)],
