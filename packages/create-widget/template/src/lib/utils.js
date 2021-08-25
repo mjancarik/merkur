@@ -1,17 +1,16 @@
 async function mapViews(widget, factoryFn, callback) {
-  const { View, slots = {} } = await factoryFn(widget);
+  const { View, slot = {} } = await factoryFn(widget);
   const { containerSelector } = widget;
 
   // Add container selectors defined on widget instance after creation
-  Object.keys(widget.slots).forEach((slotName) => {
-    slots[slotName].isSlot = true;
-    slots[slotName].containerSelector =
-      widget.slots[slotName].containerSelector;
+  Object.keys(widget.slot).forEach((slotName) => {
+    slot[slotName].isSlot = true;
+    slot[slotName].containerSelector = widget.slot[slotName].containerSelector;
   });
 
   return [
     { View, containerSelector, isSlot: false },
-    ...Object.values(slots),
+    ...Object.values(slot),
   ].map(({ View, containerSelector, isSlot }) => {
     callback({
       View,

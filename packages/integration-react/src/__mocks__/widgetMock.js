@@ -29,7 +29,7 @@ const mockedWidgetProperties = {
     },
   ],
   html: '<div class="merkur__page"></div>',
-  slots: {
+  slot: {
     headline: {
       name: 'headline',
       containerSelector: '.headline',

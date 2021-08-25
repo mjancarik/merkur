@@ -22,14 +22,14 @@
 </head>
 
 <body>
-  <div class="headline-view"><%- widgetProperties && widgetProperties.slots && widgetProperties.slots.headline.html %></div>
+  <div class="headline-view"><%- widgetProperties && widgetProperties.slot && widgetProperties.slot.headline.html %></div>
   <div class="merkur-view"><%- html %></div>
   <script>
     window.addEventListener('load', function () {
       __merkur__.create(<%- JSON.stringify(widgetProperties) %>)
         .then(function (widget) {
           widget.containerSelector = '.merkur-view';
-          widget.slots.headline.containerSelector = '.headline-view';
+          widget.slot.headline.containerSelector = '.headline-view';
 
           widget.mount();
         });
