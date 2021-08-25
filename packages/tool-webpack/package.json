@@ -1,0 +1,46 @@
+{
+  "name": "@merkur/tool-webpack",
+  "version": "0.25.0",
+  "description": "Merkur tool webpack.",
+  "main": "index.cjs",
+  "scripts": {
+    "test": "echo 'Tests pass.'",
+    "test:es:version": "echo 'Tests pass.'",
+    "build": "echo 'Build pass.'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "merkur",
+    "webpack",
+    "tool"
+  ],
+  "author": "Miroslav Jancarik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "dependencies": {
+    "@babel/core": "7.15.0",
+    "@babel/preset-env": "7.15.0",
+    "babel-loader": "8.2.2",
+    "clean-webpack-plugin": "^3.0.0",
+    "compression-webpack-plugin": "^8.0.1",
+    "core-js": "3.16.2",
+    "css-loader": "6.2.0",
+    "json-loader": "0.5.7",
+    "mini-css-extract-plugin": "2.2.0",
+    "webpack-bundle-analyzer": "^4.4.2",
+    "webpack-manifest-plugin": "4.0.2",
+    "webpack-modules": "1.0.0",
+    "webpack-node-externals": "3.0.0",
+    "webpack-shell-plugin-next": "^2.2.2"
+  }
+}
