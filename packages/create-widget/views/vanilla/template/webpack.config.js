@@ -5,7 +5,7 @@ const {
   applyES5Transformation,
   applyES9Transformation,
   pipe,
-} = require('@merkur/tools/webpack.cjs');
+} = require('@merkur/tool-webpack');
 
 createLiveReloadServer();
 

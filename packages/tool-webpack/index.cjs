@@ -10,7 +10,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
-const WebSocket = require('./websocket.cjs');
+const WebSocket = require('@merkur/tools/websocket.cjs');
 
 const DIR = process.cwd();
 const DEVELOPMENT = 'development';

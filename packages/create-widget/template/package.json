@@ -35,6 +35,7 @@
   },
   "devDependencies": {
     "@merkur/tools": "0.25.0",
+    "@merkur/tool-webpack": "0.25.0",
     "nodemon": "^2.0.12",
     "webpack": "^5.51.1",
     "webpack-cli": "^4.8.0"
