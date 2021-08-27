@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.26.0](https://github.com/mjancarik/merkur/compare/v0.25.0...v0.26.0) (2021-08-27)
+
+
+* Slot (#96) ([ec4d528](https://github.com/mjancarik/merkur/commit/ec4d528b8bb92392bdd002c092ac38352851e2a5)), closes [#96](https://github.com/mjancarik/merkur/issues/96)
+
+
+### Features
+
+* 🎸 add cjs file for es9 ([#98](https://github.com/mjancarik/merkur/issues/98)) ([6b0a4a1](https://github.com/mjancarik/merkur/commit/6b0a4a130b632de014839ab1cef2730db7f32335))
+
+
+### BREAKING CHANGES
+
+* 🧨 The property slots from widget structure is renamed to slot
+
+* fix: 🐛 import paths
+
+
+
+
+
 # [0.25.0](https://github.com/mjancarik/merkur/compare/v0.24.4...v0.25.0) (2021-08-20)
 
 
