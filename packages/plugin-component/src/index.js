@@ -112,13 +112,23 @@ function componentAPI() {
 
       return callLifeCycleMethod(widget, 'update', args);
     },
-    async setState(widget, state) {
-      widget.state = { ...widget.state, ...state };
+    async setState(widget, stateSetter) {
+      widget.state = {
+        ...widget.state,
+        ...(typeof stateSetter === 'function'
+          ? stateSetter(widget.state)
+          : stateSetter),
+      };
 
       return widget.update();
     },
-    async setProps(widget, props) {
-      widget.props = { ...widget.props, ...props };
+    async setProps(widget, propsSetter) {
+      widget.props = {
+        ...widget.props,
+        ...(typeof propsSetter === 'function'
+          ? propsSetter(widget.props)
+          : propsSetter),
+      };
 
       if (!widget.$in.component.isMounted) {
         return;

@@ -207,6 +207,17 @@ describe('component plugin API', () => {
       expect(widget.state.name).toEqual('black');
     });
 
+    it('should allow setting new widget state using fn callback', async () => {
+      await widget.mount();
+      await widget.setState({ name: 'black' });
+
+      let setState = jest.fn((state) => ({ name: state.name + ' surname' }));
+      await widget.setState(setState);
+
+      expect(widget.state.name).toEqual('black surname');
+      expect(setState).toHaveBeenCalledWith({ name: 'black' });
+    });
+
     it('should call life cycle update method', async () => {
       widget.update = jest.fn();
 
@@ -223,6 +234,17 @@ describe('component plugin API', () => {
       await widget.setProps({ name: 'black' });
 
       expect(widget.props.name).toEqual('black');
+    });
+
+    it('should allow setting new widget props using fn callback', async () => {
+      await widget.mount();
+      await widget.setProps({ name: 'black' });
+
+      let setProps = jest.fn((props) => ({ name: props.name + ' surname' }));
+      await widget.setProps(setProps);
+
+      expect(widget.props.name).toEqual('black surname');
+      expect(setProps).toHaveBeenCalledWith({ name: 'black' });
     });
 
     it('should call life cycle update method', async () => {
