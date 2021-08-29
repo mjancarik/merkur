@@ -4,6 +4,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
+  <script>
+    window.__merkur_dev__ = window.__merkur_dev__ || {};
+    window.__merkur_dev__.webSocketOptions = {
+      url: `ws://localhost:${<%- process.env.MERKUR_PLAYGROUND_LIVERELOAD_PORT %>}`
+    };
+  </script>
   <script src="/@merkur/tools/static/livereload.js"></script>
   <% assets.forEach((asset) => { %>
     <%if (asset.type === 'stylesheet') { %>
