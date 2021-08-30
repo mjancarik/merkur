@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.26.1](https://github.com/mjancarik/merkur/compare/v0.26.0...v0.26.1) (2021-08-30)
+
+
+### Bug Fixes
+
+* 🐛 Fixed condition when loading scripts ([#102](https://github.com/mjancarik/merkur/issues/102)) ([f5664f5](https://github.com/mjancarik/merkur/commit/f5664f550b375d50f85d410e02551484cee3c4ea))
+
+
+
+
+
 # [0.26.0](https://github.com/mjancarik/merkur/compare/v0.25.0...v0.26.0) (2021-08-27)
 
 
