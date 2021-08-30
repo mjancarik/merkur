@@ -111,9 +111,7 @@ function loadScriptAssets(assets, root = document.head) {
 
         return acc;
       }, false) ||
-      _asset.test
-        ? testScript.test(_asset.test)
-        : false
+      (_asset.test ? testScript.test(_asset.test) : false)
     ) {
       return scripts;
     }
