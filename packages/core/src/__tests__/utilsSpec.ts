@@ -50,14 +50,22 @@ describe('utils function', () => {
   describe('bindWidgetToFunctions', () => {
     it('should bind widget to all widget methods', () => {
       const widget = {
-        a: function (widget, a?) {
+        name: 'widget',
+        version: '0.0.1',
+        a: function (_widget, a?) {
           return a;
         },
-        b: function (widget, b) {
+        b: function (_widget, b) {
           return b;
         },
         c: {},
         d: 'string',
+        $in: {},
+        $external: {},
+        $dependencies: {},
+        $plugins: [],
+        setup: async (widget) => widget,
+        create: async (widget) => widget,
       };
 
       bindWidgetToFunctions(widget);
@@ -73,10 +81,10 @@ describe('utils function', () => {
 
     beforeEach(() => {
       widget = {
-        a: function (widget, a) {
+        a: function (_widget, a) {
           return a;
         },
-        b: function (widget, b) {
+        b: function (_widget, b) {
           return b;
         },
         c: {},
@@ -88,7 +96,7 @@ describe('utils function', () => {
       hookMethod(
         widget,
         'a',
-        (widget, originalMethod, ...rest) => 'a' + originalMethod(...rest)
+        (_widget, originalMethod, ...rest) => 'a' + originalMethod(...rest)
       );
       bindWidgetToFunctions(widget);
 
@@ -101,12 +109,12 @@ describe('utils function', () => {
       hookMethod(
         widget,
         'a',
-        (widget, originalMethod, ...rest) => 'a' + originalMethod(...rest)
+        (_widget, originalMethod, ...rest) => 'a' + originalMethod(...rest)
       );
       hookMethod(
         widget,
         'a',
-        (widget, originalMethod, ...rest) => 'b' + originalMethod(...rest)
+        (_widget, originalMethod, ...rest) => 'b' + originalMethod(...rest)
       );
       bindWidgetToFunctions(widget);
 

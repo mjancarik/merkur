@@ -1,7 +1,6 @@
-exports = {
+module.exports = {
   bail: false,
   verbose: true,
-  testEnvironment: 'node',
   coverageThreshold: {
     global: {
       functions: 50,
@@ -19,6 +18,7 @@ exports = {
   globals: {
     'ts-jest': {
       diagnostics: true,
+      babelConfig: false,
     },
   },
 };

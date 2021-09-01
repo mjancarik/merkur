@@ -16,7 +16,7 @@ async function callPluginMethod(
   method: string,
   args: unknown[]
 ): Promise<Widget> {
-  for (const plugin of widget.$plugins || []) {
+  for (const plugin of widget.$plugins) {
     if (isFunction(plugin[method])) {
       widget = await (plugin[method] as WidgetFunction)(widget, ...args);
     }

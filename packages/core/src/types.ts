@@ -40,7 +40,7 @@ export type Merkur = {
   $dependencies: AnyObj;
   $plugins: Array<() => WidgetPlugin>;
   register: RegisterFunction;
-  create: WidgetFunction;
+  create: CreateFunction;
 };
 
 export type Widget = WidgetProperties & {

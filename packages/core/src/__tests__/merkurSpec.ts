@@ -1,12 +1,12 @@
-import { getMerkur, createMerkur, removeMerkur } from '../merkur';
-import { createMerkurWidget } from '../index';
+import { getMerkur, createMerkur, removeMerkur } from "../merkur";
+import { createMerkurWidget } from "../index";
 
-describe('merkur shell', () => {
+describe("merkur shell", () => {
   beforeEach(() => {
     removeMerkur();
   });
 
-  it('should create merkur shell', () => {
+  it("should create merkur shell", () => {
     const merkur = createMerkur();
 
     expect(merkur).toMatchInlineSnapshot(`
@@ -17,24 +17,25 @@ describe('merkur shell', () => {
           "widgetFactory": Object {},
           "widgets": Array [],
         },
+        "$plugins": Array [],
         "create": [Function],
         "register": [Function],
       }
     `);
   });
 
-  it('should return merkur instance', () => {
+  it("should return merkur instance", () => {
     const merkur = createMerkur();
     const sameMerkur = getMerkur();
 
     expect(sameMerkur).toEqual(merkur);
   });
 
-  it('should register merkur widget', () => {
+  it("should register merkur widget", () => {
     const merkur = createMerkur();
     const widgetProperties = {
-      name: 'package',
-      version: '1.0.0',
+      name: "package",
+      version: "1.0.0",
     };
     const createWidget = () => createMerkurWidget(widgetProperties);
 
@@ -48,11 +49,11 @@ describe('merkur shell', () => {
     ).toEqual(createWidget);
   });
 
-  it('should create merkur widget', async () => {
+  it("should create merkur widget", async () => {
     const merkur = createMerkur();
     const widgetProperties = {
-      name: 'package',
-      version: '1.0.0',
+      name: "package",
+      version: "1.0.0",
     };
     const createWidget = () => createMerkurWidget(widgetProperties);
 

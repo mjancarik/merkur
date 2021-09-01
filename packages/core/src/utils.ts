@@ -1,7 +1,7 @@
 import { AnyObj, AnyFn, Widget } from './types';
 
 function createBoundedFunction(
-  widget: unknown, // NOTE: argument se jmenuje "widget", ale technicky vzato to muze byt cokoliv?
+  widget: unknown,
   originalFunction: AnyFn
 ): AnyFn {
   return (...rest: unknown[]) => {
@@ -17,7 +17,7 @@ export function setDefaultValueForUndefined<T>(
   const objectClone = { ...object };
 
   keys.forEach((key) => {
-    objectClone[key] = objectClone[key] || value; // FIXME: tady by mela byt kontrola undefined, protoze to prepise falsy hodnoty?
+    objectClone[key] = objectClone[key] || value;
   });
 
   return objectClone;
@@ -56,7 +56,6 @@ export function hookMethod(
   return originalFunction;
 }
 
-// TODO optional value? (test)
 export function isFunction(value?: unknown): boolean {
   return typeof value === 'function';
 }
