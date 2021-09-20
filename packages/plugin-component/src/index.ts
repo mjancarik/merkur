@@ -1,9 +1,15 @@
-import { setDefaultValueForUndefined } from '@merkur/core';
+import { setDefaultValueForUndefined } from '../../core/src/index'; //'@merkur/core';
+import {
+  AnyObj,
+  Widget,
+  WidgetPlugin,
+  ComponentApi,
+} from '../../core/src/types';
 
-export function componentPlugin() {
+export function componentPlugin(): WidgetPlugin {
   return {
     async setup(widget, widgetDefinition) {
-      let {
+      const {
         info,
         bootstrap,
         load,
@@ -46,20 +52,26 @@ export function componentPlugin() {
   };
 }
 
-async function callLifeCycleMethod(widget, methodName, args) {
+async function callLifeCycleMethod(
+  widget: Widget,
+  methodName: string,
+  args: unknown[]
+): Promise<unknown> {
   const { lifeCycle } = widget.$in.component;
 
   if (typeof lifeCycle[methodName] === 'function') {
     return lifeCycle[methodName](widget, ...args);
   }
+
+  return;
 }
 
-function componentAPI() {
+function componentAPI(): ComponentApi {
   return {
     async info(widget, ...args) {
       const { name, version, props, state, assets } = widget;
       const componentInfo =
-        (await callLifeCycleMethod(widget, 'info', args)) || {};
+        ((await callLifeCycleMethod(widget, 'info', args)) as AnyObj) || {};
 
       return {
         name,
@@ -101,7 +113,11 @@ function componentAPI() {
         return;
       }
 
-      widget.state = await callLifeCycleMethod(widget, 'load', args);
+      widget.state = (await callLifeCycleMethod(
+        widget,
+        'load',
+        args
+      )) as AnyObj;
     },
     async update(widget, ...args) {
       if (!widget.$in.component.isMounted) {

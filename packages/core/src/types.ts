@@ -17,19 +17,22 @@ export type RegisterFunction = ({
   createWidget: CreateFunction;
 }) => void;
 
-export type WidgetPlugin = {
-  setup?: (merkur: Merkur, widgetDefintition: WidgetDefintition) => Widget;
-  create?: (merkur: Merkur, widgetDefintition: WidgetDefintition) => Widget;
-};
+export interface WidgetPlugin {
+  setup?: (
+    widget: Widget,
+    widgetDefintition: WidgetDefintition
+  ) => Promise<Widget>;
+  create?: (widget: Widget) => Widget;
+}
 
 export type MerkurPlugin = {
   setup: (merkur: Merkur) => void;
 };
 
-export type WidgetProperties = {
+export interface WidgetProperties {
   name: string;
   version: string;
-};
+}
 
 export type Merkur = {
   $in: {
@@ -43,22 +46,25 @@ export type Merkur = {
   create: CreateFunction;
 };
 
-export type Widget = WidgetProperties & {
-  $in: AnyObj;
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface $in {}
+export interface Widget extends WidgetProperties {
+  $in: $in;
   $external: AnyObj;
   $dependencies: AnyObj;
   $plugins: WidgetPlugin[];
   setup: WidgetFunction;
   create: WidgetFunction;
-};
+}
 
-export type WidgetDefintition = WidgetProperties & {
+export interface WidgetDefintition extends WidgetProperties {
   $external: AnyObj;
   $dependencies: AnyObj;
   $plugins: Array<() => WidgetPlugin>;
   setup: WidgetFunction;
   create: WidgetFunction;
-};
+  [x: string]: unknown;
+}
 
 export type WidgetFunction = (
   widget: Widget,

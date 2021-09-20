@@ -64,6 +64,8 @@ export async function createMerkurWidget(
   partialWidget.version = widgetDefinition.version;
   partialWidget.$dependencies = widgetDefinition.$dependencies;
   partialWidget.$external = widgetDefinition.$external;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   partialWidget.$in = {};
 
   delete widgetDefinition.name;

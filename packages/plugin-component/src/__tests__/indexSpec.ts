@@ -1,5 +1,6 @@
-import { createMerkurWidget } from '@merkur/core';
+import { createMerkurWidget } from '../../../core/src';
 import { componentPlugin } from '../index';
+import '../types';
 
 describe('createWidget method with component plugin', () => {
   it('should create empty widget', async () => {
@@ -110,8 +111,8 @@ describe('createWidget method with component plugin', () => {
 });
 
 describe('component plugin API', () => {
-  let widget = null;
-  let mocks = null;
+  let widget: any = null;
+  let mocks: any = null;
 
   beforeEach(async () => {
     mocks = {
