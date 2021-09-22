@@ -20,7 +20,7 @@ class WebSocketMerkur {
     /**
      * @type {Object}
      */
-    this._options = Object.assign({ url: 'ws://localhost:4321' }, options);
+    this._options = Object.assign({}, options);
   }
 
   init() {
@@ -124,6 +124,8 @@ class WebSocketMerkur {
 }
 
 window.__merkur_dev__ = window.__merkur_dev__ || {};
+window.__merkur_dev__.webSocketOptions =
+  window.__merkur_dev__.webSocketOptions || {};
 window.__merkur_dev__.webSocket = new WebSocketMerkur(
   window.__merkur_dev__.webSocketOptions
 )

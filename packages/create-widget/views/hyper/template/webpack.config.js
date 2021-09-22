@@ -7,11 +7,11 @@ const {
   pipe,
 } = require('@merkur/tool-webpack');
 
-createLiveReloadServer();
-
-module.exports = Promise.all([
-  pipe(createWebConfig)(),
-  pipe(createWebConfig, applyES5Transformation)(),
-  pipe(createWebConfig, applyES9Transformation)(),
-  pipe(createNodeConfig)(),
-]);
+module.exports = createLiveReloadServer().then(() =>
+  Promise.all([
+    pipe(createWebConfig)(),
+    pipe(createWebConfig, applyES5Transformation)(),
+    pipe(createWebConfig, applyES9Transformation)(),
+    pipe(createNodeConfig)(),
+  ])
+);

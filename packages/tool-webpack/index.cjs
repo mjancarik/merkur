@@ -1,5 +1,6 @@
 const path = require('path');
 const zlib = require('zlib');
+const fp = require('find-free-port');
 const WebpackShellPlugin = require('webpack-shell-plugin-next');
 const nodeExternals = require('webpack-node-externals');
 const WebpackModules = require('webpack-modules');
@@ -89,9 +90,19 @@ function getPlugins(options = {}) {
   return { webPlugins, nodePlugins };
 }
 
-function createLiveReloadServer() {
+async function createLiveReloadServer() {
   if (environment === DEVELOPMENT) {
-    WebSocket.createServer();
+    try {
+      const [freePort] = await fp(4321);
+      process.env.MERKUR_PLAYGROUND_LIVERELOAD_PORT = freePort;
+
+      WebSocket.createServer({
+        port: freePort,
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error('Unable to retrieve free port for livereload server.');
+    }
   }
 }
 
