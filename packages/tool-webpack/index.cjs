@@ -1,3 +1,5 @@
+const { createHash } = require('crypto');
+const fs = require('fs');
 const path = require('path');
 const zlib = require('zlib');
 const WebpackShellPlugin = require('webpack-shell-plugin-next');
@@ -23,6 +25,26 @@ const resolve = {
   alias: {},
   modules: [path.resolve(DIR, 'node_modules')],
 };
+
+function createCacheKey(...args) {
+  return createHash('md4')
+    .update(args.map((value) => JSON.stringify(value)).join(''))
+    .digest('hex');
+}
+
+function createCache(name) {
+  return {
+    type: 'filesystem',
+    name,
+    version: createCacheKey(process.env.NODE_ENV),
+    buildDependencies: {
+      defaultWebpack: ['webpack/lib/'],
+      config: [path.resolve(process.cwd(), 'webpack.config.js')].filter(
+        fs.existsSync
+      ),
+    },
+  };
+}
 
 function getPlugins(options = {}) {
   const sharedPlugins = [new WebpackModules(options.webpackModules)];
@@ -98,6 +120,8 @@ function createLiveReloadServer() {
 function createWebConfig(options = {}) {
   return {
     target: 'web',
+    cache: createCache('web'),
+    bail: environment === PRODUCTION,
     mode: webpackMode,
     devtool: environment === PRODUCTION ? false : 'source-map',
     resolve: {
@@ -144,6 +168,8 @@ function createWebConfig(options = {}) {
 function createNodeConfig(options = {}) {
   return {
     target: 'node',
+    cache: createCache('server'),
+    bail: environment === PRODUCTION,
     externals: [nodeExternals()],
     externalsPresets: { node: true },
     mode: webpackMode,
@@ -242,6 +268,10 @@ function applyES9Transformation(config, options = {}) {
     },
   };
 
+  if (config?.cache?.name) {
+    config.cache.name = 'web-es9';
+  }
+
   const loader = 'babel-loader';
   const babelLoaders = findLoaders(config.module.rules, loader);
   const babelPresetEnv = [
@@ -327,6 +357,10 @@ function applyES5Transformation(config, options = {}) {
     },
   };
 
+  if (config?.cache?.name) {
+    config.cache.name = 'web-es5';
+  }
+
   const loader = 'babel-loader';
   const babelLoaders = findLoaders(config.module.rules, loader);
   const babelPresetEnv = [
@@ -373,12 +407,12 @@ function applyES5Transformation(config, options = {}) {
   return config;
 }
 
-function _pipe(a, b) {
-  return async (arg) => b(await a(arg));
+function _pipe(acc, cur) {
+  return async (arg) => cur(await acc(arg));
 }
 
 function pipe(...ops) {
-  return ops.reduce(_pipe);
+  return ops.reduce((acc, cur) => _pipe(acc, cur));
 }
 
 module.exports = {
@@ -389,6 +423,7 @@ module.exports = {
   applyES9Transformation,
   applyBundleAnalyzer,
   findLoaders,
+  createCacheKey,
   pipe,
   environment,
   webpackMode,
