@@ -98,7 +98,7 @@ function createESTransformation(
       test: /\.(js|ts|tsx|mjs|jsx)$/,
       exclude: /node_modules/,
       use: {
-        loader: 'babel-loader', // TODO require resolve everywhere?
+        loader: require.resolve('babel-loader'),
         options: {
           presets: [...(babel?.presets ?? []), babelPresetEnv],
           plugins: [...(babel?.plugins ?? [])],

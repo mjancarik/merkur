@@ -6,7 +6,6 @@ const nodeExternals = require('webpack-node-externals');
 const WebpackModules = require('webpack-modules');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
 const { createCache, createCacheKey } = require('./webpack/cache.cjs');
@@ -33,10 +32,6 @@ function getPlugins({ plugins, isProduction }) {
   return {
     webPlugins: [
       new CleanWebpackPlugin(plugins.CleanWebpackPlugin),
-      new MiniCssExtractPlugin({
-        filename: 'widget.[contenthash].css',
-        ...plugins.MiniCssExtractPlugin,
-      }),
       new WebpackManifestPlugin({
         publicPath: '',
         ...plugins.WebpackManifestPlugin,
@@ -46,7 +41,7 @@ function getPlugins({ plugins, isProduction }) {
           ...{
             filename: '[path][base].gz',
             algorithm: 'gzip',
-            test: /\.(js|css|)$/,
+            test: /\.(js|css)$/,
             compressionOptions: {
               level: 9,
             },
@@ -111,7 +106,7 @@ function createConfig(context) {
           ? {
               enforce: 'pre',
               test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
-              use: 'source-map-loader',
+              use: require.resolve('source-map-loader'),
             }
           : {}),
       },
@@ -191,6 +186,7 @@ function pipe(...ops) {
       environment: process.env.NODE_ENV,
       isProduction: process.env.NODE_ENV === 'production',
       nodeModulesDir: path.join(cwd, 'node_modules'),
+      useLessLoader: false,
       publicPath: '',
       plugins: {
         ...plugins,
