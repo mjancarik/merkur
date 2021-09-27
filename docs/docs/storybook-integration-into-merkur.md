@@ -29,7 +29,7 @@ Now we must update two storybook files `./storybook/preview.js` and `./storybook
 import '../src/client';
 
 // receive widget properties for creating our Merkur widget instance
-import { widgetProperties } from '../src/widget';
+import widgetProperties from '../src/widget';
 
 // helper method for creating storybook loader, which async creates our widget instance.
 import { createWidgetLoader } from '@merkur/tool-storybook';
@@ -79,6 +79,8 @@ module.exports = {
   .
 }
 ```
+
+> Note: If you use any pre-processors (webpack loaders) for building CSS styles you should also define then in `webpackFinal` function by extending given `config` object. More on that topic can be found in [official Storybook documentation](https://storybook.js.org/docs/react/configure/styling-and-css).
 
 That's all. Now we can write our stories.
 
