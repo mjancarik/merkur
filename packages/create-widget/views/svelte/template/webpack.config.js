@@ -8,8 +8,6 @@ const {
   webpackMode,
 } = require('@merkur/tool-webpack');
 
-createLiveReloadServer();
-
 function applySvelteWeb(config) {
   config.module.rules.push({
     test: /\.(svelte|html)$/,
@@ -49,9 +47,11 @@ function applySvelteNode(config) {
   return config;
 }
 
-module.exports = Promise.all([
-  pipe(createWebConfig, applySvelteWeb)(),
-  pipe(createWebConfig, applySvelteWeb, applyES5Transformation)(),
-  pipe(createWebConfig, applySvelteWeb, applyES9Transformation)(),
-  pipe(createNodeConfig, applySvelteNode)(),
-]);
+module.exports = createLiveReloadServer().then(() =>
+  Promise.all([
+    pipe(createWebConfig, applySvelteWeb)(),
+    pipe(createWebConfig, applySvelteWeb, applyES5Transformation)(),
+    pipe(createWebConfig, applySvelteWeb, applyES9Transformation)(),
+    pipe(createNodeConfig, applySvelteNode)(),
+  ])
+);

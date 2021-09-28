@@ -7,8 +7,6 @@ const {
   pipe,
 } = require('@merkur/tool-webpack');
 
-createLiveReloadServer();
-
 function applyBabelLoader(config) {
   config.module.rules.push({
     test: /\.(js|jsx)$/,
@@ -24,9 +22,11 @@ function applyBabelLoader(config) {
   return config;
 }
 
-module.exports = Promise.all([
-  pipe(createWebConfig, applyBabelLoader)(),
-  pipe(createWebConfig, applyBabelLoader, applyES5Transformation)(),
-  pipe(createWebConfig, applyBabelLoader, applyES9Transformation)(),
-  pipe(createNodeConfig, applyBabelLoader)(),
-]);
+module.exports = createLiveReloadServer().then(() =>
+  Promise.all([
+    pipe(createWebConfig, applyBabelLoader)(),
+    pipe(createWebConfig, applyBabelLoader, applyES5Transformation)(),
+    pipe(createWebConfig, applyBabelLoader, applyES9Transformation)(),
+    pipe(createNodeConfig, applyBabelLoader)(),
+  ])
+);

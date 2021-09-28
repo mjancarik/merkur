@@ -2,10 +2,6 @@
 
 const WebSocket = require('ws');
 
-const DEFAULT_OPTIONS = {
-  port: 4321,
-};
-
 function broadcastMessage(server, fromClient, data) {
   server.clients.forEach(function each(toClient) {
     sendMessage(fromClient, toClient, data);
@@ -19,12 +15,16 @@ function sendMessage(fromClient, toClient, data) {
 }
 
 function createServer(options = {}) {
-  options = Object.assign({}, DEFAULT_OPTIONS, options);
+  options = Object.assign(
+    {},
+    { port: process.env.MERKUR_PLAYGROUND_LIVERELOAD_PORT },
+    options
+  );
+
   let server = null;
 
   try {
     server = new WebSocket.Server(options);
-
     server.on('connection', function connection(ws) {
       ws.on('message', function incoming(data, isBinary) {
         data = isBinary ? data : data.toString();
@@ -39,14 +39,16 @@ function createServer(options = {}) {
 }
 
 function createClient(options) {
-  options = Object.assign({}, DEFAULT_OPTIONS, options);
-  const client = new WebSocket('ws://localhost:' + options.port);
+  options = Object.assign(
+    {},
+    { port: process.env.MERKUR_PLAYGROUND_LIVERELOAD_PORT },
+    options
+  );
 
-  return client;
+  return new WebSocket('ws://localhost:' + options.port);
 }
 
 module.exports = {
-  DEFAULT_OPTIONS,
   createServer,
   createClient,
 };
