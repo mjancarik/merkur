@@ -1,73 +1,96 @@
+const fs = require('fs');
 const path = require('path');
 
 const { createCacheKey } = require('../webpack/cache.cjs');
 
 function findLoaders(rules = [], loader) {
-  let loaders = [];
+  let foundLoaders = [];
+  let foundRules = [];
 
   for (let rule of rules) {
     if (!Array.isArray(rule.use)) {
-      if (rule?.use?.loader === loader) {
-        loaders.push(rule.use);
+      if (rule?.use?.loader?.includes(loader)) {
+        foundRules.push(rule);
+        foundLoaders.push(rule.use);
       }
     } else {
       rule.use.forEach((use) => {
-        if (use?.loader === loader) {
-          loaders.push(use);
+        if (use?.loader?.includes(loader)) {
+          foundRules.push(rule);
+          foundLoaders.push(use);
         }
       });
     }
   }
 
-  return loaders;
+  return {
+    rules: foundRules,
+    loaders: foundLoaders,
+  };
 }
 
 function createESTransformation(
   config,
-  { babel, isProduction, nodeModulesDir, environment },
+  { cwd, isProduction, nodeModulesDir, environment, cache },
   esVersion
 ) {
+  const esPolyfillFilePath = `./src/polyfill.${esVersion}.js`;
+
   config = {
     ...config,
     name: `web-${esVersion}`,
     entry: {
       ...config.entry,
-      polyfill: `./src/polyfill.${esVersion}.js`,
+      ...(fs.existsSync(path.resolve(cwd, esPolyfillFilePath))
+        ? { polyfill: esPolyfillFilePath }
+        : undefined),
     },
     resolve: {
       ...config.resolve,
       alias: {
+        '@merkur/core': path.join(
+          nodeModulesDir,
+          `@merkur/core/lib/index.${esVersion}.${
+            esVersion === 'es5' ? 'js' : 'mjs'
+          }`
+        ),
+        '@merkur/plugin-component': path.join(
+          nodeModulesDir,
+          `@merkur/plugin-component/lib/index.${esVersion}.${
+            esVersion === 'es5' ? 'js' : 'mjs'
+          }`
+        ),
+        '@merkur/plugin-event-emitter': path.join(
+          nodeModulesDir,
+          `@merkur/plugin-event-emitter/lib/index.${esVersion}.${
+            esVersion === 'es5' ? 'js' : 'mjs'
+          }`
+        ),
+        '@merkur/plugin-http-client': path.join(
+          nodeModulesDir,
+          `@merkur/plugin-http-client/lib/index.${esVersion}.${
+            esVersion === 'es5' ? 'js' : 'mjs'
+          }`
+        ),
+        '@merkur/plugin-error': path.join(
+          nodeModulesDir,
+          `@merkur/plugin-error/lib/index.${esVersion}.${
+            esVersion === 'es5' ? 'js' : 'mjs'
+          }`
+        ),
+        '@merkur/plugin-router': path.join(
+          nodeModulesDir,
+          `@merkur/plugin-router/lib/index.${esVersion}.${
+            esVersion === 'es5' ? 'js' : 'mjs'
+          }`
+        ),
+        '@merkur/plugin-css-scrambler': path.join(
+          nodeModulesDir,
+          `@merkur/plugin-router/lib/index.${esVersion}.${
+            esVersion === 'es5' ? 'js' : 'mjs'
+          }`
+        ),
         ...config.resolve.alias,
-        ...{
-          '@merkur/core': path.join(
-            nodeModulesDir,
-            `@merkur/core/lib/index.${esVersion}.mjs`
-          ),
-          '@merkur/plugin-component': path.join(
-            nodeModulesDir,
-            `@merkur/plugin-component/lib/index.${esVersion}.mjs`
-          ),
-          '@merkur/plugin-event-emitter': path.join(
-            nodeModulesDir,
-            `@merkur/plugin-event-emitter/lib/index.${esVersion}.mjs`
-          ),
-          '@merkur/plugin-http-client': path.join(
-            nodeModulesDir,
-            `@merkur/plugin-http-client/lib/index.${esVersion}.mjs`
-          ),
-          '@merkur/plugin-error': path.join(
-            nodeModulesDir,
-            `@merkur/plugin-error/lib/index.${esVersion}.mjs`
-          ),
-          '@merkur/plugin-router': path.join(
-            nodeModulesDir,
-            `@merkur/plugin-router/lib/index.${esVersion}.mjs`
-          ),
-          '@merkur/plugin-css-scrambler': path.join(
-            nodeModulesDir,
-            `@merkur/plugin-router/lib/index.${esVersion}.mjs`
-          ),
-        },
       },
     },
     output: {
@@ -76,7 +99,11 @@ function createESTransformation(
     },
   };
 
-  const babelLoaders = findLoaders(config.module.rules, 'babel-loader');
+  const { loaders: babelLoaders } = findLoaders(
+    config.module.rules,
+    'babel-loader'
+  );
+
   const babelPresetEnv = [
     '@babel/preset-env',
     {
@@ -100,15 +127,17 @@ function createESTransformation(
       use: {
         loader: require.resolve('babel-loader'),
         options: {
-          presets: [...(babel?.presets ?? []), babelPresetEnv],
-          plugins: [...(babel?.plugins ?? [])],
-          cacheIdentifier: createCacheKey(environment),
+          presets: [babelPresetEnv],
+          cacheIdentifier: createCacheKey(
+            environment,
+            config?.name,
+            ...cache?.versionDependencies
+          ),
           cacheDirectory: true,
           cacheCompression: false,
           compact: isProduction,
           sourceMaps: !isProduction,
           inputSourceMap: !isProduction,
-          ...(babel?.options ?? {}),
         },
       },
     });
@@ -117,6 +146,8 @@ function createESTransformation(
       use.options.presets = [...(use?.options?.presets ?? []), babelPresetEnv];
     });
   }
+
+  return config;
 }
 
 function applyES9Transformation(config, context) {
@@ -124,7 +155,7 @@ function applyES9Transformation(config, context) {
   config.output.environment = {
     bigIntLiteral: false,
     dynamicImport: false,
-    ...config.output.environment,
+    ...config.output?.environment,
   };
 
   return config;
@@ -140,13 +171,14 @@ function applyES5Transformation(config, context) {
     dynamicImport: false,
     forOf: false,
     module: false,
-    ...config.output.environment,
+    ...config.output?.environment,
   };
 
   return config;
 }
 
 module.exports = {
+  findLoaders,
   applyES9Transformation,
   applyES5Transformation,
 };

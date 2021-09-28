@@ -1,10 +1,10 @@
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-function getStyleLoaders({ isServer, isProduction, useLessLoader }) {
+function getStyleLoaders({ isServer, isProduction }, useLess) {
   let importLoaders = isServer;
 
-  if (useLessLoader) {
+  if (useLess) {
     importLoaders += 1;
   }
 
@@ -29,25 +29,27 @@ function getStyleLoaders({ isServer, isProduction, useLessLoader }) {
     !isServer && {
       loader: require.resolve('postcss-loader'),
       options: {
-        plugins: [
-          'postcss-flexbugs-fixes',
-          [
-            'postcss-preset-env',
-            {
-              autoprefixer: {
-                flexbox: 'no-2009',
+        postcssOptions: {
+          plugins: [
+            'postcss-flexbugs-fixes',
+            [
+              'postcss-preset-env',
+              {
+                autoprefixer: {
+                  flexbox: 'no-2009',
+                },
+                stage: 3,
+                features: {
+                  'custom-properties': false,
+                },
               },
-              stage: 3,
-              features: {
-                'custom-properties': false,
-              },
-            },
+            ],
           ],
-        ],
+        },
+        sourceMap: !isProduction,
       },
-      sourceMap: !isProduction,
     },
-    useLessLoader && {
+    useLess && {
       loader: require.resolve('less-loader'),
       options: {
         sourceMap: !isProduction,
@@ -65,7 +67,7 @@ function applyStyleLoaders(config, context) {
         test: /\.less$/,
         sideEffects: true,
         exclude: /node_modules/,
-        use: getStyleLoaders(context),
+        use: getStyleLoaders(context, true),
       },
       {
         test: /\.css$/,
@@ -81,12 +83,14 @@ function applyStyleLoaders(config, context) {
     minimizer: ['...', new CssMinimizerPlugin()],
   };
 
-  config.optimization.plugins.push(
+  config.plugins.push(
     new MiniCssExtractPlugin({
       filename: 'widget.[contenthash].css',
       ...plugins.MiniCssExtractPlugin,
     })
   );
+
+  return config;
 }
 
 module.exports = { applyStyleLoaders };

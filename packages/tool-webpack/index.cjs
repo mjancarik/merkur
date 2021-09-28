@@ -10,13 +10,15 @@ const CompressionPlugin = require('compression-webpack-plugin');
 
 const { createCache, createCacheKey } = require('./webpack/cache.cjs');
 const { createLiveReloadServer } = require('./webpack/liveReloadServer.cjs');
-const { applyBundleAnalyzer } = require('./module/bundleAnalyzerPlugin.cjs');
+const { applyBundleAnalyzer } = require('./module/bundleAnalyzer.cjs');
 const {
+  findLoaders,
   applyES9Transformation,
   applyES5Transformation,
 } = require('./module/babelLoader.cjs');
+const { applyStyleLoaders } = require('./module/styleLoader.cjs');
 
-function getPlugins({ plugins, isProduction }) {
+function getPlugins({ plugins, isProduction, publicPath }) {
   const sharedPlugins = [
     new WebpackModules(),
     !isProduction && [
@@ -31,60 +33,60 @@ function getPlugins({ plugins, isProduction }) {
 
   return {
     webPlugins: [
-      new CleanWebpackPlugin(plugins.CleanWebpackPlugin),
+      new CleanWebpackPlugin(plugins?.CleanWebpackPlugin),
       new WebpackManifestPlugin({
-        publicPath: '',
-        ...plugins.WebpackManifestPlugin,
+        publicPath,
+        ...plugins?.WebpackManifestPlugin,
       }),
-      ...(isProduction && [
-        new CompressionPlugin({
-          ...{
-            filename: '[path][base].gz',
-            algorithm: 'gzip',
-            test: /\.(js|css)$/,
-            compressionOptions: {
-              level: 9,
-            },
-            threshold: 0,
-            minRatio: 0.95,
-          },
-          ...plugins.CompressionPluginGzip,
-        }),
-        new CompressionPlugin({
-          ...{
-            filename: '[path][base].br',
-            algorithm: 'brotliCompress',
-            test: /\.(js|css)$/,
-            compressionOptions: {
-              params: {
-                [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+      ...(isProduction
+        ? [
+            new CompressionPlugin({
+              filename: '[path][base].gz',
+              algorithm: 'gzip',
+              test: /\.(js|css)$/,
+              compressionOptions: {
+                level: 9,
               },
-            },
-            threshold: 0,
-            minRatio: 0.95,
-          },
-          ...plugins.CompressionPluginBrotli,
-        }),
-      ]),
+              threshold: 0,
+              minRatio: 0.95,
+              ...plugins?.CompressionPluginGzip,
+            }),
+            new CompressionPlugin({
+              filename: '[path][base].br',
+              algorithm: 'brotliCompress',
+              test: /\.(js|css)$/,
+              compressionOptions: {
+                params: {
+                  [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+                },
+              },
+              threshold: 0,
+              minRatio: 0.95,
+              ...plugins?.CompressionPluginBrotli,
+            }),
+          ]
+        : []),
       ...sharedPlugins,
     ].filter(Boolean),
     nodePlugins: [
-      ...(isProduction && [
-        new WebpackShellPlugin({
-          onBuildEnd: {
-            scripts: ['npm run dev:server'],
-            blocking: false,
-            parallel: true,
-          },
-          ...plugins.WebpackShellPlugin,
-        }),
-      ]),
+      ...(isProduction
+        ? [
+            new WebpackShellPlugin({
+              onBuildEnd: {
+                scripts: ['npm run dev:server'],
+                blocking: false,
+                parallel: true,
+              },
+              ...plugins?.WebpackShellPlugin,
+            }),
+          ]
+        : []),
       ...sharedPlugins,
     ].filter(Boolean),
   };
 }
 
-function createConfig(context) {
+function createConfig(config, context) {
   const { isServer, isProduction, nodeModulesDir } = context;
 
   return {
@@ -99,24 +101,26 @@ function createConfig(context) {
       alias: {},
       extensions: ['.mjs', '.js', '.jsx', '.json'],
       modules: [nodeModulesDir],
+      ...config?.resolve,
     },
     module: {
-      rules: {
-        ...(!isProduction
-          ? {
-              enforce: 'pre',
-              test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
-              use: require.resolve('source-map-loader'),
-            }
-          : {}),
-      },
+      rules: [
+        !isProduction && {
+          enforce: 'pre',
+          test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
+          use: require.resolve('source-map-loader'),
+        },
+        ...(config?.module?.rules ?? []),
+      ].filter(Boolean),
+      ...config?.module,
     },
+    ...config,
   };
 }
 
-function createWebConfig(context) {
+function createWebConfig(config, context) {
   context.isServer = false;
-  const baseConfig = createConfig(context);
+  const baseConfig = createConfig(config, context);
   const { cwd } = context;
 
   return {
@@ -134,8 +138,9 @@ function createWebConfig(context) {
     },
     plugins: getPlugins(context).webPlugins,
     module: {
+      ...baseConfig?.module,
       rules: [
-        ...module.rules,
+        ...baseConfig?.module?.rules,
         {
           test: /\.m?js/,
           resolve: {
@@ -147,9 +152,9 @@ function createWebConfig(context) {
   };
 }
 
-function createNodeConfig(context) {
+function createNodeConfig(config, context) {
   context.isServer = true;
-  const baseConfig = createConfig(context);
+  const baseConfig = createConfig(config, context);
   const { cwd, nodeModulesDir } = context;
 
   return {
@@ -177,8 +182,12 @@ function createNodeConfig(context) {
 }
 
 function pipe(...ops) {
-  return (context) => {
-    const { plugins, ...restContext } = context;
+  return async (context) => {
+    const { plugins, publicPath, ...restContext } = context;
+
+    // TODO Revise context ->
+    // resource loaders
+    // postcss options?
 
     const cwd = process.cwd();
     const contextWithDefaults = {
@@ -187,17 +196,24 @@ function pipe(...ops) {
       isProduction: process.env.NODE_ENV === 'production',
       nodeModulesDir: path.join(cwd, 'node_modules'),
       useLessLoader: false,
-      publicPath: '',
+      publicPath,
+      ...restContext,
+      cache: {
+        versionDependencies: [],
+        cacheDirectory: path.join(cwd, '.merkur/cache'),
+        ...restContext?.cache,
+      },
       plugins: {
         ...plugins,
       },
-      ...restContext,
     };
 
-    return ops.reduce(
-      async (config, cur) => (config = await cur(config, contextWithDefaults)),
-      {}
-    );
+    let accumulator = {};
+    for (const operation of ops) {
+      accumulator = await operation(accumulator, contextWithDefaults);
+    }
+
+    return accumulator;
   };
 }
 
@@ -205,9 +221,11 @@ module.exports = {
   createWebConfig,
   createNodeConfig,
   pipe,
+  findLoaders,
   createCacheKey,
   createLiveReloadServer,
   applyBundleAnalyzer,
   applyES9Transformation,
   applyES5Transformation,
+  applyStyleLoaders,
 };
