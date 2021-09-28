@@ -226,7 +226,6 @@ function pipe(...ops) {
       ...restContext,
       cache: {
         versionDependencies: [],
-        cacheDirectory: path.join(cwd, '.merkur/webpack-cache'),
         ...restContext?.cache,
       },
       plugins: {
