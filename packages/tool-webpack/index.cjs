@@ -18,24 +18,26 @@ const {
 } = require('./module/babelLoader.cjs');
 const { applyStyleLoaders } = require('./module/styleLoader.cjs');
 
-function getPlugins({ plugins, isProduction, publicPath }) {
+function getPlugins({ plugins, isProduction }) {
   const sharedPlugins = [
     new WebpackModules(),
-    !isProduction && [
-      new webpack.SourceMapDevToolPlugin({
-        test: /\.(le|c)ss$/,
-      }),
-      new webpack.EvalSourceMapDevToolPlugin({
-        test: /\.[jt]sx?$/,
-      }),
-    ],
+    ...(!isProduction
+      ? [
+          new webpack.SourceMapDevToolPlugin({
+            test: /\.(le|c)ss$/,
+          }),
+          new webpack.EvalSourceMapDevToolPlugin({
+            test: /\.[jt]sx?$/,
+          }),
+        ]
+      : []),
   ].filter(Boolean);
 
   return {
     webPlugins: [
       new CleanWebpackPlugin(plugins?.CleanWebpackPlugin),
       new WebpackManifestPlugin({
-        publicPath,
+        publicPath: '',
         ...plugins?.WebpackManifestPlugin,
       }),
       ...(isProduction
@@ -69,7 +71,7 @@ function getPlugins({ plugins, isProduction, publicPath }) {
       ...sharedPlugins,
     ].filter(Boolean),
     nodePlugins: [
-      ...(isProduction
+      ...(!isProduction
         ? [
             new WebpackShellPlugin({
               onBuildEnd: {
@@ -87,7 +89,7 @@ function getPlugins({ plugins, isProduction, publicPath }) {
 }
 
 function createConfig(config, context) {
-  const { isServer, isProduction, nodeModulesDir } = context;
+  const { isServer, isProduction, nodeModulesDir, cwd, publicPath } = context;
 
   return {
     name: isServer ? 'node' : 'web',
@@ -103,8 +105,32 @@ function createConfig(config, context) {
       modules: [nodeModulesDir],
       ...config?.resolve,
     },
+    output: {
+      publicPath,
+    },
     module: {
       rules: [
+        {
+          test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/, /\.webp$/],
+          oneOf: [
+            {
+              resourceQuery: /inline/, // foo.png?inline
+              type: 'asset/inline',
+            },
+            {
+              resourceQuery: /external/, // foo.png?external
+              type: 'asset/resource',
+            },
+            {
+              type: 'asset',
+              parser: {
+                dataUrlCondition: {
+                  maxSize: 8192,
+                },
+              },
+            },
+          ],
+        },
         !isProduction && {
           enforce: 'pre',
           test: /\.(js|mjs|jsx|ts|tsx|cjs|css)$/,
@@ -133,8 +159,10 @@ function createWebConfig(config, context) {
       widget: './src/client.js',
     },
     output: {
+      ...baseConfig?.output,
       path: path.join(cwd, './build/static/es11/'),
       filename: '[name].[contenthash].js',
+      assetModuleFilename: '../media/[name].[hash][ext]',
     },
     plugins: getPlugins(context).webPlugins,
     module: {
@@ -173,8 +201,10 @@ function createNodeConfig(config, context) {
       widget: './src/server.js',
     },
     output: {
+      ...baseConfig?.output,
       libraryTarget: 'commonjs2',
       path: path.join(cwd, './build'),
+      assetModuleFilename: './static/media/[name].[hash][ext]',
       filename: '[name].cjs',
     },
     plugins: getPlugins(context).nodePlugins,
@@ -183,11 +213,7 @@ function createNodeConfig(config, context) {
 
 function pipe(...ops) {
   return async (context) => {
-    const { plugins, publicPath, ...restContext } = context;
-
-    // TODO Revise context ->
-    // resource loaders
-    // postcss options?
+    const { plugins, ...restContext } = context;
 
     const cwd = process.cwd();
     const contextWithDefaults = {
@@ -196,11 +222,11 @@ function pipe(...ops) {
       isProduction: process.env.NODE_ENV === 'production',
       nodeModulesDir: path.join(cwd, 'node_modules'),
       useLessLoader: false,
-      publicPath,
+      publicPath: '',
       ...restContext,
       cache: {
         versionDependencies: [],
-        cacheDirectory: path.join(cwd, '.merkur/cache'),
+        cacheDirectory: path.join(cwd, '.merkur/webpack-cache'),
         ...restContext?.cache,
       },
       plugins: {
