@@ -35,7 +35,6 @@ import widgetProperties from '../src/widget';
 import { createWidgetLoader } from '@merkur/tool-storybook';
 
 // Specific imports for your chosen view. For example Preact:
-import { h } from 'preact';
 import { forceReRender } from '@storybook/preact';
 import WidgetContext from '../src/component/WidgetContext';
 
@@ -90,7 +89,6 @@ You can use every [format](https://storybook.js.org/docs/react/writing-stories/i
 
 ```javascript
 // /src/component/Counter.jsx
-import { h } from 'preact';
 import { useContext } from 'preact/hooks';
 import WidgetContext from './WidgetContext';
 
@@ -109,7 +107,6 @@ export default function Counter({ counter }) {
 
 // /src/component/Counter.stories.jsx
 /** @jsx h */
-import { h } from 'preact';
 import Counter from './Counter';
 
 export default {

@@ -1,4 +1,3 @@
-import React from 'react';
 import Welcome from '../components/Welcome';
 import WidgetDescription from '../components/WidgetDescription';
 import WidgetContext from '../components/WidgetContext';

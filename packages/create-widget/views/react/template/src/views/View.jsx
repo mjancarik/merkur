@@ -1,4 +1,3 @@
-import React from 'react';
 import WidgetContext from '../components/WidgetContext';
 import Counter from '../components/Counter';
 import ErrorView from './ErrorView';
