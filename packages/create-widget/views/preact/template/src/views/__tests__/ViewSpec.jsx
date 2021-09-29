@@ -2,7 +2,6 @@
  * @jest-environment jsdom
  */
 
-import { h } from 'preact'; // eslint-disable-line no-unused-vars
 import { shallow } from 'enzyme';
 import { createMerkurWidget } from '@merkur/core';
 

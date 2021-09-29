@@ -1,4 +1,3 @@
-import { h } from 'preact'; // eslint-disable-line no-unused-vars
 import WidgetContext from '../components/WidgetContext';
 import Counter from '../components/Counter';
 import ErrorView from './ErrorView';

@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function ErrorView({ error }) {
   return (
     <div className="merkur__error">
