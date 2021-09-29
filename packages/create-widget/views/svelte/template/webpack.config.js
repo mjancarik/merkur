@@ -4,6 +4,7 @@ const {
   createNodeConfig,
   applyES5Transformation,
   applyES9Transformation,
+  applyStyleLoaders,
   pipe,
   webpackMode,
 } = require('@merkur/tool-webpack');
@@ -49,9 +50,19 @@ function applySvelteNode(config) {
 
 module.exports = createLiveReloadServer().then(() =>
   Promise.all([
-    pipe(createWebConfig, applySvelteWeb)(),
-    pipe(createWebConfig, applySvelteWeb, applyES5Transformation)(),
-    pipe(createWebConfig, applySvelteWeb, applyES9Transformation)(),
-    pipe(createNodeConfig, applySvelteNode)(),
+    pipe(createWebConfig, applyStyleLoaders, applySvelteWeb)(),
+    pipe(
+      createWebConfig,
+      applyStyleLoaders,
+      applySvelteWeb,
+      applyES5Transformation
+    )(),
+    pipe(
+      createWebConfig,
+      applyStyleLoaders,
+      applySvelteWeb,
+      applyES9Transformation
+    )(),
+    pipe(createNodeConfig, applyStyleLoaders, applySvelteNode)(),
   ])
 );

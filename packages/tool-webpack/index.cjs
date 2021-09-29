@@ -212,7 +212,7 @@ function createNodeConfig(config, context) {
 }
 
 function pipe(...ops) {
-  return async (context) => {
+  return async (context = {}) => {
     const { plugins, ...restContext } = context;
 
     const cwd = process.cwd();

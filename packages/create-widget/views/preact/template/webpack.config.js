@@ -4,6 +4,7 @@ const {
   createNodeConfig,
   applyES5Transformation,
   applyES9Transformation,
+  applyStyleLoaders,
   createCacheKey,
   pipe,
 } = require('@merkur/tool-webpack');
@@ -44,9 +45,19 @@ function applyBabelLoader(config, { isProduction, environment, cache }) {
 
 module.exports = createLiveReloadServer().then(() =>
   Promise.all([
-    pipe(createWebConfig, applyBabelLoader)(),
-    pipe(createWebConfig, applyBabelLoader, applyES5Transformation)(),
-    pipe(createWebConfig, applyBabelLoader, applyES9Transformation)(),
-    pipe(createNodeConfig, applyBabelLoader)(),
+    pipe(createWebConfig, applyStyleLoaders, applyBabelLoader)(),
+    pipe(
+      createWebConfig,
+      applyStyleLoaders,
+      applyBabelLoader,
+      applyES5Transformation
+    )(),
+    pipe(
+      createWebConfig,
+      applyStyleLoaders,
+      applyBabelLoader,
+      applyES9Transformation
+    )(),
+    pipe(createNodeConfig, applyStyleLoaders, applyBabelLoader)(),
   ])
 );
