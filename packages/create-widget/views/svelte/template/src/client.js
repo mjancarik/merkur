@@ -1,8 +1,10 @@
 import { createMerkurWidget, createMerkur } from '@merkur/core';
-import widgetProperties from './widget';
-import { viewFactory } from './views/viewFactory';
+
 import { mapViews } from './lib/utils';
-import style from './style.css'; // eslint-disable-line no-unused-vars
+import { viewFactory } from './views/viewFactory';
+import widgetProperties from './widget';
+
+import './style.css';
 
 function createWidget(widgetParams) {
   return createMerkurWidget({

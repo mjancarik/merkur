@@ -8,11 +8,13 @@ module.exports = {
     'prettier',
   ],
   rules: {
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'prettier/prettier': [
       'error',
       {
         singleQuote: true,
         jsxSingleQuote: true,
+        jsxBracketSameLine: false,
       },
     ],
     'no-console': [
@@ -24,17 +26,11 @@ module.exports = {
     'react/prop-types': 0,
     'react/wrap-multilines': 0,
     'react/no-deprecated': 0,
+    'react/jsx-uses-react': 'off',
+    'react/react-in-jsx-scope': 'off',
+    'react/jsx-fragments': 'off',
+    'react/jsx-no-undef': 'off',
     'import/first': ['error'],
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        js: 'never',
-        mjs: 'never',
-        jsx: 'never',
-        json: 'never',
-      },
-    ],
     'import/no-unresolved': 'off',
     'import/order': [
       'error',
@@ -57,7 +53,7 @@ module.exports = {
             position: 'after',
           },
           {
-            pattern: '*.{less,json}',
+            pattern: '*.{css,less,json}',
             group: 'object',
             patternOptions: { matchBase: true },
             position: 'after',

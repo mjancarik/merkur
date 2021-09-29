@@ -1,12 +1,11 @@
-const express = require('express');
 const config = require('config');
+const express = require('express');
 
 const { createAssets, memo } = require('@merkur/integration/server/');
 const memoCreateAssets = memo(createAssets);
 
 const widgetEnvironment = config.get('widget');
 const merkurModule = require('../../../build/widget.cjs');
-
 const { asyncMiddleware, getServerUrl } = require('../utils');
 
 const router = express.Router();

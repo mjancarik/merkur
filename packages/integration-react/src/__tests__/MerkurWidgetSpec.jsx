@@ -95,7 +95,8 @@ describe('Merkur component', () => {
         <MerkurWidget
           widgetProperties={widgetProperties}
           onWidgetMounted={onWidgetMounted}
-          onWidgetUnmounting={onWidgetUnmounting}>
+          onWidgetUnmounting={onWidgetUnmounting}
+        >
           <span>Fallback</span>
         </MerkurWidget>
       );

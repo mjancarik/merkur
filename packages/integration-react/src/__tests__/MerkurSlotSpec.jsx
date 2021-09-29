@@ -74,7 +74,8 @@ describe('MerkurSlot component', () => {
       wrapper = shallow(
         <MerkurSlot
           widgetProperties={widgetProperties}
-          slotName="non-existing-slot-name">
+          slotName='non-existing-slot-name'
+        >
           <span>Fallback</span>
         </MerkurSlot>
       );
@@ -88,7 +89,7 @@ describe('MerkurSlot component', () => {
 
     it('should render merkur slot', () => {
       wrapper = shallow(
-        <MerkurSlot widgetProperties={widgetProperties} slotName="headline">
+        <MerkurSlot widgetProperties={widgetProperties} slotName='headline'>
           <span>Fallback</span>
         </MerkurSlot>
       );
@@ -107,7 +108,7 @@ describe('MerkurSlot component', () => {
 
       expect(
         shallow(
-          <MerkurSlot widgetProperties={widgetProperties} slotName="headline">
+          <MerkurSlot widgetProperties={widgetProperties} slotName='headline'>
             <span>Fallback</span>
           </MerkurSlot>
         )
@@ -143,7 +144,7 @@ describe('MerkurSlot component methods', () => {
 
     // Shallow render component
     wrapper = shallow(
-      <MerkurSlot widgetProperties={widgetProperties} slotName="headline">
+      <MerkurSlot widgetProperties={widgetProperties} slotName='headline'>
         Fallback
       </MerkurSlot>,
       { disableLifecycleMethods: true }

@@ -1,5 +1,5 @@
-import View from './View.svelte';
 import { headlineSlotFactory } from '../slots/headlineSlotFactory';
+import View from './View.svelte';
 
 async function viewFactory(widget) {
   const slot = (await Promise.all([headlineSlotFactory(widget)])).reduce(

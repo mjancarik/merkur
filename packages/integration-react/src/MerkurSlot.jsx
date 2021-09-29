@@ -117,7 +117,8 @@ export default class MerkurSlot extends AbstractMerkurWidget {
     return (
       <WidgetWrapper
         containerSelector={this.slot.containerSelector}
-        html={html}>
+        html={html}
+      >
         {isInitialSPARender && this._renderFallback()}
       </WidgetWrapper>
     );
