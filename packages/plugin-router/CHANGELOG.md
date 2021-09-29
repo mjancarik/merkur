@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.27.0](https://github.com/mjancarik/merkur/compare/v0.26.1...v0.27.0) (2021-09-29)
+
+
+### Features
+
+* 🎸 Added direct entry points for RouterEvents export ([#107](https://github.com/mjancarik/merkur/issues/107)) ([9d10d46](https://github.com/mjancarik/merkur/commit/9d10d463c40d00a62dc25cb182aa3dc874be05df))
+
+
+
+
+
 # [0.26.0](https://github.com/mjancarik/merkur/compare/v0.25.0...v0.26.0) (2021-08-27)
 
 
