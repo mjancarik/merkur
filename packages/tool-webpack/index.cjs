@@ -89,7 +89,7 @@ function getPlugins({ plugins, isProduction }) {
 }
 
 function createConfig(config, context) {
-  const { isServer, isProduction, nodeModulesDir, cwd, publicPath } = context;
+  const { isServer, isProduction, nodeModulesDir, publicPath } = context;
 
   return {
     name: isServer ? 'node' : 'web',
