@@ -8,6 +8,11 @@ import {
 import UniversalRouter from 'universal-router';
 import generateUrls from 'universal-router/generateUrls';
 
+import RouterEvents from './RouterEvents';
+
+// Re-export for easier named import
+export * from './RouterEvents';
+
 const DEV = 'development';
 const ENV =
   typeof process !== 'undefined' && process && process.env
@@ -18,10 +23,6 @@ export function createRouter(widget, routes, options) {
   widget.$dependencies.router = new UniversalRouter(routes, options);
   widget.$dependencies.link = generateUrls(widget.$dependencies.router);
 }
-
-export const ROUTER_EVENTS = {
-  REDIRECT: '@merkur/plugin-router.redirect',
-};
 
 export function routerPlugin() {
   return {
@@ -78,7 +79,7 @@ function routerAPI() {
   return {
     router: {
       redirect(widget, url, data = {}) {
-        widget.emit(ROUTER_EVENTS.REDIRECT, { url, ...data });
+        widget.emit(RouterEvents.REDIRECT, { url, ...data });
       },
       link(widget, routeName, data = {}) {
         return widget.$dependencies.link(routeName, data);
