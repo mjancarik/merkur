@@ -141,7 +141,8 @@ function createRollupES5Config() {
 
   config.output = [
     {
-      file: `./lib/index.es5.js`,
+      dir: './lib',
+      entryFileNames: '[name].es5.js',
       format: 'cjs',
       exports: 'named',
       plugins: [getBabelOutputPlugin(babelES5BaseConfig), terser()],
@@ -179,7 +180,8 @@ function createRollupUMDConfig() {
 
   config.output = [
     {
-      file: `./lib/index.umd.js`,
+      dir: './lib',
+      entryFileNames: '[name].umd.js',
       format: 'esm',
       plugins: [],
     },
