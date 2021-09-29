@@ -1,4 +1,5 @@
 import { useContext } from 'preact/hooks';
+
 import WidgetContext from './WidgetContext';
 
 export default function Counter({ counter }) {

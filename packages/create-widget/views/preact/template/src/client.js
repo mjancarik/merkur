@@ -1,10 +1,13 @@
 import { render, hydrate } from 'preact';
 import { unmountComponentAtNode } from 'preact/compat';
+
 import { createMerkurWidget, createMerkur } from '@merkur/core';
+
+import { mapViews } from './lib/utils';
 import { viewFactory } from './views/View.jsx';
 import widgetProperties from './widget';
-import { mapViews } from './lib/utils';
-import style from './style.css'; // eslint-disable-line no-unused-vars
+
+import './style.css';
 
 function createWidget(widgetParams) {
   return createMerkurWidget({

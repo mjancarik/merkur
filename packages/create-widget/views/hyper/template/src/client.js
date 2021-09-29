@@ -1,9 +1,12 @@
 import hyper from 'hyperhtml';
+
 import { createMerkurWidget, createMerkur } from '@merkur/core';
+
+import { mapViews } from './lib/utils';
 import { viewFactory } from './views/View';
 import widgetProperties from './widget';
-import { mapViews } from './lib/utils';
-import style from './style.css'; // eslint-disable-line no-unused-vars
+
+import './style.css';
 
 function createWidget(widgetParams) {
   return createMerkurWidget({

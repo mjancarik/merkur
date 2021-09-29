@@ -1,7 +1,7 @@
-import WidgetContext from '../components/WidgetContext';
 import Counter from '../components/Counter';
-import ErrorView from './ErrorView';
+import WidgetContext from '../components/WidgetContext';
 import { headlineSlotFactory } from '../slots/HeadlineSlot';
+import ErrorView from './ErrorView';
 
 async function viewFactory(widget) {
   const slot = (await Promise.all([headlineSlotFactory(widget)])).reduce(
@@ -26,8 +26,8 @@ function View(widget) {
 
   return (
     <WidgetContext.Provider value={widget}>
-      <div className="merkur__page">
-        <div className="merkur__view">
+      <div className='merkur__page'>
+        <div className='merkur__view'>
           <Counter counter={widget.state.counter} />
         </div>
       </div>

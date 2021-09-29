@@ -1,16 +1,24 @@
 const path = require('path');
 
-const express = require('express');
 const compression = require('compression');
-const morgan = require('morgan');
-const helmet = require('helmet');
 const cors = require('cors');
+const express = require('express');
 const expressStaticGzip = require('express-static-gzip');
+const helmet = require('helmet');
+const morgan = require('morgan');
 
 const {
   apiErrorMiddleware,
   logErrorMiddleware,
 } = require('@merkur/plugin-error/server');
+
+const errorRouteFactory = require('./routes/error');
+const playgroundRouteFactory = require('./routes/playground');
+const widgetAPIRouteFactory = require('./routes/widgetAPI');
+
+const error = errorRouteFactory();
+const playground = playgroundRouteFactory();
+const widgetAPI = widgetAPIRouteFactory();
 
 const expressStaticConfig = {
   enableBrotli: true,
@@ -21,15 +29,6 @@ const expressStaticConfig = {
 
 const app = express();
 app.set('view engine', 'ejs');
-
-const playgroundRouteFactory = require('./routes/playground');
-const playground = playgroundRouteFactory();
-
-const errorRouteFactory = require('./routes/error');
-const error = errorRouteFactory();
-
-const widgetAPIRouteFactory = require('./routes/widgetAPI');
-const widgetAPI = widgetAPIRouteFactory();
 
 app
   .use(morgan('dev'))

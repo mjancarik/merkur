@@ -325,7 +325,7 @@ export default class MerkurWidget extends AbstractMerkurWidget {
       .map((asset, key) => {
         switch (asset.type) {
           case 'stylesheet':
-            return <link rel="stylesheet" href={asset.source} key={key} />;
+            return <link rel='stylesheet' href={asset.source} key={key} />;
 
           case 'inlineStyle':
             return (

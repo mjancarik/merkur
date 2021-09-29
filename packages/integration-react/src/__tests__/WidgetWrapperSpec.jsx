@@ -37,8 +37,9 @@ describe('WidgetWrapperComponent', () => {
     expect(
       shallow(
         <WidgetWrapper
-          containerSelector=".container"
-          html={'<div><h1>Hello world</h1></div>'}>
+          containerSelector='.container'
+          html={'<div><h1>Hello world</h1></div>'}
+        >
           <span>Fallback</span>
         </WidgetWrapper>
       )
@@ -57,7 +58,7 @@ describe('WidgetWrapperComponent', () => {
   it('should render with children', () => {
     expect(
       shallow(
-        <WidgetWrapper containerSelector="#container" html={''}>
+        <WidgetWrapper containerSelector='#container' html={''}>
           <span>Fallback</span>
         </WidgetWrapper>
       )
@@ -75,7 +76,7 @@ describe('WidgetWrapperComponent', () => {
   it('should process complex selector correctly', () => {
     expect(
       shallow(
-        <WidgetWrapper containerSelector="#main:first-child > div > div & pre .container">
+        <WidgetWrapper containerSelector='#main:first-child > div > div & pre .container'>
           <span>Fallback</span>
         </WidgetWrapper>
       )

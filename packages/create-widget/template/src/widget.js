@@ -1,6 +1,7 @@
 import { componentPlugin } from '@merkur/plugin-component';
-import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 import { errorPlugin } from '@merkur/plugin-error';
+import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
+
 import pkg from '../package.json';
 
 export default {
