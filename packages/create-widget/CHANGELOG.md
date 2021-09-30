@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.2](https://github.com/mjancarik/merkur/compare/v0.27.1...v0.27.2) (2021-09-30)
+
+
+### Bug Fixes
+
+* 🐛 ES5 Polyfill definition fix ([#110](https://github.com/mjancarik/merkur/issues/110)) ([485e3f7](https://github.com/mjancarik/merkur/commit/485e3f7fe1f969b727912577d7c538a43136f860))
+
+
+
+
+
 ## [0.27.1](https://github.com/mjancarik/merkur/compare/v0.27.0...v0.27.1) (2021-09-30)
 
 **Note:** Version bump only for package @merkur/create-widget
