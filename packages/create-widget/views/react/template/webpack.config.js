@@ -12,7 +12,7 @@ const {
 function applyBabelLoader(config, { isProduction, environment, cache }) {
   config.module.rules.push({
     test: /\.(js|ts|tsx|mjs|jsx)$/,
-    exclude: /node_modules\/(?!(abort-controller)\/).*/,
+    exclude: /node_modules|node_modules\/abort-controller/,
     use: {
       loader: 'babel-loader',
       options: {

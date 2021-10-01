@@ -123,7 +123,7 @@ function createESTransformation(
   if (babelLoaders.length === 0) {
     config.module.rules.push({
       test: /\.(js|ts|tsx|mjs|jsx)$/,
-      exclude: /node_modules\/(?!(abort-controller)\/).*/,
+      exclude: /node_modules|node_modules\/abort-controller/,
       use: {
         loader: require.resolve('babel-loader'),
         options: {
