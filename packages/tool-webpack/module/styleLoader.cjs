@@ -2,7 +2,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 function getStyleLoaders({ isServer, isProduction }, useLess) {
-  let importLoaders = isServer;
+  let importLoaders = isServer ? 0 : 1;
 
   if (useLess) {
     importLoaders += 1;
