@@ -82,7 +82,7 @@ The server folder contains assets, predefined config per environment, routes and
 
 ### server/config
 
-Merkur use [config](https://www.npmjs.com/package/config) module for hierarchical configurations for your widget.
+Merkur uses [config](https://www.npmjs.com/package/config) module for hierarchical configurations for your widget.
 
 ### server/router
 

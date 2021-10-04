@@ -2,7 +2,7 @@ const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 function getStyleLoaders({ isServer, isProduction }, useLess) {
-  let importLoaders = isServer;
+  let importLoaders = isServer ? 0 : 1;
 
   if (useLess) {
     importLoaders += 1;
@@ -29,6 +29,7 @@ function getStyleLoaders({ isServer, isProduction }, useLess) {
     !isServer && {
       loader: require.resolve('postcss-loader'),
       options: {
+        implementation: require('postcss'),
         postcssOptions: {
           plugins: [
             'postcss-flexbugs-fixes',
@@ -40,7 +41,7 @@ function getStyleLoaders({ isServer, isProduction }, useLess) {
                 },
                 stage: 3,
                 features: {
-                  'custom-properties': false,
+                  'custom-properties': true,
                 },
               },
             ],
