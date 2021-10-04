@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.3](https://github.com/mjancarik/merkur/compare/v0.27.2...v0.27.3) (2021-10-04)
+
+
+### Bug Fixes
+
+* 🐛 Windows babel es5 build issue with exclude pattern ([#113](https://github.com/mjancarik/merkur/issues/113)) ([26387ea](https://github.com/mjancarik/merkur/commit/26387ea01d840d5d6f55d4748d34c87c7f3f5f10))
+* build widget before running tests ([5de74c7](https://github.com/mjancarik/merkur/commit/5de74c77bb333bfc6cbf41c92502590402b7fd17))
+
+
+
+
+
 ## [0.27.2](https://github.com/mjancarik/merkur/compare/v0.27.1...v0.27.2) (2021-09-30)
 
 
