@@ -29,6 +29,7 @@ function getStyleLoaders({ isServer, isProduction }, useLess) {
     !isServer && {
       loader: require.resolve('postcss-loader'),
       options: {
+        implementation: require('postcss'),
         postcssOptions: {
           plugins: [
             'postcss-flexbugs-fixes',
