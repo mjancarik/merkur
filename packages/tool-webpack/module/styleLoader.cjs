@@ -41,7 +41,7 @@ function getStyleLoaders({ isServer, isProduction }, useLess) {
                 },
                 stage: 3,
                 features: {
-                  'custom-properties': false,
+                  'custom-properties': true,
                 },
               },
             ],
