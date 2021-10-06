@@ -83,7 +83,13 @@ After we receive response body, we first create the widget container.
 ```
 
 After that we must download widget assets, insert widget container into DOM and revive our widget.
-For downloading assets we can use the `loadAssets` method from `@merkur/integration` module. Assets can have custom attributes defined in `attr` object. The only default attribute is `defer` and you can override it by setting it as a custom attribute with value `false`. Assets may contain also a test expression. If test expression evaluates to `false` the asset will be loaded. A full example of a Merkur widget integration into an SPA application:
+For downloading assets we can use the `loadAssets` method from `@merkur/integration` module. 
+
+```bash
+npm i @merkur/integration core-js --save
+```
+
+Assets can have custom attributes defined in `attr` object. The only default attribute is `defer` and you can override it by setting it as a custom attribute with value `false`. Assets may contain also a test expression. If test expression evaluates to `false` the asset will be loaded. A full example of a Merkur widget integration into an SPA application:
 
 ```javascript
 import { loadAssets } from '@merkur/integration';
@@ -216,6 +222,10 @@ The last step is to hydrate the widget in your app after the page is loaded:
 ## Integration with React
 
 For easy integration with React library we created the `@merkur/integration-react` module. The module is designed for both client-side and server-side use.
+
+```bash
+npm i @merkur/integration-react core-js --save
+```
 
 You can use your own application stack to make the API call for `widgetProperties`. You then pass `widgetProperties` from the API call result to `MerkurWidget`. The component then automatically generates `div` container with appropriate selector (currently onl `id` and `className` are supported), based on the one defined in widget properties and takes care of all the hard work for you.
 
