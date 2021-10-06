@@ -158,12 +158,15 @@ export function transformBody() {
       return [request, newResponse];
     },
     async transformRequest(widget, request, response) {
+      const { body, headers, method } = request;
+
       if (
-        request.body &&
-        request.headers['Content-Type'] === 'application/json' &&
-        !['GET', 'HEAD'].includes(request.method)
+        body &&
+        (headers['Content-Type'] || headers['content-type']) ===
+          'application/json' &&
+        !['GET', 'HEAD'].includes(method)
       ) {
-        let newRequest = { ...request, body: JSON.stringify(request.body) };
+        let newRequest = { ...request, body: JSON.stringify(body) };
 
         return [newRequest, response];
       }

@@ -223,6 +223,19 @@ describe('createWidget method with http client plugin', () => {
       expect(request.body).toMatchInlineSnapshot(`"{\\"a\\":\\"b\\"}"`);
     });
 
+    it('should send body with lowercase header content-type', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path?c=d',
+        body: { a: 'b' },
+        headers: {
+          'content-type': 'application/json',
+        },
+      });
+
+      expect(request.body).toMatchInlineSnapshot(`"{\\"a\\":\\"b\\"}"`);
+    });
+
     it('should timeout request which exceed predefined timeout limit', async () => {
       widget.$dependencies.fetch = jest.fn((url, request) => {
         return new Promise((resolve, reject) => {
