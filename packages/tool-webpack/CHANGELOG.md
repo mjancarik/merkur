@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.4](https://github.com/mjancarik/merkur/compare/v0.27.3...v0.27.4) (2021-10-06)
+
+
+### Features
+
+* 🎸 Allow CssMinimizerPlugin options override ([#114](https://github.com/mjancarik/merkur/issues/114)) ([c02dd0b](https://github.com/mjancarik/merkur/commit/c02dd0bf06a44bbf45880c9b1932a33e287f35ce))
+
+
+
+
+
 ## [0.27.3](https://github.com/mjancarik/merkur/compare/v0.27.2...v0.27.3) (2021-10-04)
 
 
