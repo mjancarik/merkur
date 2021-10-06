@@ -81,7 +81,7 @@ function applyStyleLoaders(config, context) {
 
   config.optimization = {
     ...config.optimization,
-    minimizer: ['...', new CssMinimizerPlugin()],
+    minimizer: ['...', new CssMinimizerPlugin(plugins.CssMinimizerPlugin)],
   };
 
   config.plugins.push(
