@@ -16,12 +16,44 @@ function memo(fn, options = { generateKey: () => {} }) {
   };
 }
 
+async function processAssetInFolder({
+  asset,
+  folder,
+  fileName,
+  staticFolder,
+  staticBaseUrl,
+}) {
+  if (!asset.name || !fileName || typeof asset.source === 'string') {
+    return asset;
+  }
+
+  if (asset.type.includes('inline')) {
+    asset.source = await fsp.readFile(
+      path.join(staticFolder, folder, fileName),
+      { encoding: 'utf-8' }
+    );
+
+    return asset;
+  }
+
+  if (asset.type === 'stylesheet') {
+    asset.source = `${staticBaseUrl}/${folder}/${fileName}`;
+
+    return asset;
+  }
+
+  asset.source = asset.source || {};
+  asset.source[folder] = `${staticBaseUrl}/${folder}/${fileName}`;
+
+  return asset;
+}
+
 async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
   if (staticBaseUrl.endsWith('/')) {
     staticBaseUrl = staticBaseUrl.slice(0, -1);
   }
 
-  return folders.reduce(async (assets, folder) => {
+  const processedAssets = await folders.reduce(async (assets, folder) => {
     assets = await assets;
     const folderPath = path.join(staticFolder, folder);
 
@@ -32,39 +64,28 @@ async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
     const manifest = JSON.parse(manifestFile);
 
     return Promise.all(
-      assets.map(async (asset) => {
-        if (
-          !asset.name ||
-          !manifest[asset.name] ||
-          typeof asset.source === 'string'
-        ) {
-          return asset;
-        }
-
-        if (asset.type.includes('inline')) {
-          asset.source = await fsp.readFile(
-            path.join(folderPath, manifest[asset.name]),
-            { encoding: 'utf-8' }
-          );
-
-          return asset;
-        }
-
-        if (asset.type === 'stylesheet') {
-          asset.source = `${staticBaseUrl}/${folder}/${manifest[asset.name]}`;
-
-          return asset;
-        }
-
-        asset.source = asset.source || {};
-        asset.source[folder] = `${staticBaseUrl}/${folder}/${
-          manifest[asset.name]
-        }`;
-
-        return asset;
-      })
+      assets.map(async (asset) =>
+        processAssetInFolder({
+          asset,
+          folder,
+          fileName: manifest[asset.name],
+          staticBaseUrl,
+          staticFolder,
+        })
+      )
     );
   }, assets);
+
+  return processedAssets.filter((asset) => {
+    if (!asset.source) {
+      console.warn(
+        `Asset '${asset.name}' has been excluded because it doesn't have valid source.`
+      );
+      return false;
+    }
+
+    return true;
+  });
 }
 
 module.exports = {
