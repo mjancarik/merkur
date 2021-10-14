@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.5](https://github.com/mjancarik/merkur/compare/v0.27.4...v0.27.5) (2021-10-14)
+
+
+### Features
+
+* 🎸 allow set Content-Type header as lowercase ([98a62b6](https://github.com/mjancarik/merkur/commit/98a62b6d3347eafa19f51f1ce5a413c803e966d5))
+
+
+
+
+
 ## [0.27.1](https://github.com/mjancarik/merkur/compare/v0.27.0...v0.27.1) (2021-09-30)
 
 **Note:** Version bump only for package @merkur/plugin-http-client

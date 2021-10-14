@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.5](https://github.com/mjancarik/merkur/compare/v0.27.4...v0.27.5) (2021-10-14)
+
+
+### Bug Fixes
+
+* 🐛 exclude assets without source ([#115](https://github.com/mjancarik/merkur/issues/115)) ([1b6ba0e](https://github.com/mjancarik/merkur/commit/1b6ba0e4e0916c94c0d9295a1a3a75fa2574b7b0))
+
+
+### Features
+
+* 🎸 allow set Content-Type header as lowercase ([98a62b6](https://github.com/mjancarik/merkur/commit/98a62b6d3347eafa19f51f1ce5a413c803e966d5))
+
+
+
+
+
 ## [0.27.4](https://github.com/mjancarik/merkur/compare/v0.27.3...v0.27.4) (2021-10-06)
 
 
