@@ -36,7 +36,7 @@ import { createWidgetLoader } from '@merkur/tool-storybook';
 
 // Specific imports for your chosen view. For example Preact:
 import { forceReRender } from '@storybook/preact';
-import WidgetContext from '../src/component/WidgetContext';
+import WidgetContext from '../src/components/WidgetContext';
 
 // defined our custom widget loader
 export const loaders = [
@@ -58,19 +58,20 @@ export const decorators = [
 ];
 ```
 
-Then, we add to storybook's webpack config handling of `*.mjs` files. Fortunately, it's easy.
+Then, we add babel loader to storybook's webpack config. Fortunately, it's easy.
 
 ```javascript
 // ./storybook/main.js
+
+// ./storybook/main.js
+const { pipe } = require('@merkur/tool-webpack');
+const { applyBabelLoader } = require('../webpack.config.js');
+
 module.exports = {
   .
   .
   webpackFinal: async (config) => {
-    config.module.rules.push({
-      test: /\.mjs$/,
-      include: /node_modules/,
-      type: "javascript/auto"
-    });
+    config = await = pipe(() => config, applyBabelLoader)();
 
     return config;
   },
@@ -106,7 +107,6 @@ export default function Counter({ counter }) {
 }
 
 // /src/component/Counter.stories.jsx
-/** @jsx h */
 import Counter from './Counter';
 
 export default {

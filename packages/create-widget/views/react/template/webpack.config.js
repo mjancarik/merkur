@@ -62,3 +62,5 @@ module.exports = createLiveReloadServer().then(() =>
     pipe(createNodeConfig, applyStyleLoaders, applyBabelLoader)(),
   ])
 );
+
+module.exports.applyBabelLoader = applyBabelLoader;
