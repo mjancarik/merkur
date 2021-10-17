@@ -16,9 +16,19 @@ process.on('unhandledRejection', (error) => {
 });
 
 if (!serverConfig.clusters || !cluster.isMaster) {
-  app.listen(config.get('server.port'), () => {
+  const server = app.listen(config.get('server.port'), () => {
     console.log(`listen on localhost:${config.get('server.port')}`); // eslint-disable-line no-console
   });
+
+  const handleExit = () => {
+    server.close(() => {
+      process.exit(0);
+    });
+  };
+
+  process.on('SIGINT', handleExit);
+  process.on('SIGQUIT', handleExit);
+  process.on('SIGTERM', handleExit);
 } else {
   let cpuCount = serverConfig.clusters || os.cpus().length;
 
