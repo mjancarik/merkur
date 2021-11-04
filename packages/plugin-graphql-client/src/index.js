@@ -1,6 +1,6 @@
 import { bindWidgetToFunctions } from '@merkur/core';
 
-import { print, visit } from 'graphql';
+import { print, visit, stripIgnoredCharacters } from 'graphql';
 
 const TYPENAME_FIELD = {
   kind: 'Field',
@@ -9,6 +9,12 @@ const TYPENAME_FIELD = {
     value: '__typename',
   },
 };
+
+const DEV = 'development';
+const ENV =
+  typeof process !== 'undefined' && process && process.env
+    ? process.env.NODE_ENV
+    : DEV;
 
 export function setEndpointUrl(widget, url) {
   widget.$in.graphqlClient.endpointUrl = url;
@@ -21,11 +27,6 @@ export function setEntityClasses(widget, entityClasses) {
 export function graphqlClientPlugin() {
   return {
     async setup(widget) {
-      if (!widget.http || typeof widget.http.request !== 'function') {
-        throw new Error(
-          '@merkur/plugin-graphql-client requires that @merkur/plugin-http-client to be set up.'
-        );
-      }
       widget = {
         ...graphqlClientAPI(),
         ...widget,
@@ -35,6 +36,15 @@ export function graphqlClientPlugin() {
         endpointUrl: '',
         entityClasses: {},
       };
+
+      return widget;
+    },
+    async create(widget) {
+      if (ENV === DEV && !widget.$in.httpClient) {
+        throw new Error(
+          'You must install missing plugin: npm i @merkur/plugin-http-client'
+        );
+      }
 
       bindWidgetToFunctions(widget, widget.graphql);
 
@@ -50,6 +60,8 @@ function graphqlClientAPI() {
         const { endpointUrl, entityClasses } = widget.$in.graphqlClient;
         const { headers = {}, body = {}, ...restOptions } = options;
 
+        operation = addTypenameToSelections(operation);
+
         const { response } = await widget.http.request({
           url: endpointUrl,
           method: 'POST',
@@ -58,7 +70,7 @@ function graphqlClientAPI() {
             ...headers,
           },
           body: {
-            query: print(addTypenameToSelections(operation)),
+            query: stripIgnoredCharacters(print(operation)),
             variables,
             ...body,
           },

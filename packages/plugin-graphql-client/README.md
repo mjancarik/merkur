@@ -1,4 +1,4 @@
-# Merkur - plugin-http-client
+# Merkur - plugin-graphql-client
 
 [![Build Status](https://github.com/mjancarik/merkur/workflows/CI/badge.svg)](https://travis-ci.com/mjancarik/merkur)
 [![NPM package version](https://img.shields.io/npm/v/@merkur/plugin-http-client/latest.svg)](https://www.npmjs.com/package/@merkur/plugin-http-client)
