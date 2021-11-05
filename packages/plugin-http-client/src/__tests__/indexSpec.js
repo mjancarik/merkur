@@ -119,6 +119,7 @@ describe('createWidget method with http client plugin', () => {
         },
         "$plugins": Array [
           Object {
+            "create": [Function],
             "setup": [Function],
           },
         ],
