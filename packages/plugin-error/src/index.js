@@ -1,4 +1,5 @@
 import { hookMethod } from '@merkur/core';
+export { default as GenericError } from './GenericError';
 
 const DEV = 'development';
 const ENV =
