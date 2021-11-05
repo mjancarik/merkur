@@ -1,0 +1,60 @@
+{
+  "name": "@merkur/plugin-http-cache",
+  "version": "0.27.5",
+  "description": "Merkur plugin for maintaining http requests cache.",
+  "main": "lib/index",
+  "module": "lib/index",
+  "unpkg": "lib/index.umd.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs"
+    },
+    "./lib/index.es9.mjs": "./lib/index.es9.mjs",
+    "./lib/index.es9.cjs": "./lib/index.es9.cjs"
+  },
+  "browser": {
+    "./lib/index.js": "./lib/index.es5.js",
+    "./lib/index.cjs": "./lib/index.es5.js",
+    "./lib/index.mjs": "./lib/index.mjs",
+    "./lib/index.es9.mjs": "./lib/index.es9.mjs"
+  },
+  "scripts": {
+    "preversion": "npm test",
+    "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check --module es11 ./lib/index.mjs  && ../../node_modules/.bin/es-check --module es9 ./lib/index.es9.mjs && ../../node_modules/.bin/es-check --module es9 ./lib/index.es9.cjs",
+    "build": "node_modules/.bin/rollup -c",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "merkur",
+    "plugin",
+    "microservices",
+    "microfrontends"
+  ],
+  "author": "Vojtěch Šimko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "devDependencies": {
+    "@merkur/core": "^0.27.1",
+    "@merkur/plugin-http-client": "^0.27.5",
+    "rollup": "^2.56.2"
+  },
+  "peerDependencies": {
+    "@merkur/core": "^0.24.1",
+    "@merkur/plugin-http-client": "^0.27.5"
+  },
+  "dependencies": {}
+}
