@@ -2,6 +2,9 @@ import { bindWidgetToFunctions } from '@merkur/core';
 
 import { print, visit, stripIgnoredCharacters } from 'graphql';
 
+import GraphQLError from './error/GraphQLError';
+import UnauthorizedError from './error/UnauthorizedError';
+
 const TYPENAME_FIELD = {
   kind: 'Field',
   name: {
@@ -16,15 +19,15 @@ const ENV =
     ? process.env.NODE_ENV
     : DEV;
 
-export function setEndpointUrl(widget, url) {
+function setEndpointUrl(widget, url) {
   widget.$in.graphqlClient.endpointUrl = url;
 }
 
-export function setEntityClasses(widget, entityClasses) {
+function setEntityClasses(widget, entityClasses) {
   widget.$in.graphqlClient.entityClasses = buildTypeToEntityMap(entityClasses);
 }
 
-export function graphqlClientPlugin() {
+function graphqlClientPlugin() {
   return {
     async setup(widget) {
       widget = {
@@ -79,7 +82,18 @@ function graphqlClientAPI() {
 
         const { errors, data = {} } = response.body;
         if (errors) {
-          throw new Error(`GraphQL Error`, { errors, data });
+          if (
+            Array.isArray(errors) &&
+            errors.some((error) => error.status === 'unauthorized')
+          ) {
+            return Promise.reject(
+              new UnauthorizedError(`Unauthorized Error`, { errors, data })
+            );
+          }
+
+          return Promise.reject(
+            new GraphQLError(`Api Error`, { errors, data })
+          );
         }
 
         return processResponseData(data, entityClasses);
@@ -174,3 +188,11 @@ function addTypenameToSelections(document) {
     },
   });
 }
+
+export {
+  graphqlClientPlugin,
+  setEndpointUrl,
+  setEntityClasses,
+  GraphQLError,
+  UnauthorizedError,
+};
