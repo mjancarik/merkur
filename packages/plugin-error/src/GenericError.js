@@ -1,4 +1,6 @@
-export default class GenericError extends Error {
+import ExtensibleError from './ExtensibleError';
+
+export default class GenericError extends ExtensibleError {
   constructor(message, params) {
     super(message);
     const { status = 404, ...otherParams } = params;
