@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.27.6](https://github.com/mjancarik/merkur/compare/v0.27.5...v0.27.6) (2021-11-22)
+
+
+### Bug Fixes
+
+* 🐛 storybook integration for react and preact ([757ff64](https://github.com/mjancarik/merkur/commit/757ff64385687f4d73a3ee793549eeb785486e86))
+
+
+### Features
+
+* 🎸 close server properly ([5e40a09](https://github.com/mjancarik/merkur/commit/5e40a09392468db640b5e734d2e1de489af57a34))
+
+
+
+
+
 ## [0.27.5](https://github.com/mjancarik/merkur/compare/v0.27.4...v0.27.5) (2021-10-14)
 
 **Note:** Version bump only for package @merkur/create-widget
