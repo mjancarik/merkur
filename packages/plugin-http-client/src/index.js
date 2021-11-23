@@ -1,6 +1,6 @@
 import { bindWidgetToFunctions } from '@merkur/core';
 
-import fetch, { Response } from 'node-fetch';
+import fetch from 'node-fetch';
 import AbortController from 'abort-controller';
 
 export function setDefaultConfig(widget, newDefaultConfig) {
@@ -146,7 +146,7 @@ export function transformBody() {
       const contentType = response.headers.get('content-type');
       let body = null;
 
-      if (response.status !== 204 && response instanceof Response) {
+      if (response.status !== 204 && typeof response.json === 'function') {
         if (contentType && contentType.includes('application/json')) {
           body = await response.json();
         } else {
