@@ -53,6 +53,7 @@
   "devDependencies": {
     "@merkur/core": "^0.27.1",
     "rollup": "^2.56.2",
+    "@merkur/plugin-component": "^0.27.1",
     "@merkur/plugin-http-client": "^0.27.6",
     "@merkur/plugin-error": "^0.27.6"
   },
