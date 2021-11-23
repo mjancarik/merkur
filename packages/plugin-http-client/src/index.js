@@ -144,18 +144,20 @@ export function transformBody() {
       const contentType = response.headers.get('content-type');
       let body = null;
 
-      if (response.status !== 204) {
+      if (response.status !== 204 && response instanceof Response) {
         if (contentType && contentType.includes('application/json')) {
           body = await response.json();
         } else {
           body = await response.text();
         }
+
+        let newResponse = copyResponse(response);
+        newResponse.body = body;
+
+        return [request, newResponse];
       }
 
-      let newResponse = copyResponse(response);
-      newResponse.body = body;
-
-      return [request, newResponse];
+      return [request, response];
     },
     async transformRequest(widget, request, response) {
       const { body, headers, method } = request;
