@@ -20,7 +20,7 @@
     "@merkur/core": "0.27.1",
     "@merkur/integration": "0.27.5",
     "@merkur/plugin-component": "0.27.1",
-    "@merkur/plugin-error": "0.27.1",
+    "@merkur/plugin-error": "0.27.6",
     "@merkur/plugin-event-emitter": "0.27.1",
     "compression": "^1.7.4",
     "config": "^3.3.6",

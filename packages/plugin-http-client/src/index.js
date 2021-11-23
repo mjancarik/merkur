@@ -38,8 +38,10 @@ export function httpClientPlugin() {
       widget.$dependencies.fetch = getFetchAPI();
       widget.$dependencies.AbortController = AbortController;
 
+      return widget;
+    },
+    async create(widget) {
       bindWidgetToFunctions(widget, widget.http);
-
       return widget;
     },
   };
