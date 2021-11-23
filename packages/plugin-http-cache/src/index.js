@@ -81,8 +81,8 @@ export function cacheOutTransformer() {
       if (request.useCache) {
         const cacheEntry = widget.httpCache.get(getCacheKey(request));
 
-        if (cacheEntry && !cacheEntry.isExpired()) {
-          return [request, { ...cacheEntry.value, cached: true }];
+        if (cacheEntry) {
+          return [request, { ...cacheEntry, cached: true }];
         }
       }
 
