@@ -47,10 +47,8 @@ export function httpCachePlugin() {
       if (widget.$httpCache) {
         widget.httpCache.deserialize(widget.$httpCache);
       }
-      const { transformers } = widget.$in.httpClient.defaultConfig;
 
       setDefaultConfig(widget, {
-        transformers: [...transformers, cacheTransformer()],
         useCache: true,
         ttl: 60000,
       });
@@ -62,7 +60,22 @@ export function httpCachePlugin() {
   };
 }
 
-export function cacheTransformer() {
+export function cacheInTransformer() {
+  return {
+    async transformResponse(widget, request, response) {
+      if (request.useCache && !response.cached) {
+        const { cache } = widget.$in.httpClient;
+        const cacheEntry = new CacheEntry(copyResponse(response), request.ttl);
+
+        cache.set(getCacheKey(request), cacheEntry);
+      }
+
+      return [request, response];
+    },
+  };
+}
+
+export function cacheOutTransformer() {
   return {
     async transformRequest(widget, request, response) {
       if (request.useCache) {
@@ -71,16 +84,6 @@ export function cacheTransformer() {
         if (cacheEntry && !cacheEntry.isExpired()) {
           return [request, { ...cacheEntry.value, cached: true }];
         }
-      }
-
-      return [request, response];
-    },
-    async transformResponse(widget, request, response) {
-      if (request.useCache && !response.cached) {
-        const { cache } = widget.$in.httpClient;
-        const cacheEntry = new CacheEntry(copyResponse(response), request.ttl);
-
-        cache.set(getCacheKey(request), cacheEntry);
       }
 
       return [request, response];
