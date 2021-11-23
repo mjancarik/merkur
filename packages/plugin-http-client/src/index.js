@@ -1,6 +1,6 @@
 import { bindWidgetToFunctions } from '@merkur/core';
 
-import fetch from 'node-fetch';
+import fetch, { Response } from 'node-fetch';
 import AbortController from 'abort-controller';
 
 export function setDefaultConfig(widget, newDefaultConfig) {
