@@ -26,6 +26,21 @@ export const widgetProperties = {
 
 After that we have an `graphql.request` method available on the widget.
 
+We must add graphql loader `@merkur/plugin-graphql-client/loader` to webpack config. To add support for importing `.graphql/.gql` files.
+
+```javascript
+const { applyGraphqlLoader } = require('@merkur/plugin-graphql-client/loader');
+.
+.
+module.exports = createLiveReloadServer().then(() =>
+  Promise.all(
+    [
+      pipe(
+        .
+        applyGraphqlLoader
+.
+.
+```
 We can set GraphQL endpoint URL with `setEndpointUrl` method from `@merkur/plugin-graphql-client` and set default request config with `setDefaultConfig` method from `@merkur/plugin-http-client`.
 
 ```javascript
