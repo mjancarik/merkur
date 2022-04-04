@@ -143,10 +143,10 @@ export function transformQuery() {
 export function transformBody() {
   return {
     async transformResponse(widget, request, response) {
-      const contentType = response.headers.get('content-type');
-      let body = null;
-
       if (response.status !== 204 && typeof response.json === 'function') {
+        const contentType = response.headers.get('content-type');
+        let body = null;
+
         if (contentType && contentType.includes('application/json')) {
           body = await response.json();
         } else {
