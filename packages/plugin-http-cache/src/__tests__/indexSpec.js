@@ -12,6 +12,7 @@ import {
   setDefaultConfig,
   getDefaultTransformers,
 } from '@merkur/plugin-http-client';
+import clone from 'clone';
 
 describe('createWidget method with http client plugin', () => {
   let widget = null;
@@ -56,6 +57,9 @@ describe('createWidget method with http client plugin', () => {
     Response = {
       json() {
         return Promise.resolve({ message: 'text' });
+      },
+      clone() {
+        return clone(this);
       },
       ok: true,
       headers: {
@@ -199,5 +203,16 @@ describe('createWidget method with http client plugin', () => {
 
     expect(widget.$in.httpClient.cache.get).toHaveBeenCalledWith(cacheKey);
     expect(response.cached).toBeTruthy();
+  });
+
+  it('should keep same cached value when mutating response object', async () => {
+    const { request } = await widget.http.request({ path: '/path/to/url' });
+
+    const cacheKey = getCacheKey(request);
+
+    const { response } = await widget.http.request({ path: '/path/to/url' });
+
+    response.body = { data: 'change' };
+    expect(cacheMock[cacheKey]._value.body).toEqual({ message: 'text' });
   });
 });
