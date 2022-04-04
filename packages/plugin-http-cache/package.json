@@ -57,5 +57,7 @@
     "@merkur/core": "^0.27.1",
     "@merkur/plugin-http-client": "^0.27.6"
   },
-  "dependencies": {}
+  "dependencies": {
+    "clone": "^2.1.2"
+  }
 }
