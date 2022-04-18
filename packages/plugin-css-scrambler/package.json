@@ -58,7 +58,7 @@
     "rollup": "^2.56.2"
   },
   "peerDependencies": {
-    "@merkur/core": "^0.24.1",
+    "@merkur/core": "*",
     "postcss": "^8.3.6",
     "postcss-loader": "^6.1.1"
   },
