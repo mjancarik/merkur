@@ -3,7 +3,7 @@
   "version": "0.27.6",
   "description": "CLI for creating merkur widget easily.",
   "bin": {
-    "merkur-create-widget": "./bin/createWidget.js"
+    "merkur-create-widget": "./bin/createWidget.mjs"
   },
   "scripts": {
     "test": "echo 'Tests pass.'",

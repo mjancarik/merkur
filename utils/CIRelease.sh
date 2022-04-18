@@ -51,7 +51,7 @@ node utils/bumpVersion.js
 
 # Setup app from example feed
 cd "$ROOT_DIR"
-node packages/create-widget/bin/createWidget.js my-widget --view $1
+node packages/create-widget/bin/createWidget.mjs my-widget --view $1
 #npx @merkur/create-widget my-widget --view preact
 cd my-widget
 
