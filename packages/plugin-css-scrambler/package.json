@@ -55,15 +55,15 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@merkur/core": "^0.23.12",
-    "rollup": "^2.56.2"
+    "rollup": "^2.70.2"
   },
   "peerDependencies": {
     "@merkur/core": "*",
-    "postcss": "^8.3.6",
-    "postcss-loader": "^6.1.1"
+    "postcss": "^8.4.12",
+    "postcss-loader": "^6.2.1"
   },
   "dependencies": {
     "classnames": "^2.3.1",
-    "postcss-selector-parser": "^6.0.6"
+    "postcss-selector-parser": "^6.0.10"
   }
 }

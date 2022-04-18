@@ -168,7 +168,7 @@ function createWebConfig(config, context) {
     module: {
       ...baseConfig?.module,
       rules: [
-        ...baseConfig?.module?.rules,
+        ...(baseConfig?.module?.rules ?? []),
         {
           test: /\.m?js/,
           resolve: {

@@ -59,7 +59,7 @@
     "@merkur/core": "^0.27.1",
     "@merkur/plugin-component": "^0.27.1",
     "@merkur/plugin-event-emitter": "^0.27.1",
-    "rollup": "^2.56.2"
+    "rollup": "^2.70.2"
   },
   "peerDependencies": {
     "@merkur/core": "*",

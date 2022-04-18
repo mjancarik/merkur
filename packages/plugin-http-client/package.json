@@ -49,14 +49,14 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@merkur/core": "^0.27.1",
-    "rollup": "^2.56.2"
+    "rollup": "^2.70.2"
   },
   "peerDependencies": {
     "@merkur/core": "*"
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^3.2.3",
     "whatwg-fetch": "^3.6.2"
   }
 }
