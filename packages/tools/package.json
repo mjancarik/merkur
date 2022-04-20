@@ -1,6 +1,6 @@
 {
   "name": "@merkur/tools",
-  "version": "0.27.1",
+  "version": "0.28.0",
   "description": "Merkur tools.",
   "bin": {
     "merkur-tools": "./bin/merkurTools.js"
@@ -44,9 +44,9 @@
     "eslint-plugin-prettier": "4.0.0",
     "eslint-plugin-react": "7.29.4",
     "eslint-plugin-react-hooks": "^4.4.0",
+    "find-free-port": "^2.0.0",
     "jest": "27.5.1",
     "jest-watch-typeahead": "^1.0.0",
-    "find-free-port": "^2.0.0",
     "prettier": "2.6.2",
     "supertest": "6.2.2",
     "ws": "8.5.0",

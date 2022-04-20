@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.28.0](https://github.com/mjancarik/merkur/compare/v0.27.6...v0.28.0) (2022-04-20)
+
+
+### Bug Fixes
+
+* 🐛 keep assets property immutable ([2d99c83](https://github.com/mjancarik/merkur/commit/2d99c8367ef1aa7bf6b9d2d66089bcbb5322f240))
+* 🐛 peer dependencies warning and error ([228537c](https://github.com/mjancarik/merkur/commit/228537c7927a5a7ae987bb7551d35437cb4f8025))
+
+
+### Code Refactoring
+
+* 💡 move liveReloadServer to merkur/tools ([f81e0e8](https://github.com/mjancarik/merkur/commit/f81e0e89eff4a72985c89d23079be6a9344a3b2e))
+
+
+### Features
+
+* 🎸 Optional script assets ([a301b80](https://github.com/mjancarik/merkur/commit/a301b80bab640f1edc31c40882495d6a966abe53))
+
+
+### BREAKING CHANGES
+
+* 🧨 The liveReloadServer.cjs file is moved to @merkur/tools. The
+@merkur/tool-webpack re-export createLiveReloadServer for keeping
+backward compatability.
+
+
+
+
+
 ## [0.27.6](https://github.com/mjancarik/merkur/compare/v0.27.5...v0.27.6) (2021-11-22)
 
 

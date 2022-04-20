@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.28.0](https://github.com/mjancarik/merkur/compare/v0.27.6...v0.28.0) (2022-04-20)
+
+
+### Code Refactoring
+
+* 💡 move liveReloadServer to merkur/tools ([f81e0e8](https://github.com/mjancarik/merkur/commit/f81e0e89eff4a72985c89d23079be6a9344a3b2e))
+
+
+### BREAKING CHANGES
+
+* 🧨 The liveReloadServer.cjs file is moved to @merkur/tools. The
+@merkur/tool-webpack re-export createLiveReloadServer for keeping
+backward compatability.
+
+
+
+
+
 ## [0.27.1](https://github.com/mjancarik/merkur/compare/v0.27.0...v0.27.1) (2021-09-30)
 
 
