@@ -63,6 +63,14 @@ At first we must make an API call with your framework of choice. In this example
       },
     },
     {
+      "name": "optional.js",
+      "type": "script",
+      "source": {
+        "es5": "http://localhost:4444/static/es5/optional.31c5090d8c961e43fade.js"
+      },
+      "optional": true
+    },
+    {
       "name": "widget.css",
       "type": "stylesheet",
       "source": "http://localhost:4444/static/es11/widget.814e0cb568c7ddc0725d.css"
