@@ -46,6 +46,7 @@
     "eslint-plugin-react-hooks": "^4.4.0",
     "jest": "27.5.1",
     "jest-watch-typeahead": "^1.0.0",
+    "find-free-port": "^2.0.0",
     "prettier": "2.6.2",
     "supertest": "6.2.2",
     "ws": "8.5.0",
