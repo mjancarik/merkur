@@ -97,7 +97,7 @@ For downloading assets we can use the `loadAssets` method from `@merkur/integrat
 npm i @merkur/integration core-js --save
 ```
 
-Assets can have custom attributes defined in `attr` object. The only default attribute is `defer` and you can override it by setting it as a custom attribute with value `false`. Assets may contain also a test expression. If test expression evaluates to `false` the asset will be loaded. A full example of a Merkur widget integration into an SPA application:
+Assets can have custom attributes defined in `attr` object. The only default attribute is `defer` and you can override it by setting it as a custom attribute with value `false`. Assets may contain also a test expression. If test expression evaluates to `false` the asset will be loaded. Scripts, that are not crucial for application can be flagged as `optional`. Optional scripts wont cause error and fallback render. A full example of a Merkur widget integration into an SPA application:
 
 ```javascript
 import { loadAssets } from '@merkur/integration';
