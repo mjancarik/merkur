@@ -25,6 +25,12 @@ describe('Merkur component', () => {
     }
   };
 
+  const rejectFakeAssets = () => {
+    for (const fakeAsset of fakeAssetObjects) {
+      fakeAsset.onerror();
+    }
+  };
+
   beforeEach(() => {
     assets = [
       {
@@ -180,6 +186,59 @@ describe('Merkur component', () => {
         .catch(done);
 
       resolveFakeAssets();
+    });
+
+    it('should return promise that rejects after script fails to load', (done) => {
+      loadScriptAssets(
+        [
+          {
+            name: 'test.js',
+            type: 'script',
+            source: {
+              es5: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
+            },
+          },
+        ],
+        rootElement
+      )
+        .then(() => {
+          done('promise was resolved');
+        })
+        .catch(() => {
+          expect(document.createElement).toHaveBeenCalledTimes(1);
+          expect(rootElement.appendChild).toHaveBeenCalledTimes(1);
+
+          done();
+        });
+
+      rejectFakeAssets();
+    });
+
+    it('should return promise that resolves after script fails to load', (done) => {
+      loadScriptAssets(
+        [
+          {
+            name: 'test.js',
+            type: 'script',
+            source: {
+              es5: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
+            },
+            optional: true,
+          },
+        ],
+        rootElement
+      )
+        .then(() => {
+          expect(document.createElement).toHaveBeenCalledTimes(1);
+          expect(rootElement.appendChild).toHaveBeenCalledTimes(1);
+
+          done();
+        })
+        .catch(() => {
+          done('promise was rejected');
+        });
+
+      rejectFakeAssets();
     });
   });
 });
