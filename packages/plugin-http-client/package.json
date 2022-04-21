@@ -56,7 +56,7 @@
   },
   "dependencies": {
     "abort-controller": "^3.0.0",
-    "node-fetch": "^3.2.3",
+    "node-fetch": "^2.6.7",
     "whatwg-fetch": "^3.6.2"
   }
 }
