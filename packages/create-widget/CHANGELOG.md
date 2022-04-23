@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.28.2](https://github.com/mjancarik/merkur/compare/v0.28.1...v0.28.2) (2022-04-23)
+
+
+### Bug Fixes
+
+* 🐛 CSP for resource integrating to host app ([f88a8cc](https://github.com/mjancarik/merkur/commit/f88a8cceab50aa78405a1e1040016bb95da5c394))
+
+
+
+
+
 ## [0.28.1](https://github.com/mjancarik/merkur/compare/v0.28.0...v0.28.1) (2022-04-21)
 
 
