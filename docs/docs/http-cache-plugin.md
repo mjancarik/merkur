@@ -36,7 +36,7 @@ import {
   cacheOutTransformer,
 } from '@merkur/plugin-http-cache';
 ```
-Override default request config with `setDefaultConfig` method from `@merkur/plugin-http-client` and add transformers.
+Override default request config with `setDefaultConfig` method from `@merkur/plugin-http-client`. Add `cacheInTransformer` and `cacheOutTransformer` after default transformers(`getDefaultTransformers`).
 Cached is used by default, we can also override this behaviour and set `useCache` to false.
 
 ```javascript
@@ -49,7 +49,7 @@ export const widgetProperties = {
   bootstrap(widget) {
     setDefaultConfig(widget,
     {
-      transformers: [cacheInTransformer(),...getDefaultTransformers(widget), cacheOutTransformer()],
+      transformers: [...getDefaultTransformers(widget), cacheInTransformer(), cacheOutTransformer()],
       useCache: false,
       .....
 

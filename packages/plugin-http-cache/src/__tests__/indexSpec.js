@@ -12,7 +12,6 @@ import {
   setDefaultConfig,
   getDefaultTransformers,
 } from '@merkur/plugin-http-client';
-import clone from 'clone';
 
 describe('createWidget method with http client plugin', () => {
   let widget = null;
@@ -39,8 +38,8 @@ describe('createWidget method with http client plugin', () => {
     setDefaultConfig(widget, {
       baseUrl: 'http://localhost:4444',
       transformers: [
-        cacheInTransformer(widget),
         ...getDefaultTransformers(),
+        cacheInTransformer(widget),
         cacheOutTransformer(widget),
       ],
       useCache: true,
@@ -57,9 +56,6 @@ describe('createWidget method with http client plugin', () => {
     Response = {
       json() {
         return Promise.resolve({ message: 'text' });
-      },
-      clone() {
-        return clone(this);
       },
       ok: true,
       headers: {
@@ -108,9 +104,6 @@ describe('createWidget method with http client plugin', () => {
               "timeout": 15000,
               "transformers": Array [
                 Object {
-                  "transformResponse": [Function],
-                },
-                Object {
                   "transformRequest": [Function],
                   "transformResponse": [Function],
                 },
@@ -119,6 +112,9 @@ describe('createWidget method with http client plugin', () => {
                 },
                 Object {
                   "transformRequest": [Function],
+                  "transformResponse": [Function],
+                },
+                Object {
                   "transformResponse": [Function],
                 },
                 Object {
