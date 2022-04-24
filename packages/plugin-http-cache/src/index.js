@@ -1,6 +1,5 @@
 import { bindWidgetToFunctions, hookMethod } from '@merkur/core';
 import { setDefaultConfig, copyResponse } from '@merkur/plugin-http-client';
-import clone from 'clone';
 
 import CacheEntry from './CacheEntry';
 
@@ -66,13 +65,7 @@ export function cacheInTransformer() {
     async transformResponse(widget, request, response) {
       if (request.useCache && !response.cached) {
         const { cache } = widget.$in.httpClient;
-        const clonedResponse = response.clone();
-        const clonedBody = await clonedResponse.json();
-
-        const cachedResponse = copyResponse(clonedResponse);
-        cachedResponse.body = clonedBody;
-
-        const cacheEntry = new CacheEntry(cachedResponse, request.ttl);
+        const cacheEntry = new CacheEntry(copyResponse(response), request.ttl);
         cache.set(getCacheKey(request), cacheEntry);
       }
 
@@ -105,7 +98,7 @@ function httpCacheAPI() {
         const cacheEntry = cache.get(key);
 
         return cacheEntry && !cacheEntry.isExpired()
-          ? clone(cacheEntry.value)
+          ? copyResponse(cacheEntry.value)
           : null;
       },
       serialize(widget) {
