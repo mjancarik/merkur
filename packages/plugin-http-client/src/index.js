@@ -221,7 +221,7 @@ export function copyResponse(response) {
   } = response;
 
   return {
-    body,
+    body: assign({}, body),
     headers,
     ok,
     redirected,
@@ -232,4 +232,28 @@ export function copyResponse(response) {
     url,
     useFinalURL,
   };
+}
+
+function assign(target, source = {}, parentField = null) {
+  for (const field of Object.keys(source)) {
+    const value = source[field];
+    const fieldPath = parentField ? parentField + '.' + field : field;
+
+    if (value instanceof Array) {
+      target[field] = value.slice();
+    } else if (
+      value instanceof Object &&
+      !(value instanceof Function) &&
+      !(value instanceof RegExp)
+    ) {
+      if (!(target[field] instanceof Object)) {
+        target[field] = {};
+      }
+
+      assign(target[field], value, fieldPath);
+    } else {
+      target[field] = value;
+    }
+  }
+  return target;
 }
