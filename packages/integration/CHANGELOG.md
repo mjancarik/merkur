@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.28.0](https://github.com/mjancarik/merkur/compare/v0.27.6...v0.28.0) (2022-04-20)
+
+
+### Bug Fixes
+
+* 🐛 keep assets property immutable ([2d99c83](https://github.com/mjancarik/merkur/commit/2d99c8367ef1aa7bf6b9d2d66089bcbb5322f240))
+
+
+### Features
+
+* 🎸 Optional script assets ([a301b80](https://github.com/mjancarik/merkur/commit/a301b80bab640f1edc31c40882495d6a966abe53))
+
+
+
+
+
 ## [0.27.5](https://github.com/mjancarik/merkur/compare/v0.27.4...v0.27.5) (2021-10-14)
 
 

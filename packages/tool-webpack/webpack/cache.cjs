@@ -16,7 +16,7 @@ function createCacheKey(...args) {
 function createCache({ cwd, cache, environment }) {
   return {
     type: 'filesystem',
-    version: createCacheKey(environment, ...cache?.versionDependencies),
+    version: createCacheKey(environment, ...(cache?.versionDependencies ?? [])),
     buildDependencies: {
       defaultWebpack: ['webpack/lib/'],
       config: [path.resolve(cwd, 'webpack.config.js')].filter(fs.existsSync),

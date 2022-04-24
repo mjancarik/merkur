@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.28.2](https://github.com/mjancarik/merkur/compare/v0.28.1...v0.28.2) (2022-04-23)
+
+
+### Bug Fixes
+
+* 🐛 CSP for resource integrating to host app ([f88a8cc](https://github.com/mjancarik/merkur/commit/f88a8cceab50aa78405a1e1040016bb95da5c394))
+
+
+
+
+
+## [0.28.1](https://github.com/mjancarik/merkur/compare/v0.28.0...v0.28.1) (2022-04-21)
+
+
+### Bug Fixes
+
+* 🐛 donwgrade node-fetch to 2.6.7 ([fb4deb2](https://github.com/mjancarik/merkur/commit/fb4deb2e55f6c845bd394e7315e1b2a0eb5882b0))
+
+
+
+
+
+# [0.28.0](https://github.com/mjancarik/merkur/compare/v0.27.6...v0.28.0) (2022-04-20)
+
+**Note:** Version bump only for package @merkur/create-widget
+
+
+
+
+
 ## [0.27.6](https://github.com/mjancarik/merkur/compare/v0.27.5...v0.27.6) (2021-11-22)
 
 

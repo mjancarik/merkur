@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-error",
-  "version": "0.27.6",
+  "version": "0.28.0",
   "description": "Merkur plugin for error handling.",
   "main": "lib/index",
   "module": "lib/index",
@@ -26,7 +26,7 @@
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
-    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check --module es11 ./lib/index.mjs  && ../../node_modules/.bin/es-check --module es9 ./lib/index.es9.mjs && ../../node_modules/.bin/es-check --module es9 ./lib/index.es9.cjs",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check es11 ./lib/index.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.cjs --module",
     "build": "node_modules/.bin/rollup -c",
     "prepare": "npm run build"
   },
@@ -50,12 +50,12 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.27.1",
-    "@merkur/plugin-component": "^0.27.1",
-    "rollup": "^2.56.2"
+    "@merkur/core": "^0.28.0",
+    "@merkur/plugin-component": "^0.28.0",
+    "rollup": "^2.70.2"
   },
   "peerDependencies": {
-    "@merkur/core": "^0.24.1",
-    "@merkur/plugin-component": "^0.24.1"
+    "@merkur/core": "*",
+    "@merkur/plugin-component": "*"
   }
 }

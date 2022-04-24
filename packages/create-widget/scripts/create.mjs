@@ -1,11 +1,18 @@
-const execa = require('execa');
-const fs = require('fs');
-const fsx = require('fs-extra');
-const path = require('path');
-const chalk = require('chalk');
-const inquirer = require('inquirer');
-const argv = require('yargs').argv;
+import path from 'path';
+import { fileURLToPath } from 'url';
+import fs from 'fs';
+import fsx from 'fs-extra';
+import { execaSync } from 'execa';
+import chalk from 'chalk';
+import inquirer from 'inquirer';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
+
+const { argv } = yargs(hideBin(process.argv));
+
 const { info, error } = console;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const dir = argv._[0];
 
@@ -97,10 +104,10 @@ function createMerkurApp(dirName, view) {
 
   // Overwrite package.json with template
   const pkgJsonPath = path.join(appRoot, 'package.json');
-  const pkgJson = require(pkgJsonPath);
+  const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath));
 
   const packageTemplatePath = path.join(viewRoot, 'template.json');
-  const packageTemplate = require(packageTemplatePath);
+  const packageTemplate = JSON.parse(fs.readFileSync(packageTemplatePath));
 
   pkgJson.name = projName;
 
@@ -127,7 +134,7 @@ function createMerkurApp(dirName, view) {
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
 
   const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  execa.sync(npm, ['install'], {
+  execaSync(npm, ['install'], {
     stdio: 'inherit',
     cwd: appRoot,
   });

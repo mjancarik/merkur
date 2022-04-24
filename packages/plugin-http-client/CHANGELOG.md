@@ -3,6 +3,28 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.28.1](https://github.com/mjancarik/merkur/compare/v0.28.0...v0.28.1) (2022-04-21)
+
+
+### Bug Fixes
+
+* 🐛 donwgrade node-fetch to 2.6.7 ([fb4deb2](https://github.com/mjancarik/merkur/commit/fb4deb2e55f6c845bd394e7315e1b2a0eb5882b0))
+
+
+
+
+
+# [0.28.0](https://github.com/mjancarik/merkur/compare/v0.27.6...v0.28.0) (2022-04-20)
+
+
+### Bug Fixes
+
+* 🐛 peer dependencies warning and error ([228537c](https://github.com/mjancarik/merkur/commit/228537c7927a5a7ae987bb7551d35437cb4f8025))
+
+
+
+
+
 ## [0.27.6](https://github.com/mjancarik/merkur/compare/v0.27.5...v0.27.6) (2021-11-22)
 
 

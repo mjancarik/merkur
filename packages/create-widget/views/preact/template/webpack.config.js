@@ -31,7 +31,7 @@ function applyBabelLoader(config, { isProduction, environment, cache }) {
         cacheIdentifier: createCacheKey(
           environment,
           config?.name,
-          ...cache?.versionDependencies
+          ...(cache?.versionDependencies ?? [])
         ),
         cacheDirectory: true,
         cacheCompression: false,

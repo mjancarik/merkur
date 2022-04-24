@@ -35,6 +35,8 @@ app
   .use(
     helmet({
       contentSecurityPolicy: false,
+      crossOriginResourcePolicy: false,
+      crossOriginEmbedderPolicy: false,
     })
   )
   .use(cors())

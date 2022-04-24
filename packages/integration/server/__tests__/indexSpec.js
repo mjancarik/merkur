@@ -68,4 +68,30 @@ describe('createAssets method', () => {
       expect.stringContaining('polyfill.js')
     );
   });
+
+  it('should not modifi original assets', async () => {
+    await createAssets({
+      assets,
+      staticFolder,
+      staticBaseUrl,
+      folders,
+    });
+
+    expect(assets).toMatchInlineSnapshot(`
+      Array [
+        Object {
+          "name": "polyfill.js",
+          "type": "script",
+        },
+        Object {
+          "name": "widget.js",
+          "type": "script",
+        },
+        Object {
+          "name": "style.css",
+          "type": "stylesheet",
+        },
+      ]
+    `);
+  });
 });

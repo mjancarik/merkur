@@ -133,7 +133,7 @@ function createESTransformation(
           cacheIdentifier: createCacheKey(
             environment,
             config?.name,
-            ...cache?.versionDependencies
+            ...(cache?.versionDependencies ?? [])
           ),
           cacheDirectory: true,
           cacheCompression: false,
