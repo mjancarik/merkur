@@ -13,9 +13,9 @@
     },
     "./lib/index.es9.mjs": "./lib/index.es9.mjs",
     "./lib/index.es9.cjs": "./lib/index.es9.cjs",
-    "./loader": "./loader.js",
-    "./loader/": "./loader.js",
-    "./loader.js": "./loader.js"
+    "./webpack": "./webpack.js",
+    "./webpack/": "./webpack.js",
+    "./webpack.js": "./webpack.js"
   },
   "browser": {
     "./lib/index.js": "./lib/index.es5.js",

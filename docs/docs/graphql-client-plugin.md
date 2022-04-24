@@ -26,10 +26,10 @@ export const widgetProperties = {
 
 After that we have an `graphql.request` method available on the widget.
 
-We must add graphql loader `@merkur/plugin-graphql-client/loader` to webpack config. To add support for importing `.graphql/.gql` files.
+We must add graphql loader from `@merkur/plugin-graphql-client/webpack` to webpack config. To add support for importing `.graphql/.gql` files.
 
 ```javascript
-const { applyGraphqlLoader } = require('@merkur/plugin-graphql-client/loader');
+const { applyGraphqlLoader } = require('@merkur/plugin-graphql-client/webpack');
 .
 .
 module.exports = createLiveReloadServer().then(() =>
