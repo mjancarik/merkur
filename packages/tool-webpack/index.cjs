@@ -9,7 +9,9 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
 
 const { createCache, createCacheKey } = require('./webpack/cache.cjs');
-const { createLiveReloadServer } = require('./webpack/liveReloadServer.cjs');
+const {
+  createLiveReloadServer,
+} = require('@merkur/tools/liveReloadServer.cjs');
 const { applyBundleAnalyzer } = require('./module/bundleAnalyzer.cjs');
 const {
   findLoaders,
@@ -168,7 +170,7 @@ function createWebConfig(config, context) {
     module: {
       ...baseConfig?.module,
       rules: [
-        ...baseConfig?.module?.rules,
+        ...(baseConfig?.module?.rules ?? []),
         {
           test: /\.m?js/,
           resolve: {

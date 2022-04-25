@@ -7,7 +7,7 @@ function _loadScript(asset, root) {
     if (asset.type === 'script') {
       script.defer = true;
       script.onload = resolve;
-      script.onerror = reject;
+      script.onerror = asset.optional ? resolve : reject;
       script.src = asset.source;
 
       const { attr } = asset;

@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-css-scrambler",
-  "version": "0.27.1",
+  "version": "0.28.0",
   "description": "Merkur plugin for scrambling CSS classes.",
   "main": "lib/index",
   "module": "lib/index",
@@ -29,7 +29,7 @@
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
-    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check --module es11 ./lib/index.mjs  && ../../node_modules/.bin/es-check --module es9 ./lib/index.es9.mjs && ../../node_modules/.bin/es-check --module es9 ./lib/index.es9.cjs",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check es11 ./lib/index.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.cjs --module",
     "build": "node_modules/.bin/rollup -c",
     "prepare": "npm run build"
   },
@@ -55,15 +55,15 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@merkur/core": "^0.23.12",
-    "rollup": "^2.56.2"
+    "rollup": "^2.70.2"
   },
   "peerDependencies": {
-    "@merkur/core": "^0.24.1",
-    "postcss": "^8.3.6",
-    "postcss-loader": "^6.1.1"
+    "@merkur/core": "*",
+    "postcss": "^8.4.12",
+    "postcss-loader": "^6.2.1"
   },
   "dependencies": {
     "classnames": "^2.3.1",
-    "postcss-selector-parser": "^6.0.6"
+    "postcss-selector-parser": "^6.0.10"
   }
 }

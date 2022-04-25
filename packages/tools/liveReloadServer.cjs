@@ -1,5 +1,5 @@
 const fp = require('find-free-port');
-const WebSocket = require('@merkur/tools/websocket.cjs');
+const WebSocket = require('./websocket.cjs');
 
 async function createLiveReloadServer() {
   if (process.env.NODE_ENV === 'development') {

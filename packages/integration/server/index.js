@@ -53,28 +53,31 @@ async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
     staticBaseUrl = staticBaseUrl.slice(0, -1);
   }
 
-  const processedAssets = await folders.reduce(async (assets, folder) => {
-    assets = await assets;
-    const folderPath = path.join(staticFolder, folder);
+  const processedAssets = await folders.reduce(
+    async (assets, folder) => {
+      assets = await assets;
+      const folderPath = path.join(staticFolder, folder);
 
-    const manifestFile = await fsp.readFile(
-      path.join(folderPath, 'manifest.json'),
-      { encoding: 'utf-8' }
-    );
-    const manifest = JSON.parse(manifestFile);
+      const manifestFile = await fsp.readFile(
+        path.join(folderPath, 'manifest.json'),
+        { encoding: 'utf-8' }
+      );
+      const manifest = JSON.parse(manifestFile);
 
-    return Promise.all(
-      assets.map(async (asset) =>
-        processAssetInFolder({
-          asset,
-          folder,
-          fileName: manifest[asset.name],
-          staticBaseUrl,
-          staticFolder,
-        })
-      )
-    );
-  }, assets);
+      return Promise.all(
+        assets.map(async (asset) =>
+          processAssetInFolder({
+            asset: { ...asset },
+            folder,
+            fileName: manifest[asset.name],
+            staticBaseUrl,
+            staticFolder,
+          })
+        )
+      );
+    },
+    [...assets]
+  );
 
   return processedAssets.filter((asset) => {
     if (!asset.source) {

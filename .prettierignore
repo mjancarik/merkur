@@ -2,6 +2,8 @@
 /doc
 /node_modules
 /my-widget
+/esbuild-widget
+/swc-widget
 /packages/*/dist
 /packages/*/lib
 /packages/*/coverage
