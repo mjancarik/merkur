@@ -102,6 +102,7 @@ describe('createWidget method with http client plugin', () => {
               "method": "GET",
               "query": Object {},
               "timeout": 15000,
+              "transferServerCache": false,
               "transformers": Array [
                 Object {
                   "transformRequest": [Function],

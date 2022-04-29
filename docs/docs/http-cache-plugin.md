@@ -37,7 +37,8 @@ import {
 } from '@merkur/plugin-http-cache';
 ```
 Override default request config with `setDefaultConfig` method from `@merkur/plugin-http-client`. Add `cacheInTransformer` and `cacheOutTransformer` after default transformers(`getDefaultTransformers`).
-Cached is used by default, we can also override this behaviour and set `useCache` to false.
+
+Cached is used by default, we can also override this behaviour and set `useCache` to false. If we want to re-use server cache on client, we can set the `transferServerCache` option accordingly. And of course we can set time to to live(`ttl`) for cached entries.  
 
 ```javascript
 // ./src/widget.js
@@ -50,7 +51,9 @@ export const widgetProperties = {
     setDefaultConfig(widget,
     {
       transformers: [...getDefaultTransformers(widget), cacheInTransformer(), cacheOutTransformer()],
-      useCache: false,
+      useCache: true, // true by default
+      transferServerCache: true, // false by default
+      ttl: 60000, //60000(60s) by default
       .....
 
     });

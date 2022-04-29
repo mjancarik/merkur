@@ -42,18 +42,23 @@ export function httpCachePlugin() {
       return widget;
     },
     async create(widget) {
+      const { useCache, transferServerCache, ttl } =
+        widget.$in.httpClient.defaultConfig;
+
       bindWidgetToFunctions(widget, widget.httpCache);
 
-      if (widget.$httpCache) {
-        widget.httpCache.deserialize(widget.$httpCache);
-      }
-
       setDefaultConfig(widget, {
-        useCache: true,
-        ttl: 60000,
+        useCache: useCache ?? true,
+        transferServerCache: transferServerCache ?? false,
+        ttl: ttl ?? 60000,
       });
 
-      hookMethod(widget, 'info', infoHook);
+      if (transferServerCache) {
+        hookMethod(widget, 'info', infoHook);
+        if (widget.$httpCache) {
+          widget.httpCache.deserialize(widget.$httpCache);
+        }
+      }
 
       return widget;
     },
