@@ -4,6 +4,8 @@ import {
   isFunction,
 } from './utils';
 
+import { Widget } from './types';
+
 async function callPluginMethod(widget, method, args) {
   for (const plugin of widget.$plugins) {
     if (isFunction(plugin[method])) {
@@ -14,7 +16,7 @@ async function callPluginMethod(widget, method, args) {
   return widget;
 }
 
-export async function createMerkurWidget(widgetDefinition = {}) {
+export async function createMerkurWidget(widgetDefinition = {} as any) {
   widgetDefinition = setDefaultValueForUndefined(widgetDefinition, [
     '$dependencies',
     '$external',
@@ -41,7 +43,7 @@ export async function createMerkurWidget(widgetDefinition = {}) {
     $plugins: (widgetDefinition.$plugins || []).map((pluginFactory) =>
       pluginFactory()
     ),
-  };
+  } as any;
 
   // TODO refactoring
   widget.name = widgetDefinition.name;
@@ -65,5 +67,5 @@ export async function createMerkurWidget(widgetDefinition = {}) {
   bindWidgetToFunctions(widget);
   Object.seal(widget);
 
-  return widget;
+  return widget as unknown as Widget;
 }

@@ -1,12 +1,14 @@
 import { isFunction } from './utils';
 
+import { Merkur } from './types';
+
 function register({ name, version, createWidget }) {
   const merkur = getMerkur();
 
   merkur.$in.widgetFactory[name + version] = createWidget;
 }
 
-function create(widgetProperties = {}) {
+function create(widgetProperties) {
   const merkur = getMerkur();
   const { name, version } = widgetProperties;
   const factory = merkur.$in.widgetFactory[name + version];
@@ -25,7 +27,7 @@ function create(widgetProperties = {}) {
 export function createMerkur({ $plugins = [] } = {}) {
   const merkur = getMerkur();
 
-  $plugins.forEach((plugin) => {
+  $plugins.forEach((plugin: any) => {
     if (plugin && isFunction(plugin.setup)) {
       plugin.setup(merkur);
     }
@@ -40,7 +42,7 @@ export function removeMerkur() {
   delete globalContext.__merkur__;
 }
 
-export function getMerkur() {
+export function getMerkur(): Merkur {
   const globalContext = getGlobalContext();
 
   if (!globalContext.__merkur__) {
@@ -59,7 +61,7 @@ export function getMerkur() {
   return globalContext.__merkur__;
 }
 
-function getGlobalContext() {
+function getGlobalContext(): any {
   if (typeof globalThis !== 'undefined') {
     return globalThis;
   }

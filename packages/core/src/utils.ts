@@ -14,7 +14,7 @@ export function setDefaultValueForUndefined(object, keys, value = {}) {
   return objectClone;
 }
 
-export function bindWidgetToFunctions(widget, target) {
+export function bindWidgetToFunctions(widget, target?) {
   target = target || widget;
   Object.keys(target).forEach((key) => {
     if (isFunction(target[key])) {
