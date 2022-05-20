@@ -31,7 +31,7 @@ export interface Merkur {
   };
   $external: Record<string, any>;
   $dependencies: Record<string, any>;
-
+  create: CreateWidget;
   register: ({
     name,
     version,
@@ -41,6 +41,4 @@ export interface Merkur {
     version: string;
     createWidget: CreateWidget;
   }) => void;
-
-  create: CreateWidget;
 }

@@ -16,7 +16,7 @@ async function callPluginMethod(widget, method, args) {
   return widget;
 }
 
-export async function createMerkurWidget(widgetDefinition = {} as any) {
+export async function createMerkurWidget(widgetDefinition) {
   widgetDefinition = setDefaultValueForUndefined(widgetDefinition, [
     '$dependencies',
     '$external',

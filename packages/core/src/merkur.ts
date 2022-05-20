@@ -42,7 +42,7 @@ export function removeMerkur() {
   delete globalContext.__merkur__;
 }
 
-export function getMerkur(): Merkur {
+export function getMerkur() {
   const globalContext = getGlobalContext();
 
   if (!globalContext.__merkur__) {
@@ -58,7 +58,7 @@ export function getMerkur(): Merkur {
     };
   }
 
-  return globalContext.__merkur__;
+  return globalContext.__merkur__ as Merkur;
 }
 
 function getGlobalContext(): any {
