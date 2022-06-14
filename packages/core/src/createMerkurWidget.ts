@@ -1,10 +1,6 @@
-import {
-  setDefaultValueForUndefined,
-  bindWidgetToFunctions,
-  isFunction,
-} from './utils';
+import { bindWidgetToFunctions, isFunction } from './utils';
 
-import { Widget } from './types';
+import { Widget, WidgetDefinition } from './types';
 
 async function callPluginMethod(widget, method, args) {
   for (const plugin of widget.$plugins) {
@@ -16,58 +12,27 @@ async function callPluginMethod(widget, method, args) {
   return widget;
 }
 
-export async function createMerkurWidget(
-  widgetDefinition: Record<string, any>
-) {
-  widgetDefinition = setDefaultValueForUndefined(widgetDefinition, [
-    '$dependencies',
-    '$external',
-  ]);
-  widgetDefinition = setDefaultValueForUndefined(
-    widgetDefinition,
-    ['setup', 'create'],
-    (widget) => widget
-  );
-
-  const { setup, create } = widgetDefinition;
-
+export async function createMerkurWidget(widgetDefinition: WidgetDefinition) {
   let widget = {
-    async setup(widget, ...rest) {
-      widget = await callPluginMethod(widget, 'setup', rest);
-
-      return setup(widget, ...rest);
-    },
-    async create(widget, ...rest) {
-      widget = await callPluginMethod(widget, 'create', rest);
-
-      return create(widget, ...rest);
-    },
+    name: widgetDefinition.name,
+    version: widgetDefinition.version,
+    $dependencies: widgetDefinition.$dependencies ?? {},
+    $external: widgetDefinition.$external ?? {},
+    $in: {},
     $plugins: (widgetDefinition.$plugins || []).map((pluginFactory) =>
       pluginFactory()
     ),
-  } as any;
+  } as Partial<Widget>;
 
-  // TODO refactoring
-  widget.name = widgetDefinition.name;
-  widget.version = widgetDefinition.version;
-  widget.$dependencies = widgetDefinition.$dependencies;
-  widget.$external = widgetDefinition.$external;
-  widget.$in = {};
+  const { setup, create } = widgetDefinition;
 
-  delete widgetDefinition.name;
-  delete widgetDefinition.version;
-  delete widgetDefinition.$dependencies;
-  delete widgetDefinition.$external;
-  delete widgetDefinition.$plugins;
-
-  delete widgetDefinition.setup;
-  delete widgetDefinition.create;
-
-  widget = await widget.setup(widget, widgetDefinition);
-  widget = await widget.create(widget, widgetDefinition);
+  widget = await callPluginMethod(widget, 'setup', [widgetDefinition]);
+  widget = setup ? await setup(widget, widgetDefinition) : widget;
+  widget = await callPluginMethod(widget, 'create', [widgetDefinition]);
+  widget = create ? await create(widget, widgetDefinition) : widget;
 
   bindWidgetToFunctions(widget);
   Object.seal(widget);
 
-  return widget as unknown as Widget;
+  return widget as Widget;
 }

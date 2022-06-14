@@ -1,7 +1,15 @@
 /* eslint-disable no-unused-vars */
 
-export interface WidgetInternal {}
-export interface WidgetExternal {}
+export interface WidgetDefinition {
+  name: string;
+  version: string;
+  $plugins?: Array<() => WidgetPlugin>;
+  $external: WidgetExternal;
+  $dependencies: Record<string, any>;
+
+  create?: WidgetFunction;
+  setup?: WidgetFunction;
+}
 
 export interface Widget {
   name: string;
@@ -9,11 +17,21 @@ export interface Widget {
   $in: WidgetInternal;
   $external: WidgetExternal;
   $dependencies: Record<string, any>;
-  $plugins: Record<string, any>[];
-
-  create: any;
-  setup: any;
+  $plugins: WidgetPlugin[];
 }
+
+export interface WidgetInternal {}
+export interface WidgetExternal {}
+
+export interface WidgetPlugin {
+  create?: WidgetFunction;
+  setup?: WidgetFunction;
+}
+
+export type WidgetFunction = (
+  widget: Partial<Widget>,
+  ...rest: unknown[]
+) => Promise<Partial<Widget>> | Partial<Widget>;
 
 export interface WidgetProperties {
   name: string;
