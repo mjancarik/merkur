@@ -1,0 +1,69 @@
+{
+  "name": "@merkur/plugin-graphql-client",
+  "version": "0.27.5",
+  "description": "Merkur event emitter plugin.",
+  "main": "lib/index",
+  "module": "lib/index",
+  "unpkg": "lib/index.umd.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs"
+    },
+    "./lib/index.es9.mjs": "./lib/index.es9.mjs",
+    "./lib/index.es9.cjs": "./lib/index.es9.cjs",
+    "./webpack": "./webpack.js",
+    "./webpack/": "./webpack.js",
+    "./webpack.js": "./webpack.js"
+  },
+  "browser": {
+    "./lib/index.js": "./lib/index.es5.js",
+    "./lib/index.cjs": "./lib/index.es5.js",
+    "./lib/index.mjs": "./lib/index.mjs",
+    "./lib/index.es9.mjs": "./lib/index.es9.mjs"
+  },
+  "scripts": {
+    "preversion": "npm test",
+    "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
+    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check es11 ./lib/index.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.cjs --module",
+    "build": "node_modules/.bin/rollup -c",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "merkur",
+    "plugin",
+    "microservices",
+    "microfrontends"
+  ],
+  "author": "Miroslav Jancarik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "devDependencies": {
+    "@merkur/core": "^0.28.0",
+    "rollup": "^2.70.2",
+    "@merkur/plugin-component": "^0.28.0",
+    "@merkur/plugin-http-client": "^0.28.1",
+    "@merkur/plugin-error": "^0.28.0"
+  },
+  "peerDependencies": {
+    "@merkur/core": "*",
+    "@merkur/plugin-http-client": "^0.28.1",
+    "@merkur/plugin-error": "^0.28.0"
+  },
+  "dependencies": {
+    "graphql": "^15.7.0",
+    "graphql-tag": "^2.12.5"
+  }
+}
