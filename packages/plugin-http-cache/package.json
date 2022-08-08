@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-http-cache",
-  "version": "0.27.5",
+  "version": "0.29.0",
   "description": "Merkur plugin for maintaining http requests cache.",
   "main": "lib/index",
   "module": "lib/index",
@@ -48,14 +48,13 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.28.0",
-    "@merkur/plugin-component": "^0.28.0",
-    "@merkur/plugin-http-client": "^0.28.1",
+    "@merkur/core": "^0.29.0",
+    "@merkur/plugin-component": "^0.29.0",
+    "@merkur/plugin-http-client": "^0.29.0",
     "rollup": "^2.70.2"
   },
   "peerDependencies": {
     "@merkur/core": "^0.28.0",
     "@merkur/plugin-http-client": "^0.28.1"
-  },
-  "dependencies": {}
+  }
 }

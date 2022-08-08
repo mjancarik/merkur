@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.29.0](https://github.com/mjancarik/merkur/compare/v0.28.2...v0.29.0) (2022-08-08)
+
+
+### Bug Fixes
+
+* 🐛 check http client presence ([dd105cb](https://github.com/mjancarik/merkur/commit/dd105cbb78b538debfbc5bf487ce4afd5f213931))
+
+
+### Features
+
+* 🎸 graphql client ([2535543](https://github.com/mjancarik/merkur/commit/253554353ac506a8ab91a27ffb0f5b9ceddc00ff))
+* 🎸 upgrade merkur dependencies ([20f3bbc](https://github.com/mjancarik/merkur/commit/20f3bbc5f74b8774b8c1e4ec0bd93acb01dab5de))
+
+
+
+
+
 ## [0.27.5](https://github.com/mjancarik/merkur/compare/v0.27.4...v0.27.5) (2021-10-14)
 
 
