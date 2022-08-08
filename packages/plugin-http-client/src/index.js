@@ -143,21 +143,23 @@ export function transformQuery() {
 export function transformBody() {
   return {
     async transformResponse(widget, request, response) {
-      const contentType = response.headers.get('content-type');
-      let body = null;
+      if (response.status !== 204 && typeof response.json === 'function') {
+        const contentType = response.headers.get('content-type');
+        let body = null;
 
-      if (response.status !== 204) {
         if (contentType && contentType.includes('application/json')) {
           body = await response.json();
         } else {
           body = await response.text();
         }
+
+        let newResponse = copyResponse(response);
+        newResponse.body = body;
+
+        return [request, newResponse];
       }
 
-      let newResponse = copyResponse(response);
-      newResponse.body = body;
-
-      return [request, newResponse];
+      return [request, response];
     },
     async transformRequest(widget, request, response) {
       const { body, headers, method } = request;
@@ -219,7 +221,7 @@ export function copyResponse(response) {
   } = response;
 
   return {
-    body,
+    body: assign({}, body),
     headers,
     ok,
     redirected,
@@ -230,4 +232,28 @@ export function copyResponse(response) {
     url,
     useFinalURL,
   };
+}
+
+function assign(target, source = {}, parentField = null) {
+  for (const field of Object.keys(source)) {
+    const value = source[field];
+    const fieldPath = parentField ? parentField + '.' + field : field;
+
+    if (value instanceof Array) {
+      target[field] = value.slice();
+    } else if (
+      value instanceof Object &&
+      !(value instanceof Function) &&
+      !(value instanceof RegExp)
+    ) {
+      if (!(target[field] instanceof Object)) {
+        target[field] = {};
+      }
+
+      assign(target[field], value, fieldPath);
+    } else {
+      target[field] = value;
+    }
+  }
+  return target;
 }
