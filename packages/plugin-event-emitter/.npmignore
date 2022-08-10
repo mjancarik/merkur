@@ -13,4 +13,5 @@ CHANGELOG.md
 commitlint.config.js
 rollup.config.js
 babel.config.js
+jest.config.js
 setupJest.js
