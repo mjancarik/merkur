@@ -2,6 +2,28 @@ import testScript from './testScript';
 
 function _loadScript(asset, root) {
   return new Promise((resolve, reject) => {
+    const scriptElement = root.querySelector(`script[src='${asset.source}']`);
+
+    if (scriptElement) {
+      if (
+        (performance &&
+          performance.getEntriesByName &&
+          performance
+            .getEntriesByName(asset.source)
+            .find(
+              (entry) => entry.entryType === 'resource' && entry.responseEnd
+            )) ||
+        !performance ||
+        !performance.getEntriesByName
+      ) {
+        setTimeout(resolve, 0);
+        return;
+      }
+
+      scriptElement.addEventListener('load', resolve);
+      return;
+    }
+
     const script = document.createElement('script');
 
     if (asset.type === 'script') {
@@ -103,7 +125,6 @@ function loadScriptAssets(assets, root = document.head) {
     }
 
     if (
-      root.querySelector(`script[src='${_asset.source}']`) ||
       Array.from(scriptElements).reduce((acc, cur) => {
         if (cur.text === _asset.source) {
           return true;
