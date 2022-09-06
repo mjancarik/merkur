@@ -5,6 +5,17 @@ function _loadScript(asset, root) {
     const scriptElement = root.querySelector(`script[src='${asset.source}']`);
 
     if (scriptElement) {
+      if (
+        performance &&
+        performance.getEntriesByName &&
+        performance
+          .getEntriesByName(asset.source)
+          .find((entry) => entry.entryType === 'resource')
+      ) {
+        setTimeout(resolve, 0);
+        return;
+      }
+
       scriptElement.addEventListener('load', resolve);
       return;
     }
