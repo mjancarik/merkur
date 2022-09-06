@@ -6,11 +6,15 @@ function _loadScript(asset, root) {
 
     if (scriptElement) {
       if (
-        performance &&
-        performance.getEntriesByName &&
-        performance
-          .getEntriesByName(asset.source)
-          .find((entry) => entry.entryType === 'resource')
+        (performance &&
+          performance.getEntriesByName &&
+          performance
+            .getEntriesByName(asset.source)
+            .find(
+              (entry) => entry.entryType === 'resource' && entry.responseEnd
+            )) ||
+        !performance ||
+        !performance.getEntriesByName
       ) {
         setTimeout(resolve, 0);
         return;
