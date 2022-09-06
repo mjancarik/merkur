@@ -2,6 +2,13 @@ import testScript from './testScript';
 
 function _loadScript(asset, root) {
   return new Promise((resolve, reject) => {
+    const scriptElement = root.querySelector(`script[src='${asset.source}']`);
+
+    if (scriptElement) {
+      scriptElement.addEventListener('load', resolve);
+      return;
+    }
+
     const script = document.createElement('script');
 
     if (asset.type === 'script') {
@@ -103,7 +110,6 @@ function loadScriptAssets(assets, root = document.head) {
     }
 
     if (
-      root.querySelector(`script[src='${_asset.source}']`) ||
       Array.from(scriptElements).reduce((acc, cur) => {
         if (cur.text === _asset.source) {
           return true;
