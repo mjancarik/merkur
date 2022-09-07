@@ -46,6 +46,7 @@ Array [
     },
     "removeAttribute": [Function],
     "setAttribute": [Function],
+    "src": "http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js",
     "text": "alert();",
   },
 ]
@@ -61,6 +62,7 @@ Array [
     "rel": "stylesheet",
     "removeAttribute": [Function],
     "setAttribute": [Function],
+    "src": "http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js",
   },
   Object {
     "addEventListener": [MockFunction],
@@ -79,6 +81,7 @@ Array [
     },
     "removeAttribute": [Function],
     "setAttribute": [Function],
+    "src": "http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js",
   },
 ]
 `;

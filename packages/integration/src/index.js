@@ -9,7 +9,7 @@ function _loadScript(asset, root) {
         (performance &&
           performance.getEntriesByName &&
           performance
-            .getEntriesByName(asset.source)
+            .getEntriesByName(scriptElement.src)
             .find(
               (entry) => entry.entryType === 'resource' && entry.responseEnd
             )) ||

@@ -14,6 +14,7 @@ describe('Merkur component', () => {
       removeAttribute: (name) => delete fakeAssetObject[name],
       setAttribute: (name, value) => (fakeAssetObject[name] = value),
       addEventListener: jest.fn((type, callback) => callback(type)),
+      src: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
     };
     fakeAssetObjects.push(fakeAssetObject);
 
@@ -271,7 +272,8 @@ describe('Merkur component', () => {
 
           done();
         })
-        .catch(() => {
+        .catch((e) => {
+          console.error('error', e);
           done('promise was rejected');
         });
     });
