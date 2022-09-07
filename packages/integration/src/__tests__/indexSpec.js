@@ -272,8 +272,7 @@ describe('Merkur component', () => {
 
           done();
         })
-        .catch((e) => {
-          console.error('error', e);
+        .catch(() => {
           done('promise was rejected');
         });
     });
