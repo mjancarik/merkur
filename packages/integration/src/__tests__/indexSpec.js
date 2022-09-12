@@ -255,6 +255,7 @@ describe('Merkur component', () => {
           {
             name: 'test.js',
             type: 'script',
+            optional: true,
             source: {
               es5: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
             },
@@ -263,83 +264,21 @@ describe('Merkur component', () => {
         rootElement
       )
         .then(() => {
-          expect(performance.getEntriesByName).toHaveBeenCalledTimes(1);
-          expect(performance.getEntriesByName).toHaveBeenCalledWith(
-            'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js'
+          expect(fakeAssetObject.addEventListener).toHaveBeenCalledWith(
+            'load',
+            expect.any(Function)
           );
-          expect(fakeAssetObject.addEventListener).toHaveBeenCalledTimes(1);
-          expect(document.createElement).toHaveBeenCalledTimes(0);
-
-          done();
-        })
-        .catch(() => {
-          done('promise was rejected');
-        });
-    });
-
-    it('should return promise that resolves immediately if script is already loaded', (done) => {
-      const fakeAssetObject = fakeAssetObjectGenerator();
-      jest
-        .spyOn(rootElement, 'querySelector')
-        .mockImplementationOnce(() => fakeAssetObject);
-      performance.getEntriesByName = jest.fn(() => [
-        { entryType: 'resource', responseEnd: 333 },
-      ]);
-
-      loadScriptAssets(
-        [
-          {
-            name: 'test.js',
-            type: 'script',
-            source: {
-              es5: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
-            },
-          },
-        ],
-        rootElement
-      )
-        .then(() => {
-          expect(performance.getEntriesByName).toHaveBeenCalledTimes(1);
-          expect(performance.getEntriesByName).toHaveBeenCalledWith(
-            'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js'
+          expect(fakeAssetObject.addEventListener).toHaveBeenCalledWith(
+            'error',
+            expect.any(Function)
           );
-          expect(fakeAssetObject.addEventListener).toHaveBeenCalledTimes(0);
+          expect(fakeAssetObject.addEventListener).toHaveBeenCalledTimes(2);
           expect(document.createElement).toHaveBeenCalledTimes(0);
 
           done();
         })
-        .catch(() => {
-          done('promise was rejected');
-        });
-    });
-
-    it('should return promise that resolves immediately if script is present but browser doesnt support performance API', (done) => {
-      const fakeAssetObject = fakeAssetObjectGenerator();
-      jest
-        .spyOn(rootElement, 'querySelector')
-        .mockImplementationOnce(() => fakeAssetObject);
-      performance.getEntriesByName = undefined;
-
-      loadScriptAssets(
-        [
-          {
-            name: 'test.js',
-            type: 'script',
-            source: {
-              es5: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
-            },
-          },
-        ],
-        rootElement
-      )
-        .then(() => {
-          expect(performance.getEntriesByName).toBe(undefined);
-          expect(fakeAssetObject.addEventListener).toHaveBeenCalledTimes(0);
-          expect(document.createElement).toHaveBeenCalledTimes(0);
-
-          done();
-        })
-        .catch(() => {
+        .catch((e) => {
+          console.error(e);
           done('promise was rejected');
         });
     });
