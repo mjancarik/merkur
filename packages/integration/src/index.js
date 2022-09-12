@@ -10,7 +10,10 @@ function _loadScript(asset, root) {
       }
 
       scriptElement.addEventListener('load', resolve);
-      asset.optional && scriptElement.addEventListener('error', reject);
+      scriptElement.addEventListener(
+        'error',
+        asset.optional ? resolve : reject
+      );
       return;
     }
 
