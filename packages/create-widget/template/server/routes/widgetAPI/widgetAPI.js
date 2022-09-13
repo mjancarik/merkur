@@ -1,7 +1,7 @@
 const config = require('config');
 const express = require('express');
 
-const { createAssets, memo } = require('@merkur/integration/server/');
+const { createAssets, memo } = require('@merkur/integration/server');
 const memoCreateAssets = memo(createAssets);
 
 const widgetEnvironment = config.get('widget');
