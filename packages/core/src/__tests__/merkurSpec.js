@@ -98,5 +98,12 @@ describe('merkur shell', () => {
 
       expect(merkur.isRegistered('@szn/widget')).toBe(false);
     });
+
+    it('should return false, if only name without version is registered', () => {
+      const merkur = getMerkur();
+      merkur.$in.widgetFactory['@szn/widget'] = jest.fn();
+
+      expect(merkur.isRegistered('@szn/widget')).toBe(false);
+    });
   });
 });
