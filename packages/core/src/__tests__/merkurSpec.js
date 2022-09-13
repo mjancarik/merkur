@@ -99,11 +99,11 @@ describe('merkur shell', () => {
       expect(merkur.isRegistered('@szn/widget')).toBe(false);
     });
 
-    it('should return false, if only name without version is registered', () => {
+    it('should return true, if checking with widget version', () => {
       const merkur = getMerkur();
-      merkur.$in.widgetFactory['@szn/widget'] = jest.fn();
+      merkur.$in.widgetFactory['@szn/widget1.2.3'] = jest.fn();
 
-      expect(merkur.isRegistered('@szn/widget')).toBe(false);
+      expect(merkur.isRegistered('@szn/widget1.2.3')).toBe(false);
     });
   });
 });
