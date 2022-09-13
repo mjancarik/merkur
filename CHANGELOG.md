@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.29.4](https://github.com/mjancarik/merkur/compare/v0.29.3...v0.29.4) (2022-09-13)
+
+
+### Bug Fixes
+
+* 🐛 resolving merkur integration for node@18 ([67a344d](https://github.com/mjancarik/merkur/commit/67a344d1197674f1fa9a4f263d43b8961f1b26aa)), closes [#133](https://github.com/mjancarik/merkur/issues/133)
+
+
+
+
+
 ## [0.29.3](https://github.com/mjancarik/merkur/compare/v0.29.2...v0.29.3) (2022-09-13)
 
 **Note:** Version bump only for package merkur-monorepo
