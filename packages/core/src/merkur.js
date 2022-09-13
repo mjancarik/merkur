@@ -65,7 +65,7 @@ function isRegistered(name) {
 
   return Boolean(
     Object.keys(merkur.$in.widgetFactory).find((key) =>
-      new RegExp(`^${name}.+`).test(key)
+      new RegExp(`^${name}`).test(key)
     )
   );
 }

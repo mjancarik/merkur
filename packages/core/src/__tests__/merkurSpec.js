@@ -103,7 +103,7 @@ describe('merkur shell', () => {
       const merkur = getMerkur();
       merkur.$in.widgetFactory['@szn/widget1.2.3'] = jest.fn();
 
-      expect(merkur.isRegistered('@szn/widget1.2.3')).toBe(false);
+      expect(merkur.isRegistered('@szn/widget1.2.3')).toBe(true);
     });
   });
 });
