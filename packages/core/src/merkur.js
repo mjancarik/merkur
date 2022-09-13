@@ -19,7 +19,11 @@ function create(widgetProperties = {}) {
     );
   }
 
-  return factory(widgetProperties);
+  return factory(widgetProperties).then((widget) => {
+    merkur.$in.widgets.push(widget);
+
+    return widget;
+  });
 }
 
 export function createMerkur({ $plugins = [] } = {}) {
@@ -51,12 +55,19 @@ export function getMerkur() {
       },
       $external: {},
       $dependencies: {},
+      isRegistered,
       register,
       create,
     };
   }
 
   return globalContext.__merkur__;
+}
+
+function isRegistered(name) {
+  const merkur = getMerkur();
+
+  return Boolean(merkur.$in.widgets.find((widget) => widget.name === name));
 }
 
 function getGlobalContext() {
