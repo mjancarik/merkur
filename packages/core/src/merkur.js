@@ -19,11 +19,7 @@ function create(widgetProperties = {}) {
     );
   }
 
-  return factory(widgetProperties).then((widget) => {
-    merkur.$in.widgets.push(widget);
-
-    return widget;
-  });
+  return factory(widgetProperties);
 }
 
 export function createMerkur({ $plugins = [] } = {}) {
@@ -67,7 +63,11 @@ export function getMerkur() {
 function isRegistered(name) {
   const merkur = getMerkur();
 
-  return Boolean(merkur.$in.widgets.find((widget) => widget.name === name));
+  return Boolean(
+    Object.keys(merkur.$in.widgetFactory).find((key) =>
+      new RegExp(`^${name}.+`).test(key)
+    )
+  );
 }
 
 function getGlobalContext() {
