@@ -51,12 +51,23 @@ export function getMerkur() {
       },
       $external: {},
       $dependencies: {},
+      isRegistered,
       register,
       create,
     };
   }
 
   return globalContext.__merkur__;
+}
+
+function isRegistered(name) {
+  const merkur = getMerkur();
+
+  return Boolean(
+    Object.keys(merkur.$in.widgetFactory).find((key) =>
+      new RegExp(`^${name}`).test(key)
+    )
+  );
 }
 
 function getGlobalContext() {

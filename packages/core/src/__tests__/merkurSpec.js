@@ -18,6 +18,7 @@ describe('merkur shell', () => {
           "widgets": Array [],
         },
         "create": [Function],
+        "isRegistered": [Function],
         "register": [Function],
       }
     `);
@@ -75,5 +76,34 @@ describe('merkur shell', () => {
         "version": "1.0.0",
       }
     `);
+  });
+
+  describe('isRegistered', () => {
+    it('should return false, if nothing is registered', () => {
+      const merkur = getMerkur();
+
+      expect(merkur.isRegistered('@szn/widget')).toBe(false);
+    });
+
+    it('should return true, if widget is registered', () => {
+      const merkur = getMerkur();
+      merkur.$in.widgetFactory['@szn/widget1.2.3'] = jest.fn();
+
+      expect(merkur.isRegistered('@szn/widget')).toBe(true);
+    });
+
+    it('should return false, other widgets are registered', () => {
+      const merkur = getMerkur();
+      merkur.$in.widgetFactory['@szn/feature3.2.1'] = jest.fn();
+
+      expect(merkur.isRegistered('@szn/widget')).toBe(false);
+    });
+
+    it('should return true, if checking with widget version', () => {
+      const merkur = getMerkur();
+      merkur.$in.widgetFactory['@szn/widget1.2.3'] = jest.fn();
+
+      expect(merkur.isRegistered('@szn/widget1.2.3')).toBe(true);
+    });
   });
 });
