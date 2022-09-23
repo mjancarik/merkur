@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.29.5](https://github.com/mjancarik/merkur/compare/v0.29.4...v0.29.5) (2022-09-23)
+
+
+### Bug Fixes
+
+* 🐛 mapViews is async only for mounting methods ([a5a965a](https://github.com/mjancarik/merkur/commit/a5a965ab1db6d1c3c9892414d7cb3270b5a07b5c))
+
+
+
+
+
 ## [0.29.4](https://github.com/mjancarik/merkur/compare/v0.29.3...v0.29.4) (2022-09-13)
 
 
