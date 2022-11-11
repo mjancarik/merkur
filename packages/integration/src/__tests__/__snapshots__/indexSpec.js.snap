@@ -19,7 +19,7 @@ Array [
     "onload": [Function],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es5/undefined.6961af42bfa3596bb147.js",
+    "src": "http://localhost:4444/static/es9/undefined.6961af42bfa3596bb147.js",
   },
   Object {
     "addEventListener": [MockFunction],
@@ -28,7 +28,7 @@ Array [
     "onload": [Function],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js",
+    "src": "http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js",
   },
   Object {
     "addEventListener": [MockFunction],
@@ -46,7 +46,7 @@ Array [
     },
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js",
+    "src": "http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js",
     "text": "alert();",
   },
 ]
@@ -62,7 +62,7 @@ Array [
     "rel": "stylesheet",
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js",
+    "src": "http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js",
   },
   Object {
     "addEventListener": [MockFunction],
@@ -81,7 +81,7 @@ Array [
     },
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js",
+    "src": "http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js",
   },
 ]
 `;

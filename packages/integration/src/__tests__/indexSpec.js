@@ -14,7 +14,7 @@ describe('Merkur component', () => {
       removeAttribute: (name) => delete fakeAssetObject[name],
       setAttribute: (name, value) => (fakeAssetObject[name] = value),
       addEventListener: jest.fn((type, callback) => callback(type)),
-      src: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
+      src: 'http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js',
     };
     fakeAssetObjects.push(fakeAssetObject);
 
@@ -41,7 +41,6 @@ describe('Merkur component', () => {
         source: {
           es11: 'http://localhost:4444/static/es11/widget.6541af42bfa3596bb129.js',
           es9: 'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js',
-          es5: 'http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js',
         },
         attr: {
           async: true,
@@ -55,15 +54,14 @@ describe('Merkur component', () => {
         type: 'script',
         source: {
           es9: 'http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js',
-          es5: 'http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js',
         },
       },
       {
         name: 'undefined.js',
         type: 'script',
         source: {
-          es9: undefined,
-          es5: 'http://localhost:4444/static/es5/undefined.6961af42bfa3596bb147.js',
+          es11: undefined,
+          es9: 'http://localhost:4444/static/es9/undefined.6961af42bfa3596bb147.js',
         },
       },
       {
@@ -71,7 +69,7 @@ describe('Merkur component', () => {
         test: 'return (function () {foo();})()',
         type: 'script',
         source:
-          'http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js',
+          'http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js',
       },
       {
         type: 'inlineScript',
@@ -197,7 +195,7 @@ describe('Merkur component', () => {
             name: 'test.js',
             type: 'script',
             source: {
-              es5: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
+              es9: 'http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js',
             },
           },
         ],
@@ -223,7 +221,7 @@ describe('Merkur component', () => {
             name: 'test.js',
             type: 'script',
             source: {
-              es5: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
+              es9: 'http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js',
             },
             optional: true,
           },
@@ -257,7 +255,7 @@ describe('Merkur component', () => {
             type: 'script',
             optional: true,
             source: {
-              es5: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
+              es9: 'http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js',
             },
           },
         ],
