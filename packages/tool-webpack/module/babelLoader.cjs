@@ -50,45 +50,31 @@ function createESTransformation(
       alias: {
         '@merkur/core': path.join(
           nodeModulesDir,
-          `@merkur/core/lib/index.${esVersion}.${
-            esVersion === 'es5' ? 'js' : 'mjs'
-          }`
+          `@merkur/core/lib/index.${esVersion}.mjs`
         ),
         '@merkur/plugin-component': path.join(
           nodeModulesDir,
-          `@merkur/plugin-component/lib/index.${esVersion}.${
-            esVersion === 'es5' ? 'js' : 'mjs'
-          }`
+          `@merkur/plugin-component/lib/index.${esVersion}.mjs`
         ),
         '@merkur/plugin-event-emitter': path.join(
           nodeModulesDir,
-          `@merkur/plugin-event-emitter/lib/index.${esVersion}.${
-            esVersion === 'es5' ? 'js' : 'mjs'
-          }`
+          `@merkur/plugin-event-emitter/lib/index.${esVersion}.mjs`
         ),
         '@merkur/plugin-http-client': path.join(
           nodeModulesDir,
-          `@merkur/plugin-http-client/lib/index.${esVersion}.${
-            esVersion === 'es5' ? 'js' : 'mjs'
-          }`
+          `@merkur/plugin-http-client/lib/index.${esVersion}.mjs`
         ),
         '@merkur/plugin-error': path.join(
           nodeModulesDir,
-          `@merkur/plugin-error/lib/index.${esVersion}.${
-            esVersion === 'es5' ? 'js' : 'mjs'
-          }`
+          `@merkur/plugin-error/lib/index.${esVersion}.mjs`
         ),
         '@merkur/plugin-router': path.join(
           nodeModulesDir,
-          `@merkur/plugin-router/lib/index.${esVersion}.${
-            esVersion === 'es5' ? 'js' : 'mjs'
-          }`
+          `@merkur/plugin-router/lib/index.${esVersion}.mjs`
         ),
         '@merkur/plugin-css-scrambler': path.join(
           nodeModulesDir,
-          `@merkur/plugin-router/lib/index.${esVersion}.${
-            esVersion === 'es5' ? 'js' : 'mjs'
-          }`
+          `@merkur/plugin-router/lib/index.${esVersion}.mjs`
         ),
         ...config.resolve.alias,
       },
@@ -163,24 +149,7 @@ function applyES9Transformation(config, context) {
   return config;
 }
 
-function applyES5Transformation(config, context) {
-  config = createESTransformation(config, context, 'es5');
-  config.output.environment = {
-    arrowFunction: false,
-    bigIntLiteral: false,
-    const: false,
-    destructuring: false,
-    dynamicImport: false,
-    forOf: false,
-    module: false,
-    ...config.output?.environment,
-  };
-
-  return config;
-}
-
 module.exports = {
   findLoaders,
   applyES9Transformation,
-  applyES5Transformation,
 };

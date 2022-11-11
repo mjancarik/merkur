@@ -29,7 +29,7 @@ router.get(
       assets: info.assets,
       staticFolder,
       staticBaseUrl,
-      folders: ['es11', 'es9', 'es5'],
+      folders: ['es11', 'es9'],
     });
 
     const status = info?.error?.status ?? 200;

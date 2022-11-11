@@ -8,20 +8,6 @@ const external = [
   ...Object.keys(peerDependencies || {}),
 ];
 
-const babelES5BaseConfig = {
-  babelrc: false,
-  presets: [
-    [
-      '@babel/env',
-      {
-        modules: false,
-        useBuiltIns: 'usage',
-        corejs: { version: 3, proposals: false },
-      },
-    ],
-  ],
-};
-
 const babelES9BaseConfig = {
   babelrc: false,
   presets: [
@@ -136,22 +122,6 @@ function createRollupESConfig() {
   return config;
 }
 
-function createRollupES5Config() {
-  let config = createRollupConfig();
-
-  config.output = [
-    {
-      dir: './lib',
-      entryFileNames: '[name].es5.js',
-      format: 'cjs',
-      exports: 'named',
-      plugins: [getBabelOutputPlugin(babelES5BaseConfig), terser()],
-    },
-  ];
-
-  return config;
-}
-
 function createRollupES9Config() {
   let config = createRollupConfig();
 
@@ -197,7 +167,6 @@ export default createRollupConfig;
 export {
   createRollupConfig,
   createRollupESConfig,
-  createRollupES5Config,
   createRollupES9Config,
   createRollupUMDConfig,
 };

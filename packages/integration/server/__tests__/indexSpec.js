@@ -3,13 +3,11 @@ const fs = require('fs');
 
 const staticFolder = 'build/static';
 const staticBaseUrl = 'https://seznam.cz/static';
-const folders = ['es11', 'es9', 'es5', 'css'];
+const folders = ['es11', 'es9', 'css'];
 
 const manifests = {
   'build/static/css/manifest.json':
     '{"style.css":"style.c3e64bd85803ef0e5583.css"}',
-  'build/static/es5/manifest.json':
-    '{"widget.css": "widget.96a1e61f8f77442b9837.css", "widget.js": "widget.e5e3d41ecc1f5964c3e3.js"}',
   'build/static/es9/manifest.json':
     '{"widget.css": "widget.96a1e61f8f77442b9837.css", "widget.js": "widget.fdf95165e917b666fc62.js"}',
   'build/static/es11/manifest.json':

@@ -2,7 +2,6 @@ const {
   createLiveReloadServer,
   createWebConfig,
   createNodeConfig,
-  applyES5Transformation,
   applyES9Transformation,
   applyStyleLoaders,
   createCacheKey,
@@ -48,12 +47,6 @@ function applyBabelLoader(config, { isProduction, environment, cache }) {
 module.exports = createLiveReloadServer().then(() =>
   Promise.all([
     pipe(createWebConfig, applyStyleLoaders, applyBabelLoader)(),
-    pipe(
-      createWebConfig,
-      applyStyleLoaders,
-      applyBabelLoader,
-      applyES5Transformation
-    )(),
     pipe(
       createWebConfig,
       applyStyleLoaders,

@@ -45,7 +45,7 @@ At first we must make an API call with your framework of choice. In this example
       "name": "polyfill.js",
       "type": "script",
       "source": {
-        "es5": "http://localhost:4444/static/es5/polyfill.31c5090d8c961e43fade.js"
+        "es9": "http://localhost:4444/static/es9/polyfill.31c5090d8c961e43fade.js"
       },
       "test": "return window.fetch"
     },
@@ -54,8 +54,7 @@ At first we must make an API call with your framework of choice. In this example
       "type": "script",
       "source": {
         "es11": "http://localhost:4444/static/es11/widget.4521af42bfa3596bb128.js",
-        "es9": "http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js",
-        "es5": "http://localhost:4444/static/es5/widget.31c5090d8c961e43fade.js"
+        "es9": "http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js"
       },
       "attr": {
         "async": true,
@@ -66,7 +65,7 @@ At first we must make an API call with your framework of choice. In this example
       "name": "optional.js",
       "type": "script",
       "source": {
-        "es5": "http://localhost:4444/static/es5/optional.31c5090d8c961e43fade.js"
+        "es9": "http://localhost:4444/static/es9/optional.31c5090d8c961e43fade.js"
       },
       "optional": true
     },
@@ -165,7 +164,7 @@ If your application doesn't use npm modules, you can handle assets your own way 
               widget.mount();
             });
         };
-        script.src = asset.es5.source;
+        script.src = asset.es9.source;
         document.body.appendChild(script);
       }
 
@@ -197,7 +196,7 @@ After we receive response from the widget API call we must update the final HTML
         <script src='<%= asset.source %>' defer='true'></script>
       <% } %>
       <%if (typeof asset.source === 'object') { %>
-        <script src='<%= asset.source.es5 %>' defer='true'></script>
+        <script src='<%= asset.source.es9 %>' defer='true'></script>
       <% } %>
     <% } %>
   <% }); %>

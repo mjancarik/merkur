@@ -1,16 +1,4 @@
-let _isES9Supported;
 let _isES11Supported;
-
-function isES9Supported() {
-  if (_isES9Supported === undefined) {
-    _isES9Supported =
-      exported.test(
-        'return (() => { const o = { t: 1 }; return { ...o }; })() && (async () => ({}))()'
-      ) && !!Object.values;
-  }
-
-  return _isES9Supported;
-}
 
 function isES11Supported() {
   if (_isES11Supported === undefined) {
@@ -38,7 +26,6 @@ function test(snippet) {
 }
 
 const exported = {
-  isES9Supported,
   isES11Supported,
   test,
 };

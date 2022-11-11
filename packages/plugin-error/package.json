@@ -18,15 +18,13 @@
     "./server/index.js": "./server/index.js"
   },
   "browser": {
-    "./lib/index.js": "./lib/index.es5.js",
-    "./lib/index.cjs": "./lib/index.es5.js",
     "./lib/index.mjs": "./lib/index.mjs",
     "./lib/index.es9.mjs": "./lib/index.es9.mjs"
   },
   "scripts": {
     "preversion": "npm test",
     "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
-    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check es11 ./lib/index.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.cjs --module",
+    "test:es:version": "../../node_modules/.bin/es-check es11 ./lib/index.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.cjs --module",
     "build": "node_modules/.bin/rollup -c",
     "prepare": "npm run build"
   },

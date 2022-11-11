@@ -6,7 +6,6 @@ Array [
     "name": "widget.js",
     "source": Object {
       "es11": "https://seznam.cz/static/es11/widget.53fbc48b6fb616ecfd1b.js",
-      "es5": "https://seznam.cz/static/es5/widget.e5e3d41ecc1f5964c3e3.js",
       "es9": "https://seznam.cz/static/es9/widget.fdf95165e917b666fc62.js",
     },
     "type": "script",

@@ -17,8 +17,8 @@ This can be achieved by extending webpack config with provided drop-in function.
 module.exports = Promise.all([
 -  pipe(createWebConfig, applyBabelLoader)(),
 +  pipe(createWebConfig, applyBabelLoader, applyPostCssScramblePlugin)(),
--  pipe(createWebConfig, applyBabelLoader, applyES5Transformation)(),
-+  pipe(createWebConfig, applyBabelLoader, applyES5Transformation, applyPostCssScramblePlugin)(),
+-  pipe(createWebConfig, applyBabelLoader, applyES9Transformation)(),
++  pipe(createWebConfig, applyBabelLoader, applyES9Transformation, applyPostCssScramblePlugin)(),
   pipe(createNodeConfig, applyBabelLoader)(),
 ]);
 ```
