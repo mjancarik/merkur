@@ -14,14 +14,14 @@ jobs:
     name: Setup environment
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Cache node_modules
         id: cache-modules
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             node_modules
@@ -35,7 +35,7 @@ jobs:
         run: npx lerna bootstrap
 
       - name: Cache libs
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
@@ -45,13 +45,13 @@ jobs:
     needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Load node_modules from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             node_modules
@@ -59,7 +59,7 @@ jobs:
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('package.json') }}
 
       - name: Load libs from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
@@ -83,13 +83,13 @@ jobs:
         preview: ['react', 'preact', 'hyper', 'uhtml', 'svelte', 'vanilla']
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Load node_modules from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             node_modules
@@ -97,7 +97,7 @@ jobs:
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('package.json') }}
 
       - name: Load libs from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
@@ -114,15 +114,15 @@ jobs:
     env:
       NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 16
 
       - name: Load node_modules from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: |
             node_modules
@@ -130,7 +130,7 @@ jobs:
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('package.json') }}
 
       - name: Load libs from cache
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
