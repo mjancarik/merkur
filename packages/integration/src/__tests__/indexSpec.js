@@ -305,6 +305,7 @@ describe('Merkur component', () => {
           expect(error.message).toBe(
             "Asset 'nosource.js' is missing ES variant and could not be loaded."
           );
+          expect(error.asset).toBeTruthy();
 
           done();
         });

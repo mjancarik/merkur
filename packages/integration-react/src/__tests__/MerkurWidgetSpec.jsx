@@ -140,6 +140,33 @@ describe('Merkur component', () => {
       }, 0);
     });
 
+    it('should call onError callback and shouldnt render fallback.', (done) => {
+      jest
+        .spyOn(MerkurIntegration, 'loadScriptAssets')
+        .mockImplementation(() => Promise.reject('failed to load'));
+
+      const onError = jest.fn(() => true);
+
+      wrapper = shallow(
+        <MerkurWidget widgetProperties={widgetProperties} onError={onError}>
+          <span>Fallback</span>
+        </MerkurWidget>
+      );
+      const instance = wrapper.instance();
+
+      jest.spyOn(instance, 'setState');
+      jest.spyOn(instance, '_renderFallback');
+
+      setTimeout(() => {
+        expect(onError).toHaveBeenCalled();
+
+        expect(instance.setState).not.toHaveBeenCalled();
+        expect(instance._renderFallback).not.toHaveBeenCalled();
+
+        done();
+      }, 0);
+    });
+
     it('should load style assets on unmount', (done) => {
       jest
         .spyOn(MerkurIntegration, 'loadStyleAssets')

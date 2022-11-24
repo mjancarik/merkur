@@ -113,7 +113,10 @@ async function loadScriptAssets(assets, root = document.head) {
         const message = `Asset '${_asset.name}' is missing ES variant and could not be loaded.`;
 
         if (!_asset.optional) {
-          throw new Error(message);
+          const error = new Error(message);
+          error.asset = _asset;
+
+          throw error;
         }
 
         console.warn(message);
