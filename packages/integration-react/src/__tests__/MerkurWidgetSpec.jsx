@@ -158,8 +158,8 @@ describe('Merkur component', () => {
       jest.spyOn(instance, '_renderFallback');
 
       setTimeout(() => {
-        expect(onError).toHaveBeenCalled();
-
+        expect(onError).toHaveBeenCalledTimes(1);
+        expect(instance.state.encounteredError).toBe(false);
         expect(instance.setState).not.toHaveBeenCalled();
         expect(instance._renderFallback).not.toHaveBeenCalled();
 
