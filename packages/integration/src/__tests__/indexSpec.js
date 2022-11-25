@@ -282,5 +282,35 @@ describe('Merkur component', () => {
           done('promise was rejected');
         });
     });
+
+    it('should throw an error, if script have no source', (done) => {
+      loadScriptAssets(
+        [
+          {
+            name: 'optional.js',
+            type: 'script',
+            source: {},
+            optional: true,
+          },
+          {
+            name: 'nosource.js',
+            type: 'script',
+            source: {},
+          },
+        ],
+        rootElement
+      )
+        .then(() => {
+          done('did not reject');
+        })
+        .catch((error) => {
+          expect(error.message).toBe(
+            "Asset 'nosource.js' is missing ES variant and could not be loaded."
+          );
+          expect(error.asset).toBeTruthy();
+
+          done();
+        });
+    });
   });
 });
