@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.30.0](https://github.com/mjancarik/merkur/compare/v0.29.5...v0.30.0) (2022-11-28)
+
+
+### Features
+
+* 🎸 Scripts without source will cause promise rejection ([bd82c6e](https://github.com/mjancarik/merkur/commit/bd82c6e2c867718e0f5cda67f20f5f2065584ad1))
+
+
+
+
+
 ## [0.29.3](https://github.com/mjancarik/merkur/compare/v0.29.2...v0.29.3) (2022-09-13)
 
 **Note:** Version bump only for package @merkur/integration

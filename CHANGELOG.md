@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.30.0](https://github.com/mjancarik/merkur/compare/v0.29.5...v0.30.0) (2022-11-28)
+
+
+### Features
+
+* 🎸 MerkurWidget props.onError can stop error propagation ([5583f0f](https://github.com/mjancarik/merkur/commit/5583f0f1808b0ee273a5ef4623b4cb167fb51dba))
+* 🎸 Scripts without source will cause promise rejection ([bd82c6e](https://github.com/mjancarik/merkur/commit/bd82c6e2c867718e0f5cda67f20f5f2065584ad1))
+
+
+
+
+
 ## [0.29.5](https://github.com/mjancarik/merkur/compare/v0.29.4...v0.29.5) (2022-09-23)
 
 
