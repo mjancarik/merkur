@@ -90,7 +90,7 @@ function loadStyleAssets(assets, root = document.head) {
   return Promise.all(stylesToRender.map((asset) => _loadStyle(asset, root)));
 }
 
-function loadScriptAssets(assets, root = document.head) {
+async function loadScriptAssets(assets, root = document.head) {
   const scriptElements = root.querySelectorAll('script');
   const scriptsToRender = assets.reduce((scripts, asset) => {
     const { source } = asset;
@@ -110,9 +110,16 @@ function loadScriptAssets(assets, root = document.head) {
       }
 
       if (!_asset.source) {
-        console.warn(
-          `Asset '${_asset.name}' is missing ES variant and could not be loaded.`
-        );
+        const message = `Asset '${_asset.name}' is missing ES variant and could not be loaded.`;
+
+        if (!_asset.optional) {
+          const error = new Error(message);
+          error.asset = _asset;
+
+          throw error;
+        }
+
+        console.warn(message);
         return scripts;
       }
     }

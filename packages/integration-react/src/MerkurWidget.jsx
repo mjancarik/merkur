@@ -339,8 +339,8 @@ export default class MerkurWidget extends AbstractMerkurWidget {
   }
 
   _handleError(error) {
-    if (typeof this.props.onError === 'function') {
-      this.props.onError(error);
+    if (typeof this.props.onError === 'function' && this.props.onError(error)) {
+      return;
     }
 
     this.setState({ encounteredError: error });
