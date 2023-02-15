@@ -134,12 +134,12 @@ function processResponseData(data, entityClasses) {
     processedData[field] = value;
   });
 
-  const type = data.__typename;
+  const type = processedData.__typename;
   if (!type || !entityClasses[type]) {
-    return data;
+    return processedData;
   }
 
-  return Reflect.construct(entityClasses[type], [data]);
+  return Reflect.construct(entityClasses[type], [processedData]);
 }
 
 function addTypenameToSelections(document) {
