@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.30.1](https://github.com/mjancarik/merkur/compare/v0.30.0...v0.30.1) (2023-02-21)
+
+
+### Bug Fixes
+
+* 🐛 create instance of class for nested entites ([#152](https://github.com/mjancarik/merkur/issues/152)) ([b6327b0](https://github.com/mjancarik/merkur/commit/b6327b07793ab3e5ffe74b3b3d4b7366652f8127))
+
+
+
+
+
 # [0.30.0](https://github.com/mjancarik/merkur/compare/v0.29.5...v0.30.0) (2022-11-28)
 
 
