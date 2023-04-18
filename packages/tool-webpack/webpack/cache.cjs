@@ -3,7 +3,15 @@ const fs = require('fs');
 const path = require('path');
 
 function createCacheKey(...args) {
-  return createHash('md4')
+  let hash;
+
+  try {
+    hash = createHash('sha256');
+  } catch (err) {
+    hash = createHash('md5');
+  }
+
+  return hash
     .update(
       args
         .filter(Boolean)

@@ -31,7 +31,7 @@
     "@babel/core": "^7.17.9",
     "@babel/preset-env": "^7.16.11",
     "autoprefixer": "^10.4.4",
-    "babel-loader": "8.2.4",
+    "babel-loader": "9.1.2",
     "clean-webpack-plugin": "^4.0.0",
     "compression-webpack-plugin": "^9.2.0",
     "core-js": "^3.22.0",
