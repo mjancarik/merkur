@@ -1,6 +1,6 @@
 {
   "name": "@merkur/tool-webpack",
-  "version": "0.30.0",
+  "version": "0.31.0",
   "description": "Merkur tool webpack.",
   "main": "index.cjs",
   "scripts": {

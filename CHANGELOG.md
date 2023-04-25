@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.31.0](https://github.com/mjancarik/merkur/compare/v0.30.1...v0.31.0) (2023-04-25)
+
+
+### Features
+
+* 🎸 Add support of OpenSSL 3 in Node.js >= 17 ([a8f3385](https://github.com/mjancarik/merkur/commit/a8f33853e0eaea8482611f99bed6f02228048d05))
+
+
+
+
+
 ## [0.30.1](https://github.com/mjancarik/merkur/compare/v0.30.0...v0.30.1) (2023-02-21)
 
 
