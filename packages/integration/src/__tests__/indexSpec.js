@@ -15,6 +15,7 @@ describe('Merkur component', () => {
       setAttribute: (name, value) => (fakeAssetObject[name] = value),
       addEventListener: jest.fn((type, callback) => callback(type)),
       src: 'http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js',
+      remove: jest.fn(),
     };
     fakeAssetObjects.push(fakeAssetObject);
 
@@ -191,6 +192,10 @@ describe('Merkur component', () => {
     });
 
     it('should return promise that rejects after script fails to load', (done) => {
+      let script;
+      jest.spyOn(rootElement, 'appendChild').mockImplementation((child) => {
+        script = child;
+      });
       loadScriptAssets(
         [
           {
@@ -209,7 +214,7 @@ describe('Merkur component', () => {
         .catch(() => {
           expect(document.createElement).toHaveBeenCalledTimes(1);
           expect(rootElement.appendChild).toHaveBeenCalledTimes(1);
-
+          expect(script.remove).toHaveBeenCalledTimes(1);
           done();
         });
 
@@ -217,6 +222,10 @@ describe('Merkur component', () => {
     });
 
     it('should return promise that resolves after script fails to load', (done) => {
+      let script;
+      jest.spyOn(rootElement, 'appendChild').mockImplementation((child) => {
+        script = child;
+      });
       loadScriptAssets(
         [
           {
@@ -233,7 +242,7 @@ describe('Merkur component', () => {
         .then(() => {
           expect(document.createElement).toHaveBeenCalledTimes(1);
           expect(rootElement.appendChild).toHaveBeenCalledTimes(1);
-
+          expect(script.remove).toHaveBeenCalledTimes(1);
           done();
         })
         .catch(() => {
@@ -310,6 +319,41 @@ describe('Merkur component', () => {
           expect(error.asset).toBeTruthy();
 
           done();
+        });
+    });
+
+    it('should resolve if script is already present in DOM and loaded', (done) => {
+      jest
+        .spyOn(rootElement, 'querySelector')
+        .mockImplementation(() => 'truthy');
+
+      loadScriptAssets(
+        [
+          {
+            name: 'test.js',
+            type: 'script',
+            source: {
+              es11: 'http://localhost:4444/static/es11/test.6961af42bfa3596bb147.js',
+            },
+            test: 'return true',
+          },
+          {
+            name: 'test2.js',
+            type: 'script',
+            source: {
+              es11: 'http://localhost:4444/static/es11/test.6961af42bfa3596bb147.js',
+            },
+          },
+        ],
+        rootElement
+      )
+        .then(() => {
+          expect(document.createElement).toHaveBeenCalledTimes(0);
+
+          done();
+        })
+        .catch((error) => {
+          done(error);
         });
     });
   });

@@ -5,7 +5,7 @@ function _loadScript(asset, root) {
     const scriptElement = root.querySelector(`script[src='${asset.source}']`);
 
     if (scriptElement) {
-      if (!asset.test) {
+      if (!asset.test || testScript.test(asset.test)) {
         resolve();
       }
 
@@ -22,7 +22,11 @@ function _loadScript(asset, root) {
     if (asset.type === 'script') {
       script.defer = true;
       script.onload = resolve;
-      script.onerror = asset.optional ? resolve : reject;
+      script.onerror = (error) => {
+        script.remove();
+
+        asset.optional ? resolve(error) : reject(error);
+      };
       script.src = asset.source;
 
       const { attr } = asset;
