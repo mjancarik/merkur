@@ -29,6 +29,7 @@ const expressStaticConfig = {
 
 const app = express();
 app.set('view engine', 'ejs');
+app.set('trust proxy', true);
 
 app
   .use(morgan('dev'))
