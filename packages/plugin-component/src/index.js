@@ -26,6 +26,7 @@ export function componentPlugin() {
         lifeCycle,
         isMounted: false,
         isHydrated: false,
+        suspendedTasks: [],
       };
 
       widget = {
@@ -79,6 +80,10 @@ function componentAPI() {
       const html = await callLifeCycleMethod(widget, 'mount', args);
       widget.$in.component.isMounted = true;
 
+      for (let task of widget.$in.component.suspendedTasks) {
+        await task();
+      }
+
       return html;
     },
     async unmount(widget, ...args) {
@@ -107,6 +112,7 @@ function componentAPI() {
     },
     async update(widget, ...args) {
       if (!widget.$in.component.isMounted) {
+        widget.$in.component.suspendedTasks.push(() => widget.update(...args));
         return;
       }
 
@@ -123,16 +129,19 @@ function componentAPI() {
       return widget.update();
     },
     async setProps(widget, propsSetter) {
+      if (!widget.$in.component.isMounted) {
+        widget.$in.component.suspendedTasks.push(() =>
+          widget.setProps(propsSetter)
+        );
+        return;
+      }
+
       widget.props = {
         ...widget.props,
         ...(typeof propsSetter === 'function'
           ? propsSetter(widget.props)
           : propsSetter),
       };
-
-      if (!widget.$in.component.isMounted) {
-        return;
-      }
 
       await widget.load();
       return widget.update();
