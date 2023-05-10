@@ -35,6 +35,7 @@ describe('createWidget method with component plugin', () => {
               "unmount": undefined,
               "update": undefined,
             },
+            "suspendedTasks": Array [],
           },
         },
         "$plugins": Array [
