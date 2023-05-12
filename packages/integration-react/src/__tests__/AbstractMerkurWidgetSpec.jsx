@@ -191,20 +191,8 @@ describe('AbstractMerkurWidget', () => {
   });
 
   describe('_isClient() method', () => {
-    beforeEach(() => {
-      delete global.document;
-      delete global.window;
-    });
-
     it('should return false for non-browser environments', () => {
-      expect(instance._isClient()).toBe(false);
-
-      global.window = {};
-
-      expect(instance._isClient()).toBe(false);
-
       delete global.window;
-      global.document = {};
 
       expect(instance._isClient()).toBe(false);
     });

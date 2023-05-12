@@ -20,14 +20,14 @@ describe('createWidget method with error plugin', () => {
     });
 
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {},
-        "$external": Object {},
-        "$in": Object {
-          "component": Object {
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {
+          "component": {
             "isHydrated": false,
             "isMounted": false,
-            "lifeCycle": Object {
+            "lifeCycle": {
               "bootstrap": undefined,
               "info": undefined,
               "load": undefined,
@@ -35,20 +35,21 @@ describe('createWidget method with error plugin', () => {
               "unmount": undefined,
               "update": undefined,
             },
+            "suspendedTasks": [],
           },
         },
-        "$plugins": Array [
-          Object {
+        "$plugins": [
+          {
             "create": [Function],
             "setup": [Function],
           },
-          Object {
+          {
             "create": [Function],
             "setup": [Function],
           },
         ],
-        "assets": Array [
-          Object {
+        "assets": [
+          {
             "source": "http://www.example.com/static/1.0.0/widget.js",
             "type": "script",
           },
@@ -56,7 +57,7 @@ describe('createWidget method with error plugin', () => {
         "bootstrap": [Function],
         "containerSelector": null,
         "create": [Function],
-        "error": Object {
+        "error": {
           "message": null,
           "status": null,
         },
@@ -64,13 +65,13 @@ describe('createWidget method with error plugin', () => {
         "load": [Function],
         "mount": [Function],
         "name": "my-widget",
-        "props": Object {
+        "props": {
           "param": 1,
         },
         "setProps": [Function],
         "setState": [Function],
         "setup": [Function],
-        "state": Object {},
+        "state": {},
         "unmount": [Function],
         "update": [Function],
         "version": "1.0.0",

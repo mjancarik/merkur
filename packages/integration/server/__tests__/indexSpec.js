@@ -78,16 +78,16 @@ describe('createAssets method', () => {
     });
 
     expect(assets).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "name": "polyfill.js",
           "type": "script",
         },
-        Object {
+        {
           "name": "widget.js",
           "type": "script",
         },
-        Object {
+        {
           "name": "style.css",
           "type": "stylesheet",
         },

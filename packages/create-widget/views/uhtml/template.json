@@ -1,6 +1,6 @@
 {
   "dependencies": {
     "ucontent": "2.0.0",
-    "uhtml": "2.7.6"
+    "uhtml": "3.1.0"
   }
 }

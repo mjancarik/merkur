@@ -21,9 +21,9 @@
   },
   "scripts": {
     "preversion": "npm test",
-    "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
-    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check es11 ./lib/index.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.cjs --module",
-    "build": "node_modules/.bin/rollup -c",
+    "test": "jest --no-watchman -c ./jest.config.js",
+    "test:es:version": "es-check es5 ./lib/index.es5.js && es-check es11 ./lib/index.mjs --module && es-check es9 ./lib/index.es9.mjs --module && es-check es9 ./lib/index.es9.cjs --module",
+    "build": "rollup -c rollup.config.mjs",
     "prepare": "npm run build"
   },
   "repository": {
@@ -46,21 +46,22 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@babel/preset-react": "^7.16.7",
+    "@babel/preset-react": "^7.18.6",
     "@merkur/core": "^0.31.0",
     "@merkur/plugin-component": "^0.31.0",
     "@merkur/plugin-event-emitter": "^0.31.0",
+    "@rollup/plugin-commonjs": "^25.0.0",
+    "@rollup/plugin-replace": "^5.0.2",
     "enzyme": "3.11.0",
-    "enzyme-adapter-react-16": "1.15.6",
+    "enzyme-adapter-react-16": "1.15.7",
     "enzyme-to-json": "^3.6.2",
     "react": "16.13.1",
-    "react-dom": "16.13.1",
-    "rollup": "^2.70.2"
+    "react-dom": "16.13.1"
   },
   "peerDependencies": {
     "@merkur/core": "*",
-    "react": ">=16",
-    "react-dom": ">=16"
+    "react": ">=18",
+    "react-dom": ">=18"
   },
   "dependencies": {
     "@merkur/integration": "^0.31.1"

@@ -31,8 +31,6 @@ jobs:
       - name: Install dependencies
         if: steps.cache-modules.outputs.cache-hit != 'true'
         run: npm install
-      - name: Bootstrap monorepo
-        run: npx lerna bootstrap
 
       - name: Cache libs
         uses: actions/cache@v3

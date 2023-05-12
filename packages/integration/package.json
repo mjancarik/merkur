@@ -25,9 +25,9 @@
   },
   "scripts": {
     "preversion": "npm test",
-    "test": "../../node_modules/.bin/jest --no-watchman -c ./jest.config.js",
-    "test:es:version": "../../node_modules/.bin/es-check es5 ./lib/index.es5.js && ../../node_modules/.bin/es-check es11 ./lib/index.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.mjs --module && ../../node_modules/.bin/es-check es9 ./lib/index.es9.cjs --module",
-    "build": "node_modules/.bin/rollup -c",
+    "test": "jest --no-watchman -c ./jest.config.js",
+    "test:es:version": "es-check es5 ./lib/index.es5.js && es-check es11 ./lib/index.mjs --module && es-check es9 ./lib/index.es9.mjs --module && es-check es9 ./lib/index.es9.cjs --module",
+    "build": "rollup -c rollup.config.mjs",
     "prepare": "npm run build"
   },
   "repository": {
@@ -49,8 +49,7 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.31.0",
-    "rollup": "^2.70.2"
+    "@merkur/core": "^0.31.0"
   },
   "peerDependencies": {
     "@merkur/core": "*"

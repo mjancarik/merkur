@@ -19,16 +19,16 @@ describe('createWidget method with event emitter plugin', () => {
     });
 
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {},
-        "$external": Object {},
-        "$in": Object {
-          "eventEmitter": Object {
-            "event": Object {},
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {
+          "eventEmitter": {
+            "event": {},
           },
         },
-        "$plugins": Array [
-          Object {
+        "$plugins": [
+          {
             "setup": [Function],
           },
         ],

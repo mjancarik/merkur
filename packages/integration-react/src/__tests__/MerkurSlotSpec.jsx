@@ -97,7 +97,7 @@ describe('MerkurSlot component', () => {
       expect(wrapper).toMatchInlineSnapshot(`
         <WidgetWrapper
           containerSelector=".headline"
-          html="<div class=\\"merkur__headline\\"></div>"
+          html="<div class="merkur__headline"></div>"
         />
       `);
     });
@@ -190,6 +190,7 @@ describe('MerkurSlot component methods', () => {
       delete global.document;
       global.document = {
         querySelector: () => 'container-element',
+        addEventListener: () => {},
       };
 
       expect(instance.container).toBe('container-element');

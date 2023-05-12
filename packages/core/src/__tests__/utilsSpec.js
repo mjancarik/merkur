@@ -31,9 +31,9 @@ describe('utils function', () => {
     it('should defined empty object for "a" and "b" keys', () => {
       expect(setDefaultValueForUndefined({}, ['a', 'b'], {}))
         .toMatchInlineSnapshot(`
-        Object {
-          "a": Object {},
-          "b": Object {},
+        {
+          "a": {},
+          "b": {},
         }
       `);
     });

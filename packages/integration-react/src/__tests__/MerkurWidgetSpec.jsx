@@ -78,7 +78,7 @@ describe('Merkur component', () => {
           <Fragment>
             <WidgetWrapper
               containerSelector=".container"
-              html="<div class=\\"merkur__page\\"></div>"
+              html="<div class="merkur__page"></div>"
             />
           </Fragment>
         `);
@@ -248,6 +248,7 @@ describe('Merkur component methods', () => {
       delete global.document;
       global.document = {
         querySelector: () => 'container-element',
+        addEventListener: () => {},
       };
 
       expect(instance.container).toBe('container-element');
@@ -614,14 +615,14 @@ describe('Merkur component methods', () => {
   describe('_renderStyleAssets() method', () => {
     it('should return array of style elements for given widget assets', () => {
       expect(instance._renderStyleAssets()).toMatchInlineSnapshot(`
-        Array [
+        [
           <link
             href="http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css"
             rel="stylesheet"
           />,
           <style
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "html { font-weight: bold; }",
               }
             }
@@ -657,10 +658,10 @@ describe('Merkur component methods', () => {
       let result = instance._renderStyleAssets();
       expect(result).toHaveLength(1);
       expect(instance._renderStyleAssets()).toMatchInlineSnapshot(`
-        Array [
+        [
           <style
             dangerouslySetInnerHTML={
-              Object {
+              {
                 "__html": "html { background: red; }",
               }
             }
@@ -679,7 +680,7 @@ describe('Merkur component methods', () => {
 
       let result = instance._renderStyleAssets();
       expect(result).toHaveLength(0);
-      expect(result).toMatchInlineSnapshot(`Array []`);
+      expect(result).toMatchInlineSnapshot(`[]`);
     });
 
     it('should return empty array for invalid assets', () => {
@@ -692,7 +693,7 @@ describe('Merkur component methods', () => {
 
       let result = instance._renderStyleAssets();
       expect(result).toHaveLength(0);
-      expect(result).toMatchInlineSnapshot(`Array []`);
+      expect(result).toMatchInlineSnapshot(`[]`);
     });
   });
 
