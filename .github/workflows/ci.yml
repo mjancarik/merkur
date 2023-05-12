@@ -64,7 +64,7 @@ jobs:
 
 
       - name: Unit tests
-        run: npm test -- -- -- --coverage
+        run: npm test -- -- --coverage
       - name: Linter
         run: npm run lint
       - name: Build packages
