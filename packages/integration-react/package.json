@@ -60,8 +60,8 @@
   },
   "peerDependencies": {
     "@merkur/core": "*",
-    "react": ">=18",
-    "react-dom": ">=18"
+    "react": ">=16",
+    "react-dom": ">=16"
   },
   "dependencies": {
     "@merkur/integration": "^0.31.1"
