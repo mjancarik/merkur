@@ -77,54 +77,54 @@ describe('createWidget method with http client plugin', () => {
 
   it('should create empty widget', async () => {
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {
+      {
+        "$dependencies": {
           "AbortController": [Function],
           "fetch": [Function],
         },
-        "$external": Object {
+        "$external": {
           "AbortController": [Function],
           "fetch": [Function],
         },
-        "$in": Object {
-          "httpClient": Object {
-            "cache": Object {},
-            "defaultConfig": Object {
+        "$in": {
+          "httpClient": {
+            "cache": {},
+            "defaultConfig": {
               "baseUrl": "http://localhost:4444",
-              "headers": Object {},
+              "headers": {},
               "method": "GET",
-              "query": Object {},
+              "query": {},
               "timeout": 15000,
-              "transformers": Array [
-                Object {
+              "transformers": [
+                {
                   "transformResponse": [Function],
                 },
-                Object {
+                {
                   "transformRequest": [Function],
                   "transformResponse": [Function],
                 },
-                Object {
+                {
                   "transformRequest": [Function],
                 },
-                Object {
+                {
                   "transformRequest": [Function],
                   "transformResponse": [Function],
                 },
-                Object {
+                {
                   "transformRequest": [Function],
                 },
               ],
             },
           },
         },
-        "$plugins": Array [
-          Object {
+        "$plugins": [
+          {
             "create": [Function],
             "setup": [Function],
           },
         ],
         "create": [Function],
-        "http": Object {
+        "http": {
           "request": [Function],
         },
         "name": "my-widget",
@@ -221,7 +221,7 @@ describe('createWidget method with http client plugin', () => {
         },
       });
 
-      expect(request.body).toMatchInlineSnapshot(`"{\\"a\\":\\"b\\"}"`);
+      expect(request.body).toMatchInlineSnapshot(`"{"a":"b"}"`);
     });
 
     it('should send body with lowercase header content-type', async () => {
@@ -234,7 +234,7 @@ describe('createWidget method with http client plugin', () => {
         },
       });
 
-      expect(request.body).toMatchInlineSnapshot(`"{\\"a\\":\\"b\\"}"`);
+      expect(request.body).toMatchInlineSnapshot(`"{"a":"b"}"`);
     });
 
     it('should timeout request which exceed predefined timeout limit', async () => {
@@ -269,7 +269,7 @@ describe('createWidget method with http client plugin', () => {
       });
 
       expect(response.body).toMatchInlineSnapshot(`
-        Object {
+        {
           "message": "text",
         }
       `);
@@ -304,11 +304,11 @@ describe('createWidget method with http client plugin', () => {
           `"http://localhost:4444/path"`
         );
         expect(response).toMatchInlineSnapshot(`
-          Object {
-            "body": Object {
+          {
+            "body": {
               "message": "text",
             },
-            "headers": Object {
+            "headers": {
               "get": [Function],
             },
             "ok": false,

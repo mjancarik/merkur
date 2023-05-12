@@ -65,20 +65,20 @@ describe('createWidget method with graphql client plugin', () => {
 
   it('should create empty widget', async () => {
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {
+      {
+        "$dependencies": {
           "AbortController": [Function],
           "fetch": [Function],
         },
-        "$external": Object {
+        "$external": {
           "AbortController": [Function],
           "fetch": [Function],
         },
-        "$in": Object {
-          "component": Object {
+        "$in": {
+          "component": {
             "isHydrated": false,
             "isMounted": false,
-            "lifeCycle": Object {
+            "lifeCycle": {
               "bootstrap": undefined,
               "info": undefined,
               "load": undefined,
@@ -86,28 +86,29 @@ describe('createWidget method with graphql client plugin', () => {
               "unmount": undefined,
               "update": undefined,
             },
+            "suspendedTasks": [],
           },
-          "graphqlClient": Object {
+          "graphqlClient": {
             "endpointUrl": "http://localhost:4444",
-            "entityClasses": Object {
+            "entityClasses": {
               "FooNode": [Function],
             },
           },
-          "httpClient": Object {
-            "defaultConfig": Object {
-              "headers": Object {},
+          "httpClient": {
+            "defaultConfig": {
+              "headers": {},
               "method": "GET",
-              "query": Object {},
+              "query": {},
               "timeout": 15000,
-              "transformers": Array [
-                Object {
+              "transformers": [
+                {
                   "transformRequest": [Function],
                   "transformResponse": [Function],
                 },
-                Object {
+                {
                   "transformRequest": [Function],
                 },
-                Object {
+                {
                   "transformRequest": [Function],
                   "transformResponse": [Function],
                 },
@@ -115,22 +116,22 @@ describe('createWidget method with graphql client plugin', () => {
             },
           },
         },
-        "$plugins": Array [
-          Object {
+        "$plugins": [
+          {
             "create": [Function],
             "setup": [Function],
           },
-          Object {
+          {
             "create": [Function],
             "setup": [Function],
           },
-          Object {
+          {
             "create": [Function],
             "setup": [Function],
           },
         ],
-        "assets": Array [
-          Object {
+        "assets": [
+          {
             "source": "http://www.example.com/static/1.0.0/widget.js",
             "type": "script",
           },
@@ -138,24 +139,24 @@ describe('createWidget method with graphql client plugin', () => {
         "bootstrap": [Function],
         "containerSelector": null,
         "create": [Function],
-        "graphql": Object {
+        "graphql": {
           "request": [Function],
         },
-        "http": Object {
+        "http": {
           "request": [Function],
         },
         "info": [Function],
         "load": [Function],
         "mount": [Function],
         "name": "my-widget",
-        "props": Object {
+        "props": {
           "containerSelector": ".container",
           "param": 1,
         },
         "setProps": [Function],
         "setState": [Function],
         "setup": [Function],
-        "state": Object {},
+        "state": {},
         "unmount": [Function],
         "update": [Function],
         "version": "1.0.0",

@@ -20,14 +20,14 @@ describe('createWidget method with cssScramble plugin', () => {
     });
 
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {},
-        "$external": Object {},
-        "$in": Object {
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {
           "classNameScrambler": [Function],
         },
-        "$plugins": Array [
-          Object {
+        "$plugins": [
+          {
             "create": [Function],
             "setup": [Function],
           },

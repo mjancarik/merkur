@@ -69,20 +69,20 @@ describe('createWidget method with http client plugin', () => {
 
   it('should create empty widget', async () => {
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {
+      {
+        "$dependencies": {
           "AbortController": [Function],
           "fetch": [MockFunction],
         },
-        "$external": Object {
+        "$external": {
           "AbortController": [Function],
           "fetch": [MockFunction],
         },
-        "$in": Object {
-          "component": Object {
+        "$in": {
+          "component": {
             "isHydrated": false,
             "isMounted": false,
-            "lifeCycle": Object {
+            "lifeCycle": {
               "bootstrap": undefined,
               "info": undefined,
               "load": undefined,
@@ -90,35 +90,36 @@ describe('createWidget method with http client plugin', () => {
               "unmount": undefined,
               "update": undefined,
             },
+            "suspendedTasks": [],
           },
-          "httpClient": Object {
-            "cache": Object {
+          "httpClient": {
+            "cache": {
               "get": [MockFunction],
               "set": [MockFunction],
             },
-            "defaultConfig": Object {
+            "defaultConfig": {
               "baseUrl": "http://localhost:4444",
-              "headers": Object {},
+              "headers": {},
               "method": "GET",
-              "query": Object {},
+              "query": {},
               "timeout": 15000,
               "transferServerCache": false,
-              "transformers": Array [
-                Object {
+              "transformers": [
+                {
                   "transformRequest": [Function],
                   "transformResponse": [Function],
                 },
-                Object {
+                {
                   "transformRequest": [Function],
                 },
-                Object {
+                {
                   "transformRequest": [Function],
                   "transformResponse": [Function],
                 },
-                Object {
+                {
                   "transformResponse": [Function],
                 },
-                Object {
+                {
                   "transformRequest": [Function],
                 },
               ],
@@ -127,22 +128,22 @@ describe('createWidget method with http client plugin', () => {
             },
           },
         },
-        "$plugins": Array [
-          Object {
+        "$plugins": [
+          {
             "create": [Function],
             "setup": [Function],
           },
-          Object {
+          {
             "create": [Function],
             "setup": [Function],
           },
-          Object {
+          {
             "create": [Function],
             "setup": [Function],
           },
         ],
-        "assets": Array [
-          Object {
+        "assets": [
+          {
             "source": "http://www.example.com/static/1.0.0/widget.js",
             "type": "script",
           },
@@ -150,10 +151,10 @@ describe('createWidget method with http client plugin', () => {
         "bootstrap": [Function],
         "containerSelector": null,
         "create": [Function],
-        "http": Object {
+        "http": {
           "request": [Function],
         },
-        "httpCache": Object {
+        "httpCache": {
           "deserialize": [Function],
           "get": [Function],
           "serialize": [Function],
@@ -162,14 +163,14 @@ describe('createWidget method with http client plugin', () => {
         "load": [Function],
         "mount": [Function],
         "name": "my-widget",
-        "props": Object {
+        "props": {
           "containerSelector": ".container",
           "param": 1,
         },
         "setProps": [Function],
         "setState": [Function],
         "setup": [Function],
-        "state": Object {},
+        "state": {},
         "unmount": [Function],
         "update": [Function],
         "version": "1.0.0",

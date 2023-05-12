@@ -3,7 +3,7 @@ import {
   createRollupES5Config,
   createRollupES9Config,
   createRollupUMDConfig,
-} from '../../createRollupConfig';
+} from '../../createRollupConfig.mjs';
 
 let esConfig = createRollupESConfig();
 let es5Config = createRollupES5Config();

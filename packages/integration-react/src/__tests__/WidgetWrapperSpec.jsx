@@ -47,7 +47,7 @@ describe('WidgetWrapperComponent', () => {
       <div
         className="container"
         dangerouslySetInnerHTML={
-          Object {
+          {
             "__html": "<div><h1>Hello world</h1></div>",
           }
         }

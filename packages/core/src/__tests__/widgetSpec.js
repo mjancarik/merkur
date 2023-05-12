@@ -5,11 +5,11 @@ describe('createCustomWidget method', () => {
     const widget = await createMerkurWidget();
 
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {},
-        "$external": Object {},
-        "$in": Object {},
-        "$plugins": Array [],
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {},
+        "$plugins": [],
         "create": [Function],
         "name": undefined,
         "setup": [Function],
@@ -31,12 +31,12 @@ describe('createCustomWidget method', () => {
     });
 
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {},
-        "$external": Object {},
-        "$in": Object {},
-        "$plugins": Array [
-          Object {
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {},
+        "$plugins": [
+          {
             "setup": [Function],
           },
         ],
@@ -68,12 +68,12 @@ describe('createCustomWidget method', () => {
     });
 
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {},
-        "$external": Object {},
-        "$in": Object {},
-        "$plugins": Array [
-          Object {
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {},
+        "$plugins": [
+          {
             "create": [Function],
             "setup": [Function],
           },
@@ -97,11 +97,11 @@ describe('createCustomWidget method', () => {
     });
 
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {},
-        "$external": Object {},
-        "$in": Object {},
-        "$plugins": Array [],
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {},
+        "$plugins": [],
         "create": [Function],
         "method": [Function],
         "name": undefined,
@@ -121,11 +121,11 @@ describe('createCustomWidget method', () => {
     });
 
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {},
-        "$external": Object {},
-        "$in": Object {},
-        "$plugins": Array [],
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {},
+        "$plugins": [],
         "create": [Function],
         "method": null,
         "name": undefined,

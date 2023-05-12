@@ -1,8 +1,5 @@
 import { bindWidgetToFunctions } from '@merkur/core';
 
-import fetch from 'node-fetch';
-import AbortController from 'abort-controller';
-
 export function setDefaultConfig(widget, newDefaultConfig) {
   widget.$in.httpClient.defaultConfig = {
     ...widget.$in.httpClient.defaultConfig,
@@ -99,8 +96,8 @@ async function runTransformers(widget, transformers, method, ...rest) {
 }
 
 function getFetchAPI() {
-  if (typeof window === 'undefined' || !window.fetch) {
-    return fetch;
+  if (typeof window === 'undefined') {
+    return global.fetch;
   }
 
   return window.fetch.bind(window);

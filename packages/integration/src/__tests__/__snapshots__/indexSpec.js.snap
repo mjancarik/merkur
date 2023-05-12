@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Merkur component loadScriptAssets() function should create script elements for script assets 1`] = `
-Array [
-  Object {
+[
+  {
     "addEventListener": [MockFunction],
     "async": "",
     "custom-element": "amp-fx-collection",
@@ -13,7 +13,7 @@ Array [
     "setAttribute": [Function],
     "src": "http://localhost:4444/static/es11/widget.6541af42bfa3596bb129.js",
   },
-  Object {
+  {
     "addEventListener": [MockFunction],
     "defer": true,
     "onerror": [Function],
@@ -23,7 +23,7 @@ Array [
     "setAttribute": [Function],
     "src": "http://localhost:4444/static/es5/undefined.6961af42bfa3596bb147.js",
   },
-  Object {
+  {
     "addEventListener": [MockFunction],
     "defer": true,
     "onerror": [Function],
@@ -33,15 +33,15 @@ Array [
     "setAttribute": [Function],
     "src": "http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js",
   },
-  Object {
+  {
     "addEventListener": [MockFunction],
     "onerror": [MockFunction],
     "onload": [MockFunction] {
-      "calls": Array [
-        Array [],
+      "calls": [
+        [],
       ],
-      "results": Array [
-        Object {
+      "results": [
+        {
           "type": "return",
           "value": undefined,
         },
@@ -57,8 +57,8 @@ Array [
 `;
 
 exports[`Merkur component loadStyleAssets() function should create style elements for style assets 1`] = `
-Array [
-  Object {
+[
+  {
     "addEventListener": [MockFunction],
     "href": "http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css",
     "onerror": [Function],
@@ -69,16 +69,16 @@ Array [
     "setAttribute": [Function],
     "src": "http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js",
   },
-  Object {
+  {
     "addEventListener": [MockFunction],
     "innerHTML": ".cssClass { margin-top: 5px; }",
     "onerror": [MockFunction],
     "onload": [MockFunction] {
-      "calls": Array [
-        Array [],
+      "calls": [
+        [],
       ],
-      "results": Array [
-        Object {
+      "results": [
+        {
           "type": "return",
           "value": undefined,
         },

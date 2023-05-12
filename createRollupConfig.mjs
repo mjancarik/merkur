@@ -1,8 +1,12 @@
-import { terser } from 'rollup-plugin-terser';
+import fs from 'node:fs';
+import process from 'node:process';
+
+import terser from '@rollup/plugin-terser';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 
-const { name, dependencies, peerDependencies } = require(__dirname +
-  '/package.json');
+const { name, dependencies, peerDependencies } = JSON.parse(
+  fs.readFileSync(process.cwd() + '/package.json')
+);
 const external = [
   ...Object.keys(dependencies || {}),
   ...Object.keys(peerDependencies || {}),

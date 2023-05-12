@@ -22,80 +22,81 @@ describe('createWidget method with router plugin', () => {
     });
 
     expect(widget).toMatchInlineSnapshot(`
-Object {
-  "$dependencies": Object {},
-  "$external": Object {},
-  "$in": Object {
-    "component": Object {
-      "isHydrated": false,
-      "isMounted": false,
-      "lifeCycle": Object {
-        "bootstrap": undefined,
-        "info": undefined,
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {
+          "component": {
+            "isHydrated": false,
+            "isMounted": false,
+            "lifeCycle": {
+              "bootstrap": undefined,
+              "info": undefined,
+              "load": [Function],
+              "mount": undefined,
+              "unmount": undefined,
+              "update": undefined,
+            },
+            "suspendedTasks": [],
+          },
+          "eventEmitter": {
+            "event": {},
+          },
+          "router": {
+            "isBootstrapCalled": false,
+            "isMounting": false,
+            "isRouteActivated": false,
+            "pathname": null,
+            "route": null,
+          },
+        },
+        "$plugins": [
+          {
+            "create": [Function],
+            "setup": [Function],
+          },
+          {
+            "setup": [Function],
+          },
+          {
+            "create": [Function],
+            "setup": [Function],
+          },
+        ],
+        "assets": [
+          {
+            "source": "http://www.example.com/static/1.0.0/widget.js",
+            "type": "script",
+          },
+        ],
+        "bootstrap": [Function],
+        "containerSelector": null,
+        "create": [Function],
+        "emit": [Function],
+        "info": [Function],
         "load": [Function],
-        "mount": undefined,
-        "unmount": undefined,
-        "update": undefined,
-      },
-    },
-    "eventEmitter": Object {
-      "event": Object {},
-    },
-    "router": Object {
-      "isBootstrapCalled": false,
-      "isMounting": false,
-      "isRouteActivated": false,
-      "pathname": null,
-      "route": null,
-    },
-  },
-  "$plugins": Array [
-    Object {
-      "create": [Function],
-      "setup": [Function],
-    },
-    Object {
-      "setup": [Function],
-    },
-    Object {
-      "create": [Function],
-      "setup": [Function],
-    },
-  ],
-  "assets": Array [
-    Object {
-      "source": "http://www.example.com/static/1.0.0/widget.js",
-      "type": "script",
-    },
-  ],
-  "bootstrap": [Function],
-  "containerSelector": null,
-  "create": [Function],
-  "emit": [Function],
-  "info": [Function],
-  "load": [Function],
-  "mount": [Function],
-  "name": "my-widget",
-  "off": [Function],
-  "on": [Function],
-  "props": Object {
-    "param": 1,
-    "pathname": "/my-route",
-  },
-  "router": Object {
-    "getCurrentRoute": [Function],
-    "link": [Function],
-    "redirect": [Function],
-  },
-  "setProps": [Function],
-  "setState": [Function],
-  "setup": [Function],
-  "state": Object {},
-  "unmount": [Function],
-  "update": [Function],
-  "version": "1.0.0",
-}
-`);
+        "mount": [Function],
+        "name": "my-widget",
+        "off": [Function],
+        "on": [Function],
+        "props": {
+          "param": 1,
+          "pathname": "/my-route",
+        },
+        "router": {
+          "getCurrentRoute": [Function],
+          "link": [Function],
+          "redirect": [Function],
+        },
+        "setProps": [Function],
+        "setState": [Function],
+        "setup": [Function],
+        "state": {},
+        "unmount": [Function],
+        "update": [Function],
+        "version": "1.0.0",
+      }
+    `);
   });
 
   describe('router plugin API', () => {

@@ -9,8 +9,6 @@
       "verifyAccess": false
     }
   },
-  "packages": [
-    "packages/*"
-  ],
+  "useWorkspaces": true,
   "version": "0.31.1"
 }

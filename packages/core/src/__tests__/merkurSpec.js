@@ -10,12 +10,12 @@ describe('merkur shell', () => {
     const merkur = createMerkur();
 
     expect(merkur).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {},
-        "$external": Object {},
-        "$in": Object {
-          "widgetFactory": Object {},
-          "widgets": Array [],
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {
+          "widgetFactory": {},
+          "widgets": [],
         },
         "create": [Function],
         "isRegistered": [Function],
@@ -65,11 +65,11 @@ describe('merkur shell', () => {
     const widget = await merkur.create(widgetProperties);
 
     expect(widget).toMatchInlineSnapshot(`
-      Object {
-        "$dependencies": Object {},
-        "$external": Object {},
-        "$in": Object {},
-        "$plugins": Array [],
+      {
+        "$dependencies": {},
+        "$external": {},
+        "$in": {},
+        "$plugins": [],
         "create": [Function],
         "name": "package",
         "setup": [Function],
