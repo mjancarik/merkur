@@ -69,6 +69,6 @@
     }
   },
   "workspaces": [
-    "packages/tools", "packages/*"
+    "packages/*"
   ]
 }

@@ -100,6 +100,13 @@ jobs:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
 
+      - name: Archive npm failure logs
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: npm-logs
+          path: ~/.npm/_logs
+          retention-days: 1
 
       - name: Test release ${{ matrix.preview }}
         run: npm run test:release -- ${{ matrix.preview }}
