@@ -42,6 +42,7 @@ done
 # Install @merkur scoped packages from local registry
 echo "set scoped packages"
 echo "$PWD"
+cd "$ROOT_DIR"
 npm config set @merkur:registry=$NPM_LOCAL_REGISTRY_URL
 
 echo "bump version"
