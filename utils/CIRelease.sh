@@ -22,6 +22,7 @@ NPM_LOCAL_REGISTRY_PID=$!
 
 echo "Local verdaccio running"
 
+echo "$PWD"
 npm config set "//$NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL/:_authToken" "0"
 
 # Release @merkur packages to local registry
@@ -39,8 +40,11 @@ for PACKAGE in $PACKAGES ; do
 done
 
 # Install @merkur scoped packages from local registry
+echo "set scoped packages"
+echo "$PWD"
 npm config set @merkur:registry=$NPM_LOCAL_REGISTRY_URL
 
+echo "bump version"
 # Bump @merkur versions
 cd "$ROOT_DIR"
 node utils/bumpVersion.js
