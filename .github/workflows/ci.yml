@@ -100,6 +100,9 @@ jobs:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
 
+      - name: Test release ${{ matrix.preview }}
+        run: npm run test:release -- ${{ matrix.preview }}
+
       - name: Archive npm failure logs
         uses: actions/upload-artifact@v3
         if: failure()
@@ -107,9 +110,6 @@ jobs:
           name: npm-logs
           path: ~/.npm/_logs
           retention-days: 1
-
-      - name: Test release ${{ matrix.preview }}
-        run: npm run test:release -- ${{ matrix.preview }}
 
   publish:
     if: github.event_name == 'push' && contains(github.ref, '/tags/v')
