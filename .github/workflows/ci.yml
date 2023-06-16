@@ -62,6 +62,8 @@ jobs:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
 
+      - name: Restore workspaces
+        run: npm ci
 
       - name: Unit tests
         run: npm test -- -- --coverage
@@ -99,6 +101,9 @@ jobs:
         with:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
+
+      - name: Restore workspaces
+        run: npm ci
 
       - name: Test release ${{ matrix.preview }}
         run: npm run test:release -- ${{ matrix.preview }}
@@ -139,6 +144,9 @@ jobs:
         with:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
+
+      - name: Restore workspaces
+        run: npm ci
 
       - name: Create npmrc file
         run: echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" >> $HOME/.npmrc 2> /dev/null
