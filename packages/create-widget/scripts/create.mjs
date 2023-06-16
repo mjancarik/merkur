@@ -26,12 +26,6 @@ let viewResolver = argv.view
         choices: [
           {
             name: `${chalk.bold.blue(
-              'Hyper'
-            )} - The basic counter example with hyper.`,
-            value: 'hyper',
-          },
-          {
-            name: `${chalk.bold.blue(
               'µhtml'
             )} - The basic counter example with µhtml.`,
             value: 'uhtml',
@@ -41,12 +35,6 @@ let viewResolver = argv.view
               'Preact'
             )} - The basic counter example with preact.`,
             value: 'preact',
-          },
-          {
-            name: `${chalk.bold.blue(
-              'React'
-            )} - The basic counter example with react.`,
-            value: 'react',
           },
           {
             name: `${chalk.bold.blue(

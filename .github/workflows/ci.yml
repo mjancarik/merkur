@@ -78,7 +78,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        preview: ['react', 'preact', 'hyper', 'uhtml', 'svelte', 'vanilla']
+        preview: ['preact', 'uhtml', 'svelte', 'vanilla']
 
     steps:
       - uses: actions/checkout@v3
