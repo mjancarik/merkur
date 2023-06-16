@@ -9,7 +9,6 @@ const IGNORED_PACKAGES = [
   'plugin-component',
   'plugin-event-emitter',
   'plugin-http-client',
-  'plugin-router',
   'plugin-error',
   'plugin-css-scrambler',
   'tool-storybook',

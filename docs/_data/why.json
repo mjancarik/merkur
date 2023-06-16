@@ -1,7 +1,7 @@
 [
   {
     "title": "Flexible",
-    "text": "You can pick your favorite framework (Vue, Angular, Ember) or templating engine (React, Preact, hyperHTML, µhtml, Svelte, vanila)."
+    "text": "You can pick your favorite framework (Vue, Angular, Ember) or templating engine (Preact, µhtml, Svelte, vanila)."
   },
   {
     "title": "Usable",
