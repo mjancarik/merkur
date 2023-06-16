@@ -9,6 +9,6 @@
       "verifyAccess": false
     }
   },
-  "useWorkspaces": true,
-  "version": "0.31.1"
+  "version": "0.31.1",
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json"
 }

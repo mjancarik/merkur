@@ -1,6 +1,5 @@
 import {
   createRollupESConfig,
-  createRollupES5Config,
   createRollupES9Config,
 } from '../../createRollupConfig.mjs';
 import resolve from '@rollup/plugin-node-resolve';
@@ -9,7 +8,6 @@ import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
 
 let esConfig = createRollupESConfig();
-let es5Config = createRollupES5Config();
 let es9Config = createRollupES9Config();
 
 let extendedPlugins = [
@@ -34,7 +32,6 @@ let extendedPlugins = [
 ];
 
 esConfig.plugins.push(...extendedPlugins);
-es5Config.plugins.push(...extendedPlugins);
 es9Config.plugins.push(...extendedPlugins);
 
-export default [esConfig, es9Config, es5Config];
+export default [esConfig, es9Config];
