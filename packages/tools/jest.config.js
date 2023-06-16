@@ -23,4 +23,8 @@ module.exports = {
     require.resolve('jest-watch-typeahead/filename'),
     require.resolve('jest-watch-typeahead/testname'),
   ],
+  // https://github.com/preactjs/preact/pull/3634
+  testEnvironmentOptions: {
+    customExportConditions: ['node', 'node-addons'],
+  },
 };
