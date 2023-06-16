@@ -21,7 +21,7 @@ exports[`Merkur component loadScriptAssets() function should create script eleme
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es5/undefined.6961af42bfa3596bb147.js",
+    "src": "http://localhost:4444/static/es9/undefined.6961af42bfa3596bb147.js",
   },
   {
     "addEventListener": [MockFunction],
@@ -31,7 +31,7 @@ exports[`Merkur component loadScriptAssets() function should create script eleme
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es5/polyfill.6961af42bfa3596bb147.js",
+    "src": "http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js",
   },
   {
     "addEventListener": [MockFunction],
@@ -50,7 +50,7 @@ exports[`Merkur component loadScriptAssets() function should create script eleme
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js",
+    "src": "http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js",
     "text": "alert();",
   },
 ]
@@ -60,14 +60,14 @@ exports[`Merkur component loadStyleAssets() function should create style element
 [
   {
     "addEventListener": [MockFunction],
-    "href": "http://localhost:4444/static/es9/widget.814e0cb568c7ddc0725d.css",
+    "href": "http://localhost:4444/static/es11/widget.814e0cb568c7ddc0725d.css",
     "onerror": [Function],
     "onload": [Function],
     "rel": "stylesheet",
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js",
+    "src": "http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js",
   },
   {
     "addEventListener": [MockFunction],
@@ -87,7 +87,7 @@ exports[`Merkur component loadStyleAssets() function should create style element
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es5/test.6961af42bfa3596bb147.js",
+    "src": "http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js",
   },
 ]
 `;
