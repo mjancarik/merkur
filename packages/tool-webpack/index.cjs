@@ -16,7 +16,6 @@ const { applyBundleAnalyzer } = require('./module/bundleAnalyzer.cjs');
 const {
   findLoaders,
   applyES9Transformation,
-  applyES5Transformation,
 } = require('./module/babelLoader.cjs');
 const { applyStyleLoaders } = require('./module/styleLoader.cjs');
 
@@ -253,6 +252,5 @@ module.exports = {
   createLiveReloadServer,
   applyBundleAnalyzer,
   applyES9Transformation,
-  applyES5Transformation,
   applyStyleLoaders,
 };

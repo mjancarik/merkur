@@ -2,7 +2,6 @@ const {
   createLiveReloadServer,
   createWebConfig,
   createNodeConfig,
-  applyES5Transformation,
   applyES9Transformation,
   applyStyleLoaders,
   pipe,
@@ -51,12 +50,6 @@ function applySvelteNode(config) {
 module.exports = createLiveReloadServer().then(() =>
   Promise.all([
     pipe(createWebConfig, applyStyleLoaders, applySvelteWeb)(),
-    pipe(
-      createWebConfig,
-      applyStyleLoaders,
-      applySvelteWeb,
-      applyES5Transformation
-    )(),
     pipe(
       createWebConfig,
       applyStyleLoaders,
