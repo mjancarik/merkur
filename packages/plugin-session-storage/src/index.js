@@ -39,80 +39,81 @@ export function sessionStoragePlugin() {
 }
 
 function sessionStorageAPI() {
-  const storageAPI = {
-    get(widget, key) {
-      const {
-        $dependencies: { sessionStorage },
-        $in: {
-          sessionStorage: { keyPrefix },
-        },
-      } = widget;
+  return {
+    sessionStorage: {
+      get(widget, key) {
+        const {
+          $dependencies: { sessionStorage },
+          $in: {
+            sessionStorage: { keyPrefix },
+          },
+        } = widget;
 
-      if (!sessionStorage) {
-        return null;
-      }
+        if (!sessionStorage) {
+          return null;
+        }
 
-      try {
-        return JSON.parse(sessionStorage.getItem(keyPrefix + key))?.value;
-      } catch (error) {
-        throw new Error(
-          `merkur.plugin-session-storage.get: Failed to parse a session storage item value identified by the key ${
-            keyPrefix + key
-          }: ${error.message}`
+        try {
+          return JSON.parse(sessionStorage.getItem(keyPrefix + key))?.value;
+        } catch (error) {
+          throw new Error(
+            `merkur.plugin-session-storage.get: Failed to parse a session storage item value identified by the key ${
+              keyPrefix + key
+            }: ${error.message}`
+          );
+        }
+      },
+
+      /**
+       * Saves a value under the key. This method can throw an error, if the
+       * storage is full, please call it inside try {} block.
+       * @param {object} widget A widget object.
+       * @param {string} key A key
+       * @param {*} value A value
+       * @return {boolean} It's `true` when the operation was successful,
+       *         otherwise `false`.
+       */
+      set(widget, key, value) {
+        const {
+          $dependencies: { sessionStorage },
+          $in: {
+            sessionStorage: { keyPrefix },
+          },
+        } = widget;
+
+        if (!sessionStorage) {
+          return false;
+        }
+
+        sessionStorage.setItem(
+          keyPrefix + key,
+          JSON.stringify({
+            created: Date.now(),
+            value,
+          })
         );
-      }
-    },
 
-    /**
-     * Saves a value under the key. This method can throw an error, if the storage is full, please call it inside
-     * try {} block.
-     * @param {object} widget A widget object.
-     * @param {string} key A key
-     * @param {*} value A value
-     * @return {boolean} It's `true` when the operation was successful, otherwise `false`.
-     */
-    set(widget, key, value) {
-      const {
-        $dependencies: { sessionStorage },
-        $in: {
-          sessionStorage: { keyPrefix },
-        },
-      } = widget;
+        return true;
+      },
 
-      if (!sessionStorage) {
-        return false;
-      }
+      delete(widget, key) {
+        const {
+          $dependencies: { sessionStorage },
+          $in: {
+            sessionStorage: { keyPrefix },
+          },
+        } = widget;
 
-      sessionStorage.setItem(
-        keyPrefix + key,
-        JSON.stringify({
-          created: Date.now(),
-          value,
-        })
-      );
+        if (!sessionStorage) {
+          return false;
+        }
 
-      return true;
-    },
+        sessionStorage.removeItem(keyPrefix + key);
 
-    delete(widget, key) {
-      const {
-        $dependencies: { sessionStorage },
-        $in: {
-          sessionStorage: { keyPrefix },
-        },
-      } = widget;
-
-      if (!sessionStorage) {
-        return false;
-      }
-
-      sessionStorage.removeItem(keyPrefix + key);
-
-      return true;
+        return true;
+      },
     },
   };
-
-  return { sessionStorage: storageAPI };
 }
 
 function getNativeSessionStorage() {
