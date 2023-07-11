@@ -172,4 +172,18 @@ describe('Session Storage plugin', () => {
       expect(returnValue).toBeFalsy();
     }
   );
+
+  it('should return false and log an error if sessionStorage.setItem() throws an error', () => {
+    widget.$dependencies.sessionStorage.setItem.mockImplementationOnce(() => {
+      throw new Error('setItem error');
+    });
+    jest.spyOn(console, 'error').mockImplementationOnce();
+
+    expect(console.error).not.toHaveBeenCalled();
+
+    const returnValue = session.set('item1', 1);
+
+    expect(returnValue).toBeFalsy();
+    expect(console.error).toHaveBeenCalledTimes(1);
+  });
 });

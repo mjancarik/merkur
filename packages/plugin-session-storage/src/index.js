@@ -65,8 +65,7 @@ function sessionStorageAPI() {
       },
 
       /**
-       * Saves a value under the key. This method can throw an error, if the
-       * storage is full, please call it inside try {} block.
+       * Saves a value under the key.
        * @param {object} widget A widget object.
        * @param {string} key A key
        * @param {*} value A value
@@ -85,13 +84,19 @@ function sessionStorageAPI() {
           return false;
         }
 
-        sessionStorage.setItem(
-          keyPrefix + key,
-          JSON.stringify({
-            created: Date.now(),
-            value,
-          })
-        );
+        try {
+          sessionStorage.setItem(
+            keyPrefix + key,
+            JSON.stringify({
+              created: Date.now(),
+              value,
+            })
+          );
+        } catch (error) {
+          console.error(error);
+
+          return false;
+        }
 
         return true;
       },
