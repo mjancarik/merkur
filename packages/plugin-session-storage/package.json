@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-session-storage",
-  "version": "0.0.9",
+  "version": "0.32.0",
   "description": "Merkur session storage.",
   "main": "lib/index",
   "module": "lib/index",
@@ -48,10 +48,9 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.31.0"
+    "@merkur/core": "^0.32.0"
   },
   "peerDependencies": {
     "@merkur/core": "*"
-  },
-  "dependencies": {}
+  }
 }
