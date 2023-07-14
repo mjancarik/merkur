@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-session-storage",
-  "version": "0.32.0",
+  "version": "0.32.1",
   "description": "Merkur session storage.",
   "main": "lib/index",
   "module": "lib/index",
