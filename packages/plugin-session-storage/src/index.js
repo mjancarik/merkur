@@ -54,7 +54,9 @@ function sessionStorageAPI() {
         }
 
         try {
-          return JSON.parse(sessionStorage.getItem(keyPrefix + key))?.value;
+          const item = JSON.parse(sessionStorage.getItem(keyPrefix + key));
+
+          return item && typeof item === 'object' ? item.value : undefined;
         } catch (error) {
           throw new Error(
             `merkur.plugin-session-storage.get: Failed to parse a session storage item value identified by the key ${
