@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 
 import {
   mockedWidgetProperties,
+  mockGlobalProperty,
   widgetMockCleanup,
   widgetMockInit,
 } from '../__mocks__/widgetMock';
@@ -27,6 +28,8 @@ describe('AbstractMerkurWidget', () => {
   let widgetProperties = null;
   let instance = null;
   let wrapper = null;
+  let restoreWindow;
+  let restoreDocument;
 
   beforeEach(() => {
     // Cache mocked widget data
@@ -47,6 +50,16 @@ describe('AbstractMerkurWidget', () => {
   afterEach(() => {
     widgetMockCleanup();
     jest.clearAllMocks();
+
+    if (restoreWindow) {
+      restoreWindow();
+      restoreWindow = null;
+    }
+
+    if (restoreDocument) {
+      restoreDocument();
+      restoreDocument = null;
+    }
   });
 
   describe('html getter', () => {
@@ -192,14 +205,14 @@ describe('AbstractMerkurWidget', () => {
 
   describe('_isClient() method', () => {
     it('should return false for non-browser environments', () => {
-      delete global.window;
+      restoreWindow = mockGlobalProperty('window', undefined);
 
       expect(instance._isClient()).toBe(false);
     });
 
     it('should return true for browser environments', () => {
-      global.window = {};
-      global.document = {};
+      restoreWindow = mockGlobalProperty('window', {});
+      restoreDocument = mockGlobalProperty('document', {});
 
       expect(instance._isClient()).toBe(true);
     });
