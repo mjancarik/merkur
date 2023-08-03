@@ -10,6 +10,7 @@
     "@commitlint/config-conventional": "^17.6.7",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-run": "^3.0.1",
     "@rollup/plugin-terser": "^0.4.3",
     "@rollup/plugin-typescript": "^11.1.2",
     "@types/jest": "^29.5.3",
