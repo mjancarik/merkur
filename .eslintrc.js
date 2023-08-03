@@ -18,17 +18,17 @@ module.exports = {
       },
     ],
 
-    'react/react-in-jsx-scope': 0,
-    'react/prop-types': 0,
-    'react/wrap-multilines': 0,
-    'react/no-deprecated': 0,
+    'react/react-in-jsx-scope': 'off',
+    'react/prop-types': 'off',
+    'react/wrap-multilines': 'off',
+    'react/no-deprecated': 'off',
   },
   plugins: ['prettier', 'jest', 'react', 'jasmine'],
   settings: {
     ecmascript: 2020,
     jsx: true,
     react: {
-      version: '16',
+      version: '18',
     },
   },
   parserOptions: {
@@ -45,4 +45,48 @@ module.exports = {
   globals: {
     globalThis: false,
   },
+  overrides: [
+    // Typescript support
+    {
+      files: ['**/*.{ts,tsx}'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        tsconfigRootDir: __dirname,
+        project: ['./tsconfig.json', './packages/*/tsconfig.json'],
+      },
+      extends: ['plugin:@typescript-eslint/recommended'],
+      plugins: ['@typescript-eslint'],
+      rules: {
+        '@typescript-eslint/ban-types': 'off',
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/no-non-null-assertion': 'off',
+        '@typescript-eslint/ban-ts-comment': [
+          'error',
+          { 'ts-expect-error': false },
+        ],
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          {
+            argsIgnorePattern: '^_',
+            varsIgnorePattern: '^_',
+            destructuredArrayIgnorePattern: '^_',
+            ignoreRestSiblings: true,
+            args: 'none',
+          },
+        ],
+        '@typescript-eslint/no-namespace': [
+          'error',
+          { allowDeclarations: true },
+        ],
+      },
+    },
+    // Type-checkd Typescript support
+    // TODO gradually enable everywhere
+    {
+      files: ['./packages/react-page-renderer/**/!(__tests__)/*.{ts,tsx}'],
+      extends: [
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
+    },
+  ],
 };

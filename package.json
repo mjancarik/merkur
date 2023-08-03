@@ -11,6 +11,11 @@
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-node-resolve": "^15.1.0",
     "@rollup/plugin-terser": "^0.4.3",
+    "@rollup/plugin-typescript": "^11.1.2",
+    "@types/jest": "^29.5.3",
+    "@types/node": "^20.4.6",
+    "@typescript-eslint/eslint-plugin": "^6.2.1",
+    "@typescript-eslint/parser": "^6.2.1",
     "commitizen": "^4.3.0",
     "coveralls": "^3.1.1",
     "es-check": "^7.1.1",
@@ -29,7 +34,8 @@
     "lint-staged": "^13.2.3",
     "prettier": "^3.0.1",
     "rollup": "^3.27.1",
-    "to-mock": "^1.6.2"
+    "to-mock": "^1.6.2",
+    "typescript": "^5.1.6"
   },
   "scripts": {
     "test": "lerna run test",
