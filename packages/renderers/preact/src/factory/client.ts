@@ -1,7 +1,6 @@
 import { render, hydrate } from 'preact';
 
 import {
-  Widget,
   WidgetDefinition,
   WidgetParams,
   WidgetProperties,
@@ -12,7 +11,7 @@ import { mapViews } from './utils';
 import { ViewFactory } from '../types';
 
 /**
- * Factory for creating merkur widgets with preact renderer.
+ * Client Factory for creating merkur widgets with preact renderer.
  */
 export function createPreactWidget({
   name,
@@ -21,7 +20,6 @@ export function createPreactWidget({
   viewFactory,
   ...restProps
 }: WidgetDefinition & WidgetProperties & { viewFactory: ViewFactory }) {
-  // Create new widget factory function
   const widgetFactory = (widgetParams: WidgetParams) => {
     // TODO this can be inlined when createMerkurWidget is typed properly
     const definition: WidgetDefinition = {
@@ -35,7 +33,7 @@ export function createPreactWidget({
       shouldHydrate(widget, { container, isSlot }) {
         return Boolean(container?.children?.length && !isSlot);
       },
-      async mount(widget: Widget) {
+      async mount(widget) {
         mapViews(
           widget,
           viewFactory,
@@ -64,7 +62,7 @@ export function createPreactWidget({
           },
         );
       },
-      async update(widget: Widget) {
+      async update(widget) {
         mapViews(
           widget,
           viewFactory,
@@ -72,7 +70,7 @@ export function createPreactWidget({
             container && widget.$dependencies.render(View(widget), container),
         );
       },
-      async unmount(widget: Widget) {
+      async unmount(widget) {
         mapViews(widget, viewFactory, ({ container }) => {
           if (container) {
             widget.$dependencies.render(null, container);

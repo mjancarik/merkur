@@ -3,28 +3,30 @@ import render from 'preact-render-to-string';
 import {
   SSRMountResult,
   ViewType,
-  Widget,
   WidgetDefinition,
   WidgetParams,
   createMerkurWidget,
 } from '@merkur/core';
 import { ViewFactory } from '../types';
 
+/**
+ * Server Factory for creating merkur widgets with preact renderer.
+ */
 export function createPreactWidget({
-  $dependencies,
   mount,
   viewFactory,
+  $dependencies,
   ...restProps
 }: WidgetDefinition & { viewFactory: ViewFactory }) {
-  return (widgetParams: WidgetParams) =>
-    createMerkurWidget({
+  return (widgetParams: WidgetParams) => {
+    const definition: WidgetDefinition = {
       ...restProps,
       ...widgetParams,
       $dependencies: {
         ...$dependencies,
         render,
       },
-      async mount(widget: Widget) {
+      async mount(widget) {
         const { render } = widget.$dependencies;
         const {
           View: MainView,
@@ -62,5 +64,8 @@ export function createPreactWidget({
           }, {}),
         };
       },
-    });
+    };
+
+    return createMerkurWidget(definition);
+  };
 }
