@@ -54,7 +54,10 @@ module.exports = {
         tsconfigRootDir: __dirname,
         project: ['./tsconfig.json', './packages/*/tsconfig.json'],
       },
-      extends: ['plugin:@typescript-eslint/recommended'],
+      extends: [
+        'plugin:@typescript-eslint/recommended',
+        'plugin:@typescript-eslint/recommended-requiring-type-checking',
+      ],
       plugins: ['@typescript-eslint'],
       rules: {
         '@typescript-eslint/ban-types': 'off',
@@ -79,14 +82,6 @@ module.exports = {
           { allowDeclarations: true },
         ],
       },
-    },
-    // Type-checkd Typescript support
-    // TODO gradually enable everywhere
-    {
-      files: ['./packages/react-page-renderer/**/!(__tests__)/*.{ts,tsx}'],
-      extends: [
-        'plugin:@typescript-eslint/recommended-requiring-type-checking',
-      ],
     },
   ],
 };
