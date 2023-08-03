@@ -76,6 +76,7 @@
     }
   },
   "workspaces": [
-    "packages/*"
+    "packages/*",
+    "packages/renderers/*"
   ]
 }

@@ -1,0 +1,33 @@
+{
+  "name": "@merkur/preact",
+  "version": "0.1.0",
+  "description": "Collection of helpers to aid with preact integration to @merkur",
+  "scripts": {
+    "test": "echo 'Tests pass.'",
+    "test:es:version": "echo 'Tests pass.'",
+    "build": "rollup -c rollup.config.mjs"
+  },
+  "keywords": [
+    "merkur",
+    "preact",
+    "micro",
+    "frontend"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "author": "Jan Šimeček",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "peerDependencies": {
+    "preact": ">=10",
+    "preact-render-to-string": ">=5"
+  }
+}
