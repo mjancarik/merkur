@@ -1,6 +1,5 @@
 import typescript from '@rollup/plugin-typescript';
 import run from '@rollup/plugin-run';
-import ts from 'typescript';
 import fs from 'node:fs';
 import process from 'node:process';
 
