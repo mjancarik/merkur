@@ -4,10 +4,12 @@
   "description": "Merkur is tiny and extensible library for creating front-end microservices.",
   "main": "lib/index",
   "module": "lib/index",
+  "types": "./lib/index.d.ts",
   "unpkg": "lib/index.umd.js",
   "sideEffects": false,
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "import": "./lib/index.mjs",
       "require": "./lib/index.cjs"
     },

@@ -1,49 +1,8 @@
-export type ViewType = (widget: Widget) => any;
+import { ViewType, Widget } from '@merkur/core';
 
-export interface Widget {
-  name: string;
-  version: string;
-  containerSelector?: string;
-  $in: Record<string, any>;
-  $external: Record<string, any>;
-  $dependencies: Record<string, any>;
-  $plugins: any[];
-  slot: Record<
-    string,
-    { name: string; View: ViewType; containerSelector: string }
-  >;
-}
-
-export interface WidgetProperties {
-  name: string;
-  version: string;
-  containerSelector?: string;
-  $in: Record<string, any>;
-  $external: Record<string, any>;
-  $dependencies: Record<string, any>;
-  $plugins: any[];
-}
-
-export type MapViewArgs = {
+export type ViewFactorySlotType = { name: string; View: ViewType };
+export type ViewFactory = (widget: Widget) => {
   View: ViewType;
-  isSlot: boolean;
-  containerSelector: string;
-  container: Element | null;
+  ErrorView?: ViewType;
+  slot?: Record<string, ViewFactorySlotType>;
 };
-
-export type ViewFactory = (
-  widget: Widget,
-  ...args: any[]
-) => {
-  [key: string]: any;
-  View: ViewType;
-  slot?: Record<string, { name: string; View: ViewType }>;
-};
-
-export interface FactoryProperties extends Widget {
-  mount: (widget: Widget) => void;
-  unmount: (widget: Widget) => void;
-  update: (widget: Widget) => void;
-  shouldHydrate: (widget: Widget, viewArgs: MapViewArgs) => void;
-  viewFactory: ViewFactory;
-}

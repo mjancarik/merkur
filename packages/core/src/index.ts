@@ -7,6 +7,7 @@ import {
   isFunction,
 } from './utils';
 
+export * from './types';
 export {
   bindWidgetToFunctions,
   createMerkurWidget,

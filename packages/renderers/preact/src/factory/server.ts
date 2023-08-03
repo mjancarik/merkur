@@ -1,33 +1,22 @@
 import render from 'preact-render-to-string';
 
-import { createMerkurWidget } from '@merkur/core';
-import { FactoryProperties, WidgetProperties } from '../types';
+import {
+  SSRMountResult,
+  ViewType,
+  Widget,
+  WidgetDefinition,
+  WidgetParams,
+  createMerkurWidget,
+} from '@merkur/core';
+import { ViewFactory } from '../types';
 
 export function createPreactWidget({
   $dependencies,
   mount,
   viewFactory,
   ...restProps
-}: WidgetProperties & FactoryProperties) {
-  const factory = {
-    async mount(widget) {
-      const { View, slot = {} } = await viewFactory(widget);
-
-      return {
-        html: widget.$dependencies.render(View(widget)),
-        slot: Object.keys(slot).reduce((acc, cur) => {
-          acc[cur] = {
-            name: slot[cur].name,
-            html: widget.$dependencies.render(slot[cur].View(widget)),
-          };
-
-          return acc;
-        }, {}),
-      };
-    },
-  };
-
-  return (widgetParams) =>
+}: WidgetDefinition & { viewFactory: ViewFactory }) {
+  return (widgetParams: WidgetParams) =>
     createMerkurWidget({
       ...restProps,
       ...widgetParams,
@@ -35,6 +24,43 @@ export function createPreactWidget({
         ...$dependencies,
         render,
       },
-      mount: mount?.bind(factory) ?? factory.mount,
+      async mount(widget: Widget) {
+        const { render } = widget.$dependencies;
+        const {
+          View: MainView,
+          ErrorView,
+          slot = {},
+        } = await viewFactory(widget);
+
+        /**
+         * Wrapper around $dependencies.render function which
+         * handles connection to ErrorView and error plugin when defined.
+         */
+        const renderView = (View: ViewType) => {
+          // @ts-expect-error the @merkur/plugin-error is optional
+          if (widget?.error?.status && ErrorView) {
+            return render(ErrorView(widget));
+          }
+
+          // @ts-expect-error the @merkur/plugin-error is optional
+          if (widget?.error?.status) {
+            return render(null);
+          }
+
+          return render(View(widget));
+        };
+
+        return {
+          html: renderView(MainView(widget)),
+          slot: Object.keys(slot).reduce<SSRMountResult['slot']>((acc, cur) => {
+            acc[cur] = {
+              name: slot[cur].name,
+              html: renderView(slot[cur].View(widget)),
+            };
+
+            return acc;
+          }, {}),
+        };
+      },
     });
 }

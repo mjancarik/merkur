@@ -1,10 +1,9 @@
+export type ViewType = (widget: Widget) => any;
+
 export interface WidgetDefinition {
-  name: string;
-  version: string;
   $plugins?: Array<() => WidgetPlugin>;
   $external: WidgetExternal;
   $dependencies: Record<string, any>;
-
   create?: WidgetFunction;
   setup?: WidgetFunction;
 }
@@ -12,12 +11,23 @@ export interface WidgetDefinition {
 export interface Widget {
   name: string;
   version: string;
+  containerSelector?: string;
   $in: WidgetInternal;
   $external: WidgetExternal;
   $dependencies: Record<string, any>;
   $plugins: WidgetPlugin[];
+  slot: Record<
+    string,
+    { name: string; html: string; containerSelector: string } | undefined
+  >;
 }
 
+export interface WidgetProperties {
+  name: string;
+  version: string;
+}
+
+export interface WidgetParams {}
 export interface WidgetInternal {}
 export interface WidgetExternal {}
 
@@ -31,13 +41,8 @@ export type WidgetFunction = (
   ...rest: unknown[]
 ) => Promise<Partial<Widget>> | Partial<Widget>;
 
-export interface WidgetProperties {
-  name: string;
-  version: string;
-}
-
 export type CreateWidget = (
-  widgetProperties: WidgetProperties
+  widgetProperties: WidgetProperties,
 ) => Promise<Widget>;
 
 export interface Merkur {
