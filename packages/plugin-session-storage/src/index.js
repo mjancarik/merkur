@@ -5,11 +5,11 @@ const KEY_PREFIX_SEPARATOR = '__';
 export function setKeyPrefix(
   widget,
   additionalWords = [],
-  defaultWords = ['widget', widget.name, widget.version]
+  defaultWords = ['widget', widget.name, widget.version],
 ) {
   const words = [...defaultWords, ...additionalWords].filter(Boolean);
   const prefix = `${KEY_PREFIX_SEPARATOR}${words.join(
-    KEY_PREFIX_SEPARATOR
+    KEY_PREFIX_SEPARATOR,
   )}${KEY_PREFIX_SEPARATOR}`;
 
   widget.$in.sessionStorage.keyPrefix = prefix;
@@ -61,7 +61,7 @@ function sessionStorageAPI() {
           throw new Error(
             `merkur.plugin-session-storage.get: Failed to parse a session storage item value identified by the key ${
               keyPrefix + key
-            }: ${error.message}`
+            }: ${error.message}`,
           );
         }
       },
@@ -92,7 +92,7 @@ function sessionStorageAPI() {
             JSON.stringify({
               created: Date.now(),
               value,
-            })
+            }),
           );
         } catch (error) {
           console.error(error);

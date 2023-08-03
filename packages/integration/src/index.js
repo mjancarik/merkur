@@ -12,7 +12,7 @@ function _loadScript(asset, root) {
       scriptElement.addEventListener('load', resolve);
       scriptElement.addEventListener(
         'error',
-        asset.optional ? resolve : reject
+        asset.optional ? resolve : reject,
       );
       return;
     }
@@ -88,7 +88,7 @@ function loadStyleAssets(assets, root = document.head) {
             }
 
             return acc;
-          }, true)))
+          }, true))),
   );
 
   return Promise.all(stylesToRender.map((asset) => _loadStyle(asset, root)));

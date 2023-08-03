@@ -10,7 +10,7 @@ async function viewFactory(widget) {
 
       return acc;
     },
-    {}
+    {},
   );
 
   return {

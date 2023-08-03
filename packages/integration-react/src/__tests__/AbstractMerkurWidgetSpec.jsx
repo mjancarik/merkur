@@ -39,7 +39,7 @@ describe('AbstractMerkurWidget', () => {
     wrapper = shallow(
       <MockMerkurComponent widgetProperties={widgetProperties}>
         Fallback
-      </MockMerkurComponent>
+      </MockMerkurComponent>,
     );
 
     instance = wrapper.instance();
@@ -92,7 +92,7 @@ describe('AbstractMerkurWidget', () => {
   describe('static hasWidgetChanged() method', () => {
     it('should return false for invalid inputs', () => {
       expect(AbstractMerkurWidget.hasWidgetChanged(null, undefined)).toBe(
-        false
+        false,
       );
       expect(AbstractMerkurWidget.hasWidgetChanged()).toBe(false);
       expect(AbstractMerkurWidget.hasWidgetChanged('', '')).toBe(false);
@@ -101,8 +101,8 @@ describe('AbstractMerkurWidget', () => {
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'name', version: 'version' },
-          { a: 4, b: 5 }
-        )
+          { a: 4, b: 5 },
+        ),
       ).toBe(false);
     });
 
@@ -110,8 +110,8 @@ describe('AbstractMerkurWidget', () => {
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todo', version: '1.0.0' },
-          { name: 'todo', version: '1.0.0' }
-        )
+          { name: 'todo', version: '1.0.0' },
+        ),
       ).toBe(false);
     });
 
@@ -119,14 +119,14 @@ describe('AbstractMerkurWidget', () => {
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todo', version: '1.0.0' },
-          { name: 'todo', version: '0.1.0' }
-        )
+          { name: 'todo', version: '0.1.0' },
+        ),
       ).toBe(true);
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todo', version: '1.1.0' },
-          { name: 'todo', version: '1.0.0' }
-        )
+          { name: 'todo', version: '1.0.0' },
+        ),
       ).toBe(true);
     });
 
@@ -134,14 +134,14 @@ describe('AbstractMerkurWidget', () => {
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'articles', version: '1.0.0' },
-          { name: 'todo', version: '0.1.0' }
-        )
+          { name: 'todo', version: '0.1.0' },
+        ),
       ).toBe(true);
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todos', version: '1.0.0' },
-          { name: 'todo', version: '1.0.0' }
-        )
+          { name: 'todo', version: '1.0.0' },
+        ),
       ).toBe(true);
     });
   });

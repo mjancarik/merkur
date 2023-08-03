@@ -63,7 +63,7 @@ describe('createAssets method', () => {
     });
 
     expect(console.warn).toHaveBeenCalledWith(
-      expect.stringContaining('polyfill.js')
+      expect.stringContaining('polyfill.js'),
     );
   });
 

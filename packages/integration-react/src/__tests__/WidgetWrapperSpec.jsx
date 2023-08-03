@@ -41,8 +41,8 @@ describe('WidgetWrapperComponent', () => {
           html={'<div><h1>Hello world</h1></div>'}
         >
           <span>Fallback</span>
-        </WidgetWrapper>
-      )
+        </WidgetWrapper>,
+      ),
     ).toMatchInlineSnapshot(`
       <div
         className="container"
@@ -60,8 +60,8 @@ describe('WidgetWrapperComponent', () => {
       shallow(
         <WidgetWrapper containerSelector='#container' html={''}>
           <span>Fallback</span>
-        </WidgetWrapper>
-      )
+        </WidgetWrapper>,
+      ),
     ).toMatchInlineSnapshot(`
       <div
         id="container"
@@ -78,8 +78,8 @@ describe('WidgetWrapperComponent', () => {
       shallow(
         <WidgetWrapper containerSelector='#main:first-child > div > div & pre .container'>
           <span>Fallback</span>
-        </WidgetWrapper>
-      )
+        </WidgetWrapper>,
+      ),
     ).toMatchInlineSnapshot(`
       <div
         className="container"

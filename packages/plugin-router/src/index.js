@@ -48,13 +48,13 @@ export function routerPlugin() {
       if (ENV === DEV) {
         if (!widget.$in.component) {
           throw new Error(
-            'You must install missing plugin: npm i @merkur/plugin-component'
+            'You must install missing plugin: npm i @merkur/plugin-component',
           );
         }
 
         if (!widget.$in.eventEmitter) {
           throw new Error(
-            'You must install missing plugin: npm i @merkur/plugin-event-emitter'
+            'You must install missing plugin: npm i @merkur/plugin-event-emitter',
           );
         }
       }
@@ -62,7 +62,7 @@ export function routerPlugin() {
       widget.$in.component.lifeCycle = setDefaultValueForUndefined(
         widget.$in.component.lifeCycle,
         ['load'],
-        () => {}
+        () => {},
       );
       hookMethod(widget, '$in.component.lifeCycle.load', loadHook);
       hookMethod(widget, 'bootstrap', bootstrapHook);
@@ -197,7 +197,7 @@ async function resolveRoute(widget) {
 
     if (!widget.$dependencies.router) {
       throw new Error(
-        'You must add calling of createRouter(widget, routes, options) to widget.setup method.'
+        'You must add calling of createRouter(widget, routes, options) to widget.setup method.',
       );
     }
   }

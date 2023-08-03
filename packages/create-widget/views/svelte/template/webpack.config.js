@@ -54,8 +54,8 @@ module.exports = createLiveReloadServer().then(() =>
       createWebConfig,
       applyStyleLoaders,
       applySvelteWeb,
-      applyES9Transformation
+      applyES9Transformation,
     )(),
     pipe(createNodeConfig, applyStyleLoaders, applySvelteNode)(),
-  ])
+  ]),
 );

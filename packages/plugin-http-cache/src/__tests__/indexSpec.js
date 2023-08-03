@@ -185,7 +185,7 @@ describe('createWidget method with http client plugin', () => {
 
     expect(widget.$in.httpClient.cache.set).toHaveBeenCalledWith(
       cacheKey,
-      expect.any(CacheEntry)
+      expect.any(CacheEntry),
     );
     expect(cacheMock[cacheKey]).toBeInstanceOf(CacheEntry);
   });

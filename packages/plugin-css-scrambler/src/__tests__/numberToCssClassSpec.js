@@ -26,7 +26,7 @@ describe('number-to-css-class', () => {
       if (className.length < lastClassName.length) {
         throw new Error(
           'The class names must be in ascending order, but ' +
-            `${className} came after ${lastClassName}`
+            `${className} came after ${lastClassName}`,
         );
       }
       if (!/^[-_a-zA-Z]/.test(className)) {
@@ -37,7 +37,7 @@ describe('number-to-css-class', () => {
           'Detected a collision:',
           classNameToNumber.get(className),
           i,
-          className
+          className,
         );
       }
       lastClassName = className;

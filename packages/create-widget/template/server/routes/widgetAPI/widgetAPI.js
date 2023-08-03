@@ -39,7 +39,7 @@ router.get(
       html,
       slot,
     });
-  })
+  }),
 );
 
 module.exports = () => ({ router });

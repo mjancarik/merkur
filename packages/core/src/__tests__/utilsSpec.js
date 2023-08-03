@@ -92,7 +92,7 @@ describe('utils function', () => {
       hookMethod(
         widget,
         'a',
-        (widget, originalMethod, ...rest) => 'a' + originalMethod(...rest)
+        (widget, originalMethod, ...rest) => 'a' + originalMethod(...rest),
       );
       bindWidgetToFunctions(widget);
 
@@ -105,12 +105,12 @@ describe('utils function', () => {
       hookMethod(
         widget,
         'a',
-        (widget, originalMethod, ...rest) => 'a' + originalMethod(...rest)
+        (widget, originalMethod, ...rest) => 'a' + originalMethod(...rest),
       );
       hookMethod(
         widget,
         'a',
-        (widget, originalMethod, ...rest) => 'b' + originalMethod(...rest)
+        (widget, originalMethod, ...rest) => 'b' + originalMethod(...rest),
       );
       bindWidgetToFunctions(widget);
 
@@ -123,7 +123,7 @@ describe('utils function', () => {
       hookMethod(
         widget,
         'c.e',
-        (widget, originalMethod, ...rest) => 'c.e' + originalMethod(...rest)
+        (widget, originalMethod, ...rest) => 'c.e' + originalMethod(...rest),
       );
       bindWidgetToFunctions(widget);
       bindWidgetToFunctions(widget.c);
@@ -138,11 +138,11 @@ describe('utils function', () => {
       expect.assertions(1);
       try {
         hookMethod(widget, 'x.y.z', (widget, originalMethod, ...rest) =>
-          originalMethod(...rest)
+          originalMethod(...rest),
         );
       } catch (e) {
         expect(e.message).toMatchInlineSnapshot(
-          `"Defined path 'x.y.z' is incorrect. Check your widget structure."`
+          `"Defined path 'x.y.z' is incorrect. Check your widget structure."`,
         );
       }
     });
@@ -151,11 +151,11 @@ describe('utils function', () => {
       expect.assertions(1);
       try {
         hookMethod(widget, 'd', (widget, originalMethod, ...rest) =>
-          originalMethod(...rest)
+          originalMethod(...rest),
         );
       } catch (e) {
         expect(e.message).toMatchInlineSnapshot(
-          `"Defined path 'd' is incorrect. Check your widget structure."`
+          `"Defined path 'd' is incorrect. Check your widget structure."`,
         );
       }
     });

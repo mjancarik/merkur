@@ -12,5 +12,5 @@ module.exports = createLiveReloadServer().then(() =>
     pipe(createWebConfig, applyStyleLoaders)(),
     pipe(createWebConfig, applyStyleLoaders, applyES9Transformation)(),
     pipe(createNodeConfig, applyStyleLoaders)(),
-  ])
+  ]),
 );

@@ -60,7 +60,7 @@ function httpClientAPI() {
           transformers,
           'transformRequest',
           request,
-          response
+          response,
         );
 
         response = !response
@@ -72,7 +72,7 @@ function httpClientAPI() {
           transformers,
           'transformResponse',
           request,
-          response
+          response,
         );
 
         if (!response.ok) {
@@ -121,7 +121,7 @@ export function transformQuery() {
 
       const queryString = Object.keys(request.query)
         .map((key) =>
-          [key, request.query[key]].map(encodeURIComponent).join('=')
+          [key, request.query[key]].map(encodeURIComponent).join('='),
         )
         .join('&');
       const hasQuestionMark = newRequest.url.indexOf('?') !== -1;

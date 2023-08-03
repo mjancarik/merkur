@@ -38,24 +38,26 @@ app
       contentSecurityPolicy: false,
       crossOriginResourcePolicy: false,
       crossOriginEmbedderPolicy: false,
-    })
+    }),
   )
   .use(cors())
   .use(compression())
   .use(
     '/static',
-    expressStaticGzip(path.join(__dirname, 'static'), expressStaticConfig)
+    expressStaticGzip(path.join(__dirname, 'static'), expressStaticConfig),
   )
   .use(
     '/static',
     expressStaticGzip(
       path.join(__dirname, '../build/static'),
-      expressStaticConfig
-    )
+      expressStaticConfig,
+    ),
   )
   .use(
     '/@merkur/tools/static/',
-    express.static(path.join(__dirname, '../node_modules/@merkur/tools/static'))
+    express.static(
+      path.join(__dirname, '../node_modules/@merkur/tools/static'),
+    ),
   )
   .use(widgetAPI.router)
   .use(playground.router)
