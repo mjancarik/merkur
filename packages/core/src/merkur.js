@@ -15,7 +15,7 @@ function create(widgetProperties = {}) {
     throw new Error(
       `The widget with defined name and version "${
         name + version
-      }" is not defined.`
+      }" is not defined.`,
     );
   }
 
@@ -65,8 +65,8 @@ function isRegistered(name) {
 
   return Boolean(
     Object.keys(merkur.$in.widgetFactory).find((key) =>
-      new RegExp(`^${name}`).test(key)
-    )
+      new RegExp(`^${name}`).test(key),
+    ),
   );
 }
 

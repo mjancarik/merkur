@@ -170,7 +170,7 @@ describe('Session Storage plugin', () => {
       const returnValue = session[method]('item1', 1);
 
       expect(returnValue).toBeFalsy();
-    }
+    },
   );
 
   it('should return false and log an error if sessionStorage.setItem() throws an error', () => {

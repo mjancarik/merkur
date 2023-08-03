@@ -28,7 +28,7 @@ export function httpCachePlugin() {
     async setup(widget) {
       if (ENV === DEV && !widget.$in.httpClient) {
         throw new Error(
-          'You must setup plugin @merkur/plugin-http-client before @merkur/plugin-http-cache'
+          'You must setup plugin @merkur/plugin-http-client before @merkur/plugin-http-cache',
         );
       }
 
@@ -120,7 +120,7 @@ function httpCacheAPI() {
 
         return JSON.stringify(serializedData).replace(
           /<\/script/gi,
-          '<\\/script'
+          '<\\/script',
         );
       },
 

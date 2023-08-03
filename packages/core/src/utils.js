@@ -43,7 +43,7 @@ function parsePath(widget, path = '') {
 
   if (!isFunction(target[methodName])) {
     throw new Error(
-      `Defined path '${path}' is incorrect. Check your widget structure.`
+      `Defined path '${path}' is incorrect. Check your widget structure.`,
     );
   }
 

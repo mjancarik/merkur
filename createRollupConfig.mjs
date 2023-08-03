@@ -5,7 +5,7 @@ import terser from '@rollup/plugin-terser';
 import { getBabelOutputPlugin } from '@rollup/plugin-babel';
 
 const { name, dependencies, peerDependencies } = JSON.parse(
-  fs.readFileSync(process.cwd() + '/package.json')
+  fs.readFileSync(process.cwd() + '/package.json'),
 );
 const external = [
   ...Object.keys(dependencies || {}),
@@ -65,18 +65,18 @@ const babelUMDConfig = {
           '@merkur/core': getGlobalName('@merkur/core'),
           '@merkur/plugin-component': getGlobalName('@merkur/plugin-component'),
           '@merkur/plugin-event-emitter': getGlobalName(
-            '@merkur/plugin-event-emitter'
+            '@merkur/plugin-event-emitter',
           ),
           '@merkur/plugin-http-client': getGlobalName(
-            '@merkur/plugin-http-client'
+            '@merkur/plugin-http-client',
           ),
           '@merkur/plugin-error': getGlobalName('@merkur/plugin-error'),
           '@merkur/integration': getGlobalName('@merkur/integration'),
           '@merkur/integration-react': getGlobalName(
-            '@merkur/integration-react'
+            '@merkur/integration-react',
           ),
           '@merkur/plugin-css-scrambler': getGlobalName(
-            '@merkur/plugin-css-scrambler'
+            '@merkur/plugin-css-scrambler',
           ),
           'node-fetch': 'fetch',
         },
@@ -96,7 +96,7 @@ function getGlobalName(name) {
       /([^.]*)$/,
       (merkurPackage) =>
         merkurPackage[0].toUpperCase() +
-        merkurPackage.slice(1, merkurPackage.length)
+        merkurPackage.slice(1, merkurPackage.length),
     )}`;
 }
 

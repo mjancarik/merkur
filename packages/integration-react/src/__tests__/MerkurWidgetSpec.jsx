@@ -39,7 +39,7 @@ describe('Merkur component', () => {
 
     // Shallow render component
     wrapper = shallow(
-      <MerkurWidget widgetProperties={widgetProperties}>Fallback</MerkurWidget>
+      <MerkurWidget widgetProperties={widgetProperties}>Fallback</MerkurWidget>,
     );
 
     widgetMockInit();
@@ -55,7 +55,7 @@ describe('Merkur component', () => {
       wrapper = shallow(
         <MerkurWidget>
           <span>Fallback</span>
-        </MerkurWidget>
+        </MerkurWidget>,
       );
 
       expect(wrapper.exists()).toBeTruthy();
@@ -69,7 +69,7 @@ describe('Merkur component', () => {
       wrapper = shallow(
         <MerkurWidget widgetProperties={widgetProperties}>
           <span>Fallback</span>
-        </MerkurWidget>
+        </MerkurWidget>,
       );
 
       setTimeout(() => {
@@ -98,7 +98,7 @@ describe('Merkur component', () => {
           onWidgetUnmounting={onWidgetUnmounting}
         >
           <span>Fallback</span>
-        </MerkurWidget>
+        </MerkurWidget>,
       );
 
       setTimeout(() => {
@@ -124,7 +124,7 @@ describe('Merkur component', () => {
       wrapper = shallow(
         <MerkurWidget widgetProperties={widgetProperties} onError={onError}>
           <span>Fallback</span>
-        </MerkurWidget>
+        </MerkurWidget>,
       );
 
       setTimeout(() => {
@@ -150,7 +150,7 @@ describe('Merkur component', () => {
       wrapper = shallow(
         <MerkurWidget widgetProperties={widgetProperties} onError={onError}>
           <span>Fallback</span>
-        </MerkurWidget>
+        </MerkurWidget>,
       );
       const instance = wrapper.instance();
 
@@ -175,7 +175,7 @@ describe('Merkur component', () => {
       wrapper = shallow(
         <MerkurWidget widgetProperties={widgetProperties}>
           <span>Fallback</span>
-        </MerkurWidget>
+        </MerkurWidget>,
       );
 
       setTimeout(() => {
@@ -217,7 +217,7 @@ describe('Merkur component methods', () => {
     // Shallow render component
     wrapper = shallow(
       <MerkurWidget widgetProperties={widgetProperties}>Fallback</MerkurWidget>,
-      { disableLifecycleMethods: true }
+      { disableLifecycleMethods: true },
     );
 
     // Update states so widget renders
@@ -269,15 +269,15 @@ describe('Merkur component methods', () => {
         MerkurWidget.getDerivedStateFromProps({
           color: 'blue',
           size: 'large',
-        })
+        }),
       ).toBe(null);
       expect(MerkurWidget.getDerivedStateFromProps()).toBe(null);
       expect(MerkurWidget.getDerivedStateFromProps(null, null)).toBe(null);
       expect(
-        MerkurWidget.getDerivedStateFromProps(null, { widgetProperties: {} })
+        MerkurWidget.getDerivedStateFromProps(null, { widgetProperties: {} }),
       ).toBe(null);
       expect(
-        MerkurWidget.getDerivedStateFromProps({ widgetProperties: {} })
+        MerkurWidget.getDerivedStateFromProps({ widgetProperties: {} }),
       ).toBe(null);
     });
 
@@ -287,8 +287,8 @@ describe('Merkur component methods', () => {
           {
             widgetProperties,
           },
-          { cachedWidgetMeta: null }
-        )
+          { cachedWidgetMeta: null },
+        ),
       ).toEqual({
         cachedWidgetMeta: {
           name: widgetProperties.name,
@@ -303,8 +303,8 @@ describe('Merkur component methods', () => {
           {
             widgetProperties,
           },
-          { cachedWidgetMeta: null }
-        )
+          { cachedWidgetMeta: null },
+        ),
       ).toEqual({
         cachedWidgetMeta: {
           name: widgetProperties.name,
@@ -322,8 +322,8 @@ describe('Merkur component methods', () => {
               name: widgetProperties.name,
               version: widgetProperties.version,
             },
-          }
-        )
+          },
+        ),
       ).toBe(null);
     });
 
@@ -343,8 +343,8 @@ describe('Merkur component methods', () => {
               name: widgetProperties.name,
               version: widgetProperties.version,
             },
-          }
-        )
+          },
+        ),
       ).toEqual({
         encounteredError: false,
         assetsLoaded: false,
@@ -361,7 +361,7 @@ describe('Merkur component methods', () => {
       let defaultState = wrapper.state();
 
       expect(
-        instance.shouldComponentUpdate({ widgetProperties }, defaultState)
+        instance.shouldComponentUpdate({ widgetProperties }, defaultState),
       ).toBe(false);
       expect(
         instance.shouldComponentUpdate(
@@ -370,8 +370,8 @@ describe('Merkur component methods', () => {
             ...defaultState,
             newStateKey: 1,
             thisShouldBeIgnored: true,
-          }
-        )
+          },
+        ),
       ).toBe(false);
       expect(
         instance.shouldComponentUpdate(
@@ -380,8 +380,8 @@ describe('Merkur component methods', () => {
             sameProps: 'with new keys and values',
             butStill: 'the same name or version',
           },
-          defaultState
-        )
+          defaultState,
+        ),
       ).toBe(false);
     });
 
@@ -391,8 +391,8 @@ describe('Merkur component methods', () => {
       expect(
         instance.shouldComponentUpdate(
           { widgetProperties: {} },
-          wrapper.state()
-        )
+          wrapper.state(),
+        ),
       ).toBe(true);
     });
 
@@ -405,8 +405,8 @@ describe('Merkur component methods', () => {
           {
             ...defaultState,
             encounteredError: !defaultState.encounteredError,
-          }
-        )
+          },
+        ),
       ).toBe(true);
     });
 
@@ -419,8 +419,8 @@ describe('Merkur component methods', () => {
           {
             ...defaultState,
             assetsLoaded: !defaultState.assetsLoaded,
-          }
-        )
+          },
+        ),
       ).toBe(true);
     });
 
@@ -434,8 +434,8 @@ describe('Merkur component methods', () => {
               version: '1.2.3',
             },
           },
-          wrapper.state()
-        )
+          wrapper.state(),
+        ),
       ).toBe(true);
 
       expect(
@@ -447,8 +447,8 @@ describe('Merkur component methods', () => {
               version: widgetProperties.version,
             },
           },
-          wrapper.state()
-        )
+          wrapper.state(),
+        ),
       ).toBe(true);
 
       expect(
@@ -460,8 +460,8 @@ describe('Merkur component methods', () => {
               version: '1.5.6',
             },
           },
-          wrapper.state()
-        )
+          wrapper.state(),
+        ),
       ).toBe(true);
     });
   });
@@ -489,7 +489,7 @@ describe('Merkur component methods', () => {
 
       instance.componentDidUpdate(
         { widgetProperties },
-        { assetsLoaded: false }
+        { assetsLoaded: false },
       );
 
       expect(instance._mountWidget).toHaveBeenCalledTimes(1);
@@ -510,7 +510,7 @@ describe('Merkur component methods', () => {
     it('should not try to mount the widget if anything else in the state changed', () => {
       instance.componentDidUpdate(
         { widgetProperties },
-        { ...wrapper.state(), somethingElseChanged: true }
+        { ...wrapper.state(), somethingElseChanged: true },
       );
 
       expect(instance._mountWidget).not.toHaveBeenCalled();
@@ -561,7 +561,7 @@ describe('Merkur component methods', () => {
             version: '1.2.3',
           },
         },
-        wrapper.state()
+        wrapper.state(),
       );
 
       expect(instance._removeWidget).toHaveBeenCalledTimes(1);
@@ -760,7 +760,7 @@ describe('Merkur component methods', () => {
       expect(offWidget).toHaveBeenCalledTimes(1);
       expect(offWidget).toHaveBeenCalledWith(
         '@merkur/plugin-error.error',
-        instance._handleClientError
+        instance._handleClientError,
       );
     });
 
@@ -820,7 +820,7 @@ describe('Merkur component methods', () => {
       expect(instance.setState).toHaveBeenCalledTimes(1);
       expect(instance.setState).toHaveBeenCalledWith(
         { assetsLoaded: true },
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 

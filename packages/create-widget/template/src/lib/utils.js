@@ -31,7 +31,7 @@ function mapResolvedViews(widget, callback) {
         container:
           containerSelector && document?.querySelector(containerSelector),
       });
-    }
+    },
   );
 }
 

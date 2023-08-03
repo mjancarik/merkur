@@ -30,7 +30,7 @@ function applyBabelLoader(config, { isProduction, environment, cache }) {
         cacheIdentifier: createCacheKey(
           environment,
           config?.name,
-          ...(cache?.versionDependencies ?? [])
+          ...(cache?.versionDependencies ?? []),
         ),
         cacheDirectory: true,
         cacheCompression: false,
@@ -51,10 +51,10 @@ module.exports = createLiveReloadServer().then(() =>
       createWebConfig,
       applyStyleLoaders,
       applyBabelLoader,
-      applyES9Transformation
+      applyES9Transformation,
     )(),
     pipe(createNodeConfig, applyStyleLoaders, applyBabelLoader)(),
-  ])
+  ]),
 );
 
 module.exports.applyBabelLoader = applyBabelLoader;

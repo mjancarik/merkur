@@ -16,7 +16,7 @@
  */
 export default function ExtensibleError(
   message,
-  dropInternalStackFrames = true
+  dropInternalStackFrames = true,
 ) {
   if (!(this instanceof ExtensibleError)) {
     throw new TypeError('Cannot call a class as a function');
@@ -24,7 +24,7 @@ export default function ExtensibleError(
   if (this.constructor === ExtensibleError) {
     throw new TypeError(
       'The ExtensibleError is an abstract class and ' +
-        'must be extended before it can be instantiated.'
+        'must be extended before it can be instantiated.',
     );
   }
 
