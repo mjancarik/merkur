@@ -4,6 +4,7 @@ describe('merkur module', () => {
   it('should keep module interface', () => {
     expect(merkur).toMatchInlineSnapshot(`
       {
+        "assignMissingKeys": [Function],
         "bindWidgetToFunctions": [Function],
         "createMerkur": [Function],
         "createMerkurWidget": [Function],

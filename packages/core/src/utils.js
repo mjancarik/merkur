@@ -57,3 +57,15 @@ export function isFunction(value) {
 export function isUndefined(value) {
   return typeof value === 'undefined';
 }
+
+export function assignMissingKeys(target, ...sources) {
+  sources.forEach((source) => {
+    Object.keys(source || {}).forEach((key) => {
+      if (!(key in target)) {
+        target[key] = source[key];
+      }
+    });
+  });
+
+  return target;
+}
