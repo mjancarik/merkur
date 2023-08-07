@@ -1,4 +1,5 @@
 import {
+  assignMissingKeys,
   bindWidgetToFunctions,
   setDefaultValueForUndefined,
   hookMethod,
@@ -27,10 +28,7 @@ export function createRouter(widget, routes, options) {
 export function routerPlugin() {
   return {
     async setup(widget) {
-      widget = {
-        ...routerAPI(),
-        ...widget,
-      };
+      assignMissingKeys(widget, routerAPI());
 
       widget.$in.router = {
         route: null,
