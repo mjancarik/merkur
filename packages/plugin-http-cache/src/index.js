@@ -1,4 +1,8 @@
-import { bindWidgetToFunctions, hookMethod } from '@merkur/core';
+import {
+  assignMissingKeys,
+  bindWidgetToFunctions,
+  hookMethod,
+} from '@merkur/core';
 import { setDefaultConfig, copyResponse } from '@merkur/plugin-http-client';
 
 import CacheEntry from './CacheEntry';
@@ -32,10 +36,7 @@ export function httpCachePlugin() {
         );
       }
 
-      widget = {
-        ...httpCacheAPI(),
-        ...widget,
-      };
+      assignMissingKeys(widget, httpCacheAPI());
 
       widget.$in.httpClient.cache = new Map();
 

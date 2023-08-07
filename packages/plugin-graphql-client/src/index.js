@@ -1,4 +1,4 @@
-import { bindWidgetToFunctions } from '@merkur/core';
+import { assignMissingKeys, bindWidgetToFunctions } from '@merkur/core';
 
 import { print, visit, stripIgnoredCharacters } from 'graphql';
 
@@ -30,10 +30,7 @@ function setEntityClasses(widget, entityClasses) {
 function graphqlClientPlugin() {
   return {
     async setup(widget) {
-      widget = {
-        ...graphqlClientAPI(),
-        ...widget,
-      };
+      assignMissingKeys(widget, graphqlClientAPI());
 
       widget.$in.graphqlClient = {
         endpointUrl: '',

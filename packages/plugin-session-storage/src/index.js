@@ -1,4 +1,4 @@
-import { bindWidgetToFunctions } from '@merkur/core';
+import { assignMissingKeys, bindWidgetToFunctions } from '@merkur/core';
 
 const KEY_PREFIX_SEPARATOR = '__';
 
@@ -18,10 +18,7 @@ export function setKeyPrefix(
 export function sessionStoragePlugin() {
   return {
     async setup(widget) {
-      widget = {
-        ...sessionStorageAPI(),
-        ...widget,
-      };
+      assignMissingKeys(widget, sessionStorageAPI());
 
       widget.$in.sessionStorage = {};
       setKeyPrefix(widget);

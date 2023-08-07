@@ -1,4 +1,4 @@
-import { bindWidgetToFunctions } from '@merkur/core';
+import { assignMissingKeys, bindWidgetToFunctions } from '@merkur/core';
 
 export function setDefaultConfig(widget, newDefaultConfig) {
   widget.$in.httpClient.defaultConfig = {
@@ -17,10 +17,7 @@ export function getDefaultTransformers(widget) {
 export function httpClientPlugin() {
   return {
     async setup(widget) {
-      widget = {
-        ...httpClientAPI(),
-        ...widget,
-      };
+      assignMissingKeys(widget, httpClientAPI());
 
       widget.$in.httpClient = {
         defaultConfig: {

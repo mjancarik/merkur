@@ -177,7 +177,7 @@ describe('Session Storage plugin', () => {
     widget.$dependencies.sessionStorage.setItem.mockImplementationOnce(() => {
       throw new Error('setItem error');
     });
-    jest.spyOn(console, 'error').mockImplementationOnce();
+    jest.spyOn(console, 'error').mockImplementation();
 
     expect(console.error).not.toHaveBeenCalled();
 
