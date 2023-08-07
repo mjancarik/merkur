@@ -7,6 +7,16 @@
     "test:es:version": "echo 'Tests pass.'",
     "build": "rollup -c rollup.config.mjs"
   },
+  "exports": {
+    "./client": {
+      "types": "./lib/client/client.d.ts",
+      "default": "./lib/client/client.js"
+    },
+    "./server": {
+      "types": "./lib/client/client.d.ts",
+      "default": "./lib/client/client.js"
+    }
+  },
   "keywords": [
     "merkur",
     "preact",

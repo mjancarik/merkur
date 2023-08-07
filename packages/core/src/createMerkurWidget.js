@@ -14,6 +14,13 @@ async function callPluginMethod(widget, method, args) {
   return widget;
 }
 
+/**
+ * Typed helper function for easier definition of widget properties.
+ */
+export function createWidgetDefinition(widgetDefinition) {
+  return widgetDefinition;
+}
+
 export async function createMerkurWidget(widgetDefinition = {}) {
   widgetDefinition = setDefaultValueForUndefined(widgetDefinition, [
     '$dependencies',

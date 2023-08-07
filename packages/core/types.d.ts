@@ -1,11 +1,19 @@
 export type ViewType = (widget: Widget) => any;
 
 export interface WidgetDefinition {
+  assets: WidgetAssset[];
   $plugins?: Array<() => WidgetPlugin>;
   $external: WidgetExternal;
   $dependencies: Record<string, any>;
   create?: WidgetFunction;
   setup?: WidgetFunction;
+}
+
+export interface WidgetAssset {
+  name: string;
+  type: 'stylesheet' | 'script' | 'inlineStyle';
+  optional?: boolean;
+  test?: string;
 }
 
 export interface Widget {
@@ -41,18 +49,20 @@ export type WidgetFunction = (
   ...rest: unknown[]
 ) => Promise<Partial<Widget>> | Partial<Widget>;
 
-export type CreateWidget = (
+export type MerkurCreate = (
   widgetProperties: WidgetProperties,
 ) => Promise<Widget>;
 
+export type WidgetCreate = (widgetParams: WidgetParams) => Promise<Widget>;
+
 export interface Merkur {
   $in: {
-    widgets: [];
-    widgetFactory: Record<string, CreateWidget>;
+    widgets: []; // TODO
+    widgetFactory: Record<string, MerkurCreate>;
   };
   $external: Record<string, any>;
   $dependencies: Record<string, any>;
-  create: CreateWidget;
+  create: MerkurCreate;
   register: ({
     name,
     version,
@@ -60,6 +70,20 @@ export interface Merkur {
   }: {
     name: string;
     version: string;
-    createWidget: CreateWidget;
+    createWidget: WidgetCreate;
   }) => void;
 }
+
+/**
+ * Merkur API types
+ */
+export declare function createMerkurWidget(
+  widgetDefinition: WidgetDefinition,
+): Widget;
+
+export declare function createMerkur(): Merkur;
+
+export interface CreateWidgetDefinitionArgs {}
+export declare function createWidgetDefinition<
+  T extends WidgetDefinition & WidgetProperties & CreateWidgetDefinitionArgs,
+>(widgetDefinition: T): T;

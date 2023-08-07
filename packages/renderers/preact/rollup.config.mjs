@@ -1,5 +1,16 @@
 import { createRollupTypescriptConfig } from '../../../createRollupConfig.mjs';
 
-let typescriptConfig = createRollupTypescriptConfig({ watchMode: true });
-
-export default [typescriptConfig];
+export default [
+  {
+    ...createRollupTypescriptConfig({
+      input: './src/client.ts',
+      dir: './lib/client',
+    }),
+  },
+  {
+    ...createRollupTypescriptConfig({
+      input: './src/server.ts',
+      dir: './lib/server',
+    }),
+  },
+];

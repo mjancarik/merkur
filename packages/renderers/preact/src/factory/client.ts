@@ -1,14 +1,12 @@
 import { render, hydrate } from 'preact';
 
 import {
-  WidgetDefinition,
   WidgetParams,
-  WidgetProperties,
   createMerkur,
   createMerkurWidget,
+  createWidgetDefinition,
 } from '@merkur/core';
 import { mapViews } from './utils';
-import { ViewFactory } from '../types';
 
 /**
  * Client Factory for creating merkur widgets with preact renderer.
@@ -19,10 +17,9 @@ export function createPreactWidget({
   $dependencies,
   viewFactory,
   ...restProps
-}: WidgetDefinition & WidgetProperties & { viewFactory: ViewFactory }) {
-  const widgetFactory = (widgetParams: WidgetParams) => {
-    // TODO this can be inlined when createMerkurWidget is typed properly
-    const definition: WidgetDefinition = {
+}: Parameters<typeof createWidgetDefinition>[0]) {
+  const widgetFactory = async (widgetParams: WidgetParams) =>
+    createMerkurWidget({
       ...restProps,
       ...widgetParams,
       $dependencies: {
@@ -77,10 +74,7 @@ export function createPreactWidget({
           }
         });
       },
-    };
-
-    return createMerkurWidget(definition);
-  };
+    });
 
   // Register widget factory on client
   createMerkur().register({
