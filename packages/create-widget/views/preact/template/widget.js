@@ -3,6 +3,8 @@ import { componentPlugin } from '@merkur/plugin-component';
 import { errorPlugin } from '@merkur/plugin-error';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 
+import { viewFactory } from './views/View.jsx';
+
 import pkg from '../package.json';
 import './style.css';
 
@@ -10,6 +12,7 @@ export default createWidgetDefinition({
   name: pkg.name,
   version: pkg.version,
   $plugins: [componentPlugin, eventEmitterPlugin, errorPlugin],
+  viewFactory,
   assets: [
     {
       name: 'polyfill.js',
