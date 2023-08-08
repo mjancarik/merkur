@@ -198,7 +198,7 @@ describe('utils function', () => {
 
         expect(result).toEqual(widget);
         expect(result).toEqual(assignResult);
-      }
+      },
     );
 
     it('should add only e, f, g keys once', () => {
