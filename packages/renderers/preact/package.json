@@ -8,13 +8,16 @@
     "build": "rollup -c rollup.config.mjs"
   },
   "exports": {
+    "./entries/client.js": "./entries/client.js",
+    "./entries/server.js": "./entries/server.js",
+    "./webpack": "./webpack/index.js",
     "./client": {
       "types": "./lib/client/client.d.ts",
       "default": "./lib/client/client.js"
     },
     "./server": {
-      "types": "./lib/client/client.d.ts",
-      "default": "./lib/client/client.js"
+      "types": "./lib/server/server.d.ts",
+      "default": "./lib/server/server.js"
     }
   },
   "keywords": [
@@ -38,6 +41,8 @@
   },
   "peerDependencies": {
     "preact": ">=10",
-    "preact-render-to-string": ">=5"
+    "preact-render-to-string": ">=5",
+    "@babel/preset-react": "7.14.0",
+    "@merkur/tool-webpack": ">=0.28"
   }
 }

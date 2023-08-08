@@ -18,14 +18,6 @@ declare module '@merkur/core' {
     viewFactory: ViewFactory;
   }
 
-  interface WidgetDefinition {
-    // TODO These should be moved to plugin-component
-    shouldHydrate?: (widget: Widget, viewArgs: MapViewArgs) => boolean;
-    mount?: (widget: Widget) => Promise<void | SSRMountResult>;
-    update?: (widget: Widget) => Promise<void>;
-    unmount?: (widget: Widget) => Promise<void>;
-  }
-
   interface Widget {
     // TODO These should be moved to plugin-component
     shouldHydrate: (widget: Widget, viewArgs: MapViewArgs) => boolean;

@@ -12,7 +12,6 @@ import {
  * Server Factory for creating merkur widgets with preact renderer.
  */
 export function createPreactWidget({
-  mount,
   viewFactory,
   $dependencies,
   ...restProps
@@ -52,11 +51,11 @@ export function createPreactWidget({
         };
 
         return {
-          html: renderView(MainView(widget)),
+          html: renderView(MainView),
           slot: Object.keys(slot).reduce<SSRMountResult['slot']>((acc, cur) => {
             acc[cur] = {
               name: slot[cur].name,
-              html: renderView(slot[cur].View(widget)),
+              html: renderView(slot[cur].View),
             };
 
             return acc;
