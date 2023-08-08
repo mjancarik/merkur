@@ -145,7 +145,7 @@ describe('createWidget method with http client plugin', () => {
       });
 
       expect(request.url).toMatchInlineSnapshot(
-        `"http://localhost:4444/path/to/url"`
+        `"http://localhost:4444/path/to/url"`,
       );
     });
 
@@ -185,7 +185,7 @@ describe('createWidget method with http client plugin', () => {
       });
 
       expect(request.url).toMatchInlineSnapshot(
-        `"http://localhost:4444/path?c=d"`
+        `"http://localhost:4444/path?c=d"`,
       );
     });
 
@@ -196,7 +196,7 @@ describe('createWidget method with http client plugin', () => {
       });
 
       expect(request.url).toMatchInlineSnapshot(
-        `"http://localhost:4444/path?a=b"`
+        `"http://localhost:4444/path?a=b"`,
       );
     });
 
@@ -207,7 +207,7 @@ describe('createWidget method with http client plugin', () => {
       });
 
       expect(request.url).toMatchInlineSnapshot(
-        `"http://localhost:4444/path?c=d&a=b"`
+        `"http://localhost:4444/path?c=d&a=b"`,
       );
     });
 
@@ -291,7 +291,7 @@ describe('createWidget method with http client plugin', () => {
 
     it('should reject promise for status code greater than 299', async () => {
       widget.$dependencies.fetch = jest.fn(() =>
-        Promise.resolve({ ...Response, ...{ ok: false } })
+        Promise.resolve({ ...Response, ...{ ok: false } }),
       );
 
       try {
@@ -301,7 +301,7 @@ describe('createWidget method with http client plugin', () => {
         });
       } catch ({ response, request }) {
         expect(request.url).toMatchInlineSnapshot(
-          `"http://localhost:4444/path"`
+          `"http://localhost:4444/path"`,
         );
         expect(response).toMatchInlineSnapshot(`
           {

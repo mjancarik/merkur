@@ -31,7 +31,7 @@ function createWidget(widgetParams) {
             },
             hydrate: !!container?.children?.length,
           });
-        }
+        },
       );
     },
     async unmount(widget) {

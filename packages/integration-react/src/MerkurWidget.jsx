@@ -23,7 +23,7 @@ export default class MerkurWidget extends AbstractMerkurWidget {
     return (
       (this._isClient() &&
         document?.querySelector(
-          this.props.widgetProperties?.containerSelector
+          this.props.widgetProperties?.containerSelector,
         )) ||
       null
     );
@@ -72,7 +72,7 @@ export default class MerkurWidget extends AbstractMerkurWidget {
       if (
         AbstractMerkurWidget.hasWidgetChanged(
           prevState.cachedWidgetMeta,
-          nextProps.widgetProperties
+          nextProps.widgetProperties,
         )
       ) {
         return {
@@ -109,7 +109,7 @@ export default class MerkurWidget extends AbstractMerkurWidget {
       !AbstractMerkurWidget.validateProperties(this.props.widgetProperties) ||
       AbstractMerkurWidget.hasWidgetChanged(
         this.props.widgetProperties,
-        nextProps.widgetProperties
+        nextProps.widgetProperties,
       )
     ) {
       return true;
@@ -248,7 +248,7 @@ export default class MerkurWidget extends AbstractMerkurWidget {
     if (
       AbstractMerkurWidget.hasWidgetChanged(
         currentWidgetProperties,
-        prevWidgetProperties
+        prevWidgetProperties,
       )
     ) {
       this._removeWidget();
@@ -320,7 +320,7 @@ export default class MerkurWidget extends AbstractMerkurWidget {
     return assets
       .filter(
         (asset) =>
-          ['stylesheet', 'inlineStyle'].includes(asset.type) && asset.source
+          ['stylesheet', 'inlineStyle'].includes(asset.type) && asset.source,
       )
       .map((asset, key) => {
         switch (asset.type) {
@@ -395,9 +395,9 @@ export default class MerkurWidget extends AbstractMerkurWidget {
               },
               () => {
                 resolve();
-              }
+              },
             );
-          })
+          }),
       )
       .catch((error) => this._handleError(error));
   }

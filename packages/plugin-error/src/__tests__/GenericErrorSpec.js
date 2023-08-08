@@ -12,7 +12,7 @@ describe('GenericError', () => {
     expect(error.params).toEqual(
       expect.objectContaining({
         reason: 'api_error',
-      })
+      }),
     );
   });
 });

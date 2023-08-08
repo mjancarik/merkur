@@ -5,7 +5,7 @@ function isES9Supported() {
   if (_isES9Supported === undefined) {
     _isES9Supported =
       exported.test(
-        'return (() => { const o = { t: 1 }; return { ...o }; })() && (async () => ({}))()'
+        'return (() => { const o = { t: 1 }; return { ...o }; })() && (async () => ({}))()',
       ) && !!Object.values;
   }
 
@@ -16,7 +16,7 @@ function isES11Supported() {
   if (_isES11Supported === undefined) {
     _isES11Supported =
       exported.test(
-        'return (() => { const o = { t: { q: true } }; return o?.t?.q && (o?.a?.q ?? true); })()'
+        'return (() => { const o = { t: { q: true } }; return o?.t?.q && (o?.a?.q ?? true); })()',
       ) &&
       exported.test('return typeof Promise.allSettled === "function"') &&
       exported.test('return typeof globalThis !== "undefined"') &&

@@ -16,7 +16,7 @@ function createCacheKey(...args) {
       args
         .filter(Boolean)
         .map((value) => JSON.stringify(value))
-        .join('')
+        .join(''),
     )
     .digest('hex');
 }

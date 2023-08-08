@@ -21,7 +21,7 @@ function createWidget(widgetParams) {
         widget,
         viewFactory,
         ({ View, container }) =>
-          container && widget.$dependencies.render(container, View(widget))
+          container && widget.$dependencies.render(container, View(widget)),
       );
     },
     async unmount(widget) {
@@ -30,7 +30,7 @@ function createWidget(widgetParams) {
         viewFactory,
         ({ container }) =>
           container &&
-          widget.$dependencies.render(container, widget.$dependencies.html``)
+          widget.$dependencies.render(container, widget.$dependencies.html``),
       );
     },
     async update(widget) {
@@ -38,7 +38,7 @@ function createWidget(widgetParams) {
         widget,
         viewFactory,
         ({ View, container }) =>
-          container && widget.$dependencies.render(container, View(widget))
+          container && widget.$dependencies.render(container, View(widget)),
       );
     },
   });

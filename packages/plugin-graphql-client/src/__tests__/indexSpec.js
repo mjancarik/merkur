@@ -180,7 +180,7 @@ describe('createWidget method with graphql client plugin', () => {
         id: 3,
       });
       expect(widget.$dependencies.fetch.mock.calls[0][1].body).toBe(
-        '{"query":"query BasicQuery($id:ID!){basic(id:$id){foo __typename}}","variables":{"id":3}}'
+        '{"query":"query BasicQuery($id:ID!){basic(id:$id){foo __typename}}","variables":{"id":3}}',
       );
     });
 
@@ -238,7 +238,7 @@ describe('createWidget method with graphql client plugin', () => {
       });
       expect(widget.$dependencies.fetch).toHaveBeenCalled();
       expect(data).toStrictEqual(
-        new FooEntity({ foo: 'text', __typename: 'FooNode' })
+        new FooEntity({ foo: 'text', __typename: 'FooNode' }),
       );
     });
   });

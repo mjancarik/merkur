@@ -32,7 +32,7 @@ function findLoaders(rules = [], loader) {
 function createESTransformation(
   config,
   { cwd, isProduction, nodeModulesDir, environment, cache },
-  esVersion
+  esVersion,
 ) {
   const esPolyfillFilePath = `./src/polyfill.${esVersion}.js`;
 
@@ -50,31 +50,31 @@ function createESTransformation(
       alias: {
         '@merkur/core': path.join(
           nodeModulesDir,
-          `@merkur/core/lib/index.${esVersion}.mjs`
+          `@merkur/core/lib/index.${esVersion}.mjs`,
         ),
         '@merkur/plugin-component': path.join(
           nodeModulesDir,
-          `@merkur/plugin-component/lib/index.mjs`
+          `@merkur/plugin-component/lib/index.mjs`,
         ),
         '@merkur/plugin-event-emitter': path.join(
           nodeModulesDir,
-          `@merkur/plugin-event-emitter/lib/index.mjs`
+          `@merkur/plugin-event-emitter/lib/index.mjs`,
         ),
         '@merkur/plugin-http-client': path.join(
           nodeModulesDir,
-          `@merkur/plugin-http-client/lib/index.mjs`
+          `@merkur/plugin-http-client/lib/index.mjs`,
         ),
         '@merkur/plugin-error': path.join(
           nodeModulesDir,
-          `@merkur/plugin-error/lib/index.mjs`
+          `@merkur/plugin-error/lib/index.mjs`,
         ),
         '@merkur/plugin-router': path.join(
           nodeModulesDir,
-          `@merkur/plugin-router/lib/index.mjs`
+          `@merkur/plugin-router/lib/index.mjs`,
         ),
         '@merkur/plugin-css-scrambler': path.join(
           nodeModulesDir,
-          `@merkur/plugin-router/lib/index.mjs`
+          `@merkur/plugin-router/lib/index.mjs`,
         ),
         ...config.resolve.alias,
       },
@@ -87,7 +87,7 @@ function createESTransformation(
 
   const { loaders: babelLoaders } = findLoaders(
     config.module.rules,
-    'babel-loader'
+    'babel-loader',
   );
 
   const babelPresetEnv = [
@@ -119,7 +119,7 @@ function createESTransformation(
           cacheIdentifier: createCacheKey(
             environment,
             config?.name,
-            ...(cache?.versionDependencies ?? [])
+            ...(cache?.versionDependencies ?? []),
           ),
           cacheDirectory: true,
           cacheCompression: false,

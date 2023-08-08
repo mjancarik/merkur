@@ -43,7 +43,7 @@ function createWidget(widgetParams) {
         widget,
         viewFactory,
         ({ View, container }) =>
-          container && widget.$dependencies.render(View(widget), container)
+          container && widget.$dependencies.render(View(widget), container),
       );
     },
   });

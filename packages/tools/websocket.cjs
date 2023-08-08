@@ -18,7 +18,7 @@ function createServer(options = {}) {
   options = Object.assign(
     {},
     { port: process.env.MERKUR_PLAYGROUND_LIVERELOAD_PORT },
-    options
+    options,
   );
 
   let server = null;
@@ -42,7 +42,7 @@ function createClient(options) {
   options = Object.assign(
     {},
     { port: process.env.MERKUR_PLAYGROUND_LIVERELOAD_PORT },
-    options
+    options,
   );
 
   return new WebSocket('ws://localhost:' + options.port);

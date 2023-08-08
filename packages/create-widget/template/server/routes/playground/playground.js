@@ -10,7 +10,7 @@ const { playgroundErrorMiddleware } = require('@merkur/plugin-error/server');
 const { asyncMiddleware, getServerUrl } = require('../utils');
 
 const playgroundTemplate = ejs.compile(
-  fs.readFileSync(path.join(__dirname, '/playground.ejs'), 'utf8')
+  fs.readFileSync(path.join(__dirname, '/playground.ejs'), 'utf8'),
 );
 
 const router = express.Router();
@@ -35,14 +35,14 @@ router
           widgetProperties: restProperties,
           assets,
           html,
-        })
+        }),
       );
-    })
+    }),
   )
   .use(
     playgroundErrorMiddleware({
       renderPlayground: playgroundTemplate,
-    })
+    }),
   );
 
 module.exports = () => ({ router });

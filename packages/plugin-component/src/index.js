@@ -127,7 +127,7 @@ function componentAPI() {
     async setProps(widget, propsSetter) {
       if (!widget.$in.component.isMounted) {
         widget.$in.component.suspendedTasks.push(() =>
-          widget.setProps(propsSetter)
+          widget.setProps(propsSetter),
         );
         return;
       }

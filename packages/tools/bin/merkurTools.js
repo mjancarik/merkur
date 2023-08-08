@@ -14,6 +14,6 @@ require('yargs')
     },
     async (argv) => {
       return livereload(argv);
-    }
+    },
   )
   .help().argv;
