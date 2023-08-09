@@ -30,7 +30,7 @@ export async function mapViews<T>(
   const { View, ErrorView, slot = {} } = await viewFactory(widget);
 
   // Add additional slot information to slot views
-  const slots = Object.keys(widget.slot).reduce<
+  const slots = Object.keys(widget.slot ?? {}).reduce<
     Exclude<MapViewArgs['slot'], undefined>
   >((acc, cur) => {
     acc[cur] = {
