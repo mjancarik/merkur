@@ -1,7 +1,4 @@
-import {
-  createMerkurWidget,
-  createWidgetDefinition,
-} from './createMerkurWidget';
+import { createMerkurWidget, defineWidget } from './createMerkurWidget';
 import { createMerkur, removeMerkur, getMerkur } from './merkur';
 import {
   setDefaultValueForUndefined,
@@ -19,5 +16,5 @@ export {
   isFunction,
   removeMerkur,
   setDefaultValueForUndefined,
-  createWidgetDefinition,
+  defineWidget,
 };

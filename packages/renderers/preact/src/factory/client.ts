@@ -4,7 +4,7 @@ import {
   WidgetParams,
   createMerkur,
   createMerkurWidget,
-  createWidgetDefinition,
+  defineWidget,
 } from '@merkur/core';
 import { mapViews } from './utils';
 
@@ -17,7 +17,7 @@ export function createPreactWidget({
   $dependencies,
   viewFactory,
   ...restProps
-}: Parameters<typeof createWidgetDefinition>[0]) {
+}: Parameters<typeof defineWidget>[0]) {
   const widgetFactory = async (widgetParams: WidgetParams) =>
     createMerkurWidget({
       ...restProps,

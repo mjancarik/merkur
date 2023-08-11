@@ -14,7 +14,7 @@ declare module '@merkur/core' {
     slot: Record<string, { name: string; html: string }>;
   };
 
-  interface CreateWidgetDefinitionArgs {
+  interface DefineWidgetArgs {
     viewFactory: ViewFactory;
   }
 

@@ -5,7 +5,7 @@ import {
   ViewType,
   WidgetParams,
   createMerkurWidget,
-  createWidgetDefinition,
+  defineWidget,
 } from '@merkur/core';
 
 /**
@@ -15,7 +15,7 @@ export function createPreactWidget({
   viewFactory,
   $dependencies,
   ...restProps
-}: Parameters<typeof createWidgetDefinition>[0]) {
+}: Parameters<typeof defineWidget>[0]) {
   return (widgetParams: WidgetParams) =>
     createMerkurWidget({
       ...restProps,

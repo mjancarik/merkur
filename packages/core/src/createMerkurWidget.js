@@ -15,9 +15,9 @@ async function callPluginMethod(widget, method, args) {
 }
 
 /**
- * Typed helper function for easier definition of widget properties.
+ * Type helper to make it easier to define widget properties.
  */
-export function createWidgetDefinition(widgetDefinition) {
+export function defineWidget(widgetDefinition) {
   return widgetDefinition;
 }
 

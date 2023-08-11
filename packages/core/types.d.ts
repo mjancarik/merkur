@@ -89,9 +89,9 @@ export declare function createMerkurWidget<
   T extends WidgetDefinition & CreateMerkurWidgetArgs,
 >(widgetDefinition: T): Widget;
 
-export interface CreateWidgetDefinitionArgs {}
-export declare function createWidgetDefinition<
-  T extends WidgetDefinition & WidgetProperties & CreateWidgetDefinitionArgs,
+export interface DefineWidgetArgs {}
+export declare function defineWidget<
+  T extends WidgetDefinition & WidgetProperties & DefineWidgetArgs,
 >(widgetDefinition: T): T;
 
 export declare function createMerkur(): Merkur;
