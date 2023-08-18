@@ -15,10 +15,40 @@ async function callPluginMethod(widget, method, args) {
 }
 
 /**
- * Type helper to make it easier to define widget properties.
+ * Typed helper to make it easier to define widget properties.
  */
 export function defineWidget(widgetDefinition) {
   return widgetDefinition;
+}
+
+/**
+ * Typed helper to make it easier to define widget properties.
+ */
+export function defineSlot(params) {
+  return params;
+}
+
+/**
+ * Typed helper to make it easier to define widget properties.
+ */
+export function createViewFactory(params) {
+  const { slotFactories, ...restParams } = params;
+
+  return async (widget) => {
+    const slot = (await Promise.all([slotFactories(widget)])).reduce(
+      (acc, cur) => {
+        acc[cur.name] = cur;
+
+        return acc;
+      },
+      {},
+    );
+
+    return {
+      ...restParams,
+      slot,
+    };
+  };
 }
 
 export function setDefinitionDefaults(widgetDefinition) {

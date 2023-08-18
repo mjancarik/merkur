@@ -1,12 +1,4 @@
-import { ViewType, Widget } from '@merkur/core';
 import { MapViewArgs } from './factory/utils';
-
-export type ViewFactorySlotType = { name: string; View: ViewType };
-export type ViewFactory = (widget: Widget) => Promise<{
-  View: ViewType;
-  ErrorView?: ViewType;
-  slot?: Record<string, ViewFactorySlotType>;
-}>;
 
 declare module '@merkur/core' {
   type SSRMountResult = {

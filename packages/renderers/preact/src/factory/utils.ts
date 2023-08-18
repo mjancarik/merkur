@@ -1,5 +1,9 @@
-import { ViewType, Widget } from '@merkur/core';
-import { ViewFactory, ViewFactorySlotType } from '../types';
+import {
+  ViewFactory,
+  ViewFactorySlotType,
+  ViewType,
+  Widget,
+} from '@merkur/core';
 
 export type MapViewArgs = {
   View: ViewType;

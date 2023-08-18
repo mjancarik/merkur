@@ -94,6 +94,24 @@ export declare function defineWidget<
   T extends WidgetDefinition & WidgetProperties & DefineWidgetArgs,
 >(widgetDefinition: T): T;
 
+export type SlotDefinition = { name: string; View: ViewType };
+export declare function defineSlot(params: SlotDefinition);
+
+export type ViewDefinition = {
+  View: ViewType;
+  ErrorView?: ViewType;
+  slotFactories: (widget: Widget) => SlotDefinition | Promise<SlotDefinition>;
+};
+
+export type ViewFactorySlotType = { name: string; View: ViewType };
+export type ViewFactory = (widget: Widget) => Promise<{
+  View: ViewType;
+  ErrorView?: ViewType;
+  slot?: Record<string, ViewFactorySlotType>;
+}>;
+
+export declare function createViewFactory(params: ViewDefinition): ViewFactory;
+
 export declare function createMerkur(): Merkur;
 export declare function hookMethod(
   widget: Widget,

@@ -1,12 +1,14 @@
+import { defineSlot } from '@merkur/core';
+
 import Welcome from '../components/Welcome';
 import WidgetContext from '../components/WidgetContext';
 import WidgetDescription from '../components/WidgetDescription';
 
 async function headlineSlotFactory() {
-  return {
+  return defineSlot({
     name: 'headline',
     View: HeadlineSlot,
-  };
+  });
 }
 
 function HeadlineSlot(widget) {
