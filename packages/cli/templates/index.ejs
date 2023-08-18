@@ -1,0 +1,30 @@
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MAIN</title>
+  </head>
+  <body>
+    <div class="headline-view"><%- widget?.slot?.headline?.html %></div>
+    <div class="merkur-view"><%- widget.html %></div>
+    <script type="module" src="/src/client.js"></script>
+
+    <script>
+      window.addEventListener('load', function () {
+        const widgetProperties = <%- JSON.stringify(widget) %>
+
+        window.__merkur__.create(widgetProperties).then(async function (widget) {
+          widget.containerSelector = '.merkur-view';
+          widget.slot.headline = {
+            containerSelector: '.headline-view',
+          };
+
+          widget.mount();
+        });
+      });
+    </script>
+  </body>
+</html>
