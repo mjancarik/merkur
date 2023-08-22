@@ -16,6 +16,8 @@ async function callPluginMethod(widget, method, args) {
 
 /**
  * Typed helper to make it easier to define widget properties.
+ *
+ * @type import('@merkur/core').defineWidget
  */
 export function defineWidget(widgetDefinition) {
   return widgetDefinition;
@@ -23,26 +25,29 @@ export function defineWidget(widgetDefinition) {
 
 /**
  * Typed helper to make it easier to define widget properties.
+ *
+ * @type import('@merkur/core').createSlotFactory
  */
-export function defineSlot(params) {
-  return params;
+export function createSlotFactory(creator) {
+  return async (widget) => creator(widget);
 }
 
 /**
  * Typed helper to make it easier to define widget properties.
+ *
+ * @type import('@merkur/core').createViewFactory
  */
-export function createViewFactory(params) {
-  const { slotFactories, ...restParams } = params;
-
+export function createViewFactory(creator) {
   return async (widget) => {
-    const slot = (await Promise.all([slotFactories(widget)])).reduce(
-      (acc, cur) => {
-        acc[cur.name] = cur;
+    const { slotFactories, ...restParams } = await creator(widget);
 
-        return acc;
-      },
-      {},
-    );
+    const slot = (
+      await Promise.all(slotFactories.map((creator) => creator(widget)))
+    ).reduce((acc, cur) => {
+      acc[cur.name] = cur;
+
+      return acc;
+    }, {});
 
     return {
       ...restParams,
@@ -72,6 +77,9 @@ export function setDefinitionDefaults(widgetDefinition) {
   };
 }
 
+/**
+ * @type import('@merkur/core').createMerkurWidget
+ */
 export async function createMerkurWidget(widgetDefinition = {}) {
   const definition = setDefinitionDefaults(widgetDefinition);
   const { setup, create } = definition;

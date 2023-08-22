@@ -1,15 +1,13 @@
-import { defineSlot } from '@merkur/core';
+import { createSlotFactory } from '@merkur/core';
 
 import Welcome from '../components/Welcome';
 import WidgetContext from '../components/WidgetContext';
 import WidgetDescription from '../components/WidgetDescription';
 
-async function headlineSlotFactory() {
-  return defineSlot({
-    name: 'headline',
-    View: HeadlineSlot,
-  });
-}
+const headlineSlotFactory = createSlotFactory(() => ({
+  name: 'headline',
+  View: HeadlineSlot,
+}));
 
 function HeadlineSlot(widget) {
   if (widget.error && widget.error.status) {
