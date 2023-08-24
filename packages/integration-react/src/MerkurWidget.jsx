@@ -33,7 +33,8 @@ export default class MerkurWidget extends AbstractMerkurWidget {
     super(props);
 
     this._widget = null;
-    this._handleClientError = this._handleError.bind(this);
+    // emitter has widget as first argument, error as second
+    this._handleClientError = (_widget, error) => this._handleError(error);
 
     this.state = {
       encounteredError: false,
