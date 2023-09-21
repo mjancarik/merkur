@@ -13,7 +13,7 @@ const { argv } = yargs(hideBin(process.argv));
 if (argv._.length === 0) {
   // eslint-disable-next-line no-console
   console.log(`
-Please specify your new project directory: 
+Please specify your new project directory:
   ${chalk.blue('@merkur/create-widget')} ${chalk.green('<project-directory>')}
 For example:
   ${chalk.blue('@merkur/create-widget')} ${chalk.green('my-widget')}`);

@@ -1,4 +1,4 @@
-import { createRollupTypescriptConfig } from '../../../createRollupConfig.mjs';
+import { createRollupTypescriptConfig } from '../../createRollupConfig.mjs';
 
 export default [
   {

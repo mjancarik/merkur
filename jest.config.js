@@ -2,6 +2,7 @@ exports = {
   bail: false,
   verbose: true,
   testEnvironment: 'node',
+  prettierPath: '',
   coverageThreshold: {
     global: {
       functions: 50,

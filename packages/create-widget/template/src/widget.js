@@ -12,10 +12,6 @@ export default defineWidget({
   $plugins: [componentPlugin, eventEmitterPlugin, errorPlugin],
   assets: [
     {
-      name: 'polyfill.js',
-      type: 'script',
-    },
-    {
       name: 'widget.js',
       type: 'script',
     },
