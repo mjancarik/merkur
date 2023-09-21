@@ -6,6 +6,7 @@ import {
 } from './createMerkurWidget';
 import { createMerkur, removeMerkur, getMerkur } from './merkur';
 import {
+  assignMissingKeys,
   setDefaultValueForUndefined,
   bindWidgetToFunctions,
   hookMethod,
@@ -13,6 +14,7 @@ import {
 } from './utils';
 
 export {
+  assignMissingKeys,
   bindWidgetToFunctions,
   createMerkurWidget,
   createMerkur,

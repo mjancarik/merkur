@@ -1,4 +1,5 @@
 import {
+  assignMissingKeys,
   isFunction,
   isUndefined,
   setDefaultValueForUndefined,
@@ -158,6 +159,71 @@ describe('utils function', () => {
           `"Defined path 'd' is incorrect. Check your widget structure."`,
         );
       }
+    });
+  });
+
+  describe('assignMissingKeys(target, ...sources)', () => {
+    let widget;
+
+    beforeEach(() => {
+      widget = {
+        a: function (widget, a) {
+          return a;
+        },
+        b: function (widget, b) {
+          return b;
+        },
+        c: {},
+        d: 'string',
+      };
+    });
+
+    it.each([
+      null,
+      undefined,
+      0,
+      42,
+      'string',
+      { e: 1, f: function () {} },
+      function () {},
+      false,
+      true,
+      [],
+    ])(
+      'should return the same result as Object.assign(widget, %p)',
+      (source) => {
+        const assignResult = { ...widget };
+        Object.assign(assignResult, source);
+        const result = assignMissingKeys(widget, source);
+
+        expect(result).toEqual(widget);
+        expect(result).toEqual(assignResult);
+      },
+    );
+
+    it('should add only e, f, g keys once', () => {
+      const source1 = {
+        a: 42,
+        f: function (widget, f) {
+          return f;
+        },
+      };
+      const source2 = {
+        c: function (widget, c) {
+          return c;
+        },
+        e: { prop: 1 },
+        f: 'string',
+        g: [],
+      };
+      const result = assignMissingKeys(widget, source1, source2);
+
+      expect(result).toEqual({
+        ...widget,
+        e: source2.e,
+        f: source1.f,
+        g: source2.g,
+      });
     });
   });
 });

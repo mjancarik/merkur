@@ -1,10 +1,9 @@
+import { assignMissingKeys } from '@merkur/core';
+
 export function eventEmitterPlugin() {
   return {
     async setup(widget) {
-      widget = {
-        ...eventEmitterAPI(),
-        ...widget,
-      };
+      assignMissingKeys(widget, eventEmitterAPI());
 
       widget.$in.eventEmitter = {
         event: {},
