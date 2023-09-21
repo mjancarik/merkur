@@ -156,6 +156,10 @@ describe('createWidget method with graphql client plugin', () => {
         "setProps": [Function],
         "setState": [Function],
         "setup": [Function],
+        "slot": {
+          "AbortController": [Function],
+          "fetch": [Function],
+        },
         "state": {},
         "unmount": [Function],
         "update": [Function],

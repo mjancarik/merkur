@@ -170,6 +170,10 @@ describe('createWidget method with http client plugin', () => {
         "setProps": [Function],
         "setState": [Function],
         "setup": [Function],
+        "slot": {
+          "AbortController": [Function],
+          "fetch": [MockFunction],
+        },
         "state": {},
         "unmount": [Function],
         "update": [Function],

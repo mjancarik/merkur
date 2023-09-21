@@ -1,8 +1,8 @@
-exports = {
+module.exports = {
   bail: false,
   verbose: true,
   testEnvironment: 'node',
-  prettierPath: '',
+  prettierPath: null,
   coverageThreshold: {
     global: {
       functions: 50,
