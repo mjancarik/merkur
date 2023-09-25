@@ -49,7 +49,7 @@ dirs.forEach((dir) => {
   fs.writeFileSync(templatePath, JSON.stringify(packageJson, null, 2) + '\n');
 });
 
-function resolvePackageVersions(dependencies) {
+function resolvePackageVersions(dependencies = {}) {
   Object.keys(dependencies).forEach((dependency) => {
     if (dependency.startsWith('@merkur/')) {
       let dependencyPackageJson = path.resolve(
