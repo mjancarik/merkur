@@ -46,7 +46,7 @@ dirs.forEach((dir) => {
   );
   templateJson.dependencies = resolvePackageVersions(templateJson.dependencies);
 
-  fs.writeFileSync(templatePath, JSON.stringify(packageJson, null, 2) + '\n');
+  fs.writeFileSync(templatePath, JSON.stringify(templateJson, null, 2) + '\n');
 });
 
 function resolvePackageVersions(dependencies = {}) {
