@@ -1,7 +1,8 @@
 {
   "dependencies": {
     "preact": "10.13.2",
-    "preact-render-to-string": "6.0.3"
+    "preact-render-to-string": "6.0.3",
+    "@merkur/preact": "0.33.0"
   },
   "devDependencies": {
     "@babel/preset-react": "7.18.6",
