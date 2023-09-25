@@ -1,9 +1,15 @@
-import { defineWidget } from '@merkur/core';
+/* eslint-disable no-unused-vars */
+import {
+  createSlotFactory,
+  createViewFactory,
+  defineWidget,
+} from '@merkur/core';
 import { componentPlugin } from '@merkur/plugin-component';
 import { errorPlugin } from '@merkur/plugin-error';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 
-import { viewFactory } from './views/View';
+import HeadlineSlot from './slots/HeadlineSlot';
+import View from './views/View';
 
 import pkg from '../package.json';
 
@@ -12,7 +18,15 @@ import './style.css';
 export default defineWidget({
   name: pkg.name,
   version: pkg.version,
-  viewFactory: viewFactory,
+  viewFactory: createViewFactory((widget) => ({
+    View,
+    slotFactories: [
+      createSlotFactory((widget) => ({
+        name: 'headline',
+        View: HeadlineSlot,
+      })),
+    ],
+  })),
   $plugins: [componentPlugin, eventEmitterPlugin, errorPlugin],
   assets: [
     {
@@ -32,7 +46,6 @@ export default defineWidget({
   },
   load(widget) {
     // We don't want to set environment into app state
-    // eslint-disable-next-line no-unused-vars
     const { environment, ...restProps } = widget.props;
 
     return {

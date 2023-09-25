@@ -1,13 +1,6 @@
-import { createSlotFactory } from '@merkur/core';
-
 import Welcome from '../components/Welcome';
 import WidgetContext from '../components/WidgetContext';
 import WidgetDescription from '../components/WidgetDescription';
-
-const headlineSlotFactory = createSlotFactory(() => ({
-  name: 'headline',
-  View: HeadlineSlot,
-}));
 
 function HeadlineSlot(widget) {
   if (widget.error && widget.error.status) {
@@ -27,5 +20,4 @@ function HeadlineSlot(widget) {
   );
 }
 
-export { headlineSlotFactory };
 export default HeadlineSlot;

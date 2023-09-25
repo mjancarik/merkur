@@ -1,14 +1,6 @@
-import { createViewFactory } from '@merkur/core';
-
 import ErrorView from './ErrorView';
 import Counter from '../components/Counter';
 import WidgetContext from '../components/WidgetContext';
-import { headlineSlotFactory } from '../slots/HeadlineSlot';
-
-const viewFactory = createViewFactory(() => ({
-  View,
-  slotFactories: [headlineSlotFactory],
-}));
 
 function View(widget) {
   if (widget.error && widget.error.status) {
@@ -26,5 +18,4 @@ function View(widget) {
   );
 }
 
-export { viewFactory };
 export default View;
