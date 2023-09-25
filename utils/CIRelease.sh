@@ -11,7 +11,7 @@ NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 ROOT_DIR=`pwd`
 CREATE_MERKUR_WIDGET_DIR="$ROOT_DIR/packages/create-widget"
 PACKAGE_VERSION=`node -e "console.log(require('./lerna.json').version)"`-next
-PACKAGES="core create-widget integration integration-react plugin-component plugin-css-scrambler plugin-error plugin-event-emitter plugin-http-client plugin-router tools tool-storybook tool-webpack"
+PACKAGES="core create-widget integration integration-react plugin-component plugin-css-scrambler plugin-error plugin-event-emitter plugin-http-client plugin-router tools tool-storybook tool-webpack preact"
 
 # Install dependencies
 npm i verdaccio@4.8.1 autocannon@6.5.0 --no-save
@@ -34,7 +34,7 @@ for PACKAGE in $PACKAGES ; do
     for PACKAGE_UPDATE in $PACKAGES ; do
         sed -i "s#\"@merkur/$PACKAGE_UPDATE\":\s\".*\"#\"@merkur/$PACKAGE_UPDATE\": \"$PACKAGE_VERSION\"#" package.json
     done
-    
+
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
     npm publish --registry $NPM_LOCAL_REGISTRY_URL
 done
