@@ -1,0 +1,46 @@
+{
+  "name": "@merkur/playground",
+  "version": "0.32.0",
+  "description": "Merkur playground to enable easier development and preview of widgets.",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -w --preserveWatchOutput",
+    "lint": "eslint './**/*.{js,jsx,ts,tsx}'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "merkur",
+    "plugin",
+    "microservices",
+    "microfrontends",
+    "playground"
+  ],
+  "author": "Jan Šimeček <jan.simecek@firma.seznam.cz>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "peerDependencies": {
+    "express": ">=4"
+  },
+  "dependencies": {
+    "@merkur/integration": "^0.32.0",
+    "ejs": "^3.1.9",
+    "sirv": "^2.0.3"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.2",
+    "@types/express": "^4.17.17",
+    "express": "^4.18.2"
+  }
+}
