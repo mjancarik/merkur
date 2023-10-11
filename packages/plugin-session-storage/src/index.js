@@ -75,7 +75,7 @@ function sessionStorageAPI() {
        * @param {string} key A key
        * @param {*} value A value
        * @param {object} [options] An options object.
-       * @param {number} [options.maxAge] Number of seconds after which the
+       * @param {number} [options.ttl] Number of milliseconds after which the
        *        value should be removed.
        * @return {boolean} It's `true` when the operation was successful,
        *         otherwise `false`.
@@ -97,8 +97,8 @@ function sessionStorageAPI() {
           value,
         };
 
-        if (Number.isFinite(Number.parseInt(options?.maxAge))) {
-          item.maxAge = Number.parseInt(options.maxAge);
+        if (Number.isFinite(Number.parseInt(options?.ttl))) {
+          item.ttl = Number.parseInt(options.ttl);
         }
 
         if (shouldDeleteItem(item)) {
@@ -143,16 +143,16 @@ function getNativeSessionStorage() {
 }
 
 function shouldDeleteItem(item) {
-  if (!item || !('maxAge' in item) || !item.created) {
+  if (!item || !('ttl' in item) || !item.created) {
     return false;
   }
 
-  if (item.maxAge <= 0) {
+  if (item.ttl <= 0) {
     return true;
   }
 
   const now = Date.now();
   const age = now - item.created;
 
-  return age > item.maxAge * 1000;
+  return age > item.ttl;
 }
