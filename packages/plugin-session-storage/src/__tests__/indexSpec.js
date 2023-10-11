@@ -190,33 +190,33 @@ describe('Session Storage plugin', () => {
     expect(console.error).toHaveBeenCalledTimes(1);
   });
 
-  it('should delete an item after maxAge', () => {
-    const maxAge = 60;
+  it('should delete an item after ttl', () => {
+    const ttl = 60;
     const value = 1;
-    session.set('item1', value, { maxAge });
+    session.set('item1', value, { ttl });
 
-    jest.advanceTimersByTime(maxAge * 1000);
+    jest.advanceTimersByTime(ttl);
     expect(session.get('item1')).toBe(value);
 
     jest.advanceTimersByTime(1);
     expect(session.get('item1')).toBeUndefined();
   });
 
-  it.each([-1, 0])('should not not set an item when maxAge is %p', (maxAge) => {
+  it.each([-1, 0])('should not not set an item when ttl is %p', (ttl) => {
     expect(session.get('item1')).toBeUndefined();
 
-    session.set('item1', 1, { maxAge });
+    session.set('item1', 1, { ttl });
 
     expect(session.get('item1')).toBeUndefined();
   });
 
-  it.each([-1, 0])('should delete an item when maxAge is %p', (maxAge) => {
+  it.each([-1, 0])('should delete an item when ttl is %p', (ttl) => {
     const value = 1;
     session.set('item1', value);
 
     expect(session.get('item1')).toBe(value);
 
-    session.set('item1', value, { maxAge });
+    session.set('item1', value, { ttl });
 
     expect(session.get('item1')).toBeUndefined();
   });
