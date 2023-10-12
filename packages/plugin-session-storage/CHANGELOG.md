@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.34.1](https://github.com/mjancarik/merkur/compare/v0.34.0...v0.34.1) (2023-10-12)
+
+
+### Bug Fixes
+
+* 🐛 Remove ?. syntax from plugin-session-storage ([7a500f7](https://github.com/mjancarik/merkur/commit/7a500f787e8b2b22957c091d44e7213f1e22f040))
+
+
+
+
+
 # [0.34.0](https://github.com/mjancarik/merkur/compare/v0.33.0...v0.34.0) (2023-10-11)
 
 
