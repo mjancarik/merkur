@@ -97,7 +97,7 @@ function sessionStorageAPI() {
           value,
         };
 
-        if (Number.isFinite(Number.parseInt(options?.ttl))) {
+        if (options && Number.isFinite(Number.parseInt(options.ttl))) {
           item.ttl = Number.parseInt(options.ttl);
         }
 
