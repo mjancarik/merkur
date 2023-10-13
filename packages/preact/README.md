@@ -68,6 +68,40 @@ module.exports = createLiveReloadServer().then(() =>
 
 Delete your existing `client.js` and `server.js` files, `applyPreactConfig` will use default ones from `@merkur/preact` package.
 
+When in a need, please consider extending the default entry point functionality using `hookMethod` from `@merkur/core`, rather than creating your own entry points. This reduces the amount of code you need to maintain and makes sure the integration is always up to date and working as expected.
+
+```
+{
+  setup(widget) {
+    // Attach error handler
+    widget.on(widget, ERROR_EVENTS.ERROR, error => errorHandler(widget, error));
+
+    // Extend client mount
+    if (typeof document !== 'undefined') {
+      hookMethod(widget, 'mount', (w, originalMount, ...args) => {
+        if (document.querySelector(w.containerSelector) === null) {
+          widget.emit(ERROR_EVENTS.ERROR, {
+            error: {
+              status: 555
+            }
+          });
+        }
+
+        return originalMount(w, ...args);
+      });
+    }
+
+    if (widget.props.debug) {
+      enableDebug();
+    }
+
+    widget.suggestApi = new SuggestApi(widget);
+
+    return widget;
+  },
+}
+```
+
 ## Documentation
 
 To check out [live demo](https://merkur.js.org/demo) and [docs](https://merkur.js.org/docs), visit [https://merkur.js.org](https://merkur.js.org).
