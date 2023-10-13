@@ -206,13 +206,26 @@ function createRollupTypescriptConfig(options = {}) {
     include: 'src/**',
   };
 
-  config.output = {
-    dir: options?.dir ?? './lib',
-    entryFileNames: '[name].js',
-    format: 'esm',
-    exports: 'named',
-    sourcemap: true,
-  };
+  config.output = [
+    {
+      dir: options?.dir ?? './lib',
+      entryFileNames: '[name].cjs',
+      format: 'cjs',
+      exports: 'named',
+    },
+    {
+      dir: options?.dir ?? './lib',
+      entryFileNames: '[name].js',
+      format: 'cjs',
+      exports: 'named',
+    },
+    {
+      dir: options?.dir ?? './lib',
+      entryFileNames: '[name].mjs',
+      format: 'esm',
+      exports: 'named',
+    },
+  ];
 
   config.plugins.push(
     typescript({

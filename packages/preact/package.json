@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo 'Tests pass.'",
     "test:es:version": "echo 'Tests pass.'",
-    "build": "rollup -c rollup.config.mjs"
+    "build": "rollup -c rollup.config.mjs",
+    "dev": "rollup -c rollup.config.mjs -w"
   },
   "exports": {
     "./entries/client.js": "./entries/client.js",
@@ -13,11 +14,13 @@
     "./webpack": "./webpack/index.js",
     "./client": {
       "types": "./lib/client/client.d.ts",
-      "default": "./lib/client/client.js"
+      "import": "./lib/client/client.mjs",
+      "require": "./lib/client/client.cjs"
     },
     "./server": {
       "types": "./lib/server/server.d.ts",
-      "default": "./lib/server/server.js"
+      "import": "./lib/server/server.mjs",
+      "require": "./lib/server/server.cjs"
     }
   },
   "keywords": [
