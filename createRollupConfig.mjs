@@ -209,7 +209,7 @@ function createRollupTypescriptConfig(options = {}) {
   config.output = {
     dir: options?.dir ?? './lib',
     entryFileNames: '[name].js',
-    format: 'cjs',
+    format: 'esm',
     exports: 'named',
     sourcemap: true,
   };
