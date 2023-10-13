@@ -51,6 +51,8 @@
     "preact": ">=10",
     "preact-render-to-string": ">=5",
     "@babel/preset-react": "*",
+    "@merkur/core": ">=0.34",
+    "@merkur/plugin-component": ">=0.34",
     "@merkur/tool-webpack": ">=0.28"
   }
 }
