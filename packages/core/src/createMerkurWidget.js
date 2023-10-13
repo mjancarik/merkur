@@ -41,6 +41,12 @@ export function createViewFactory(creator) {
   return async (widget) => {
     const { slotFactories, ...restParams } = await creator(widget);
 
+    if (!slotFactories) {
+      return {
+        ...restParams,
+      };
+    }
+
     const slot = (
       await Promise.all(slotFactories.map((creator) => creator(widget)))
     ).reduce((acc, cur) => {
