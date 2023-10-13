@@ -53,6 +53,12 @@ function sessionStorageAPI() {
         try {
           const item = JSON.parse(sessionStorage.getItem(keyPrefix + key));
 
+          if (shouldDeleteItem(item)) {
+            widget.sessionStorage.delete(key);
+
+            return undefined;
+          }
+
           return item && typeof item === 'object' ? item.value : undefined;
         } catch (error) {
           throw new Error(
@@ -68,10 +74,13 @@ function sessionStorageAPI() {
        * @param {object} widget A widget object.
        * @param {string} key A key
        * @param {*} value A value
+       * @param {object} [options] An options object.
+       * @param {number} [options.ttl] Number of milliseconds after which the
+       *        value should be removed.
        * @return {boolean} It's `true` when the operation was successful,
        *         otherwise `false`.
        */
-      set(widget, key, value) {
+      set(widget, key, value, options) {
         const {
           $dependencies: { sessionStorage },
           $in: {
@@ -83,14 +92,23 @@ function sessionStorageAPI() {
           return false;
         }
 
+        const item = {
+          created: Date.now(),
+          value,
+        };
+
+        if (options && Number.isFinite(Number.parseInt(options.ttl))) {
+          item.ttl = Number.parseInt(options.ttl);
+        }
+
+        if (shouldDeleteItem(item)) {
+          widget.sessionStorage.delete(key);
+
+          return true;
+        }
+
         try {
-          sessionStorage.setItem(
-            keyPrefix + key,
-            JSON.stringify({
-              created: Date.now(),
-              value,
-            }),
-          );
+          sessionStorage.setItem(keyPrefix + key, JSON.stringify(item));
         } catch (error) {
           console.error(error);
 
@@ -122,4 +140,19 @@ function sessionStorageAPI() {
 
 function getNativeSessionStorage() {
   return typeof window === 'undefined' ? undefined : window.sessionStorage;
+}
+
+function shouldDeleteItem(item) {
+  if (!item || !('ttl' in item) || !item.created) {
+    return false;
+  }
+
+  if (item.ttl <= 0) {
+    return true;
+  }
+
+  const now = Date.now();
+  const age = now - item.created;
+
+  return age > item.ttl;
 }

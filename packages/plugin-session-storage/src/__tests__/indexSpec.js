@@ -38,10 +38,13 @@ describe('Session Storage plugin', () => {
     if ('sessionStorage' in widget.$dependencies) {
       widget.$dependencies.sessionStorage = sessionStorage;
     }
+
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
     sessionStorage.clear();
+    jest.useRealTimers();
   });
 
   it('should create empty widget', async () => {
@@ -128,7 +131,7 @@ describe('Session Storage plugin', () => {
     expect(session.get('item5')).toStrictEqual(arr);
   });
 
-  it('should should have (not) an item', () => {
+  it('should have (not) an item', () => {
     expect(session.get('item1')).toBeUndefined();
 
     session.set('item1', 1);
@@ -185,5 +188,36 @@ describe('Session Storage plugin', () => {
 
     expect(returnValue).toBeFalsy();
     expect(console.error).toHaveBeenCalledTimes(1);
+  });
+
+  it('should delete an item after ttl', () => {
+    const ttl = 60;
+    const value = 1;
+    session.set('item1', value, { ttl });
+
+    jest.advanceTimersByTime(ttl);
+    expect(session.get('item1')).toBe(value);
+
+    jest.advanceTimersByTime(1);
+    expect(session.get('item1')).toBeUndefined();
+  });
+
+  it.each([-1, 0])('should not not set an item when ttl is %p', (ttl) => {
+    expect(session.get('item1')).toBeUndefined();
+
+    session.set('item1', 1, { ttl });
+
+    expect(session.get('item1')).toBeUndefined();
+  });
+
+  it.each([-1, 0])('should delete an item when ttl is %p', (ttl) => {
+    const value = 1;
+    session.set('item1', value);
+
+    expect(session.get('item1')).toBe(value);
+
+    session.set('item1', value, { ttl });
+
+    expect(session.get('item1')).toBeUndefined();
   });
 });
