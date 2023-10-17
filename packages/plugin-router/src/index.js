@@ -23,7 +23,7 @@ const ENV =
 export function createRouter(widget, routes, options) {
   widget.$dependencies.router = new UniversalRouter(routes, options);
   widget.$dependencies.link = generateUrls(widget.$dependencies.router, {
-    stringifyQueryParams: params => new URLSearchParams(params).toString()
+    stringifyQueryParams: (params) => new URLSearchParams(params).toString()
   });
 }
 
