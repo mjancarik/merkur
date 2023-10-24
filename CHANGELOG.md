@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.34.3](https://github.com/mjancarik/merkur/compare/v0.34.2...v0.34.3) (2023-10-24)
+
+### Features
+
+- 🎸 Add url from error params to widget.error ([ff05048](https://github.com/mjancarik/merkur/commit/ff05048557591a7f95f1cf0d83bdf1a873a9d72d))
+
 ## [0.34.2](https://github.com/mjancarik/merkur/compare/v0.34.1...v0.34.2) (2023-10-18)
 
 **Note:** Version bump only for package merkur-monorepo
