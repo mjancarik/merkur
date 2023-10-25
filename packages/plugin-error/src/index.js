@@ -89,7 +89,7 @@ async function updateHook(widget, originalUpdate, ...rest) {
 export function setErrorInfo(widget, error) {
   widget.error.status = error.status;
   widget.error.message = error.message;
-  widget.error.url = error.params?.url;
+  widget.error.url = error.params && error.params.url;
 
   if (ENV === DEV) {
     widget.error.stack = error.stack;
