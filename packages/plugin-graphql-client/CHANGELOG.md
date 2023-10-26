@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.34.4](https://github.com/mjancarik/merkur/compare/v0.34.3...v0.34.4) (2023-10-26)
+
+**Note:** Version bump only for package @merkur/plugin-graphql-client
+
 ## [0.34.3](https://github.com/mjancarik/merkur/compare/v0.34.2...v0.34.3) (2023-10-24)
 
 **Note:** Version bump only for package @merkur/plugin-graphql-client
