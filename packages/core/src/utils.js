@@ -43,7 +43,7 @@ function parsePath(widget, path = '') {
 
   if (!isFunction(target[methodName])) {
     throw new Error(
-      `Defined path '${path}' is incorrect. Check your widget structure.`
+      `Defined path '${path}' is incorrect. Check your widget structure.`,
     );
   }
 
@@ -56,4 +56,16 @@ export function isFunction(value) {
 
 export function isUndefined(value) {
   return typeof value === 'undefined';
+}
+
+export function assignMissingKeys(target, ...sources) {
+  sources.forEach((source) => {
+    Object.keys(source || {}).forEach((key) => {
+      if (!(key in target)) {
+        target[key] = source[key];
+      }
+    });
+  });
+
+  return target;
 }

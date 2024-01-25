@@ -29,5 +29,5 @@ execaSync(
   [path.resolve(__dirname, '../scripts/create.mjs'), ...process.argv.slice(2)],
   {
     stdio: 'inherit',
-  }
+  },
 );

@@ -1,4 +1,8 @@
-import { bindWidgetToFunctions, hookMethod } from '@merkur/core';
+import {
+  assignMissingKeys,
+  bindWidgetToFunctions,
+  hookMethod,
+} from '@merkur/core';
 import { setDefaultConfig, copyResponse } from '@merkur/plugin-http-client';
 
 import CacheEntry from './CacheEntry';
@@ -28,14 +32,11 @@ export function httpCachePlugin() {
     async setup(widget) {
       if (ENV === DEV && !widget.$in.httpClient) {
         throw new Error(
-          'You must setup plugin @merkur/plugin-http-client before @merkur/plugin-http-cache'
+          'You must setup plugin @merkur/plugin-http-client before @merkur/plugin-http-cache',
         );
       }
 
-      widget = {
-        ...httpCacheAPI(),
-        ...widget,
-      };
+      assignMissingKeys(widget, httpCacheAPI());
 
       widget.$in.httpClient.cache = new Map();
 
@@ -120,7 +121,7 @@ function httpCacheAPI() {
 
         return JSON.stringify(serializedData).replace(
           /<\/script/gi,
-          '<\\/script'
+          '<\\/script',
         );
       },
 

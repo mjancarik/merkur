@@ -76,7 +76,7 @@ function applyStyleLoaders(config, context) {
         exclude: /node_modules/,
         use: getStyleLoaders(context),
       },
-    ].filter(Boolean)
+    ].filter(Boolean),
   );
 
   config.optimization = {
@@ -88,7 +88,7 @@ function applyStyleLoaders(config, context) {
     new MiniCssExtractPlugin({
       filename: 'widget.[contenthash].css',
       ...plugins.MiniCssExtractPlugin,
-    })
+    }),
   );
 
   return config;

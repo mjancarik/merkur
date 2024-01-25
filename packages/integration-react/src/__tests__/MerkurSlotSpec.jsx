@@ -30,7 +30,7 @@ describe('MerkurSlot component', () => {
 
     // Shallow render component
     wrapper = shallow(
-      <MerkurSlot widgetProperties={widgetProperties}>Fallback</MerkurSlot>
+      <MerkurSlot widgetProperties={widgetProperties}>Fallback</MerkurSlot>,
     );
 
     widgetMockInit();
@@ -46,7 +46,7 @@ describe('MerkurSlot component', () => {
       wrapper = shallow(
         <MerkurSlot>
           <span>Fallback</span>
-        </MerkurSlot>
+        </MerkurSlot>,
       );
 
       expect(wrapper).toMatchInlineSnapshot(`
@@ -60,7 +60,7 @@ describe('MerkurSlot component', () => {
       wrapper = shallow(
         <MerkurSlot widgetProperties={widgetProperties}>
           <span>Fallback</span>
-        </MerkurSlot>
+        </MerkurSlot>,
       );
 
       expect(wrapper).toMatchInlineSnapshot(`
@@ -77,7 +77,7 @@ describe('MerkurSlot component', () => {
           slotName='non-existing-slot-name'
         >
           <span>Fallback</span>
-        </MerkurSlot>
+        </MerkurSlot>,
       );
 
       expect(wrapper).toMatchInlineSnapshot(`
@@ -91,7 +91,7 @@ describe('MerkurSlot component', () => {
       wrapper = shallow(
         <MerkurSlot widgetProperties={widgetProperties} slotName='headline'>
           <span>Fallback</span>
-        </MerkurSlot>
+        </MerkurSlot>,
       );
 
       expect(wrapper).toMatchInlineSnapshot(`
@@ -110,8 +110,8 @@ describe('MerkurSlot component', () => {
         shallow(
           <MerkurSlot widgetProperties={widgetProperties} slotName='headline'>
             <span>Fallback</span>
-          </MerkurSlot>
-        )
+          </MerkurSlot>,
+        ),
       ).toMatchInlineSnapshot(`
         <WidgetWrapper
           containerSelector=".headline"
@@ -147,7 +147,7 @@ describe('MerkurSlot component methods', () => {
       <MerkurSlot widgetProperties={widgetProperties} slotName='headline'>
         Fallback
       </MerkurSlot>,
-      { disableLifecycleMethods: true }
+      { disableLifecycleMethods: true },
     );
 
     // Update states so widget renders
@@ -210,7 +210,7 @@ describe('MerkurSlot component methods', () => {
       let defaultState = wrapper.state();
 
       expect(
-        instance.shouldComponentUpdate({ widgetProperties }, defaultState)
+        instance.shouldComponentUpdate({ widgetProperties }, defaultState),
       ).toBe(false);
       expect(
         instance.shouldComponentUpdate(
@@ -219,8 +219,8 @@ describe('MerkurSlot component methods', () => {
             sameProps: 'with new keys and values',
             butStill: 'the same name or version',
           },
-          defaultState
-        )
+          defaultState,
+        ),
       ).toBe(false);
     });
 

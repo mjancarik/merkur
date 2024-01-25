@@ -1,4 +1,4 @@
-import { setDefaultValueForUndefined } from '@merkur/core';
+import { assignMissingKeys, setDefaultValueForUndefined } from '@merkur/core';
 
 export function componentPlugin() {
   return {
@@ -29,11 +29,7 @@ export function componentPlugin() {
         suspendedTasks: [],
       };
 
-      widget = {
-        ...widgetProperties,
-        ...componentAPI(),
-        ...widget,
-      };
+      assignMissingKeys(widget, componentAPI(), widgetProperties);
 
       widget = setDefaultValueForUndefined(widget, ['props', 'state']);
       widget = setDefaultValueForUndefined(widget, ['assets'], []);
@@ -131,7 +127,7 @@ function componentAPI() {
     async setProps(widget, propsSetter) {
       if (!widget.$in.component.isMounted) {
         widget.$in.component.suspendedTasks.push(() =>
-          widget.setProps(propsSetter)
+          widget.setProps(propsSetter),
         );
         return;
       }

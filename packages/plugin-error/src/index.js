@@ -27,12 +27,12 @@ export function errorPlugin() {
       if (ENV === DEV) {
         if (!widget.$in.component) {
           throw new Error(
-            'You must install missing plugin: npm i @merkur/plugin-component'
+            'You must install missing plugin: npm i @merkur/plugin-component',
           );
         }
         if (!widget.$in.eventEmitter) {
           throw new Error(
-            'You must install missing plugin: npm i @merkur/plugin-event-emitter'
+            'You must install missing plugin: npm i @merkur/plugin-event-emitter',
           );
         }
       }
@@ -89,6 +89,7 @@ async function updateHook(widget, originalUpdate, ...rest) {
 export function setErrorInfo(widget, error) {
   widget.error.status = error.status;
   widget.error.message = error.message;
+  widget.error.url = error.params && error.params.url;
 
   if (ENV === DEV) {
     widget.error.stack = error.stack;

@@ -127,7 +127,7 @@ window.__merkur_dev__ = window.__merkur_dev__ || {};
 window.__merkur_dev__.webSocketOptions =
   window.__merkur_dev__.webSocketOptions || {};
 window.__merkur_dev__.webSocket = new WebSocketMerkur(
-  window.__merkur_dev__.webSocketOptions
+  window.__merkur_dev__.webSocketOptions,
 )
   .init()
   .subscribe(({ to, command }) => {

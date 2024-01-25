@@ -3,6 +3,7 @@ import { shallow } from 'enzyme';
 
 import {
   mockedWidgetProperties,
+  mockGlobalProperty,
   widgetMockCleanup,
   widgetMockInit,
 } from '../__mocks__/widgetMock';
@@ -27,6 +28,8 @@ describe('AbstractMerkurWidget', () => {
   let widgetProperties = null;
   let instance = null;
   let wrapper = null;
+  let restoreWindow;
+  let restoreDocument;
 
   beforeEach(() => {
     // Cache mocked widget data
@@ -36,7 +39,7 @@ describe('AbstractMerkurWidget', () => {
     wrapper = shallow(
       <MockMerkurComponent widgetProperties={widgetProperties}>
         Fallback
-      </MockMerkurComponent>
+      </MockMerkurComponent>,
     );
 
     instance = wrapper.instance();
@@ -47,6 +50,16 @@ describe('AbstractMerkurWidget', () => {
   afterEach(() => {
     widgetMockCleanup();
     jest.clearAllMocks();
+
+    if (restoreWindow) {
+      restoreWindow();
+      restoreWindow = null;
+    }
+
+    if (restoreDocument) {
+      restoreDocument();
+      restoreDocument = null;
+    }
   });
 
   describe('html getter', () => {
@@ -79,7 +92,7 @@ describe('AbstractMerkurWidget', () => {
   describe('static hasWidgetChanged() method', () => {
     it('should return false for invalid inputs', () => {
       expect(AbstractMerkurWidget.hasWidgetChanged(null, undefined)).toBe(
-        false
+        false,
       );
       expect(AbstractMerkurWidget.hasWidgetChanged()).toBe(false);
       expect(AbstractMerkurWidget.hasWidgetChanged('', '')).toBe(false);
@@ -88,8 +101,8 @@ describe('AbstractMerkurWidget', () => {
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'name', version: 'version' },
-          { a: 4, b: 5 }
-        )
+          { a: 4, b: 5 },
+        ),
       ).toBe(false);
     });
 
@@ -97,8 +110,8 @@ describe('AbstractMerkurWidget', () => {
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todo', version: '1.0.0' },
-          { name: 'todo', version: '1.0.0' }
-        )
+          { name: 'todo', version: '1.0.0' },
+        ),
       ).toBe(false);
     });
 
@@ -106,14 +119,14 @@ describe('AbstractMerkurWidget', () => {
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todo', version: '1.0.0' },
-          { name: 'todo', version: '0.1.0' }
-        )
+          { name: 'todo', version: '0.1.0' },
+        ),
       ).toBe(true);
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todo', version: '1.1.0' },
-          { name: 'todo', version: '1.0.0' }
-        )
+          { name: 'todo', version: '1.0.0' },
+        ),
       ).toBe(true);
     });
 
@@ -121,14 +134,14 @@ describe('AbstractMerkurWidget', () => {
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'articles', version: '1.0.0' },
-          { name: 'todo', version: '0.1.0' }
-        )
+          { name: 'todo', version: '0.1.0' },
+        ),
       ).toBe(true);
       expect(
         AbstractMerkurWidget.hasWidgetChanged(
           { name: 'todos', version: '1.0.0' },
-          { name: 'todo', version: '1.0.0' }
-        )
+          { name: 'todo', version: '1.0.0' },
+        ),
       ).toBe(true);
     });
   });
@@ -192,14 +205,14 @@ describe('AbstractMerkurWidget', () => {
 
   describe('_isClient() method', () => {
     it('should return false for non-browser environments', () => {
-      delete global.window;
+      restoreWindow = mockGlobalProperty('window', undefined);
 
       expect(instance._isClient()).toBe(false);
     });
 
     it('should return true for browser environments', () => {
-      global.window = {};
-      global.document = {};
+      restoreWindow = mockGlobalProperty('window', {});
+      restoreDocument = mockGlobalProperty('document', {});
 
       expect(instance._isClient()).toBe(true);
     });

@@ -74,4 +74,23 @@ function widgetMockCleanup() {
   removeMerkur();
 }
 
-export { mockedWidgetProperties, widgetMockCleanup, widgetMockInit };
+function mockGlobalProperty(propName, value) {
+  const originalDescriptor = Object.getOwnPropertyDescriptor(global, propName);
+  Object.defineProperty(global, propName, { writable: true });
+  global[propName] = value;
+
+  return () => {
+    if (originalDescriptor) {
+      Object.defineProperty(global, propName, originalDescriptor);
+    } else {
+      delete global[propName];
+    }
+  };
+}
+
+export {
+  mockedWidgetProperties,
+  mockGlobalProperty,
+  widgetMockCleanup,
+  widgetMockInit,
+};

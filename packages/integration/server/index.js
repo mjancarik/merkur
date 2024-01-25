@@ -30,7 +30,7 @@ async function processAssetInFolder({
   if (asset.type.includes('inline')) {
     asset.source = await fsp.readFile(
       path.join(staticFolder, folder, fileName),
-      { encoding: 'utf-8' }
+      { encoding: 'utf-8' },
     );
 
     return asset;
@@ -60,7 +60,7 @@ async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
 
       const manifestFile = await fsp.readFile(
         path.join(folderPath, 'manifest.json'),
-        { encoding: 'utf-8' }
+        { encoding: 'utf-8' },
       );
       const manifest = JSON.parse(manifestFile);
 
@@ -72,17 +72,17 @@ async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
             fileName: manifest[asset.name],
             staticBaseUrl,
             staticFolder,
-          })
-        )
+          }),
+        ),
       );
     },
-    [...assets]
+    [...assets],
   );
 
   return processedAssets.filter((asset) => {
     if (!asset.source) {
       console.warn(
-        `Asset '${asset.name}' has been excluded because it doesn't have valid source.`
+        `Asset '${asset.name}' has been excluded because it doesn't have valid source.`,
       );
       return false;
     }

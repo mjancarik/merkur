@@ -10,5 +10,5 @@ versionChangelogs.shift();
 
 fs.writeFileSync(
   path.resolve(process.cwd(), 'current-changelog.txt'),
-  versionChangelogs?.[0].trim() ?? ''
+  versionChangelogs?.[0].trim() ?? '',
 );

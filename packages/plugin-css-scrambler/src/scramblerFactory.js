@@ -39,7 +39,7 @@ export default function scramblerFactory(hashingTable) {
         }
 
         return `${prefixTable.get(prefix)}_${mainPartTable.get(
-          mainPart
+          mainPart,
         )}_${uniqueHash}`;
       })
       .join(' ');

@@ -22,7 +22,7 @@ export async function createMerkurWidget(widgetDefinition = {}) {
   widgetDefinition = setDefaultValueForUndefined(
     widgetDefinition,
     ['setup', 'create'],
-    (widget) => widget
+    (widget) => widget,
   );
 
   const { setup, create } = widgetDefinition;
@@ -39,7 +39,7 @@ export async function createMerkurWidget(widgetDefinition = {}) {
       return create(widget, ...rest);
     },
     $plugins: (widgetDefinition.$plugins || []).map((pluginFactory) =>
-      pluginFactory()
+      pluginFactory(),
     ),
   };
 

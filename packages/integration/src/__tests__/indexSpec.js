@@ -205,7 +205,7 @@ describe('Merkur component', () => {
             },
           },
         ],
-        rootElement
+        rootElement,
       )
         .then(() => {
           done('promise was resolved');
@@ -236,7 +236,7 @@ describe('Merkur component', () => {
             optional: true,
           },
         ],
-        rootElement
+        rootElement,
       )
         .then(() => {
           expect(document.createElement).toHaveBeenCalledTimes(1);
@@ -269,16 +269,16 @@ describe('Merkur component', () => {
             },
           },
         ],
-        rootElement
+        rootElement,
       )
         .then(() => {
           expect(fakeAssetObject.addEventListener).toHaveBeenCalledWith(
             'load',
-            expect.any(Function)
+            expect.any(Function),
           );
           expect(fakeAssetObject.addEventListener).toHaveBeenCalledWith(
             'error',
-            expect.any(Function)
+            expect.any(Function),
           );
           expect(fakeAssetObject.addEventListener).toHaveBeenCalledTimes(2);
           expect(document.createElement).toHaveBeenCalledTimes(0);
@@ -306,14 +306,14 @@ describe('Merkur component', () => {
             source: {},
           },
         ],
-        rootElement
+        rootElement,
       )
         .then(() => {
           done('did not reject');
         })
         .catch((error) => {
           expect(error.message).toBe(
-            "Asset 'nosource.js' is missing ES variant and could not be loaded."
+            "Asset 'nosource.js' is missing ES variant and could not be loaded.",
           );
           expect(error.asset).toBeTruthy();
 
@@ -344,7 +344,7 @@ describe('Merkur component', () => {
             },
           },
         ],
-        rootElement
+        rootElement,
       )
         .then(() => {
           expect(document.createElement).toHaveBeenCalledTimes(0);

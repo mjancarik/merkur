@@ -52,7 +52,7 @@ describe('Merkur component', () => {
   describe('test() function', () => {
     it('should return true', () => {
       expect(testScript.test('return typeof window !== "undefined"')).toEqual(
-        true
+        true,
       );
     });
 

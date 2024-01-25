@@ -32,7 +32,7 @@ let viewResolver = argv.view
           },
           {
             name: `${chalk.bold.blue(
-              'Preact'
+              'Preact',
             )} - The basic counter example with preact.`,
             value: 'preact',
           },
@@ -44,7 +44,7 @@ let viewResolver = argv.view
           },
           {
             name: `${chalk.bold.blue(
-              'Vanilla'
+              'Vanilla',
             )} - The basic counter example with vanilla js.`,
             value: 'vanilla',
           },
@@ -59,8 +59,8 @@ viewResolver.then(({ view }) => {
 function createMerkurApp(dirName, view) {
   info(
     `Creating new MERKUR widget inside ${chalk.green(
-      dirName
-    )} directory for ${view}...`
+      dirName,
+    )} directory for ${view}...`,
   );
 
   const projName = dirName.split(path.sep).pop();
@@ -84,8 +84,8 @@ function createMerkurApp(dirName, view) {
   } else {
     error(
       `Aborting... the directory ${dirName} ${chalk.bold.red(
-        'already exists'
-      )}.\n`
+        'already exists',
+      )}.\n`,
     );
     process.exit(0);
   }
@@ -103,7 +103,7 @@ function createMerkurApp(dirName, view) {
     Object.entries(packageTemplate[packageProperty]).forEach(
       ([module, version]) => {
         pkgJson[packageProperty][module] = version;
-      }
+      },
     );
   });
 
@@ -115,8 +115,8 @@ function createMerkurApp(dirName, view) {
   // Run npm install
   info(
     `Running ${chalk.cyan(
-      'npm install'
-    )} inside widget directory, this might take a while...`
+      'npm install',
+    )} inside widget directory, this might take a while...`,
   );
   // eslint-disable-next-line no-console
   console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
@@ -129,7 +129,7 @@ function createMerkurApp(dirName, view) {
 
   // Show final info
   info(`${chalk.bold('Success!')} Created ${chalk.cyan(
-    projName
+    projName,
   )} inside ${chalk.green(appRoot)} directory.
 From there you can run several commands:
   ${chalk.cyan('npm run test')}

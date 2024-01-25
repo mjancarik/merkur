@@ -1,4 +1,4 @@
-import { bindWidgetToFunctions } from '@merkur/core';
+import { assignMissingKeys, bindWidgetToFunctions } from '@merkur/core';
 
 import { print, visit, stripIgnoredCharacters } from 'graphql';
 
@@ -30,10 +30,7 @@ function setEntityClasses(widget, entityClasses) {
 function graphqlClientPlugin() {
   return {
     async setup(widget) {
-      widget = {
-        ...graphqlClientAPI(),
-        ...widget,
-      };
+      assignMissingKeys(widget, graphqlClientAPI());
 
       widget.$in.graphqlClient = {
         endpointUrl: '',
@@ -45,7 +42,7 @@ function graphqlClientPlugin() {
     async create(widget) {
       if (ENV === DEV && !widget.$in.httpClient) {
         throw new Error(
-          'You must install missing plugin: npm i @merkur/plugin-http-client'
+          'You must install missing plugin: npm i @merkur/plugin-http-client',
         );
       }
 
@@ -87,12 +84,12 @@ function graphqlClientAPI() {
             errors.some((error) => error.status === 'unauthorized')
           ) {
             return Promise.reject(
-              new UnauthorizedError(`Unauthorized Error`, { errors, data })
+              new UnauthorizedError(`Unauthorized Error`, { errors, data }),
             );
           }
 
           return Promise.reject(
-            new GraphQLError(`Api Error`, { errors, data })
+            new GraphQLError(`Api Error`, { errors, data }),
           );
         }
 
@@ -163,7 +160,7 @@ function addTypenameToSelections(document) {
           (selection) =>
             selection.kind === 'Field' &&
             (selection.name.value === '__typename' ||
-              selection.name.value.lastIndexOf('__', 0) === 0)
+              selection.name.value.lastIndexOf('__', 0) === 0),
         );
 
         if (skip) {

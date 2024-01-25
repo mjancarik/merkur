@@ -45,7 +45,7 @@ export default class MerkurSlot extends AbstractMerkurWidget {
       !AbstractMerkurWidget.validateProperties(nextProps.widgetProperties) ||
       AbstractMerkurWidget.hasWidgetChanged(
         this.props.widgetProperties,
-        nextProps.widgetProperties
+        nextProps.widgetProperties,
       )
     ) {
       return true;

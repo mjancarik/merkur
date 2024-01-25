@@ -45,7 +45,9 @@ describe('merkur shell', () => {
     });
 
     expect(
-      merkur.$in.widgetFactory[widgetProperties.name + widgetProperties.version]
+      merkur.$in.widgetFactory[
+        widgetProperties.name + widgetProperties.version
+      ],
     ).toEqual(createWidget);
   });
 

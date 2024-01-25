@@ -24,7 +24,7 @@ function postCssScrambler(options) {
         fs.writeFileSync(options.hashTable, JSON.stringify(tableData));
       } else {
         [prefixesTable, mainPartsTable] = JSON.parse(
-          fs.readFileSync(options.hashTable)
+          fs.readFileSync(options.hashTable),
         );
       }
 
@@ -45,7 +45,7 @@ function postCssScrambler(options) {
           const mainPartIndex = mainPartsTable.indexOf(mainPart);
           if (prefixIndex === -1 || mainPartIndex === -1) {
             throw new Error(
-              `The ${className} CSS class in not in the hash table`
+              `The ${className} CSS class in not in the hash table`,
             );
           }
 
@@ -124,7 +124,7 @@ function applyPostCssScramblePlugin(options) {
       generateHashTable: true,
       hashTable: path.resolve(
         process.env.WIDGET_DIRNAME,
-        './build/static/hashtable.json'
+        './build/static/hashtable.json',
       ),
       ...options,
     });
@@ -137,7 +137,7 @@ function applyPostCssScramblePlugin(options) {
 
       const postCssUseEntryIndex = rule.use.findIndex(
         (useEntry) =>
-          useEntry === 'postcss-loader' || useEntry.loader === 'postcss-loader'
+          useEntry === 'postcss-loader' || useEntry.loader === 'postcss-loader',
       );
 
       if (~postCssUseEntryIndex) {
@@ -173,7 +173,7 @@ function applyPostCssScramblePlugin(options) {
 
     // add postcss loader to rule matching css files
     const cssRuleIndex = config.module.rules.findIndex((rule) =>
-      rule.test.test('.css')
+      rule.test.test('.css'),
     );
 
     if (~cssRuleIndex) {
