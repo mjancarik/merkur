@@ -26,7 +26,7 @@ let viewResolver = argv.view
         choices: [
           {
             name: `${chalk.bold.blue(
-              'µhtml'
+              'µhtml',
             )} - The basic counter example with µhtml.`,
             value: 'uhtml',
           },
@@ -38,7 +38,7 @@ let viewResolver = argv.view
           },
           {
             name: `${chalk.bold.blue(
-              'Svelte'
+              'Svelte',
             )} - The basic counter example with svelte.`,
             value: 'svelte',
           },
