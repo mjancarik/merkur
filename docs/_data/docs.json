@@ -66,6 +66,10 @@
       ]
     },
     {
+      "title": "Merkur widget as custom element",
+      "url": "/docs/register-custom-element"
+    },
+    {
       "title": "Plugins",
       "url": "/docs/plugins"
     },
