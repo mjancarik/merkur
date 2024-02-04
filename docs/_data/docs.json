@@ -62,12 +62,12 @@
         {
           "title": "Integration with React",
           "url": "/docs/integration-with-app#integration-with-react"
-        },
-        {
-          "title": "Merkur widget as custom element",
-          "url": "/docs/register-custom-element"
         }
       ]
+    },
+    {
+      "title": "Merkur widget as custom element",
+      "url": "/docs/register-custom-element"
     },
     {
       "title": "Plugins",
