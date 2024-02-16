@@ -1,5 +1,35 @@
-describe('TODO', () => {
-  it('should create test', () => {
+import { deepMerge } from '..';
+
+describe('Merkur integration custom element', () => {
+  describe('deepMerge method', () => {
+    it('should merge source object to target with target modification', () => {
+      let target = {
+        a: 1,
+        b: {
+          c: '2',
+          d: ['3', '4'],
+        },
+      };
+      let source = {
+        e: '5',
+        b: {
+          f: '6',
+          d: ['7'],
+        },
+      };
+      expect(deepMerge(target, source)).toEqual({
+        a: 1,
+        e: '5',
+        b: {
+          c: '2',
+          f: '6',
+          d: ['3', '4', '7'],
+        },
+      });
+    });
+  });
+
+  it('should create other test', () => {
     expect(true).toBeTruthy();
   });
 });
