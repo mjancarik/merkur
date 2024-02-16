@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.34.6](https://github.com/mjancarik/merkur/compare/v0.34.5...v0.34.6) (2024-02-16)
+
+**Note:** Version bump only for package @merkur/create-widget
+
 ## [0.34.5](https://github.com/mjancarik/merkur/compare/v0.34.4...v0.34.5) (2024-02-04)
 
 ### Features
