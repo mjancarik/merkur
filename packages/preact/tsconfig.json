@@ -6,6 +6,9 @@
       "DOM",
       "DOM.Iterable"
     ],
+    "types": [
+      "plugin-component"
+    ]
   },
   "include": [
     "src"

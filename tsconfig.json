@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "esnext",
+    "module": "Node16",
     "moduleResolution": "node16",
     "importHelpers": true,
     "sourceMap": true,
@@ -16,6 +16,7 @@
     "typeRoots": [
       "./types",
       "./node_modules/@types",
+      "./node_modules/@merkur",
     ],
   }
 }
