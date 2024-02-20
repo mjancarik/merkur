@@ -29,7 +29,8 @@ function mapResolvedViews(widget, callback) {
         isSlot,
         containerSelector,
         container:
-          containerSelector && document?.querySelector(containerSelector),
+          (containerSelector && document?.querySelector(containerSelector)) ||
+          widget.container,
       });
     },
   );

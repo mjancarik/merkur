@@ -3,43 +3,55 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-## [0.34.1](https://github.com/mjancarik/merkur/compare/v0.34.0...v0.34.1) (2023-10-12)
+## [0.34.6](https://github.com/mjancarik/merkur/compare/v0.34.5...v0.34.6) (2024-02-16)
 
+### Features
+
+- 🎸 add support for client config and assets ([66f3a23](https://github.com/mjancarik/merkur/commit/66f3a2337b530a6f60a59814e908fecc364099b2))
+
+## [0.34.5](https://github.com/mjancarik/merkur/compare/v0.34.4...v0.34.5) (2024-02-04)
+
+### Features
+
+- 🎸 new integration-custom-element ([209dc88](https://github.com/mjancarik/merkur/commit/209dc882e88b92bfd029df3f74282bbc15b3bd65))
+
+## [0.34.4](https://github.com/mjancarik/merkur/compare/v0.34.3...v0.34.4) (2023-10-26)
 
 ### Bug Fixes
 
-* 🐛 Remove ?. syntax from plugin-session-storage ([7a500f7](https://github.com/mjancarik/merkur/commit/7a500f787e8b2b22957c091d44e7213f1e22f040))
+- 🐛 ES-check problem with Optional chaining ([eea274a](https://github.com/mjancarik/merkur/commit/eea274aefea7feb95feddd60f417b4e57bb5c21d))
 
+## [0.34.3](https://github.com/mjancarik/merkur/compare/v0.34.2...v0.34.3) (2023-10-24)
 
+### Features
 
+- 🎸 Add url from error params to widget.error ([ff05048](https://github.com/mjancarik/merkur/commit/ff05048557591a7f95f1cf0d83bdf1a873a9d72d))
 
+## [0.34.2](https://github.com/mjancarik/merkur/compare/v0.34.1...v0.34.2) (2023-10-18)
+
+**Note:** Version bump only for package merkur-monorepo
+
+## [0.34.1](https://github.com/mjancarik/merkur/compare/v0.34.0...v0.34.1) (2023-10-12)
+
+### Bug Fixes
+
+- 🐛 Remove ?. syntax from plugin-session-storage ([7a500f7](https://github.com/mjancarik/merkur/commit/7a500f787e8b2b22957c091d44e7213f1e22f040))
 
 # [0.34.0](https://github.com/mjancarik/merkur/compare/v0.33.0...v0.34.0) (2023-10-11)
 
-
 ### Features
 
-* 🎸 Add maxAge option to saved items (expiration) ([d103bf5](https://github.com/mjancarik/merkur/commit/d103bf533b68dfcbfe1d95c395fb78b02827f5ae))
-
-
-
-
+- 🎸 Add maxAge option to saved items (expiration) ([d103bf5](https://github.com/mjancarik/merkur/commit/d103bf533b68dfcbfe1d95c395fb78b02827f5ae))
 
 # [0.33.0](https://github.com/mjancarik/merkur/compare/v0.32.1...v0.33.0) (2023-08-10)
 
-
 ### Bug Fixes
 
-* 🐛 Fix assigning to widget object ([6a89efa](https://github.com/mjancarik/merkur/commit/6a89efadaf18a7640c8db732fc8f27b849c6ff1c))
-
+- 🐛 Fix assigning to widget object ([6a89efa](https://github.com/mjancarik/merkur/commit/6a89efadaf18a7640c8db732fc8f27b849c6ff1c))
 
 ### Features
 
-* 🎸 Add assignMissingKeys function ([2960ff2](https://github.com/mjancarik/merkur/commit/2960ff2453338f1255f39bd9ddfe44c56077cd4b))
-
-
-
-
+- 🎸 Add assignMissingKeys function ([2960ff2](https://github.com/mjancarik/merkur/commit/2960ff2453338f1255f39bd9ddfe44c56077cd4b))
 
 ## [0.32.1](https://github.com/mjancarik/merkur/compare/v0.32.0...v0.32.1) (2023-07-14)
 
