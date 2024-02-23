@@ -12,7 +12,7 @@ title: Integrating Storybook into Merkur
 At first we must install storybook to our Merkur project. The best way is using the [Storybook CLI](https://storybook.js.org/docs/react/get-started/install) to install it in a single command.
 
 ```bash
-npx sb init --builder webpack5
+npx storybook@latest init
 ```
 
 After that we install merkur module for easy integration.
@@ -21,7 +21,7 @@ After that we install merkur module for easy integration.
 npm i @merkur/tool-storybook --save-dev
 ```
 
-Now we must update two storybook files `./storybook/preview.js` and `./storybook/main.js`. At first we update our `./storybook/preview.js` similarly to the example below.
+Now we must update storybook file `./storybook/preview.js` similarly to the example below.
 
 ```javascript
 // ./storybook/preview.js
@@ -34,14 +34,18 @@ import widgetProperties from '../src/widget';
 // helper method for creating storybook loader, which async creates our widget instance.
 import { createWidgetLoader } from '@merkur/tool-storybook';
 
-// Specific imports for your chosen view. For example Preact:
-import { forceReRender } from '@storybook/preact';
+// Imports for updating storybook playground.
+import { FORCE_RE_RENDER } from '@storybook/core-events';
+import { addons } from '@storybook/preview-api';
+
 import WidgetContext from '../src/components/WidgetContext';
 
 // defined our custom widget loader
 export const loaders = [
   createWidgetLoader({
-    render: forceReRender, // widget must be able to update the storybook playground
+    render: () => {
+      addons.getChannel().emit(FORCE_RE_RENDER); // widget must be able to update the storybook playground
+    },
     widgetProperties, // created widget properties
   })
 ];
@@ -56,28 +60,6 @@ export const decorators = [
     );
   },
 ];
-```
-
-Then, we add babel loader to storybook's webpack config. Fortunately, it's easy.
-
-```javascript
-// ./storybook/main.js
-
-// ./storybook/main.js
-const { pipe } = require('@merkur/tool-webpack');
-const { applyBabelLoader } = require('../webpack.config.js');
-
-module.exports = {
-  .
-  .
-  webpackFinal: async (config) => {
-    config = await = pipe(() => config, applyBabelLoader)();
-
-    return config;
-  },
-  .
-  .
-}
 ```
 
 > Note: If you use any pre-processors (webpack loaders) for building CSS styles you should also define then in `webpackFinal` function by extending given `config` object. More on that topic can be found in [official Storybook documentation](https://storybook.js.org/docs/react/configure/styling-and-css).
