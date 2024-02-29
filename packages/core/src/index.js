@@ -1,9 +1,4 @@
-import {
-  createMerkurWidget,
-  defineWidget,
-  createSlotFactory,
-  createViewFactory,
-} from './createMerkurWidget';
+import { createMerkurWidget, defineWidget } from './createMerkurWidget';
 import { createMerkur, removeMerkur, getMerkur } from './merkur';
 import {
   assignMissingKeys,
@@ -23,7 +18,5 @@ export {
   isFunction,
   removeMerkur,
   setDefaultValueForUndefined,
-  createSlotFactory,
-  createViewFactory,
   defineWidget,
 };

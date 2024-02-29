@@ -8,8 +8,6 @@ describe('merkur module', () => {
   "bindWidgetToFunctions": [Function],
   "createMerkur": [Function],
   "createMerkurWidget": [Function],
-  "createSlotFactory": [Function],
-  "createViewFactory": [Function],
   "defineWidget": [Function],
   "getMerkur": [Function],
   "hookMethod": [Function],

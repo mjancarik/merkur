@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-vars */
+import { defineWidget } from '@merkur/core';
 import {
-  createSlotFactory,
+  componentPlugin,
   createViewFactory,
-  defineWidget,
-} from '@merkur/core';
-import { componentPlugin } from '@merkur/plugin-component';
+  createSlotFactory,
+} from '@merkur/plugin-component';
 import { errorPlugin } from '@merkur/plugin-error';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 

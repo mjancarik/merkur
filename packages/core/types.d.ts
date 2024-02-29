@@ -22,10 +22,6 @@ export interface Widget {
   $external: WidgetExternal;
   $dependencies: Record<string, any>;
   $plugins: WidgetPlugin[];
-  slot: Record<
-    string,
-    { name: string; html: string; containerSelector: string } | undefined
-  >;
 }
 
 export interface WidgetProperties {
@@ -93,32 +89,6 @@ export interface DefineWidgetArgs {}
 export declare function defineWidget<
   T extends WidgetDefinition & WidgetProperties & DefineWidgetArgs,
 >(widgetDefinition: T): T;
-
-export type SlotDefinition = { name: string; View: ViewType };
-export type SlotFactory = (widget: Widget) => Promise<SlotDefinition>;
-
-export declare function createSlotFactory(
-  creator: (widget: Widget) => SlotDefinition | Promise<SlotDefinition>,
-): SlotFactory;
-
-export type ViewDefinition = {
-  View: ViewType;
-  ErrorView?: ViewType;
-  slotFactories: ((
-    widget: Widget,
-  ) => SlotDefinition | Promise<SlotDefinition>)[];
-};
-
-export type ViewFactorySlotType = { name: string; View: ViewType };
-export type ViewFactory = (widget: Widget) => Promise<{
-  View: ViewType;
-  ErrorView?: ViewType;
-  slot?: Record<string, ViewFactorySlotType>;
-}>;
-
-export declare function createViewFactory(
-  creator: (widget: Widget) => ViewDefinition | Promise<ViewDefinition>,
-): ViewFactory;
 
 export declare function createMerkur(): Merkur;
 export declare function hookMethod(

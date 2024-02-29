@@ -23,45 +23,6 @@ export function defineWidget(widgetDefinition) {
   return widgetDefinition;
 }
 
-/**
- * Typed helper to make it easier to define widget properties.
- *
- * @type import('@merkur/core').createSlotFactory
- */
-export function createSlotFactory(creator) {
-  return async (widget) => creator(widget);
-}
-
-/**
- * Typed helper to make it easier to define widget properties.
- *
- * @type import('@merkur/core').createViewFactory
- */
-export function createViewFactory(creator) {
-  return async (widget) => {
-    const { slotFactories, ...restParams } = await creator(widget);
-
-    if (!slotFactories) {
-      return {
-        ...restParams,
-      };
-    }
-
-    const slot = (
-      await Promise.all(slotFactories.map((creator) => creator(widget)))
-    ).reduce((acc, cur) => {
-      acc[cur.name] = cur;
-
-      return acc;
-    }, {});
-
-    return {
-      ...restParams,
-      slot,
-    };
-  };
-}
-
 export function setDefinitionDefaults(widgetDefinition) {
   return {
     ...widgetDefinition,
