@@ -1,7 +1,7 @@
 {
   "name": "@merkur/preact",
   "version": "0.34.0",
-  "description": "Collection of helpers to aid with preact integration to @merkur",
+  "description": "Collection of helpers to aid with Preact integration to @merkur",
   "scripts": {
     "test": "echo 'Tests pass.'",
     "test:es:version": "echo 'Tests pass.'",
