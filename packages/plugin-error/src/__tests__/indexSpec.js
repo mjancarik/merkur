@@ -71,6 +71,7 @@ describe('createWidget method with error plugin', () => {
         "setProps": [Function],
         "setState": [Function],
         "setup": [Function],
+        "slot": {},
         "state": {},
         "unmount": [Function],
         "update": [Function],

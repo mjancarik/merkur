@@ -3,17 +3,18 @@ import * as merkur from '../index';
 describe('merkur module', () => {
   it('should keep module interface', () => {
     expect(merkur).toMatchInlineSnapshot(`
-      {
-        "assignMissingKeys": [Function],
-        "bindWidgetToFunctions": [Function],
-        "createMerkur": [Function],
-        "createMerkurWidget": [Function],
-        "getMerkur": [Function],
-        "hookMethod": [Function],
-        "isFunction": [Function],
-        "removeMerkur": [Function],
-        "setDefaultValueForUndefined": [Function],
-      }
-    `);
+{
+  "assignMissingKeys": [Function],
+  "bindWidgetToFunctions": [Function],
+  "createMerkur": [Function],
+  "createMerkurWidget": [Function],
+  "defineWidget": [Function],
+  "getMerkur": [Function],
+  "hookMethod": [Function],
+  "isFunction": [Function],
+  "removeMerkur": [Function],
+  "setDefaultValueForUndefined": [Function],
+}
+`);
   });
 });

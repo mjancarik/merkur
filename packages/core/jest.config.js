@@ -1,3 +1,5 @@
 const defaultConfig = require('../../jest.config.js');
 
-module.exports = { ...defaultConfig };
+module.exports = {
+  ...defaultConfig,
+};

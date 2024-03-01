@@ -63,6 +63,7 @@ describe('createWidget method with component plugin', () => {
         "setProps": [Function],
         "setState": [Function],
         "setup": [Function],
+        "slot": {},
         "state": {},
         "unmount": [Function],
         "update": [Function],

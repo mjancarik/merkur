@@ -14,18 +14,42 @@ async function callPluginMethod(widget, method, args) {
   return widget;
 }
 
-export async function createMerkurWidget(widgetDefinition = {}) {
-  widgetDefinition = setDefaultValueForUndefined(widgetDefinition, [
-    '$dependencies',
-    '$external',
-  ]);
-  widgetDefinition = setDefaultValueForUndefined(
-    widgetDefinition,
-    ['setup', 'create'],
-    (widget) => widget,
-  );
+/**
+ * Typed helper to make it easier to define widget properties.
+ *
+ * @type import('@merkur/core').defineWidget
+ */
+export function defineWidget(widgetDefinition) {
+  return widgetDefinition;
+}
 
-  const { setup, create } = widgetDefinition;
+export function setDefinitionDefaults(widgetDefinition) {
+  return {
+    ...widgetDefinition,
+    ...setDefaultValueForUndefined(
+      widgetDefinition,
+      ['containerSelector'],
+      null,
+    ),
+    ...setDefaultValueForUndefined(widgetDefinition, [
+      'slot',
+      '$dependencies',
+      '$external',
+    ]),
+    ...setDefaultValueForUndefined(
+      widgetDefinition,
+      ['setup', 'create'],
+      (widget) => widget,
+    ),
+  };
+}
+
+/**
+ * @type import('@merkur/core').createMerkurWidget
+ */
+export async function createMerkurWidget(widgetDefinition = {}) {
+  const definition = setDefinitionDefaults(widgetDefinition);
+  const { setup, create } = definition;
 
   let widget = {
     async setup(widget, ...rest) {
@@ -38,29 +62,29 @@ export async function createMerkurWidget(widgetDefinition = {}) {
 
       return create(widget, ...rest);
     },
-    $plugins: (widgetDefinition.$plugins || []).map((pluginFactory) =>
+    $plugins: (definition.$plugins || []).map((pluginFactory) =>
       pluginFactory(),
     ),
   };
 
   // TODO refactoring
-  widget.name = widgetDefinition.name;
-  widget.version = widgetDefinition.version;
-  widget.$dependencies = widgetDefinition.$dependencies;
-  widget.$external = widgetDefinition.$external;
+  widget.name = definition.name;
+  widget.version = definition.version;
+  widget.$dependencies = definition.$dependencies;
+  widget.$external = definition.$external;
   widget.$in = {};
 
-  delete widgetDefinition.name;
-  delete widgetDefinition.version;
-  delete widgetDefinition.$dependencies;
-  delete widgetDefinition.$external;
-  delete widgetDefinition.$plugins;
+  delete definition.name;
+  delete definition.version;
+  delete definition.$dependencies;
+  delete definition.$external;
+  delete definition.$plugins;
 
-  delete widgetDefinition.setup;
-  delete widgetDefinition.create;
+  delete definition.setup;
+  delete definition.create;
 
-  widget = await widget.setup(widget, widgetDefinition);
-  widget = await widget.create(widget, widgetDefinition);
+  widget = await widget.setup(widget, definition);
+  widget = await widget.create(widget, definition);
 
   bindWidgetToFunctions(widget);
   Object.seal(widget);

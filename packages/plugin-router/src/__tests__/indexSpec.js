@@ -91,6 +91,7 @@ describe('createWidget method with router plugin', () => {
         "setProps": [Function],
         "setState": [Function],
         "setup": [Function],
+        "slot": {},
         "state": {},
         "unmount": [Function],
         "update": [Function],

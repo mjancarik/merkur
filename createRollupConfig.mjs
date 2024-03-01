@@ -201,22 +201,35 @@ function createRollupUMDConfig() {
 function createRollupTypescriptConfig(options = {}) {
   let config = createRollupConfig();
 
-  config.input = './src/index.ts';
+  config.input = options?.input ?? './src/index.ts';
   config.watch = {
     include: 'src/**',
   };
 
-  config.output = {
-    dir: './lib',
-    entryFileNames: '[name].mjs',
-    format: 'esm',
-    exports: 'named',
-    sourcemap: true,
-  };
+  config.output = [
+    {
+      dir: options?.dir ?? './lib',
+      entryFileNames: '[name].cjs',
+      format: 'cjs',
+      exports: 'named',
+    },
+    {
+      dir: options?.dir ?? './lib',
+      entryFileNames: '[name].js',
+      format: 'cjs',
+      exports: 'named',
+    },
+    {
+      dir: options?.dir ?? './lib',
+      entryFileNames: '[name].mjs',
+      format: 'esm',
+      exports: 'named',
+    },
+  ];
 
   config.plugins.push(
     typescript({
-      outDir: './lib',
+      outDir: options?.dir ?? './lib',
     }),
     options.watchMode &&
       run({

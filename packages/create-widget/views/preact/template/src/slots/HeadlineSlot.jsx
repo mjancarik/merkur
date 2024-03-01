@@ -2,13 +2,6 @@ import Welcome from '../components/Welcome';
 import WidgetContext from '../components/WidgetContext';
 import WidgetDescription from '../components/WidgetDescription';
 
-async function headlineSlotFactory() {
-  return {
-    name: 'headline',
-    View: HeadlineSlot,
-  };
-}
-
 function HeadlineSlot(widget) {
   if (widget.error && widget.error.status) {
     return null;
@@ -27,5 +20,4 @@ function HeadlineSlot(widget) {
   );
 }
 
-export { headlineSlotFactory };
 export default HeadlineSlot;
