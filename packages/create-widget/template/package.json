@@ -3,20 +3,20 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "dev:server": "cross-env NODE_CONFIG_DIR='./server/config' NODE_ENV=development nodemon server/server.js --config nodemon.json",
     "test": "npm run test:all",
-    "test:unit": "cross-env TEST_GROUP='unit' jest -c ./jest.config.js",
-    "test:integration": "cross-env TEST_GROUP='integration' NODE_CONFIG_DIR='./server/config' jest -c ./jest.config.js",
-    "test:all": "npm run build && cross-env TEST_GROUP='all' NODE_CONFIG_DIR='./server/config' jest -c ./jest.config.js",
-    "test:watch": "cross-env TEST_GROUP='unit' jest -c ./jest.config.js --watchAll",
+    "test:unit": "cross-env TEST_GROUP='unit' merkur test",
+    "test:integration": "cross-env TEST_GROUP='integration' merkur test",
+    "test:all": "npm run build && cross-env TEST_GROUP='all' merkur test",
+    "test:watch": "cross-env TEST_GROUP='unit' merkur test --watchAll",
     "lint": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore './**/*.{js,jsx}'",
-    "dev": "cross-env NODE_ENV=development webpack --config ./webpack.config.js --watch",
-    "build": "cross-env NODE_ENV=production webpack --config ./webpack.config.js",
-    "start": "cross-env NODE_CONFIG_DIR='./server/config' NODE_ENV=production node server/server.js"
+    "dev": "merkur dev",
+    "build": "merkur build",
+    "start": "merkur start"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@merkur/cli": "0.34.0",
     "@merkur/core": "0.34.0",
     "@merkur/integration": "0.34.0",
     "@merkur/plugin-component": "0.34.0",
@@ -26,21 +26,15 @@
     "config": "^3.3.7",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
-    "ejs": "^3.1.6",
     "express": "^4.17.3",
     "express-static-gzip": "^2.1.5",
-    "got": "^11.8.2",
     "helmet": "^5.0.2",
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "@merkur/tools": "0.34.0",
-    "@merkur/tool-webpack": "0.34.0",
-    "nodemon": "^2.0.15",
-    "webpack": "^5.72.0",
-    "webpack-cli": "^4.9.2"
+    "@merkur/tools": "0.34.0"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=20.0.0"
   }
 }

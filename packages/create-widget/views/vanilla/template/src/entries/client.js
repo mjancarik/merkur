@@ -1,8 +1,8 @@
 import { createMerkurWidget, createMerkur } from '@merkur/core';
 
 import { mapViews } from './lib/utils';
-import { viewFactory } from './views/View';
-import widgetProperties from './widget';
+import { viewFactory } from '../views/View';
+import widgetProperties from '@widget';
 
 import './style.css';
 

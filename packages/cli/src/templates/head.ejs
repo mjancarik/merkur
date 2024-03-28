@@ -1,0 +1,20 @@
+<script>
+  window.__merkur_dev__ = window.__merkur_dev__ || {};
+  window.__merkur_dev__.merkurConfig = <%- JSON.stringify(merkurConfig) %>;
+   window.__merkur_dev__.assets = <%- JSON.stringify(assets) %>;
+  window.__merkur_dev__.widgetProperties = <%- JSON.stringify(widgetProperties) %>;
+  <%- devClient %>
+</script>
+<% assets.forEach((asset)=> { %>
+  <%if (asset.type==='stylesheet' ) { %>
+    <link rel='stylesheet' href='<%= asset.source %>' data-name="<%= asset.name %>" />
+  <% } %>
+  <%if (asset.type==='script' ) { %>
+    <%if (typeof asset.source==='string' ) { %>
+      <script src='<%= asset.source %>' defer='true' data-name="<%= asset.name %>"></script>
+    <% } %>
+    <%if (typeof asset.source==='object' ) { %>
+      <script src='<%= asset.source.es13 %>' defer='true' data-name="<%= asset.name %>"></script>
+    <% } %>
+  <% } %>
+<% }); %>

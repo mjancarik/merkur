@@ -24,24 +24,24 @@ let viewResolver = argv.view
         name: 'view',
         message: 'Choose a view configuration:',
         choices: [
-          {
-            name: `${chalk.bold.blue(
-              'µhtml',
-            )} - The basic counter example with µhtml.`,
-            value: 'uhtml',
-          },
+          // {
+          //   name: `${chalk.bold.blue(
+          //     'µhtml',
+          //   )} - The basic counter example with µhtml.`,
+          //   value: 'uhtml',
+          // },
           {
             name: `${chalk.bold.blue(
               'Preact',
             )} - The basic counter example with preact.`,
             value: 'preact',
           },
-          {
-            name: `${chalk.bold.blue(
-              'Svelte',
-            )} - The basic counter example with svelte.`,
-            value: 'svelte',
-          },
+          // {
+          //   name: `${chalk.bold.blue(
+          //     'Svelte',
+          //   )} - The basic counter example with svelte.`,
+          //   value: 'svelte',
+          // },
           {
             name: `${chalk.bold.blue(
               'Vanilla',

@@ -25,7 +25,7 @@ module.exports = {
   },
   plugins: ['prettier', 'jest', 'react', 'jasmine'],
   settings: {
-    ecmascript: 2020,
+    ecmascript: 2022,
     jsx: true,
     react: {
       version: '18',
@@ -33,7 +33,7 @@ module.exports = {
   },
   parserOptions: {
     sourceType: 'module',
-    ecmaVersion: 11,
+    ecmaVersion: 13,
   },
   env: {
     browser: true,

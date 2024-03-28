@@ -1,0 +1,59 @@
+{
+  "name": "@merkur/cli",
+  "version": "0.34.0",
+  "description": "Merkur is tiny and extensible library for creating front-end microservices.",
+  "bin": {
+    "merkur": "./bin/merkur.mjs"
+  },
+  "main": "lib/index",
+  "module": "lib/index",
+  "exports": {
+    ".": {
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "node ./scripts/build.mjs",
+    "dev": "node ./scripts/build.mjs --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "merkur",
+    "plugin",
+    "microservices",
+    "microfrontends",
+    "cli",
+    "esbuild"
+  ],
+  "author": "Miroslav Jancarik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "dependencies": {
+    "@esmj/emitter": "^0.4.1",
+    "@esmj/observable": "^0.1.1",
+    "chalk": "^5.3.0",
+    "commander": "^12.0.0",
+    "compression": "^1.7.4",
+    "esbuild": "^0.20.1",
+    "esbuild-plugin-manifest": "^1.0.3",
+    "express": "^4.18.2",
+    "ws": "^8.16.0"
+  },
+  "peerDependencies": {
+    "@merkur/tools": "*"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

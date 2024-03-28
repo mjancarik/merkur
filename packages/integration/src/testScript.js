@@ -1,5 +1,6 @@
 let _isES9Supported;
 let _isES11Supported;
+let _isES13Supported;
 
 function isES9Supported() {
   if (_isES9Supported === undefined) {
@@ -26,6 +27,16 @@ function isES11Supported() {
   return _isES11Supported;
 }
 
+function isES13Supported() {
+  if (_isES13Supported === undefined) {
+    _isES13Supported =
+      exported.test('return [1,1].findLast(e => e === 1)') &&
+      exported.test('return Object.hasOwn({a:1}, "a")');
+  }
+
+  return _isES13Supported;
+}
+
 function test(snippet) {
   try {
     const fn = new Function(snippet);
@@ -40,6 +51,7 @@ function test(snippet) {
 const exported = {
   isES9Supported,
   isES11Supported,
+  isES13Supported,
   test,
 };
 

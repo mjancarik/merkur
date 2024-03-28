@@ -1,11 +1,12 @@
 const cluster = require('cluster');
 const os = require('os');
 
-const config = require('config');
+const { resolveConfig } = require('@merkur/cli');
+const { merkurConfig } = resolveConfig();
 
 const { app } = require('./app');
 
-const serverConfig = config.get('server');
+const { widgetServer } = merkurConfig;
 
 process.on('uncaughtException', (error) => {
   console.error(error);
@@ -15,10 +16,8 @@ process.on('unhandledRejection', (error) => {
   console.error(error);
 });
 
-if (!serverConfig.clusters || !cluster.isMaster) {
-  const server = app.listen(config.get('server.port'), () => {
-    console.log(`listen on localhost:${config.get('server.port')}`); // eslint-disable-line no-console
-  });
+if (!widgetServer.clusters || !cluster.isMaster) {
+  const server = app.listen(widgetServer.port);
 
   const handleExit = () => {
     server.close(() => {
@@ -30,7 +29,7 @@ if (!serverConfig.clusters || !cluster.isMaster) {
   process.on('SIGQUIT', handleExit);
   process.on('SIGTERM', handleExit);
 } else {
-  let cpuCount = serverConfig.clusters || os.cpus().length;
+  let cpuCount = widgetServer.clusters || os.cpus().length;
 
   for (let i = 0; i < cpuCount; i += 1) {
     cluster.fork();
