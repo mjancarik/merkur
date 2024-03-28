@@ -1,6 +1,7 @@
 const config = require('config');
 const express = require('express');
 
+const { resolveConfig } = require('@merkur/cli');
 const {
   asyncMiddleware,
   createAssets,
@@ -9,7 +10,6 @@ const {
 } = require('@merkur/integration/server');
 const memoCreateAssets = memo(createAssets);
 
-const { resolveConfig } = require('@merkur/cli');
 const { merkurConfig } = resolveConfig();
 const { staticFolder, buildFolder, protocol, host, staticPath } =
   merkurConfig.widgetServer;

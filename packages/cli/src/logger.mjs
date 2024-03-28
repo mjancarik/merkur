@@ -12,9 +12,7 @@ export class Logger {
   #log(prefix, color, message) {
     if (prefix) {
       process.stdout.write(
-        color(
-          `${prefix}: ${this.#identifier ? `(${this.#identifier}) ` : ''}`
-        )
+        color(`${prefix}: ${this.#identifier ? `(${this.#identifier}) ` : ''}`),
       );
     }
 
@@ -24,7 +22,7 @@ export class Logger {
     } catch (error) {
       console.error(error);
     }
-    
+
     process.stdout.write('\n');
   }
 
@@ -54,13 +52,13 @@ export class Logger {
 
   error(message, options) {
     if (message instanceof Error) {
-      const [_, ...stackLines] = message.stack?.split('\n') ?? '';
+      const [_, ...stackLines] = message.stack?.split('\n') ?? ''; //eslint-disable-line
 
       this.#log(
         'error',
         chalk.bold.red,
         `${chalk.underline(message.name)}: ${message.message.trim()}`,
-        options
+        options,
       );
 
       process.stdout.write(`\n${chalk.gray(stackLines.join('\n'))}\n`);

@@ -36,6 +36,7 @@ module.exports = {
     ecmaVersion: 13,
   },
   env: {
+    [`es2020`]: true,
     browser: true,
     node: true,
     es6: true,
