@@ -11,7 +11,7 @@ NPM_LOCAL_REGISTRY_URL="http://${NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL}/"
 ROOT_DIR=`pwd`
 CREATE_MERKUR_WIDGET_DIR="$ROOT_DIR/packages/create-widget"
 PACKAGE_VERSION=`node -e "console.log(require('./lerna.json').version)"`-next
-PACKAGES="core create-widget integration integration-react integration-custom-element plugin-component plugin-css-scrambler plugin-error plugin-event-emitter plugin-http-client plugin-router tools tool-storybook tool-webpack preact"
+PACKAGES="cli core create-widget integration integration-react integration-custom-element plugin-component plugin-css-scrambler plugin-error plugin-event-emitter plugin-http-client plugin-router tools tool-storybook tool-webpack preact"
 
 # Install dependencies
 npm i verdaccio@4.8.1 autocannon@6.5.0 --no-save
