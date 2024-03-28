@@ -2,7 +2,7 @@
 
 set -e
 
-TARGET_WEB_URL="http://localhost:4444/"
+TARGET_WEB_URL="http://localhost:4444/widget"
 PARALLEL_TEST_CONNECTIONS=10
 
 NPM_LOCAL_REGISTRY_URL_NO_PROTOCOL="localhost:4873"

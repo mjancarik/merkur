@@ -51,7 +51,7 @@ export async function createMerkurConfig({ cliConfig, context } = {}) {
 
 async function loadExtender({ merkurConfig, cliConfig, logger, context }) {
   await Promise.all(
-    merkurConfig?.extends.map(async (modulePath) => {
+    merkurConfig?.extends?.map(async (modulePath) => {
       try {
         const file = await import(`${modulePath}`);
         await file.default({
