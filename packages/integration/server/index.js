@@ -77,6 +77,7 @@ async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
           ),
         );
       } catch (error) {
+        console.error(error);
         return assets;
       }
     },

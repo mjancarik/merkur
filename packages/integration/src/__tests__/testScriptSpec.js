@@ -59,10 +59,10 @@ describe('Merkur component', () => {
     });
 
     it('should return true', () => {
-      const isES13Supported = testScript.isES31Supported();
+      const isES13Supported = testScript.isES13Supported();
 
       expect(isES13Supported).toEqual(true);
-      expect(testScript.test).toHaveBeenCalledTimes(4);
+      expect(testScript.test).toHaveBeenCalledTimes(2);
     });
 
     it('should return true but not test again', () => {
