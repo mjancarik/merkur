@@ -22,7 +22,6 @@ export async function createCLIConfig({ args, context, command } = {}) {
       staticPath: args?.staticPath ?? '/static',
       inspect: args.inspect ?? false,
       verbose: args.verbose ?? false,
-      forceLegacy: args.forceLegacy ?? false,
     },
     context,
     args,

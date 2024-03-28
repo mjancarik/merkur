@@ -1,5 +1,6 @@
 *
 !lib/**/*
+!cli/**/*
 !entries/**/*
 !webpack/**/*
 !package.json
