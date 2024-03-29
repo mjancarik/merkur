@@ -77,7 +77,6 @@ async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
           ),
         );
       } catch (error) {
-        console.error(error);
         return assets;
       }
     },
@@ -162,6 +161,8 @@ function requireUncached(module, options = {}) {
       );
     }
   }
+
+  return require(modulePath);
 }
 
 function asyncMiddleware(fn) {

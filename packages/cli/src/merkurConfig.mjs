@@ -193,8 +193,11 @@ emitter.on(
             `${protocol}//${host}/widget?${new URLSearchParams(req.params)}`,
           );
 
-          if (response.ok) {
-            widgetProperties = await response.json();
+          widgetProperties = await response.json();
+          if (!response.ok) {
+            const error = new Error(widgetProperties?.error?.message);
+            error.stack = widgetProperties?.error?.stack;
+            throw error;
           }
 
           return widgetProperties;

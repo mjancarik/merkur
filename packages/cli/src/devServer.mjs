@@ -52,7 +52,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           // TODO refactor
           if (isDevCommand) {
             const { widgetServer } = merkurConfig;
-            widgetProperties.assets = widgetProperties.assets?.map((asset) => {
+            widgetProperties.assets = widgetProperties?.assets?.map((asset) => {
               if (typeof asset.source === 'string') {
                 asset.source = asset.source.replace(
                   widgetServer.origin,
@@ -122,9 +122,8 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
 
         logger.error(error);
         res.status(500).json({
-          status: 'Something is wrong with the @merkur/cli/devServer',
           error: {
-            message: error.message,
+            message: `Something is wrong with the @merkur/cli/devServer: ${error.message}`,
             stack: error.stack,
           },
         });
