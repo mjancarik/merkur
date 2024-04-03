@@ -1,4 +1,4 @@
-import { render, hydrate } from 'preact';
+import { render, html } from 'uhtml';
 
 import {
   WidgetParams,
@@ -9,9 +9,9 @@ import {
 import { mapViews } from './utils';
 
 /**
- * Client Factory for creating merkur widgets with preact renderer.
+ * Client Factory for creating merkur widgets with uhtml renderer.
  */
-export function createPreactWidget({
+export function createUhtmlWidget({
   name,
   version,
   $dependencies,
@@ -25,7 +25,7 @@ export function createPreactWidget({
       $dependencies: {
         ...$dependencies,
         render,
-        hydrate,
+        html,
       },
       shouldHydrate(widget, { container, isSlot }) {
         return Boolean(container?.children?.length && !isSlot);
@@ -64,13 +64,13 @@ export function createPreactWidget({
           widget,
           viewFactory,
           ({ View, container }) =>
-            container && widget.$dependencies.render(View(widget), container),
+            container && widget.$dependencies.render(container, View(widget)),
         );
       },
       async unmount(widget) {
         await mapViews(widget, viewFactory, ({ container }) => {
           if (container) {
-            widget.$dependencies.render(null, container);
+            widget.$dependencies.render(container, widget.$dependencies.html``);
           }
         });
       },

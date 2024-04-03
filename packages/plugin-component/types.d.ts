@@ -1,5 +1,20 @@
 import { MapViewArgs } from './factory/utils';
 
+export type MapViewArgs = {
+  View: ViewType;
+  ErrorView?: ViewType;
+  containerSelector: string;
+  container: Element | null;
+  isSlot: boolean;
+  slot?: Record<
+    string,
+    {
+      isSlot: boolean;
+      containerSelector?: string;
+    } & ViewFactorySlotType
+  >;
+};
+
 export type SSRMountResult = {
   html: string;
   slot: Record<string, { name: string; html: string }>;

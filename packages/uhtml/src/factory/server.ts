@@ -1,4 +1,4 @@
-import render from 'preact-render-to-string';
+import { html } from 'ucontent';
 
 import {
   ViewType,
@@ -6,12 +6,12 @@ import {
   createMerkurWidget,
   defineWidget,
 } from '@merkur/core';
-import { type SSRMountResult } from '@merkur/plugin-component';
+import { SSRMountResult } from '@merkur/plugin-component';
 
 /**
- * Server Factory for creating merkur widgets with preact renderer.
+ * Server Factory for creating merkur widgets with uhtml renderer.
  */
-export function createPreactWidget({
+export function createUhtmlWidget({
   viewFactory,
   $dependencies,
   ...restProps
@@ -22,10 +22,9 @@ export function createPreactWidget({
       ...widgetParams,
       $dependencies: {
         ...$dependencies,
-        render,
+        html,
       },
       async mount(widget) {
-        const { render } = widget.$dependencies;
         const {
           View: MainView,
           ErrorView,
@@ -39,15 +38,15 @@ export function createPreactWidget({
         const renderView = (View: ViewType) => {
           // @ts-expect-error the @merkur/plugin-error is optional
           if (widget?.error?.status && ErrorView) {
-            return render(ErrorView(widget));
+            return ErrorView(widget);
           }
 
           // @ts-expect-error the @merkur/plugin-error is optional
           if (widget?.error?.status) {
-            return render(null);
+            return null;
           }
 
-          return render(View(widget));
+          return View(widget);
         };
 
         return {

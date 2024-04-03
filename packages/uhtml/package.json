@@ -1,0 +1,53 @@
+{
+  "name": "@merkur/uhtml",
+  "version": "0.34.0",
+  "description": "Collection of helpers to aid with Svelte integration to @merkur",
+  "scripts": {
+    "test": "echo 'Tests pass.'",
+    "test:es:version": "echo 'Tests pass.'",
+    "build": "rollup -c rollup.config.mjs",
+    "prepare": "npm run build",
+    "dev": "rollup -c rollup.config.mjs -w"
+  },
+  "exports": {
+    "./entries/client.js": "./entries/client.js",
+    "./entries/server.js": "./entries/server.js",
+    "./webpack": "./webpack/index.js",
+    "./client": {
+      "types": "./lib/client/client.d.ts",
+      "import": "./lib/client/client.mjs",
+      "require": "./lib/client/client.cjs"
+    },
+    "./server": {
+      "types": "./lib/server/server.d.ts",
+      "import": "./lib/server/server.mjs",
+      "require": "./lib/server/server.cjs"
+    }
+  },
+  "keywords": [
+    "merkur",
+    "uhtml",
+    "micro",
+    "frontend"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "author": "Jan Šimeček",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "devDependencies": {
+  },
+  "peerDependencies": {
+    "@merkur/core": ">=0.34",
+    "@merkur/plugin-component": ">=0.34",
+    "@merkur/tool-webpack": ">=0.28"
+  }
+}
