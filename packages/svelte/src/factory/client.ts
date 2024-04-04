@@ -4,10 +4,10 @@ import {
   createMerkurWidget,
   defineWidget,
 } from '@merkur/core';
-import { mapViews } from './utils';
 import { ViewType } from '@merkur/plugin-component';
 import { ComponentType, SvelteComponent } from 'svelte';
 import { RenderParams } from '../types';
+import { mapViews } from '@merkur/plugin-component/helpers';
 
 declare module '@merkur/core' {
   interface WidgetExternal {

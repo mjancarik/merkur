@@ -6,7 +6,7 @@ import {
   createMerkurWidget,
   defineWidget,
 } from '@merkur/core';
-import { mapViews } from './utils';
+import { mapViews } from '@merkur/plugin-component/helpers';
 
 /**
  * Client Factory for creating merkur widgets with uhtml renderer.

@@ -1,12 +1,7 @@
 import { html } from 'ucontent';
 
-import {
-  ViewType,
-  WidgetParams,
-  createMerkurWidget,
-  defineWidget,
-} from '@merkur/core';
-import { SSRMountResult } from '@merkur/plugin-component';
+import { WidgetParams, createMerkurWidget, defineWidget } from '@merkur/core';
+import { SSRMountResult, ViewType } from '@merkur/plugin-component';
 
 /**
  * Server Factory for creating merkur widgets with uhtml renderer.
