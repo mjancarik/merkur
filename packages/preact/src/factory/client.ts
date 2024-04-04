@@ -8,6 +8,13 @@ import {
 } from '@merkur/core';
 import { mapViews } from '@merkur/plugin-component/helpers';
 
+declare module '@merkur/core' {
+  interface WidgetDependencies {
+    render: typeof render;
+    hydrate: typeof hydrate;
+  }
+}
+
 /**
  * Client Factory for creating merkur widgets with preact renderer.
  */
@@ -40,8 +47,9 @@ export function createPreactWidget({
             }
 
             const { render, hydrate } = widget.$dependencies;
-            const renderView = widget.shouldHydrate(widget, {
+            const renderView = widget.shouldHydrate({
               View,
+              ErrorView,
               container,
               ...rest,
             })

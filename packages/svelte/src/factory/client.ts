@@ -5,7 +5,7 @@ import {
   defineWidget,
 } from '@merkur/core';
 import { ViewType } from '@merkur/plugin-component';
-import { ComponentType, SvelteComponent } from 'svelte';
+import { ComponentType, SvelteComponentTyped } from 'svelte';
 import { RenderParams } from '../types';
 import { mapViews } from '@merkur/plugin-component/helpers';
 
@@ -16,10 +16,12 @@ declare module '@merkur/core' {
 }
 
 declare module '@merkur/plugin-component' {
-  interface ViewType extends ComponentType<SvelteComponent<RenderParams>> {}
+  interface ViewType
+    extends ComponentType<SvelteComponentTyped<RenderParams>> {}
 }
 
 /**
+ *
  * Client Factory for creating merkur widgets with svelte renderer.
  */
 export function createSvelteWidget({
@@ -32,8 +34,8 @@ export function createSvelteWidget({
     createMerkurWidget({
       ...restProps,
       ...widgetParams,
-      shouldHydrate(widget, { container, isSlot }) {
-        return Boolean(container?.children?.length && !isSlot);
+      shouldHydrate(widget, { container }) {
+        return !!container?.children?.length;
       },
       async mount(widget) {
         widget.$external.app = {};
@@ -46,6 +48,14 @@ export function createSvelteWidget({
               return;
             }
 
+            const hydrate = widget.shouldHydrate({
+              View,
+              ErrorView,
+              container,
+              containerSelector,
+              ...rest,
+            });
+
             const renderView = (RenderedView: ViewType) => {
               widget.$external.app[containerSelector] = new RenderedView({
                 target: container,
@@ -54,21 +64,16 @@ export function createSvelteWidget({
                   state: widget.state,
                   props: widget.props,
                 },
-                hydrate: widget.shouldHydrate(widget, {
-                  View: RenderedView,
-                  container,
-                  containerSelector,
-                  ...rest,
-                }),
+                hydrate,
               });
             };
 
             // @ts-expect-error the @merkur/plugin-error is optional
             if (widget?.error?.status && ErrorView) {
-              return renderView(ErrorView(widget));
+              return renderView(ErrorView);
             }
 
-            return renderView(View(widget));
+            return renderView(View);
           },
         );
       },

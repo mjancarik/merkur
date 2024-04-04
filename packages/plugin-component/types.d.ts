@@ -1,3 +1,5 @@
+import { Widget } from '@merkur/core';
+
 export interface ViewType {
   (widget: Widget): any;
 }
@@ -31,10 +33,10 @@ declare module '@merkur/core' {
   }
 
   interface Widget {
-    shouldHydrate: (widget: Widget, viewArgs: MapViewArgs) => boolean;
-    mount: (widget: Widget) => Promise<void | SSRMountResult>;
-    update: (widget: Widget) => Promise<void>;
-    unmount: (widget: Widget) => Promise<void>;
+    shouldHydrate: (viewArgs: MapViewArgs) => boolean;
+    mount: () => Promise<void | SSRMountResult>;
+    update: () => Promise<void>;
+    unmount: () => Promise<void>;
     slot: Record<
       string,
       { name: string; html: string; containerSelector: string } | undefined

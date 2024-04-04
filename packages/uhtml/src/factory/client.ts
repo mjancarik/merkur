@@ -8,6 +8,13 @@ import {
 } from '@merkur/core';
 import { mapViews } from '@merkur/plugin-component/helpers';
 
+declare module '@merkur/core' {
+  interface WidgetDependencies {
+    render: typeof render;
+    html: typeof html;
+  }
+}
+
 /**
  * Client Factory for creating merkur widgets with uhtml renderer.
  */
@@ -39,13 +46,14 @@ export function createUHtmlWidget({
               return;
             }
 
-            const { render, hydrate } = widget.$dependencies;
-            const renderView = widget.shouldHydrate(widget, {
+            const { render, html } = widget.$dependencies;
+            const renderView = widget.shouldHydrate({
               View,
+              ErrorView,
               container,
               ...rest,
             })
-              ? hydrate
+              ? html
               : render;
 
             // @ts-expect-error the @merkur/plugin-error is optional

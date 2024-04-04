@@ -17,6 +17,7 @@ export function createPreactWidget({
       ...widgetParams,
       $dependencies: {
         ...$dependencies,
+        // @ts-expect-error conflict with client types
         render,
       },
       async mount(widget) {
@@ -34,14 +35,17 @@ export function createPreactWidget({
         const renderView = (View: ViewType): string => {
           // @ts-expect-error the @merkur/plugin-error is optional
           if (widget?.error?.status && ErrorView) {
+            // @ts-expect-error conflict with client types
             return render(ErrorView(widget));
           }
 
           // @ts-expect-error the @merkur/plugin-error is optional
           if (widget?.error?.status) {
+            // @ts-expect-error conflict with client types
             return render(null);
           }
 
+          // @ts-expect-error conflict with client types
           return render(View(widget));
         };
 
