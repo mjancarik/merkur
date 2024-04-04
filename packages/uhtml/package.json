@@ -43,11 +43,13 @@
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "devDependencies": {
-  },
   "peerDependencies": {
     "@merkur/core": ">=0.34",
     "@merkur/plugin-component": ">=0.34",
     "@merkur/tool-webpack": ">=0.28"
+  },
+  "dependencies": {
+    "ucontent": "^2.0.0",
+    "uhtml": "^4.5.0"
   }
 }

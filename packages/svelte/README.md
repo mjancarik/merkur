@@ -4,25 +4,25 @@
   </a>
 </p>
 
-# @merkur/uhtml
+# @merkur/svelte
 
-Collection of helpers to aid with uhtml integration to @merkur. It includes:
- - additional webpack config for easier setup of uhtml for babel and webpack.
+Collection of helpers to aid with svelte integration to @merkur. It includes:
+ - additional webpack config for easier setup of svelte for babel and webpack.
  - default entry points for client and server that should fit needs of most of the widgets (custom entry points can still be used as well).
  - factory functions for easier definition and setup of entry points.
 
-While you can use merkur with uhtml without this package, we strongly suggest to use it, since it removes some abstractions and makes the codebase more approachable for begginners. It also provides some additional features that are not available without it while also making sure the integration is always up to date and working as expected.
+While you can use merkur with svelte without this package, we strongly suggest to use it, since it removes some abstractions and makes the codebase more approachable for begginners. It also provides some additional features that are not available without it while also making sure the integration is always up to date and working as expected.
 
 You can still customize the webpack config and entry points as you wish, even when using this package.
 
 ## Getting started
 
-This package has peer dependencies on `@merkur/core`, `uhtml` and `@merkur/plugin-component`. Make sure you have them installed in your project.
+This package has peer dependencies on `@merkur/core`, `svelte` and `@merkur/plugin-component`. Make sure you have them installed in your project.
 
 ```bash
 
 ```bash
-npm i -S @merkur/uhtml
+npm i -S @merkur/svelte
 ```
 
 ## Usage
@@ -34,8 +34,8 @@ Add following overrides to your webpack config (delete any existing overrides fo
 ```js
 const {
   applyBabelLoader,
-  applyUHtmlConfig,
-} = require('@merkur/uhtml/webpack');
+  applySvelteConfig,
+} = require('@merkur/svelte/webpack');
 
 // ...
 
@@ -43,18 +43,18 @@ module.exports = createLiveReloadServer().then(() =>
   Promise.all([
     pipe(
       createWebConfig,
-      applyUHtmlConfig, // <<<<
+      applySvelteConfig, // <<<<
       applyStyleLoaders,
     )(),
     pipe(
       createWebConfig,
-      applyUHtmlConfig, // <<<<
+      applySvelteConfig, // <<<<
       applyStyleLoaders,
       applyES9Transformation,
     )(),
     pipe(
       createNodeConfig,
-      applyUHtmlConfig, // <<<<
+      applySvelteConfig, // <<<<
       applyStyleLoaders,
     )(),
   ]),
@@ -63,7 +63,7 @@ module.exports = createLiveReloadServer().then(() =>
 
 ### Default client.js and server.js entry points
 
-Delete your existing `client.js` and `server.js` files, `applyUHtmlConfig` will use default ones from `@merkur/uhtml` package.
+Delete your existing `client.js` and `server.js` files, `applySvelteConfig` will use default ones from `@merkur/svelte` package.
 
 When in a need, please consider extending the default entry point functionality using `hookMethod` from `@merkur/core`, rather than creating your own entry points. This reduces the amount of code you need to maintain and makes sure the integration is always up to date and working as expected.
 

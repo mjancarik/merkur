@@ -11,7 +11,7 @@ import { SSRMountResult } from '@merkur/plugin-component';
 /**
  * Server Factory for creating merkur widgets with uhtml renderer.
  */
-export function createUhtmlWidget({
+export function createUHtmlWidget({
   viewFactory,
   $dependencies,
   ...restProps

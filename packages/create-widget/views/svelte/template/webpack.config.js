@@ -5,57 +5,33 @@ const {
   applyES9Transformation,
   applyStyleLoaders,
   pipe,
-  webpackMode,
 } = require('@merkur/tool-webpack');
-
-function applySvelteWeb(config) {
-  config.module.rules.push({
-    test: /\.(svelte|html)$/,
-    use: {
-      loader: 'svelte-loader',
-      options: {
-        compilerOptions: {
-          dev: webpackMode,
-          generate: 'dom',
-          hydratable: true,
-        },
-        emitCss: true,
-        hotReload: false,
-      },
-    },
-  });
-
-  return config;
-}
-
-function applySvelteNode(config) {
-  config.module.rules.push({
-    test: /\.(svelte|html)$/,
-    use: {
-      loader: 'svelte-loader',
-      options: {
-        compilerOptions: {
-          css: false,
-          generate: 'ssr',
-          dev: webpackMode,
-          hydratable: true,
-        },
-      },
-    },
-  });
-
-  return config;
-}
+const {
+  applySvelteConfig,
+  applySvelteWeb,
+  applySvelteNode,
+} = require('@merkur/svelte/webpack');
 
 module.exports = createLiveReloadServer().then(() =>
   Promise.all([
-    pipe(createWebConfig, applyStyleLoaders, applySvelteWeb)(),
     pipe(
       createWebConfig,
+      applySvelteConfig,
+      applyStyleLoaders,
+      applySvelteWeb,
+    )(),
+    pipe(
+      createWebConfig,
+      applySvelteConfig,
       applyStyleLoaders,
       applySvelteWeb,
       applyES9Transformation,
     )(),
-    pipe(createNodeConfig, applyStyleLoaders, applySvelteNode)(),
+    pipe(
+      createNodeConfig,
+      applySvelteConfig,
+      applyStyleLoaders,
+      applySvelteNode,
+    )(),
   ]),
 );

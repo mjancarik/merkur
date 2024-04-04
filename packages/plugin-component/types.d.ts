@@ -1,4 +1,6 @@
-import { MapViewArgs } from './factory/utils';
+export interface ViewType {
+  (widget: Widget): any;
+}
 
 export type MapViewArgs = {
   View: ViewType;
@@ -20,6 +22,9 @@ export type SSRMountResult = {
   slot: Record<string, { name: string; html: string }>;
 };
 
+export interface WidgetState {}
+export interface WidgetProps {}
+
 declare module '@merkur/core' {
   interface DefineWidgetArgs {
     viewFactory: ViewFactory;
@@ -34,6 +39,8 @@ declare module '@merkur/core' {
       string,
       { name: string; html: string; containerSelector: string } | undefined
     >;
+    state: WidgetState;
+    props: WidgetProps;
   }
 
   interface WidgetDefinition {

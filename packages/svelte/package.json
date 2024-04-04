@@ -1,7 +1,7 @@
 {
-  "name": "@merkur/preact",
+  "name": "@merkur/svelte",
   "version": "0.34.0",
-  "description": "Collection of helpers to aid with Preact integration to @merkur",
+  "description": "Collection of helpers to aid with Svelte integration to @merkur",
   "scripts": {
     "test": "echo 'Tests pass.'",
     "test:es:version": "echo 'Tests pass.'",
@@ -26,7 +26,7 @@
   },
   "keywords": [
     "merkur",
-    "preact",
+    "svelte",
     "micro",
     "frontend"
   ],
@@ -43,15 +43,13 @@
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
-  "dependencies": {
-    "@babel/preset-react": "^7.24.1",
-    "preact": "^10.20.1",
-    "preact-render-to-string": "^6.4.1"
-  },
   "peerDependencies": {
     "@merkur/core": ">=0.34",
     "@merkur/plugin-component": ">=0.34",
-    "@merkur/tool-webpack": ">=0.28",
-    "babel-loader": ">=9"
+    "@merkur/tool-webpack": ">=0.28"
+  },
+  "dependencies": {
+    "svelte": "^4.2.12",
+    "svelte-loader": "^3.2.0"
   }
 }

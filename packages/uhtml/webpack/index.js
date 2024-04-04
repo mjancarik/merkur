@@ -1,7 +1,7 @@
 const path = require('path');
 const fs = require('fs');
 
-function applyUhtmlConfig(config, { cwd, isServer }) {
+function applyUHtmlConfig(config, { cwd, isServer }) {
   // Check for existence of widget entry points
   if (
     config.entry.widget &&
@@ -29,5 +29,5 @@ function applyUhtmlConfig(config, { cwd, isServer }) {
 }
 
 module.exports = {
-  applyUhtmlConfig,
+  applyUHtmlConfig,
 };

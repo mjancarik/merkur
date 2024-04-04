@@ -11,7 +11,7 @@ import { mapViews } from './utils';
 /**
  * Client Factory for creating merkur widgets with uhtml renderer.
  */
-export function createUhtmlWidget({
+export function createUHtmlWidget({
   name,
   version,
   $dependencies,

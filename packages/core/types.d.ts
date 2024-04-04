@@ -1,5 +1,3 @@
-export type ViewType = (widget: Widget) => any;
-
 export interface BaseWidgetAsset {
   type: 'stylesheet' | 'script' | 'inlineStyle';
   optional?: boolean;
