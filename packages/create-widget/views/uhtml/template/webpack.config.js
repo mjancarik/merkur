@@ -10,13 +10,13 @@ const {
 
 module.exports = createLiveReloadServer().then(() =>
   Promise.all([
-    pipe(createWebConfig, applyUHtmlConfig(), applyStyleLoaders)(),
+    pipe(createWebConfig, applyUHtmlConfig, applyStyleLoaders)(),
     pipe(
       createWebConfig,
-      applyUHtmlConfig(),
+      applyUHtmlConfig,
       applyStyleLoaders,
       applyES9Transformation,
     )(),
-    pipe(createNodeConfig, applyUHtmlConfig(), applyStyleLoaders)(),
+    pipe(createNodeConfig, applyUHtmlConfig, applyStyleLoaders)(),
   ]),
 );

@@ -34,9 +34,6 @@ export function createUHtmlWidget({
         render,
         html,
       },
-      shouldHydrate(widget, { container, isSlot }) {
-        return Boolean(container?.children?.length && !isSlot);
-      },
       async mount(widget) {
         await mapViews(
           widget,
@@ -46,40 +43,35 @@ export function createUHtmlWidget({
               return;
             }
 
-            const { render, html } = widget.$dependencies;
-            const renderView = widget.shouldHydrate({
-              View,
-              ErrorView,
-              container,
-              ...rest,
-            })
-              ? html
-              : render;
+            const { render } = widget.$dependencies;
 
             // @ts-expect-error the @merkur/plugin-error is optional
             if (widget?.error?.status) {
               return ErrorView
-                ? renderView(ErrorView(widget), container)
-                : render(null, container);
+                ? render(container, ErrorView(widget))
+                : render(container, '');
             }
 
-            return renderView(View(widget), container);
+            return render(container, View(widget));
           },
         );
       },
       async update(widget) {
-        await mapViews(
-          widget,
-          viewFactory,
-          ({ View, container }) =>
-            container && widget.$dependencies.render(container, View(widget)),
-        );
+        await mapViews(widget, viewFactory, ({ View, container }) => {
+          if (!container) {
+            return;
+          }
+
+          widget.$dependencies.render(container, View(widget));
+        });
       },
       async unmount(widget) {
         await mapViews(widget, viewFactory, ({ container }) => {
-          if (container) {
-            widget.$dependencies.render(container, widget.$dependencies.html``);
+          if (!container) {
+            return;
           }
+
+          widget.$dependencies.render(container, widget.$dependencies.html``);
         });
       },
     });
