@@ -64,7 +64,7 @@ async function loadExtender({ merkurConfig, cliConfig, logger, context }) {
       } catch (error) {
         logger.error(error);
       }
-    }),
+    }) ?? [],
   );
 }
 
