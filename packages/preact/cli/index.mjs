@@ -1,13 +1,21 @@
-export default function ({ emitter, EMITTER_EVENTS }) {
+import { fileURLToPath } from 'url';
+
+export default function ({ emitter, EMITTER_EVENTS, cliConfig }) {
   emitter.on(
     EMITTER_EVENTS.MERKUR_CONFIG,
-    function defaultEntries({ merkurConfig, cliConfig }) {
+    function defaultEntries({ merkurConfig }) {
       merkurConfig.defaultEntries = {
         client: [
-          `${cliConfig.projectFolder}/node_modules/@merkur/preact/entries/client.js`,
+          //`${cliConfig.projectFolder}/node_modules/@merkur/preact/entries/client.js`,
+          fileURLToPath(
+            import.meta.resolve('@merkur/preact/entries/client.js'),
+          ),
         ],
         server: [
-          `${cliConfig.projectFolder}/node_modules/@merkur/preact/entries/server.js`,
+          //`${cliConfig.projectFolder}/node_modules/@merkur/preact/entries/server.js`,
+          fileURLToPath(
+            import.meta.resolve('@merkur/preact/entries/server.js'),
+          ),
         ],
       };
 

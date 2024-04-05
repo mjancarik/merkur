@@ -167,10 +167,8 @@ emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function defaultEntries({ merkurConfig, cliConfig }) {
     merkurConfig.defaultEntries = {
-      ...{
-        client: [`${cliConfig.projectFolder}/src/entries/client.js`],
-        server: [`${cliConfig.projectFolder}/src/entries/server.js`],
-      },
+      client: [`${cliConfig.projectFolder}/src/entries/client.js`],
+      server: [`${cliConfig.projectFolder}/src/entries/server.js`],
       ...merkurConfig.defaultEntries,
     };
 
@@ -182,26 +180,24 @@ emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function playground({ merkurConfig, cliConfig }) {
     merkurConfig.playground = {
-      ...{
-        template: `${cliConfig.cliFolder}/templates/playground.ejs`,
-        templateDir: `${cliConfig.cliFolder}/templates`,
-        path: '/',
-        widgetHandler: async (req) => {
-          const { protocol, host } = merkurConfig.widgetServer;
-          let widgetProperties = null;
-          const response = await fetch(
-            `${protocol}//${host}/widget?${new URLSearchParams(req.params)}`,
-          );
+      template: `${cliConfig.cliFolder}/templates/playground.ejs`,
+      templateFolder: `${cliConfig.cliFolder}/templates`,
+      path: '/',
+      widgetHandler: async (req) => {
+        const { protocol, host } = merkurConfig.widgetServer;
+        let widgetProperties = null;
+        const response = await fetch(
+          `${protocol}//${host}/widget?${new URLSearchParams(req.params)}`,
+        );
 
-          widgetProperties = await response.json();
-          if (!response.ok) {
-            const error = new Error(widgetProperties?.error?.message);
-            error.stack = widgetProperties?.error?.stack;
-            throw error;
-          }
+        widgetProperties = await response.json();
+        if (!response.ok) {
+          const error = new Error(widgetProperties?.error?.message);
+          error.stack = widgetProperties?.error?.stack;
+          throw error;
+        }
 
-          return widgetProperties;
-        },
+        return widgetProperties;
       },
       ...merkurConfig.playground,
     };
@@ -214,11 +210,9 @@ emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function socketServer({ merkurConfig }) {
     merkurConfig.socketServer = {
-      ...{
-        protocol: 'ws:',
-        host: 'localhost:4321',
-        port: 4321,
-      },
+      protocol: 'ws:',
+      host: 'localhost:4321',
+      port: 4321,
       ...merkurConfig.socketServer,
     };
 
@@ -230,21 +224,16 @@ emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function widgetServer({ merkurConfig, cliConfig }) {
     merkurConfig.widgetServer = {
-      ...{
-        protocol: 'http:',
-        host: 'localhost:4444',
-        port: 4444,
-        staticPath: cliConfig.staticPath,
-        staticFolder: path.resolve(
-          cliConfig.projectFolder,
-          cliConfig.staticFolder,
-        ),
-        buildFolder: path.resolve(
-          cliConfig.projectFolder,
-          cliConfig.buildFolder,
-        ),
-        clusters: cliConfig.command === COMMAND_NAME.DEV ? 0 : 3,
-      },
+      protocol: 'http:',
+      host: 'localhost:4444',
+      port: 4444,
+      staticPath: cliConfig.staticPath,
+      staticFolder: path.resolve(
+        cliConfig.projectFolder,
+        cliConfig.staticFolder,
+      ),
+      buildFolder: path.resolve(cliConfig.projectFolder, cliConfig.buildFolder),
+      clusters: cliConfig.command === COMMAND_NAME.DEV ? 0 : 3,
       ...merkurConfig.widgetServer,
     };
 
