@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'url';
 
-export default function ({ emitter, EMITTER_EVENTS, cliConfig }) {
+export default function ({ emitter, EMITTER_EVENTS }) {
   emitter.on(
     EMITTER_EVENTS.MERKUR_CONFIG,
     function defaultEntries({ merkurConfig }) {
