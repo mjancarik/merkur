@@ -1,4 +1,4 @@
-#!/usr/bin/env node --watch
+#!/usr/bin/env node
 import { Command } from 'commander';
 import { dev } from '../src/commands/dev.mjs';
 import { build } from '../src/commands/build.mjs';
