@@ -1,10 +1,10 @@
 import { createMerkurWidget, createMerkur } from '@merkur/core';
 
-import { mapViews } from './lib/utils';
+import { mapViews } from '../lib/utils';
 import { viewFactory } from '../views/View';
 import widgetProperties from '@widget';
 
-import './style.css';
+import '../style.css';
 
 function createWidget(widgetParams) {
   return createMerkurWidget({

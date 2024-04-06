@@ -1,7 +1,5 @@
 {
   "dependencies": {
-    "preact": "10.13.2",
-    "preact-render-to-string": "6.0.3",
     "@merkur/preact": "0.34.0"
   },
   "devDependencies": {
