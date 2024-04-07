@@ -1,7 +1,7 @@
 const cluster = require('cluster');
 const os = require('os');
 
-const { resolveConfig } = require('@merkur/cli');
+const { resolveConfig } = require('@merkur/cli/server');
 const { merkurConfig } = resolveConfig();
 
 const { app } = require('./app');

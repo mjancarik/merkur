@@ -5,7 +5,7 @@ const expressStaticGzip = require('express-static-gzip');
 const helmet = require('helmet');
 const morgan = require('morgan');
 
-const { resolveConfig } = require('@merkur/cli');
+const { resolveConfig } = require('@merkur/cli/server');
 
 const { merkurConfig } = resolveConfig();
 

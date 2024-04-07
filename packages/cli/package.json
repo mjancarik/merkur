@@ -5,10 +5,8 @@
   "bin": {
     "merkur": "./bin/merkur.mjs"
   },
-  "main": "lib/index",
-  "module": "lib/index",
   "exports": {
-    ".": {
+    "./server": {
       "import": "./lib/index.mjs",
       "require": "./lib/index.cjs"
     }

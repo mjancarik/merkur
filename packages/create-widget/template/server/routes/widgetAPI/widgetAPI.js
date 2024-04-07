@@ -1,7 +1,7 @@
 const config = require('config');
 const express = require('express');
 
-const { resolveConfig } = require('@merkur/cli');
+const { resolveConfig } = require('@merkur/cli/server');
 const {
   asyncMiddleware,
   createAssets,
