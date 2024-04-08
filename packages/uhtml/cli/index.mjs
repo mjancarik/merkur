@@ -1,4 +1,4 @@
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from 'node:url';
 
 export default function ({ emitter, EMITTER_EVENTS }) {
   emitter.on(
@@ -16,14 +16,4 @@ export default function ({ emitter, EMITTER_EVENTS }) {
       return merkurConfig;
     },
   );
-
-  // emitter.on(EMITTER_EVENTS.TASK_BUILD, function defaultBuild({ build }) {
-  //   build = {
-  //     ...build,
-  //     jsxImportSource: 'preact',
-  //     jsx: 'automatic',
-  //   };
-
-  //   return build;
-  // });
 }

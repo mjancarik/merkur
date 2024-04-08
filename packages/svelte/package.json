@@ -50,6 +50,7 @@
     "@merkur/tool-webpack": ">=0.28"
   },
   "dependencies": {
+    "esbuild-svelte": "^0.8.0",
     "svelte": "^3.59.2",
     "svelte-loader": "^3.2.0"
   }
