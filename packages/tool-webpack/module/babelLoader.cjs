@@ -115,7 +115,12 @@ function createESTransformation(
       test: /\.(js|ts|tsx|mjs|jsx)$/,
       exclude: (modulePath) =>
         /node_modules/.test(modulePath) &&
-        !/node_modules\/(abort-controller|event-target-shim)/.test(modulePath),
+        !/node_modules\/(abort-controller|event-target-shim)/.test(
+          modulePath,
+        ) &&
+        !/node_modules\/@merkur\/(svelte|uhtml|preact|vanilla)/.test(
+          modulePath,
+        ),
       use: {
         loader: require.resolve('babel-loader'),
         options: {
