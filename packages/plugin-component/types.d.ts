@@ -15,6 +15,7 @@ export type MapViewArgs = {
     {
       isSlot: boolean;
       containerSelector?: string;
+      container?: Element;
     } & ViewFactorySlotType
   >;
 };
@@ -33,13 +34,20 @@ declare module '@merkur/core' {
   }
 
   interface Widget {
+    container?: Element;
     shouldHydrate: (viewArgs: MapViewArgs) => boolean;
     mount: () => Promise<void | SSRMountResult>;
     update: () => Promise<void>;
     unmount: () => Promise<void>;
     slot: Record<
       string,
-      { name: string; html: string; containerSelector: string } | undefined
+      | {
+          name: string;
+          html: string;
+          containerSelector: string;
+          container?: Element;
+        }
+      | undefined
     >;
     state: WidgetState;
     props: WidgetProps;
@@ -50,6 +58,15 @@ declare module '@merkur/core' {
     mount: (widget: Widget) => Promise<void | SSRMountResult>;
     update: (widget: Widget) => Promise<void>;
     unmount: (widget: Widget) => Promise<void>;
+  }
+  interface WidgetInternal {
+    component: {
+      lifeCycle: Record<string, function>;
+      isMounted: boolean;
+      isHydrated: boolean;
+      suspendedTasks: Array<function>;
+      resolvedViews: Map<ViewFactory, ReturnType<ViewFactory>>;
+    };
   }
 }
 

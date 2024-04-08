@@ -27,6 +27,7 @@ export function componentPlugin() {
         isMounted: false,
         isHydrated: false,
         suspendedTasks: [],
+        resolvedViews: new Map(),
       };
 
       assignMissingKeys(widget, componentAPI(), widgetProperties);
