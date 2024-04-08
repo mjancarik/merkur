@@ -1,3 +1,4 @@
+const { applyUHtmlConfig } = require('@merkur/uhtml/webpack');
 const {
   createLiveReloadServer,
   createWebConfig,
@@ -9,8 +10,13 @@ const {
 
 module.exports = createLiveReloadServer().then(() =>
   Promise.all([
-    pipe(createWebConfig, applyStyleLoaders)(),
-    pipe(createWebConfig, applyStyleLoaders, applyES9Transformation)(),
-    pipe(createNodeConfig, applyStyleLoaders)(),
+    pipe(createWebConfig, applyUHtmlConfig, applyStyleLoaders)(),
+    pipe(
+      createWebConfig,
+      applyUHtmlConfig,
+      applyStyleLoaders,
+      applyES9Transformation,
+    )(),
+    pipe(createNodeConfig, applyUHtmlConfig, applyStyleLoaders)(),
   ]),
 );

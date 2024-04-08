@@ -1,4 +1,4 @@
-import { render, hydrate } from 'preact';
+import { render, html } from 'uhtml';
 
 import {
   WidgetParams,
@@ -11,14 +11,14 @@ import { mapViews } from '@merkur/plugin-component/helpers';
 declare module '@merkur/core' {
   interface WidgetDependencies {
     render: typeof render;
-    hydrate: typeof hydrate;
+    html: typeof html;
   }
 }
 
 /**
- * Client Factory for creating merkur widgets with preact renderer.
+ * Client Factory for creating merkur widgets with uhtml renderer.
  */
-export function createPreactWidget({
+export function createUHtmlWidget({
   name,
   version,
   $dependencies,
@@ -32,10 +32,7 @@ export function createPreactWidget({
       $dependencies: {
         ...$dependencies,
         render,
-        hydrate,
-      },
-      shouldHydrate(widget, { container, isSlot }) {
-        return Boolean(container?.children?.length && !isSlot);
+        html,
       },
       async mount(widget) {
         await mapViews(
@@ -46,40 +43,35 @@ export function createPreactWidget({
               return;
             }
 
-            const { render, hydrate } = widget.$dependencies;
-            const renderView = widget.shouldHydrate({
-              View,
-              ErrorView,
-              container,
-              ...rest,
-            })
-              ? hydrate
-              : render;
+            const { render } = widget.$dependencies;
 
             // @ts-expect-error the @merkur/plugin-error is optional
             if (widget?.error?.status) {
               return ErrorView
-                ? renderView(ErrorView(widget), container)
-                : render(null, container);
+                ? render(container, ErrorView(widget))
+                : render(container, '');
             }
 
-            return renderView(View(widget), container);
+            return render(container, View(widget));
           },
         );
       },
       async update(widget) {
-        await mapViews(
-          widget,
-          viewFactory,
-          ({ View, container }) =>
-            container && widget.$dependencies.render(View(widget), container),
-        );
+        await mapViews(widget, viewFactory, ({ View, container }) => {
+          if (!container) {
+            return;
+          }
+
+          widget.$dependencies.render(container, View(widget));
+        });
       },
       async unmount(widget) {
         await mapViews(widget, viewFactory, ({ container }) => {
-          if (container) {
-            widget.$dependencies.render(null, container);
+          if (!container) {
+            return;
           }
+
+          widget.$dependencies.render(container, widget.$dependencies.html``);
         });
       },
     });

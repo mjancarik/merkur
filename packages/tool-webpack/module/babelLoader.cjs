@@ -52,9 +52,13 @@ function createESTransformation(
           nodeModulesDir,
           `@merkur/core/lib/index.${esVersion}.mjs`,
         ),
+        '@merkur/plugin-component/helpers': path.join(
+          nodeModulesDir,
+          `@merkur/plugin-component/lib/helpers.${esVersion}.mjs`,
+        ),
         '@merkur/plugin-component': path.join(
           nodeModulesDir,
-          `@merkur/plugin-component/lib/index.mjs`,
+          `@merkur/plugin-component/lib/index.${esVersion}.mjs`,
         ),
         '@merkur/plugin-event-emitter': path.join(
           nodeModulesDir,
@@ -111,7 +115,12 @@ function createESTransformation(
       test: /\.(js|ts|tsx|mjs|jsx)$/,
       exclude: (modulePath) =>
         /node_modules/.test(modulePath) &&
-        !/node_modules\/(abort-controller|event-target-shim)/.test(modulePath),
+        !/node_modules\/(abort-controller|event-target-shim)/.test(
+          modulePath,
+        ) &&
+        !/node_modules\/@merkur\/(svelte|uhtml|preact|vanilla)/.test(
+          modulePath,
+        ),
       use: {
         loader: require.resolve('babel-loader'),
         options: {

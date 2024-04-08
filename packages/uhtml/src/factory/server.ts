@@ -1,12 +1,12 @@
-import render from 'preact-render-to-string';
+import { html } from 'ucontent';
 
 import { WidgetParams, createMerkurWidget, defineWidget } from '@merkur/core';
-import { ViewType, type SSRMountResult } from '@merkur/plugin-component';
+import { SSRMountResult, ViewType } from '@merkur/plugin-component';
 
 /**
- * Server Factory for creating merkur widgets with preact renderer.
+ * Server Factory for creating merkur widgets with uhtml renderer.
  */
-export function createPreactWidget({
+export function createUHtmlWidget({
   viewFactory,
   $dependencies,
   ...restProps
@@ -17,11 +17,9 @@ export function createPreactWidget({
       ...widgetParams,
       $dependencies: {
         ...$dependencies,
-        // @ts-expect-error conflict with client types
-        render,
+        html,
       },
       async mount(widget) {
-        const { render } = widget.$dependencies;
         const {
           View: MainView,
           ErrorView,
@@ -32,21 +30,18 @@ export function createPreactWidget({
          * Wrapper around $dependencies.render function which
          * handles connection to ErrorView and error plugin when defined.
          */
-        const renderView = (View: ViewType): string => {
+        const renderView = (View: ViewType) => {
           // @ts-expect-error the @merkur/plugin-error is optional
           if (widget?.error?.status && ErrorView) {
-            // @ts-expect-error conflict with client types
-            return render(ErrorView(widget));
+            return ErrorView(widget);
           }
 
           // @ts-expect-error the @merkur/plugin-error is optional
           if (widget?.error?.status) {
-            // @ts-expect-error conflict with client types
-            return render(null);
+            return null;
           }
 
-          // @ts-expect-error conflict with client types
-          return render(View(widget));
+          return View(widget);
         };
 
         return {

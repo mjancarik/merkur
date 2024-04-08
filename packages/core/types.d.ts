@@ -1,5 +1,3 @@
-export type ViewType = (widget: Widget) => any;
-
 export interface BaseWidgetAsset {
   type: 'stylesheet' | 'script' | 'inlineStyle';
   optional?: boolean;
@@ -14,13 +12,15 @@ export interface SourceAsset extends BaseWidgetAsset {
   source: string;
 }
 
+export interface WidgetDependencies {}
+
 export interface Widget {
   name: string;
   version: string;
   containerSelector?: string;
   $in: WidgetInternal;
   $external: WidgetExternal;
-  $dependencies: Record<string, any>;
+  $dependencies: WidgetDependencies;
   $plugins: WidgetPlugin[];
 }
 
@@ -33,7 +33,7 @@ export interface WidgetDefinition {
   assets: (WidgetAsset | SourceAsset)[];
   $plugins?: Array<() => WidgetPlugin>;
   $external: WidgetExternal;
-  $dependencies: Record<string, any>;
+  $dependencies: WidgetDependencies;
   create?: WidgetFunction;
   setup?: WidgetFunction;
 }
@@ -63,8 +63,8 @@ export interface Merkur {
     widgets: []; // TODO
     widgetFactory: Record<string, MerkurCreate>;
   };
-  $external: Record<string, any>;
-  $dependencies: Record<string, any>;
+  $external: WidgetExternal;
+  $dependencies: WidgetDependencies;
   create: MerkurCreate;
   register: ({
     name,

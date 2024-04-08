@@ -1,0 +1,19 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable"
+    ],
+    "types": [
+      "plugin-component"
+    ]
+  },
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "**/__tests__/**"
+  ]
+}

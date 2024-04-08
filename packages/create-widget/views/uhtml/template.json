@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "ucontent": "2.0.0",
-    "uhtml": "3.1.0"
+    "@merkur/uhtml": "0.34.0"
   }
 }

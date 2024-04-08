@@ -1,32 +1,36 @@
-import render from 'preact-render-to-string';
-
 import { WidgetParams, createMerkurWidget, defineWidget } from '@merkur/core';
-import { ViewType, type SSRMountResult } from '@merkur/plugin-component';
+import { SSRMountResult, ViewType } from '@merkur/plugin-component';
+import { RenderParams } from '../types';
+
+declare module '@merkur/plugin-component' {
+  interface ViewType {
+    render: (params: RenderParams) => { html: string } | null;
+  }
+}
 
 /**
- * Server Factory for creating merkur widgets with preact renderer.
+ * Server Factory for creating merkur widgets with svelte renderer.
  */
-export function createPreactWidget({
+export function createSvelteWidget({
   viewFactory,
-  $dependencies,
   ...restProps
 }: Parameters<typeof defineWidget>[0]) {
   return (widgetParams: WidgetParams) =>
     createMerkurWidget({
       ...restProps,
       ...widgetParams,
-      $dependencies: {
-        ...$dependencies,
-        // @ts-expect-error conflict with client types
-        render,
-      },
       async mount(widget) {
-        const { render } = widget.$dependencies;
         const {
           View: MainView,
           ErrorView,
           slot = {},
         } = await viewFactory(widget);
+
+        const renderParams: RenderParams = {
+          widget,
+          state: widget.state,
+          props: widget.props,
+        };
 
         /**
          * Wrapper around $dependencies.render function which
@@ -35,18 +39,15 @@ export function createPreactWidget({
         const renderView = (View: ViewType): string => {
           // @ts-expect-error the @merkur/plugin-error is optional
           if (widget?.error?.status && ErrorView) {
-            // @ts-expect-error conflict with client types
-            return render(ErrorView(widget));
+            return ErrorView.render(renderParams)?.html ?? '';
           }
 
           // @ts-expect-error the @merkur/plugin-error is optional
           if (widget?.error?.status) {
-            // @ts-expect-error conflict with client types
-            return render(null);
+            return '';
           }
 
-          // @ts-expect-error conflict with client types
-          return render(View(widget));
+          return View.render(renderParams)?.html ?? '';
         };
 
         return {

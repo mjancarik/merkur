@@ -209,19 +209,19 @@ function createRollupTypescriptConfig(options = {}) {
   config.output = [
     {
       dir: options?.dir ?? './lib',
-      entryFileNames: '[name].cjs',
+      entryFileNames: `[name]${options?.postfix ? `.${options?.postfix}` : ''}.cjs`,
       format: 'cjs',
       exports: 'named',
     },
     {
       dir: options?.dir ?? './lib',
-      entryFileNames: '[name].js',
+      entryFileNames: `[name]${options?.postfix ? `.${options?.postfix}` : ''}.js`,
       format: 'cjs',
       exports: 'named',
     },
     {
       dir: options?.dir ?? './lib',
-      entryFileNames: '[name].mjs',
+      entryFileNames: `[name]${options?.postfix ? `.${options?.postfix}` : ''}.mjs`,
       format: 'esm',
       exports: 'named',
     },
@@ -229,6 +229,7 @@ function createRollupTypescriptConfig(options = {}) {
 
   config.plugins.push(
     typescript({
+      target: options?.target ?? 'ES2020',
       outDir: options?.dir ?? './lib',
     }),
     options.watchMode &&
@@ -240,6 +241,14 @@ function createRollupTypescriptConfig(options = {}) {
   return config;
 }
 
+function createRollupTypescriptES9Config(options = {}) {
+  return createRollupTypescriptConfig({
+    ...options,
+    target: 'ES2018',
+    postfix: 'es9',
+  });
+}
+
 export default createRollupConfig;
 
 export {
@@ -249,4 +258,5 @@ export {
   createRollupES9Config,
   createRollupUMDConfig,
   createRollupTypescriptConfig,
+  createRollupTypescriptES9Config,
 };

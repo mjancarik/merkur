@@ -1,9 +1,9 @@
+import { Widget } from '@merkur/core';
 import {
   ViewFactory,
   ViewFactorySlotType,
   ViewType,
-  Widget,
-} from '@merkur/core';
+} from '@merkur/plugin-component';
 
 export type MapViewArgs = {
   View: ViewType;
