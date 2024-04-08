@@ -89,8 +89,6 @@ function createESTransformation(
     },
   };
 
-  console.log(config.resolve.alias);
-
   const { loaders: babelLoaders } = findLoaders(
     config.module.rules,
     'babel-loader',
