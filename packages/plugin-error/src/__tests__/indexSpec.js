@@ -20,64 +20,65 @@ describe('createWidget method with error plugin', () => {
     });
 
     expect(widget).toMatchInlineSnapshot(`
-      {
-        "$dependencies": {},
-        "$external": {},
-        "$in": {
-          "component": {
-            "isHydrated": false,
-            "isMounted": false,
-            "lifeCycle": {
-              "bootstrap": undefined,
-              "info": undefined,
-              "load": undefined,
-              "mount": undefined,
-              "unmount": undefined,
-              "update": undefined,
-            },
-            "suspendedTasks": [],
-          },
-        },
-        "$plugins": [
-          {
-            "create": [Function],
-            "setup": [Function],
-          },
-          {
-            "create": [Function],
-            "setup": [Function],
-          },
-        ],
-        "assets": [
-          {
-            "source": "http://www.example.com/static/1.0.0/widget.js",
-            "type": "script",
-          },
-        ],
-        "bootstrap": [Function],
-        "containerSelector": null,
-        "create": [Function],
-        "error": {
-          "message": null,
-          "status": null,
-        },
-        "info": [Function],
-        "load": [Function],
-        "mount": [Function],
-        "name": "my-widget",
-        "props": {
-          "param": 1,
-        },
-        "setProps": [Function],
-        "setState": [Function],
-        "setup": [Function],
-        "slot": {},
-        "state": {},
-        "unmount": [Function],
-        "update": [Function],
-        "version": "1.0.0",
-      }
-    `);
+{
+  "$dependencies": {},
+  "$external": {},
+  "$in": {
+    "component": {
+      "isHydrated": false,
+      "isMounted": false,
+      "lifeCycle": {
+        "bootstrap": undefined,
+        "info": undefined,
+        "load": undefined,
+        "mount": undefined,
+        "unmount": undefined,
+        "update": undefined,
+      },
+      "resolvedViews": Map {},
+      "suspendedTasks": [],
+    },
+  },
+  "$plugins": [
+    {
+      "create": [Function],
+      "setup": [Function],
+    },
+    {
+      "create": [Function],
+      "setup": [Function],
+    },
+  ],
+  "assets": [
+    {
+      "source": "http://www.example.com/static/1.0.0/widget.js",
+      "type": "script",
+    },
+  ],
+  "bootstrap": [Function],
+  "containerSelector": null,
+  "create": [Function],
+  "error": {
+    "message": null,
+    "status": null,
+  },
+  "info": [Function],
+  "load": [Function],
+  "mount": [Function],
+  "name": "my-widget",
+  "props": {
+    "param": 1,
+  },
+  "setProps": [Function],
+  "setState": [Function],
+  "setup": [Function],
+  "slot": {},
+  "state": {},
+  "unmount": [Function],
+  "update": [Function],
+  "version": "1.0.0",
+}
+`);
   });
 });
 
