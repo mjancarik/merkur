@@ -16,7 +16,7 @@ program
   .description('CLI for Merkur framework.')
   .option('--writeToDisk', 'Write built files to disk.')
   .option('--runTask [runTask...]', 'Run only defined task.')
-  .option('--outFile <string>', 'Server out file configuration to es-build.')
+  .option('--outFile <string>', 'Server out file configuration in es-build.')
   .option('--port <number>', 'Widget server port.')
   .option('--devServerPort <number>', 'Dev server port.')
   .option('--projectFolder <string>', 'Project folder.')
