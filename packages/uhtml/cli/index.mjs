@@ -6,14 +6,10 @@ export default function ({ emitter, EMITTER_EVENTS }) {
     function defaultEntries({ merkurConfig }) {
       merkurConfig.defaultEntries = {
         client: [
-          fileURLToPath(
-            import.meta.resolve('@merkur/uhtml/entries/client.js'),
-          ),
+          fileURLToPath(import.meta.resolve('@merkur/uhtml/entries/client.js')),
         ],
         server: [
-          fileURLToPath(
-            import.meta.resolve('@merkur/uhtml/entries/server.js'),
-          ),
+          fileURLToPath(import.meta.resolve('@merkur/uhtml/entries/server.js')),
         ],
       };
 
