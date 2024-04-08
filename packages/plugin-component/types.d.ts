@@ -65,7 +65,7 @@ declare module '@merkur/core' {
       isMounted: boolean;
       isHydrated: boolean;
       suspendedTasks: Array<function>;
-      resolvedViews: Map<ViewFactory, ReturnType<ViewFactory>>;
+      resolvedViews: Map<ViewFactory, ReturnType<ViewFactory>[]>;
     };
   }
 }
