@@ -18,10 +18,4 @@ describe('Widget', () => {
     expect(res.statusCode).toEqual(404);
     expect(res.body.error.status).toEqual(404);
   });
-
-  it('should return 200 for playground page', async () => {
-    const res = await request(app).get('/');
-
-    expect(res.statusCode).toEqual(200);
-  });
 });

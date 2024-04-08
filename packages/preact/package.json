@@ -13,6 +13,7 @@
     "./entries/client.js": "./entries/client.js",
     "./entries/server.js": "./entries/server.js",
     "./webpack": "./webpack/index.js",
+    "./cli": "./cli/index.mjs",
     "./client": {
       "types": "./lib/client/client.d.ts",
       "import": "./lib/client/client.mjs",
@@ -45,12 +46,12 @@
   },
   "devDependencies": {
     "preact": "^10.16.0",
-    "preact-render-to-string": "^6.2.0",
+    "preact-render-to-string": "^6.4.0",
     "@babel/preset-react": "^7.22.5"
   },
   "peerDependencies": {
     "preact": ">=10",
-    "preact-render-to-string": ">=5",
+    "preact-render-to-string": ">=6",
     "@babel/preset-react": "*",
     "@merkur/core": ">=0.34",
     "@merkur/plugin-component": ">=0.34",

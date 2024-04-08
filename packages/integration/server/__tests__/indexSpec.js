@@ -1,5 +1,5 @@
-const { createAssets } = require('../index');
-const fs = require('fs');
+const { createAssets } = require('../index.js');
+const fs = require('node:fs');
 
 const staticFolder = 'build/static';
 const staticBaseUrl = 'https://seznam.cz/static';
@@ -14,11 +14,20 @@ const manifests = {
     '{"widget.css": "widget.6f79bbbdbeda640aeda0.css", "widget.js": "widget.53fbc48b6fb616ecfd1b.js"}',
 };
 
-jest.mock('fs', () => ({
-  promises: {
-    readFile: jest.fn((path) => manifests[path]),
-  },
-}));
+jest.mock('node:fs', () => {
+  const originalModule = jest.requireActual('fs');
+
+  return {
+    __esModule: true,
+    ...originalModule,
+    promises: {
+      ...originalModule.promises,
+      readFile: jest.fn((path) => {
+        return manifests[path];
+      }),
+    },
+  };
+});
 
 global.console.warn = jest.fn();
 
@@ -67,7 +76,7 @@ describe('createAssets method', () => {
     );
   });
 
-  it('should not modifi original assets', async () => {
+  it('should not modify original assets', async () => {
     await createAssets({
       assets,
       staticFolder,

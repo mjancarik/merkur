@@ -105,7 +105,9 @@ async function loadScriptAssets(assets, root = document.head) {
     }
 
     if (source === Object(source)) {
-      if (source.es11 && testScript.isES11Supported()) {
+      if (source.es13 && testScript.isES13Supported()) {
+        _asset.source = source.es13;
+      } else if (source.es11 && testScript.isES11Supported()) {
         _asset.source = source.es11;
       } else if (source.es9 && testScript.isES9Supported()) {
         _asset.source = source.es9;
