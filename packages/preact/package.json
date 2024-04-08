@@ -13,6 +13,7 @@
     "./entries/client.js": "./entries/client.js",
     "./entries/server.js": "./entries/server.js",
     "./webpack": "./webpack/index.js",
+    "./cli": "./cli/index.mjs",
     "./client": {
       "types": "./lib/client/client.d.ts",
       "import": "./lib/client/client.mjs",

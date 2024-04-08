@@ -1,5 +1,3 @@
-const path = require('path');
-
 const compression = require('compression');
 const cors = require('cors');
 const express = require('express');
@@ -7,17 +5,19 @@ const expressStaticGzip = require('express-static-gzip');
 const helmet = require('helmet');
 const morgan = require('morgan');
 
+const { resolveConfig } = require('@merkur/cli/server');
+
+const { merkurConfig } = resolveConfig();
+
 const {
   apiErrorMiddleware,
   logErrorMiddleware,
 } = require('@merkur/plugin-error/server');
 
 const errorRouteFactory = require('./routes/error');
-const playgroundRouteFactory = require('./routes/playground');
 const widgetAPIRouteFactory = require('./routes/widgetAPI');
 
 const error = errorRouteFactory();
-const playground = playgroundRouteFactory();
 const widgetAPI = widgetAPIRouteFactory();
 
 const expressStaticConfig = {
@@ -28,8 +28,6 @@ const expressStaticConfig = {
 };
 
 const app = express();
-app.set('view engine', 'ejs');
-app.set('trust proxy', true);
 
 app
   .use(morgan('dev'))
@@ -43,24 +41,17 @@ app
   .use(cors())
   .use(compression())
   .use(
-    '/static',
-    expressStaticGzip(path.join(__dirname, 'static'), expressStaticConfig),
+    merkurConfig.widgetServer.staticPath,
+    express.static(merkurConfig.widgetServer.staticFolder),
   )
   .use(
-    '/static',
+    merkurConfig.widgetServer.staticPath,
     expressStaticGzip(
-      path.join(__dirname, '../build/static'),
+      merkurConfig.widgetServer.staticFolder,
       expressStaticConfig,
     ),
   )
-  .use(
-    '/@merkur/tools/static/',
-    express.static(
-      path.join(__dirname, '../node_modules/@merkur/tools/static'),
-    ),
-  )
   .use(widgetAPI.router)
-  .use(playground.router)
   .use(error.router)
   .use(logErrorMiddleware())
   .use(apiErrorMiddleware());

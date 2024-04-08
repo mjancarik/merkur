@@ -1,5 +1,4 @@
 import { assignMissingKeys, setDefaultValueForUndefined } from '@merkur/core';
-import { mapViews } from './helpers';
 
 export function componentPlugin() {
   return {
@@ -184,5 +183,3 @@ export function createViewFactory(creator) {
     };
   };
 }
-
-export { mapViews };
