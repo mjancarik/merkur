@@ -80,7 +80,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        preview: ['preact', 'vanilla', 'uhtml', 'svelte']
+        preview: ['preact', 'vanilla']
 
     steps:
       - uses: actions/checkout@v3
