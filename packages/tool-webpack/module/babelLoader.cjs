@@ -52,9 +52,13 @@ function createESTransformation(
           nodeModulesDir,
           `@merkur/core/lib/index.${esVersion}.mjs`,
         ),
+        '@merkur/plugin-component/helpers': path.join(
+          nodeModulesDir,
+          `@merkur/plugin-component/lib/helpers.${esVersion}.mjs`,
+        ),
         '@merkur/plugin-component': path.join(
           nodeModulesDir,
-          `@merkur/plugin-component/lib/index.mjs`,
+          `@merkur/plugin-component/lib/index.${esVersion}.mjs`,
         ),
         '@merkur/plugin-event-emitter': path.join(
           nodeModulesDir,
@@ -84,6 +88,8 @@ function createESTransformation(
       path: path.join(config.output.path, `../${esVersion}/`),
     },
   };
+
+  console.log(config.resolve.alias);
 
   const { loaders: babelLoaders } = findLoaders(
     config.module.rules,
