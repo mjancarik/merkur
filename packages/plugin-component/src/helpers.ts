@@ -31,9 +31,12 @@ export async function mapViews<T>(
   viewFactory: ViewFactory,
   callback: (viewArgs: MapViewArgs) => T,
 ) {
-  // if (widget.$in?.component?.resolvedViews?.has(viewFactory)) {
-  //   return mapResolvedViews(widget, callback);
-  // }
+  if (widget.$in.component.resolvedViews.has(viewFactory)) {
+    return mapResolvedViews(
+      widget.$in.component.resolvedViews.get(viewFactory) ?? [],
+      callback,
+    );
+  }
 
   const { containerSelector } = widget;
   const { View, ErrorView, slot = {} } = await viewFactory(widget);
@@ -53,56 +56,34 @@ export async function mapViews<T>(
   }, {});
 
   const views = [
-    { View, ErrorView, containerSelector, isSlot: false },
+    {
+      View,
+      ErrorView,
+      containerSelector,
+      isSlot: false,
+      container: widget.container,
+    },
     ...Object.values(slots),
-  ] as Omit<MapViewArgs, 'container'>[];
+  ] as MapViewArgs[];
 
-  return views.map(({ containerSelector, ...rest }) => {
+  widget.$in.component.resolvedViews.set(viewFactory, views);
+
+  return mapResolvedViews(views, callback);
+}
+
+function mapResolvedViews<T>(
+  views: MapViewArgs[],
+  callback: (viewArgs: MapViewArgs) => T,
+) {
+  return views.map(({ View, containerSelector, isSlot, container }) => {
     callback({
+      View,
+      isSlot,
       containerSelector,
       container:
         (containerSelector && document?.querySelector(containerSelector)) ||
-        widget?.container ||
+        container ||
         null,
-      ...rest,
     });
   });
 }
-
-// function mapViews(widget, factoryFn, callback) {
-//   if (widget.$external.resolvedViews) {
-//     return mapResolvedViews(widget, callback);
-//   }
-
-//   return factoryFn(widget).then(({ View, slot = {} }) => {
-//     const { containerSelector } = widget;
-//     // Add container selectors defined on widget instance after creation
-//     Object.keys(widget.slot).forEach((slotName) => {
-//       slot[slotName].isSlot = true;
-//       slot[slotName].containerSelector =
-//         widget.slot[slotName].containerSelector;
-//     });
-
-//     widget.$external.resolvedViews = [
-//       { View, containerSelector, isSlot: false },
-//       ...Object.values(slot),
-//     ];
-
-//     return mapResolvedViews(widget, callback);
-//   });
-// }
-
-// function mapResolvedViews(widget, callback) {
-//   return widget.$external.resolvedViews.map(
-//     ({ View, containerSelector, isSlot }) => {
-//       callback({
-//         View,
-//         isSlot,
-//         containerSelector,
-//         container:
-//           (containerSelector && document?.querySelector(containerSelector)) ||
-//           widget.container,
-//       });
-//     },
-//   );
-// }
