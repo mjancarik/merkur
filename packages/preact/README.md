@@ -4,104 +4,32 @@
   </a>
 </p>
 
-# @merkur/preact
+# Merkur
 
-Collection of helpers to aid with preact integration to @merkur. It includes:
- - additional webpack config for easier setup of preact for babel and webpack.
- - default entry points for client and server that should fit needs of most of the widgets (custom entry points can still be used as well).
- - factory functions for easier definition and setup of entry points.
+[![Build Status](https://github.com/mjancarik/merkur/workflows/CI/badge.svg)](https://github.com/mjancarik/merkur/actions/workflows/ci.yml)
+[![NPM package version](https://img.shields.io/npm/v/@merkur/core/latest.svg)](https://www.npmjs.com/package/@merkur/core)
+![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@merkur/core/latest)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-While you can use merkur with preact without this package, we strongly suggest to use it, since it removes some abstractions and makes the codebase more approachable for begginners. It also provides some additional features that are not available without it while also making sure the integration is always up to date and working as expected.
+The [Merkur](https://merkur.js.org/) is tiny extensible javascript library for front-end microservices(micro frontends). It allows by default server side rendering for loading performance boost. You can connect it with other frameworks or languages because merkur defines easy API. You can use one of six predefined template's library [Preact](https://preactjs.com/), [µhtml](https://github.com/WebReflection/uhtml#readme), [Svelte](https://svelte.dev/) and [vanilla](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) but you can easily extend for others.
 
-You can still customize the webpack config and entry points as you wish, even when using this package.
+## Features
+ - Flexible templating engine
+ - Usable with all tech stacks
+ - SSR-ready by default
+ - Easy extensible with plugins
+ - Tiny - 1 KB minified + gzipped 
 
 ## Getting started
 
-This package has peer dependencies on `@merkur/core`, `preact` and `@merkur/plugin-component`. Make sure you have them installed in your project.
-
 ```bash
+npx @merkur/create-widget <name>
 
-```bash
-npm i -S @merkur/preact
+cd name
+
+npm run dev // Point your browser at http://localhost:4444/
 ```
-
-## Usage
-
-### Webpack config
-
-Add following overrides to your webpack config (delete any existing overrides for `babel-loader`):
-
-```js
-const {
-  applyBabelLoader,
-  applyPreactConfig,
-} = require('@merkur/preact/webpack');
-
-// ...
-
-module.exports = createLiveReloadServer().then(() =>
-  Promise.all([
-    pipe(
-      createWebConfig,
-      applyPreactConfig, // <<<<
-      applyStyleLoaders,
-      applyBabelLoader,  // <<<<
-    )(),
-    pipe(
-      createWebConfig,
-      applyPreactConfig, // <<<<
-      applyStyleLoaders,
-      applyBabelLoader,  // <<<<
-      applyES9Transformation,
-    )(),
-    pipe(
-      createNodeConfig,
-      applyPreactConfig, // <<<<
-      applyStyleLoaders,
-      applyBabelLoader,  // <<<<
-    )(),
-  ]),
-);
-```
-
-### Default client.js and server.js entry points
-
-Delete your existing `client.js` and `server.js` files, `applyPreactConfig` will use default ones from `@merkur/preact` package.
-
-When in a need, please consider extending the default entry point functionality using `hookMethod` from `@merkur/core`, rather than creating your own entry points. This reduces the amount of code you need to maintain and makes sure the integration is always up to date and working as expected.
-
-```
-{
-  setup(widget) {
-    // Attach error handler
-    widget.on(widget, ERROR_EVENTS.ERROR, error => errorHandler(widget, error));
-
-    // Extend client mount
-    if (typeof document !== 'undefined') {
-      hookMethod(widget, 'mount', (w, originalMount, ...args) => {
-        if (document.querySelector(w.containerSelector) === null) {
-          widget.emit(ERROR_EVENTS.ERROR, {
-            error: {
-              status: 555
-            }
-          });
-        }
-
-        return originalMount(w, ...args);
-      });
-    }
-
-    if (widget.props.debug) {
-      enableDebug();
-    }
-
-    widget.suggestApi = new SuggestApi(widget);
-
-    return widget;
-  },
-}
-```
-
+![alt text](https://raw.githubusercontent.com/mjancarik/merkur/master/images/hello-widget.png "Merkur example, hello widget")
 ## Documentation
 
 To check out [live demo](https://merkur.js.org/demo) and [docs](https://merkur.js.org/docs), visit [https://merkur.js.org](https://merkur.js.org).

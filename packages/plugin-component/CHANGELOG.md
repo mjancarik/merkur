@@ -3,24 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.35.0](https://github.com/mjancarik/merkur/compare/v0.34.6...v0.35.0) (2024-04-09)
+
+### Bug Fixes
+
+- 🐛 Type fxies ([848c468](https://github.com/mjancarik/merkur/commit/848c46806b3260a10f9f31385793184a75c6c772))
+
+### Features
+
+- 🎸 Added mapViews helper to plugin-component ([52e5551](https://github.com/mjancarik/merkur/commit/52e5551f26930ba9eea044a6a95e13ba5fcfa583))
+- 🎸 Added new @merkur/uhtml integration package ([5bf180a](https://github.com/mjancarik/merkur/commit/5bf180aba905d9d49178eefdd1d71db0dea98fb6))
+- 🎸 Added svelte package ([f55463f](https://github.com/mjancarik/merkur/commit/f55463fdc7e8cec173e358d056f7d35c78d65d5c))
+
 # [0.34.0](https://github.com/mjancarik/merkur/compare/v0.33.0...v0.34.0) (2023-10-11)
 
 **Note:** Version bump only for package @merkur/plugin-component
 
-
-
-
-
 # [0.33.0](https://github.com/mjancarik/merkur/compare/v0.32.1...v0.33.0) (2023-08-10)
-
 
 ### Bug Fixes
 
-* 🐛 Fix assigning to widget object ([6a89efa](https://github.com/mjancarik/merkur/commit/6a89efadaf18a7640c8db732fc8f27b849c6ff1c))
-
-
-
-
+- 🐛 Fix assigning to widget object ([6a89efa](https://github.com/mjancarik/merkur/commit/6a89efadaf18a7640c8db732fc8f27b849c6ff1c))
 
 # [0.32.0](https://github.com/mjancarik/merkur/compare/v0.31.1...v0.32.0) (2023-07-14)
 

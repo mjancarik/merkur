@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.35.0](https://github.com/mjancarik/merkur/compare/v0.34.6...v0.35.0) (2024-04-09)
+
+### Bug Fixes
+
+- 🐛 build in CI ([5f26ec1](https://github.com/mjancarik/merkur/commit/5f26ec1c7ebf7596e57d815f466bb33d614bac40))
+- 🐛 change snapshots to toMatchSnapshot due to prettier@3 ([f48f315](https://github.com/mjancarik/merkur/commit/f48f315e911ff0a751fc5f38f873fd27d5248dba))
+- 🐛 empty merkur config extends field ([02fd41a](https://github.com/mjancarik/merkur/commit/02fd41adb12ac76051ebf2ff6b3642c5e34a2de9))
+- 🐛 Fixed optional slotFactories prop in createWidgetFactory ([a818e18](https://github.com/mjancarik/merkur/commit/a818e189ab4843ec7853dc2ab4716551d415cb79))
+- 🐛 Fixed tests ([8082933](https://github.com/mjancarik/merkur/commit/80829338ec84feafa87d5c7a2d7c4d425a414ac1))
+- 🐛 remove watch mode ([b63c145](https://github.com/mjancarik/merkur/commit/b63c145f5c194f4b8bee8b2420e69510ef40821e))
+- 🐛 require module ([865f6bc](https://github.com/mjancarik/merkur/commit/865f6bcbf24a09a1e89f436592c69d2233fd27fa))
+- 🐛 Type fxies ([848c468](https://github.com/mjancarik/merkur/commit/848c46806b3260a10f9f31385793184a75c6c772))
+- 🐛 uhtml build, mark ucontent as external dependency ([9d2f522](https://github.com/mjancarik/merkur/commit/9d2f522d584fec60c6d5a74d1d1e555f92578dc2))
+
+### Features
+
+- 🎸 add svelte esbuild configuration ([6706746](https://github.com/mjancarik/merkur/commit/6706746c12ec5d8652def6c9735e8132bbcead5d))
+- 🎸 Added @merkur/preact ([36ec4ca](https://github.com/mjancarik/merkur/commit/36ec4cad8569c0bb80b17ef4fbd3043c21b46d0f))
+- 🎸 Added mapViews helper to plugin-component ([52e5551](https://github.com/mjancarik/merkur/commit/52e5551f26930ba9eea044a6a95e13ba5fcfa583))
+- 🎸 Added new @merkur/uhtml integration package ([5bf180a](https://github.com/mjancarik/merkur/commit/5bf180aba905d9d49178eefdd1d71db0dea98fb6))
+- 🎸 Added support for custom entry points ([e74b055](https://github.com/mjancarik/merkur/commit/e74b05529bf35b624563ae26eb3e676bcc60026b))
+- 🎸 Added svelte package ([f55463f](https://github.com/mjancarik/merkur/commit/f55463fdc7e8cec173e358d056f7d35c78d65d5c))
+- 🎸 change exports to @merkur/cli/server ([ae7b9e5](https://github.com/mjancarik/merkur/commit/ae7b9e54110e62a6ae595543ff56d844ef9722c3))
+- 🎸 initial commit @merkur/cli ([12e54dc](https://github.com/mjancarik/merkur/commit/12e54dcc440bc83746e58a438ad10ef1ce925f69))
+- 🎸 test command return corrrect exit code ([b3cf4c7](https://github.com/mjancarik/merkur/commit/b3cf4c7c60307d096322c5830d4a5d9493b5495f))
+
 ## [0.34.6](https://github.com/mjancarik/merkur/compare/v0.34.5...v0.34.6) (2024-02-16)
 
 ### Features

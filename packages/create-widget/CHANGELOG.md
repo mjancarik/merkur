@@ -3,6 +3,21 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.35.0](https://github.com/mjancarik/merkur/compare/v0.34.6...v0.35.0) (2024-04-09)
+
+### Bug Fixes
+
+- 🐛 build in CI ([5f26ec1](https://github.com/mjancarik/merkur/commit/5f26ec1c7ebf7596e57d815f466bb33d614bac40))
+- 🐛 change snapshots to toMatchSnapshot due to prettier@3 ([f48f315](https://github.com/mjancarik/merkur/commit/f48f315e911ff0a751fc5f38f873fd27d5248dba))
+- 🐛 Fixed tests ([8082933](https://github.com/mjancarik/merkur/commit/80829338ec84feafa87d5c7a2d7c4d425a414ac1))
+- 🐛 Type fxies ([848c468](https://github.com/mjancarik/merkur/commit/848c46806b3260a10f9f31385793184a75c6c772))
+
+### Features
+
+- 🎸 Added svelte package ([f55463f](https://github.com/mjancarik/merkur/commit/f55463fdc7e8cec173e358d056f7d35c78d65d5c))
+- 🎸 change exports to @merkur/cli/server ([ae7b9e5](https://github.com/mjancarik/merkur/commit/ae7b9e54110e62a6ae595543ff56d844ef9722c3))
+- 🎸 initial commit @merkur/cli ([12e54dc](https://github.com/mjancarik/merkur/commit/12e54dcc440bc83746e58a438ad10ef1ce925f69))
+
 ## [0.34.6](https://github.com/mjancarik/merkur/compare/v0.34.5...v0.34.6) (2024-02-16)
 
 **Note:** Version bump only for package @merkur/create-widget

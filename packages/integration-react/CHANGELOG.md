@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.35.0](https://github.com/mjancarik/merkur/compare/v0.34.6...v0.35.0) (2024-04-09)
+
+### Features
+
+- 🎸 Added @merkur/preact ([36ec4ca](https://github.com/mjancarik/merkur/commit/36ec4cad8569c0bb80b17ef4fbd3043c21b46d0f))
+
 ## [0.34.2](https://github.com/mjancarik/merkur/compare/v0.34.1...v0.34.2) (2023-10-18)
 
 **Note:** Version bump only for package @merkur/integration-react

@@ -3,24 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.35.0](https://github.com/mjancarik/merkur/compare/v0.34.6...v0.35.0) (2024-04-09)
+
+### Bug Fixes
+
+- 🐛 Fixed optional slotFactories prop in createWidgetFactory ([a818e18](https://github.com/mjancarik/merkur/commit/a818e189ab4843ec7853dc2ab4716551d415cb79))
+- 🐛 Type fxies ([848c468](https://github.com/mjancarik/merkur/commit/848c46806b3260a10f9f31385793184a75c6c772))
+
+### Features
+
+- 🎸 Added svelte package ([f55463f](https://github.com/mjancarik/merkur/commit/f55463fdc7e8cec173e358d056f7d35c78d65d5c))
+
 # [0.34.0](https://github.com/mjancarik/merkur/compare/v0.33.0...v0.34.0) (2023-10-11)
 
 **Note:** Version bump only for package @merkur/core
 
-
-
-
-
 # [0.33.0](https://github.com/mjancarik/merkur/compare/v0.32.1...v0.33.0) (2023-08-10)
-
 
 ### Features
 
-* 🎸 Add assignMissingKeys function ([2960ff2](https://github.com/mjancarik/merkur/commit/2960ff2453338f1255f39bd9ddfe44c56077cd4b))
-
-
-
-
+- 🎸 Add assignMissingKeys function ([2960ff2](https://github.com/mjancarik/merkur/commit/2960ff2453338f1255f39bd9ddfe44c56077cd4b))
 
 # [0.32.0](https://github.com/mjancarik/merkur/compare/v0.31.1...v0.32.0) (2023-07-14)
 
