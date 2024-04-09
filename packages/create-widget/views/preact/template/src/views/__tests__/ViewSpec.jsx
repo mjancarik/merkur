@@ -24,6 +24,6 @@ describe('View', () => {
   it('should display main view', async () => {
     const wrapper = await widget.mount();
 
-    expect(wrapper).toMatchInlineSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 });
