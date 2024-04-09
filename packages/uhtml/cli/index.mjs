@@ -16,4 +16,18 @@ export default function ({ emitter, EMITTER_EVENTS }) {
       return merkurConfig;
     },
   );
+
+  emitter.on(
+    EMITTER_EVENTS.TASK_BUILD,
+    function defaultBuild({ build, config }) {
+      build = {
+        ...build,
+        external: config.isServer
+          ? [...(build.external ?? []), 'ucontent']
+          : build.external,
+      };
+
+      return build;
+    },
+  );
 }
