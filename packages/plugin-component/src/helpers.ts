@@ -16,6 +16,7 @@ export type MapViewArgs = {
     {
       isSlot: boolean;
       containerSelector?: string;
+      container?: Element;
     } & ViewFactorySlotType
   >;
 };
@@ -30,6 +31,13 @@ export async function mapViews<T>(
   viewFactory: ViewFactory,
   callback: (viewArgs: MapViewArgs) => T,
 ) {
+  if (widget.$in.component.resolvedViews.has(viewFactory)) {
+    return mapResolvedViews(
+      widget.$in.component.resolvedViews.get(viewFactory) ?? [],
+      callback,
+    );
+  }
+
   const { containerSelector } = widget;
   const { View, ErrorView, slot = {} } = await viewFactory(widget);
 
@@ -41,23 +49,41 @@ export async function mapViews<T>(
       ...slot[cur],
       isSlot: true,
       containerSelector: widget.slot[cur]?.containerSelector,
+      container: widget.slot[cur]?.container,
     };
 
     return acc;
   }, {});
 
   const views = [
-    { View, ErrorView, containerSelector, isSlot: false },
+    {
+      View,
+      ErrorView,
+      containerSelector,
+      isSlot: false,
+      container: widget.container,
+    },
     ...Object.values(slots),
-  ] as Omit<MapViewArgs, 'container'>[];
+  ] as MapViewArgs[];
 
-  return views.map(({ containerSelector, ...rest }) => {
+  widget.$in.component.resolvedViews.set(viewFactory, views);
+
+  return mapResolvedViews(views, callback);
+}
+
+function mapResolvedViews<T>(
+  views: MapViewArgs[],
+  callback: (viewArgs: MapViewArgs) => T,
+) {
+  return views.map(({ View, containerSelector, isSlot, container }) => {
     callback({
+      View,
+      isSlot,
       containerSelector,
       container:
         (containerSelector && document?.querySelector(containerSelector)) ||
+        container ||
         null,
-      ...rest,
     });
   });
 }

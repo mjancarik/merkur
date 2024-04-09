@@ -144,8 +144,9 @@ function traverse(module, callback) {
   callback(module);
 }
 
+const memoPathResolve = memo(path.resolve);
 function requireUncached(module, options = {}) {
-  const modulePath = path.resolve(module);
+  const modulePath = memoPathResolve(module);
 
   if (process.env.NODE_WATCH === 'true') {
     if (options.optional && modulePath && !getFileStats(modulePath)) {

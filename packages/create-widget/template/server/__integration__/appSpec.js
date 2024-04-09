@@ -9,7 +9,7 @@ describe('Widget', () => {
     expect(res.statusCode).toEqual(200);
     expect(res.body.assets.length).toBeGreaterThan(0);
     delete res.body.assets;
-    expect(res.body).toMatchInlineSnapshot();
+    expect(res.body).toMatchSnapshot();
   });
 
   it('should return 404 for not defined route', async () => {

@@ -13,6 +13,7 @@
     "./entries/client.js": "./entries/client.js",
     "./entries/server.js": "./entries/server.js",
     "./webpack": "./webpack/index.js",
+    "./cli": "./cli/index.mjs",
     "./client": {
       "types": "./lib/client/client.d.ts",
       "import": "./lib/client/client.mjs",
@@ -49,6 +50,7 @@
     "@merkur/tool-webpack": ">=0.28"
   },
   "dependencies": {
+    "esbuild-svelte": "^0.8.0",
     "svelte": "^3.59.2",
     "svelte-loader": "^3.2.0"
   }

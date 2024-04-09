@@ -1,4 +1,5 @@
 *
+!cli/**/*
 !lib/**/*
 !entries/**/*
 !webpack/**/*

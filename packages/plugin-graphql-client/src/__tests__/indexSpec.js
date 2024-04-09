@@ -65,107 +65,108 @@ describe('createWidget method with graphql client plugin', () => {
 
   it('should create empty widget', async () => {
     expect(widget).toMatchInlineSnapshot(`
-      {
-        "$dependencies": {
-          "AbortController": [Function],
-          "fetch": [Function],
-        },
-        "$external": {
-          "AbortController": [Function],
-          "fetch": [Function],
-        },
-        "$in": {
-          "component": {
-            "isHydrated": false,
-            "isMounted": false,
-            "lifeCycle": {
-              "bootstrap": undefined,
-              "info": undefined,
-              "load": undefined,
-              "mount": undefined,
-              "unmount": undefined,
-              "update": undefined,
-            },
-            "suspendedTasks": [],
-          },
-          "graphqlClient": {
-            "endpointUrl": "http://localhost:4444",
-            "entityClasses": {
-              "FooNode": [Function],
-            },
-          },
-          "httpClient": {
-            "defaultConfig": {
-              "headers": {},
-              "method": "GET",
-              "query": {},
-              "timeout": 15000,
-              "transformers": [
-                {
-                  "transformRequest": [Function],
-                  "transformResponse": [Function],
-                },
-                {
-                  "transformRequest": [Function],
-                },
-                {
-                  "transformRequest": [Function],
-                  "transformResponse": [Function],
-                },
-              ],
-            },
-          },
-        },
-        "$plugins": [
+{
+  "$dependencies": {
+    "AbortController": [Function],
+    "fetch": [Function],
+  },
+  "$external": {
+    "AbortController": [Function],
+    "fetch": [Function],
+  },
+  "$in": {
+    "component": {
+      "isHydrated": false,
+      "isMounted": false,
+      "lifeCycle": {
+        "bootstrap": undefined,
+        "info": undefined,
+        "load": undefined,
+        "mount": undefined,
+        "unmount": undefined,
+        "update": undefined,
+      },
+      "resolvedViews": Map {},
+      "suspendedTasks": [],
+    },
+    "graphqlClient": {
+      "endpointUrl": "http://localhost:4444",
+      "entityClasses": {
+        "FooNode": [Function],
+      },
+    },
+    "httpClient": {
+      "defaultConfig": {
+        "headers": {},
+        "method": "GET",
+        "query": {},
+        "timeout": 15000,
+        "transformers": [
           {
-            "create": [Function],
-            "setup": [Function],
+            "transformRequest": [Function],
+            "transformResponse": [Function],
           },
           {
-            "create": [Function],
-            "setup": [Function],
+            "transformRequest": [Function],
           },
           {
-            "create": [Function],
-            "setup": [Function],
+            "transformRequest": [Function],
+            "transformResponse": [Function],
           },
         ],
-        "assets": [
-          {
-            "source": "http://www.example.com/static/1.0.0/widget.js",
-            "type": "script",
-          },
-        ],
-        "bootstrap": [Function],
-        "containerSelector": null,
-        "create": [Function],
-        "graphql": {
-          "request": [Function],
-        },
-        "http": {
-          "request": [Function],
-        },
-        "info": [Function],
-        "load": [Function],
-        "mount": [Function],
-        "name": "my-widget",
-        "props": {
-          "containerSelector": ".container",
-          "param": 1,
-        },
-        "setProps": [Function],
-        "setState": [Function],
-        "setup": [Function],
-        "slot": {
-          "AbortController": [Function],
-          "fetch": [Function],
-        },
-        "state": {},
-        "unmount": [Function],
-        "update": [Function],
-        "version": "1.0.0",
-      }
-    `);
+      },
+    },
+  },
+  "$plugins": [
+    {
+      "create": [Function],
+      "setup": [Function],
+    },
+    {
+      "create": [Function],
+      "setup": [Function],
+    },
+    {
+      "create": [Function],
+      "setup": [Function],
+    },
+  ],
+  "assets": [
+    {
+      "source": "http://www.example.com/static/1.0.0/widget.js",
+      "type": "script",
+    },
+  ],
+  "bootstrap": [Function],
+  "containerSelector": null,
+  "create": [Function],
+  "graphql": {
+    "request": [Function],
+  },
+  "http": {
+    "request": [Function],
+  },
+  "info": [Function],
+  "load": [Function],
+  "mount": [Function],
+  "name": "my-widget",
+  "props": {
+    "containerSelector": ".container",
+    "param": 1,
+  },
+  "setProps": [Function],
+  "setState": [Function],
+  "setup": [Function],
+  "slot": {
+    "AbortController": [Function],
+    "fetch": [Function],
+  },
+  "state": {},
+  "unmount": [Function],
+  "update": [Function],
+  "version": "1.0.0",
+}
+`);
   });
   describe('request method', () => {
     beforeEach(() => {

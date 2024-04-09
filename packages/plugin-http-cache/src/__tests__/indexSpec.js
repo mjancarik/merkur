@@ -69,117 +69,118 @@ describe('createWidget method with http client plugin', () => {
 
   it('should create empty widget', async () => {
     expect(widget).toMatchInlineSnapshot(`
-      {
-        "$dependencies": {
-          "AbortController": [Function],
-          "fetch": [MockFunction],
-        },
-        "$external": {
-          "AbortController": [Function],
-          "fetch": [MockFunction],
-        },
-        "$in": {
-          "component": {
-            "isHydrated": false,
-            "isMounted": false,
-            "lifeCycle": {
-              "bootstrap": undefined,
-              "info": undefined,
-              "load": undefined,
-              "mount": undefined,
-              "unmount": undefined,
-              "update": undefined,
-            },
-            "suspendedTasks": [],
-          },
-          "httpClient": {
-            "cache": {
-              "get": [MockFunction],
-              "set": [MockFunction],
-            },
-            "defaultConfig": {
-              "baseUrl": "http://localhost:4444",
-              "headers": {},
-              "method": "GET",
-              "query": {},
-              "timeout": 15000,
-              "transferServerCache": false,
-              "transformers": [
-                {
-                  "transformRequest": [Function],
-                  "transformResponse": [Function],
-                },
-                {
-                  "transformRequest": [Function],
-                },
-                {
-                  "transformRequest": [Function],
-                  "transformResponse": [Function],
-                },
-                {
-                  "transformResponse": [Function],
-                },
-                {
-                  "transformRequest": [Function],
-                },
-              ],
-              "ttl": 60000,
-              "useCache": true,
-            },
-          },
-        },
-        "$plugins": [
+{
+  "$dependencies": {
+    "AbortController": [Function],
+    "fetch": [MockFunction],
+  },
+  "$external": {
+    "AbortController": [Function],
+    "fetch": [MockFunction],
+  },
+  "$in": {
+    "component": {
+      "isHydrated": false,
+      "isMounted": false,
+      "lifeCycle": {
+        "bootstrap": undefined,
+        "info": undefined,
+        "load": undefined,
+        "mount": undefined,
+        "unmount": undefined,
+        "update": undefined,
+      },
+      "resolvedViews": Map {},
+      "suspendedTasks": [],
+    },
+    "httpClient": {
+      "cache": {
+        "get": [MockFunction],
+        "set": [MockFunction],
+      },
+      "defaultConfig": {
+        "baseUrl": "http://localhost:4444",
+        "headers": {},
+        "method": "GET",
+        "query": {},
+        "timeout": 15000,
+        "transferServerCache": false,
+        "transformers": [
           {
-            "create": [Function],
-            "setup": [Function],
+            "transformRequest": [Function],
+            "transformResponse": [Function],
           },
           {
-            "create": [Function],
-            "setup": [Function],
+            "transformRequest": [Function],
           },
           {
-            "create": [Function],
-            "setup": [Function],
+            "transformRequest": [Function],
+            "transformResponse": [Function],
+          },
+          {
+            "transformResponse": [Function],
+          },
+          {
+            "transformRequest": [Function],
           },
         ],
-        "assets": [
-          {
-            "source": "http://www.example.com/static/1.0.0/widget.js",
-            "type": "script",
-          },
-        ],
-        "bootstrap": [Function],
-        "containerSelector": null,
-        "create": [Function],
-        "http": {
-          "request": [Function],
-        },
-        "httpCache": {
-          "deserialize": [Function],
-          "get": [Function],
-          "serialize": [Function],
-        },
-        "info": [Function],
-        "load": [Function],
-        "mount": [Function],
-        "name": "my-widget",
-        "props": {
-          "containerSelector": ".container",
-          "param": 1,
-        },
-        "setProps": [Function],
-        "setState": [Function],
-        "setup": [Function],
-        "slot": {
-          "AbortController": [Function],
-          "fetch": [MockFunction],
-        },
-        "state": {},
-        "unmount": [Function],
-        "update": [Function],
-        "version": "1.0.0",
-      }
-    `);
+        "ttl": 60000,
+        "useCache": true,
+      },
+    },
+  },
+  "$plugins": [
+    {
+      "create": [Function],
+      "setup": [Function],
+    },
+    {
+      "create": [Function],
+      "setup": [Function],
+    },
+    {
+      "create": [Function],
+      "setup": [Function],
+    },
+  ],
+  "assets": [
+    {
+      "source": "http://www.example.com/static/1.0.0/widget.js",
+      "type": "script",
+    },
+  ],
+  "bootstrap": [Function],
+  "containerSelector": null,
+  "create": [Function],
+  "http": {
+    "request": [Function],
+  },
+  "httpCache": {
+    "deserialize": [Function],
+    "get": [Function],
+    "serialize": [Function],
+  },
+  "info": [Function],
+  "load": [Function],
+  "mount": [Function],
+  "name": "my-widget",
+  "props": {
+    "containerSelector": ".container",
+    "param": 1,
+  },
+  "setProps": [Function],
+  "setState": [Function],
+  "setup": [Function],
+  "slot": {
+    "AbortController": [Function],
+    "fetch": [MockFunction],
+  },
+  "state": {},
+  "unmount": [Function],
+  "update": [Function],
+  "version": "1.0.0",
+}
+`);
   });
 
   it('should store response in cache', async () => {

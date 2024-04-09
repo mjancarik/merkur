@@ -35,4 +35,8 @@ export async function test({ args, command }) {
   runner.on('spawn', () => {
     logger.debug(`Run test runner ${args.join(', ')}`);
   });
+  runner.on('exit', (code, signal) => {
+    logger.info(`child process exited with code ${code} and signal ${signal}`);
+    process.exit(code);
+  });
 }
