@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@merkur/preact": "0.34.0"
+    "@merkur/preact": "0.35.0"
   },
   "devDependencies": {
     "enzyme": "3.11.0",
