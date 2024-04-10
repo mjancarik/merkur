@@ -188,6 +188,24 @@
       ]
     },
     {
+      "title": "Router plugin",
+      "url": "/docs/router-plugin",
+      "submenu": [
+        {
+          "title": "Installation",
+          "url": "/docs/router-plugin#installation"
+        },
+        {
+          "title": "Methods",
+          "url": "/docs/router-plugin#methods"
+        },
+        {
+          "title": "Controller life cycle methods",
+          "url": "/docs/router-plugin#controller-life-cycle-methods"
+        }
+      ]
+    },
+    {
       "title": "Storybook integration",
       "url": "/docs/storybook-integration-into-merkur",
       "submenu": [
