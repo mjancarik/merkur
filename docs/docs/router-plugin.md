@@ -182,6 +182,7 @@ Returns url for route name with filling route pattern with data.
 ### redirect
  - url - redirecting url
  - data - object with other data 
+
 Emit `RouterEvents.Redirect` event through @merkur/plugin-event-emitter for which must listen skeleton app. 
 
 ## Controller life cycle methods
