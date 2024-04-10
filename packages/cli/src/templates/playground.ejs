@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <div class="headline-view"><%- widgetProperties && widgetProperties.slot && widgetProperties.slot.headline.html %>
+  <div class="headline-view"><%- widgetProperties && widgetProperties.slot && widgetProperties.slot.headline && widgetProperties.slot.headline.html %>
   </div>
   <div class="merkur-view"><%- html %></div>
   <script>
@@ -17,7 +17,9 @@
       __merkur__.create(<%- JSON.stringify(widgetProperties) %>)
         .then(function (widget) {
           widget.containerSelector = '.merkur-view';
-          widget.slot.headline.containerSelector = '.headline-view';
+          if (widget?.slot?.headline) {
+            widget.slot.headline.containerSelector = '.headline-view';
+          }
 
           widget.mount();
         });
