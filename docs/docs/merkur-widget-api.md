@@ -5,9 +5,9 @@ title: Widget API - Merkur
 
 # Merkur widget API
 
-A Merkur widget, whether within the application or when returned as JSON by the API endpoint, contains six predefined properties: `name`, `version`, `containerSelector`, `$in`, `$external`, `$dependencies`, and `$plugins`. The property `$in` is intended for internal usage by merkur widget plugins or merkur itself.
+A Merkur widget, whether within the application or when returned as JSON by the API endpoint, contains six predefined properties: `name`, `version`, `containerSelector`, `container`, `$in`, `$external`, `$dependencies`, and `$plugins`. The property `$in` is intended for internal usage by merkur widget plugins or merkur itself.
 
-Other properties are for your own needs. The `containerSelector` is used to store CSS selector, identifying merkur component root in DOM tree. The property `$external` is for storing variables. The property `$dependencies` is for defining widget dependencies and specific features of the environment where the widget operates. The last property, `$plugins`, is for defining specific widget plugins.
+Other properties are for your own needs. The `containerSelector` is used to store CSS selector, identifying merkur component root in DOM tree or you set root element with `container` property. The property `$external` is for storing variables. The property `$dependencies` is for defining widget dependencies and specific features of the environment where the widget operates. The last property, `$plugins`, is for defining specific widget plugins.
 
 The widget also contains two methods for plugins; `setup` and `create`. For more details continue to the [plugins]({{ '/docs/plugins' | relative_url }}) section. You can use these methods also in `widgetProperties`.
 

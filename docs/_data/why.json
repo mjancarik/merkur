@@ -17,10 +17,10 @@
   },
   {
     "title": "Configurable",
-    "text": "You have control over Babel, Webpack, server, etc."
+    "text": "You have control over merkur.config.mjs file to set build, devServer, server, etc."
   },
   {
     "title": "Tiny",
-    "text": "Merkur is less than 1 kB minified + gzipped."
+    "text": "Merkur is less than 1,2 kB minified + gzipped."
   }
 ]
