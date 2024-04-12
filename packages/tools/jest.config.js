@@ -1,7 +1,7 @@
 const testGroupRegexes = {
-  unit: '(/__tests__/).*(Spec|test)\\.jsx?$',
-  integration: '(/__integration__/).*(Spec|test)\\.jsx?$',
-  all: '(/__integration__/)|(/__tests__/).*(Spec|test)\\.jsx?$',
+  unit: '(/__tests__/).*(Spec|test)\\.[jt]sx?$',
+  integration: '(/__integration__/).*(Spec|test)\\.[jt]sx?$',
+  all: '(/__integration__/)|(/__tests__/).*(Spec|test)\\.[jt]sx?$',
 };
 
 const testGroup =
@@ -16,6 +16,7 @@ module.exports = {
   testEnvironment: 'node',
   modulePaths: ['<rootDir>/'],
   testRegex: testGroupRegexes[testGroup],
+  testPathIgnorePatterns: ['/node_modules/', '/__snapshots__/'],
   transform: {
     '^.+\\.[t|j]sx?$': 'babel-jest',
   },

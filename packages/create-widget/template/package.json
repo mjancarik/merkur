@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@merkur/tools": "0.35.0",
-    "esbuild-jest2": "^0.6.5"
+    "esbuild-jest": "^0.5.0"
   },
   "engines": {
     "node": ">=20.0.0"
