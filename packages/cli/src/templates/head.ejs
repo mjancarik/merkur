@@ -9,6 +9,12 @@
   <%if (asset.type==='stylesheet' ) { %>
     <link rel='stylesheet' href='<%= asset.source %>' data-name="<%= asset.name %>" />
   <% } %>
+  <%if (asset.type==='inlineStyle' ) { %>
+    <style data-name="<%= asset.name %>">
+      <%= asset.source %>
+    </style>
+  <% } %>
+
   <%if (asset.type==='script' ) { %>
     <%if (typeof asset.source==='string' ) { %>
       <script src='<%= asset.source %>' defer='true' data-name="<%= asset.name %>"></script>

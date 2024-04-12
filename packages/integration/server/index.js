@@ -22,21 +22,34 @@ async function processAssetInFolder({
   fileName,
   staticFolder,
   staticBaseUrl,
+  cliConfig,
 }) {
   if (!asset.name || !fileName || typeof asset.source === 'string') {
     return asset;
   }
 
   if (asset.type.includes('inline')) {
-    asset.source = await fsp.readFile(
-      path.join(staticFolder, folder, fileName),
-      { encoding: 'utf-8' },
-    );
+    try {
+      asset.source = await fsp.readFile(
+        path.join(staticFolder, folder, fileName),
+        { encoding: 'utf-8' },
+      );
+    } catch (error) {
+      // TODO remove (process.env.NODE_ENV !== 'development' && !cliConfig)
+      if (
+        (process.env.NODE_ENV !== 'development' && !cliConfig) ||
+        (cliConfig?.writeToDisk && cliConfig?.command !== 'dev')
+      ) {
+        throw error;
+      }
+    }
 
-    return asset;
+    if (asset.source) {
+      return asset;
+    }
   }
 
-  if (asset.type === 'stylesheet') {
+  if (asset.type === 'stylesheet' || asset.type === 'inlineStyle') {
     asset.source = `${staticBaseUrl}/${folder}/${fileName}`;
 
     return asset;
@@ -48,10 +61,24 @@ async function processAssetInFolder({
   return asset;
 }
 
-async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
+// TODO remove folders
+async function createAssets({
+  assets,
+  staticFolder,
+  staticBaseUrl,
+  folders,
+  cliConfig,
+  merkurConfig,
+}) {
   if (staticBaseUrl.endsWith('/')) {
     staticBaseUrl = staticBaseUrl.slice(0, -1);
   }
+
+  folders =
+    folders ||
+    Object.values(merkurConfig?.task)
+      .filter((task) => task.build.platform !== 'node')
+      .map((task) => task.name);
 
   const processedAssets = await folders.reduce(
     async (assets, folder) => {
@@ -73,6 +100,8 @@ async function createAssets({ assets, staticFolder, folders, staticBaseUrl }) {
               fileName: manifest[asset.name],
               staticBaseUrl,
               staticFolder,
+              cliConfig,
+              merkurConfig,
             }),
           ),
         );
@@ -119,7 +148,6 @@ function deleteCache(modulePath, force = false) {
     });
   }
 }
-
 function searchCache(moduleName, callback) {
   if (moduleName && require.cache[moduleName] !== undefined) {
     const module = require.cache[moduleName];
@@ -147,7 +175,6 @@ function traverse(module, callback) {
 const memoPathResolve = memo(path.resolve);
 function requireUncached(module, options = {}) {
   const modulePath = memoPathResolve(module);
-
   if (process.env.NODE_WATCH === 'true') {
     if (options.optional && modulePath && !getFileStats(modulePath)) {
       return;

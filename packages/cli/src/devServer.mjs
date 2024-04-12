@@ -25,7 +25,8 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
     path: playgroundPath,
     widgetHandler,
   } = merkurConfig.playground;
-  const { cliFolder, command } = cliConfig;
+  const { cliFolder, command, writeToDisk, buildFolder, projectFolder } =
+    cliConfig;
 
   return new Promise((resolve, reject) => {
     const app = express();
@@ -59,6 +60,18 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
                   origin,
                 );
 
+                if (asset.type.includes('inline')) {
+                  const path = asset.source.replace(origin, '');
+                  if (writeToDisk) {
+                    asset.source = fs.readFileSync(
+                      path.join(path.resolve(projectFolder, buildFolder), path),
+                      'utf8',
+                    );
+                  } else {
+                    asset.source = context.memory[path]?.text;
+                  }
+                }
+
                 return asset;
               }
 
@@ -68,6 +81,21 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
                     asset.source[assetVersion] = asset.source[
                       assetVersion
                     ].replace(widgetServer.origin, origin);
+                  }
+
+                  if (asset.type.includes('inline')) {
+                    const path = asset.source.replace(origin, '');
+                    if (writeToDisk) {
+                      asset.source = fs.readFileSync(
+                        path.join(
+                          path.resolve(projectFolder, buildFolder),
+                          path,
+                        ),
+                        'utf8',
+                      );
+                    } else {
+                      asset.source = context.memory[path]?.text;
+                    }
                   }
                 });
               }

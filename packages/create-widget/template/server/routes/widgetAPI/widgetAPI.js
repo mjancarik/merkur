@@ -10,7 +10,7 @@ const {
 } = require('@merkur/integration/server');
 const memoCreateAssets = memo(createAssets);
 
-const { merkurConfig } = resolveConfig();
+const { merkurConfig, cliConfig } = resolveConfig();
 const { staticFolder, buildFolder, protocol, host, staticPath } =
   merkurConfig.widgetServer;
 
@@ -35,7 +35,8 @@ router.get(
       assets: info.assets,
       staticFolder,
       staticBaseUrl: `${protocol}//${host}${staticPath}`,
-      folders: Object.keys(merkurConfig.task),
+      merkurConfig,
+      cliConfig,
     });
 
     const status = info?.error?.status ?? 200;

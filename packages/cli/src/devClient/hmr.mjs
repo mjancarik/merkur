@@ -5,7 +5,7 @@ export async function hmr({ to, command, changed }) {
         return new Promise((resolve) => {
           const element = document.querySelector(`[data-name="${asset.name}"]`);
 
-          if (!element) {
+          if (!element || element.nodeName === 'STYLE') {
             location.reload();
             return;
           }
