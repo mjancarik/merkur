@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.3](https://github.com/mjancarik/merkur/compare/v0.35.2...v0.35.3) (2024-04-14)
+
+### Bug Fixes
+
+- 🐛 template for inlineStyle assets ([f0fa8d6](https://github.com/mjancarik/merkur/commit/f0fa8d6ac2396d2468ae704eb3f101af1e4e05cc))
+
 # [0.35.0](https://github.com/mjancarik/merkur/compare/v0.34.6...v0.35.0) (2024-04-09)
 
 ### Bug Fixes

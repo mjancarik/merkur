@@ -1,6 +1,6 @@
 {
   "name": "@merkur/integration-react",
-  "version": "0.35.0",
+  "version": "0.35.3",
   "description": "Merkur module for easy integration with react.",
   "main": "lib/index",
   "module": "lib/index",
@@ -64,6 +64,6 @@
     "react-dom": ">=16"
   },
   "dependencies": {
-    "@merkur/integration": "^0.35.0"
+    "@merkur/integration": "^0.35.3"
   }
 }

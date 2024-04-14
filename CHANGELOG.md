@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.3](https://github.com/mjancarik/merkur/compare/v0.35.2...v0.35.3) (2024-04-14)
+
+### Bug Fixes
+
+- 🐛 preact template ([9be091e](https://github.com/mjancarik/merkur/commit/9be091e40b7fa79393ee10900daa7e0d786449e2))
+- 🐛 template for inlineStyle assets ([f0fa8d6](https://github.com/mjancarik/merkur/commit/f0fa8d6ac2396d2468ae704eb3f101af1e4e05cc))
+
+### Features
+
+- 🎸 add base cli types ([6ab6983](https://github.com/mjancarik/merkur/commit/6ab6983c96254ed0d36244e62246863a986e1e5e))
+- 🎸 playground template allow empty slots ([3863f69](https://github.com/mjancarik/merkur/commit/3863f696f867978cc34f40e43eefb7e74c827eb5))
+
 ## [0.35.2](https://github.com/mjancarik/merkur/compare/v0.35.1...v0.35.2) (2024-04-10)
 
 ### Bug Fixes
