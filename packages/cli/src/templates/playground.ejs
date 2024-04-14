@@ -9,7 +9,9 @@
 </head>
 
 <body>
-  <div class="headline-view"><%- widgetProperties && widgetProperties.slot && widgetProperties.slot.headline && widgetProperties.slot.headline.html %>
+  <% if(widgetProperties?.slot?.headline?.html){ %>
+    <div class="headline-view"><%- widgetProperties && widgetProperties.slot && widgetProperties.slot.headline && widgetProperties.slot.headline.html %>
+  <% } %>
   </div>
   <div class="merkur-view"><%- html %></div>
   <script>
