@@ -12,11 +12,45 @@ import * as esbuild from 'esbuild';
     minify: true,
     write: true,
     target: 'es2022',
+    platform: 'browser',
     outfile: './lib/devClient.mjs',
   });
 
   if (watch) {
     await devClient.watch();
+  }
+
+  // server
+  const serverMJR = await command({
+    entryPoints: ['./src/server.mjs'],
+    sourcemap: false,
+    bundle: true,
+    minify: true,
+    write: true,
+    format: 'esm',
+    target: 'es2022',
+    platform: 'node',
+    outfile: './lib/server.mjs',
+  });
+
+  if (watch) {
+    await serverMJR.watch();
+  }
+
+  const serverCJS = await command({
+    entryPoints: ['./src/server.mjs'],
+    sourcemap: false,
+    bundle: true,
+    minify: true,
+    write: true,
+    format: 'cjs',
+    target: 'es2022',
+    platform: 'node',
+    outfile: './lib/server.cjs',
+  });
+
+  if (watch) {
+    await serverCJS.watch();
   }
 
   const moduleMJS = await command({
