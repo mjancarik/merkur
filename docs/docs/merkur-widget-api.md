@@ -16,35 +16,41 @@ The widget instance is sealed after creation so you cannot add properties or fun
 Sometimes you might not be sure whether to store data in widget state or the `$external` property. The best way to decide is to ask if you need to react to the change of the variable. If you do, store it in state; if you don't, or specifically want to avoid that, `$external` might be the right choice.
 
 ```javascript
-import { createMerkurWidget, createMerkur } from '@merkur/core';
-import { componentPlugin } from '@merkur/plugin-component';
+import { defineWidget } from '@merkur/core';
+import {
+  componentPlugin,
+  createViewFactory,
+  createSlotFactory,
+} from '@merkur/plugin-component';
+import { errorPlugin } from '@merkur/plugin-error';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
-import { render } from 'preact';
-import { viewFactory } from './views/View.jsx';
-import { mapViews } from './lib/utils';
-import { name, version } from '../package.json';
 
-export const widgetProperties = {
+import HeadlineSlot from './slots/HeadlineSlot';
+import View from './views/View';
+
+import pkg from '../package.json';
+
+import './style.css';
+
+export default defineWidget({
   // base merkur widget structure
-  name,
-  version,
+  name: pkg.name,
+  version: pkg.version,
   containerSelector: '.container', // Can be omitted, usually filled right after widget creation.
-  $dependencies: {
-    render, // specific render method for client side and server side
-  },
-  $plugins: [componentPlugin, eventEmitterPlugin],
-  setup(widget, widgetDefinition) {
-    console.log(widgetDefinition); // argument from createMerkurWidget
-
-    return widget;
-  },
+  $plugins: [componentPlugin, eventEmitterPlugin, errorPlugin],
 
   // properties and methods which are added by componentPlugin
+  viewFactory: createViewFactory((widget) => ({
+    View,
+    slotFactories: [
+      createSlotFactory((widget) => ({
+        name: 'headline',
+        containerSelector: '.container-headline',
+        View: HeadlineSlot,
+      })),
+    ],
+  })),
   assets: [
-    {
-      name: 'polyfill.js',
-      type: 'script',
-    },
     {
       name: 'widget.js',
       type: 'script',
@@ -55,33 +61,14 @@ export const widgetProperties = {
     },
   ],
   load(widget) {
+    // We don't want to set environment into app state
+    // eslint-disable-next-line no-unused-vars
+    const { environment, ...restProps } = widget.props;
+
     return {
       counter: 0,
-      ...widget.props,
+      ...restProps,
     };
-  },
-  async mount(widget) {
-    /**
-     * - mapViews utility function is used to iterate through all defined views and slots
-     * - viewFactory returns View component a optional slot views (more on slots further in the documentation)
-     */
-    return mapViews(widget, viewFactory, ({ View, container, isSlot }) => {
-      if (!container) {
-        return null;
-      }
-
-      return (container?.children?.length && !isSlot
-        ? widget.$dependencies.hydrate
-        : widget.$dependencies.render)(View(widget), container);
-    });
-  },
-  async update(widget) {
-    return mapViews(
-      widget,
-      viewFactory,
-      ({ View, container }) =>
-        container && widget.$dependencies.render(View(widget), container)
-    );
   },
 
   // your own defined properties and methods
@@ -91,25 +78,6 @@ export const widgetProperties = {
   onReset(widget) {
     widget.setState({ counter: 0 });
   },
-};
-
-
-// factory function
-// widgetParams are params from API call for widget,
-// widgetParams.props = { containerSelector: '.container' };
-// we will explain in next section
-function createWidget(widgetParams) {
-  return createMerkurWidget({
-    ...widgetParams,
-    ...widgetProperties,
-  });
-}
-
-// we will explain in next section
-const merkur = createMerkur();
-merkur.register({
-  ...widgetProperties,
-  createWidget,
 });
 
 ```
@@ -127,33 +95,19 @@ This enables the ability to render the same data (state) in multiple views in di
 
 The usage of slots is completely optional and can be omitted from the main widget structure. They're also very much dependent on the actual framework used on the frontend and require slight customization. However they are automatically defined in all default templates, when using `@merkur/create-widget` utility, so feel free to take a look at the implementation and adapt it to your needs.
 
-The main difference in using slots is the definition of `viewFactory` function:
+The main difference in using slots is the definition of `createSlotFactory` function:
 
 ```javascript
-async function headlineSlotFactory() {
-  return {
-    name: 'headline',
-    containerSelector: '.headline-view', // optional, usually is redefined on client anyway
-    View: HeadlineSlot, // Headline slot view component
-  };
-}
-
-async function viewFactory(widget) {
-  const slot = (await Promise.all([headlineSlotFactory(widget)])).reduce(
-    (acc, cur) => {
-      acc[cur.name] = cur;
-
-      return acc;
-    },
-    {}
-  );
-
-  return {
-    containerSelector: '.merkur-view', // optional, usually is redefined on client anyway
-    View: View, // Main widget view component
-    slot,
-  };
-}
+  viewFactory: createViewFactory((widget) => ({
+    View,
+    slotFactories: [
+      createSlotFactory((widget) => ({
+        name: 'headline',
+        containerSelector: '.container-headline',
+        View: HeadlineSlot,
+      })),
+    ],
+  })),
 
 ```
 
@@ -167,56 +121,10 @@ which is used to generate following structure:
     "headline": {
       "name": "headline",
       "view": "<slot_view_function>",
-      "containerSelector": ".headline-view", // optional
+      "containerSelector": ".container-headline", // optional
     }
   },
 }
 ```
 
-this factory function is then used in lifecycle methods in `client.js` and `server.js` to properly render widget instance into the main view and all it's slots. Below you can see examples for `mount` methods from preact integration for `client.js` and `server.js`:
-
-```javascript
-// server.js
-{
-  // ...
-  async mount(widget) {
-    const { View, slot = {} } = await viewFactory(widget);
-
-    return {
-      html: widget.$dependencies.render(View(widget)),
-      slot: Object.keys(slot).reduce((acc, cur) => {
-        acc[cur] = {
-          name: slot[cur].name,
-          html: widget.$dependencies.render(slot[cur].View(widget)),
-        };
-
-        return acc;
-      }, {}),
-    };
-  },
-  // ...
-}
-```
-
-```javascript
-// client.js
-{
-  // ...
-  async mount(widget) {
-    return mapViews(widget, viewFactory, ({ View, container, isSlot }) => {
-      if (!container) {
-        return null;
-      }
-
-      return (container?.children?.length && !isSlot
-        ? widget.$dependencies.hydrate
-        : widget.$dependencies.render)(View(widget), container);
-    });
-  },
-  // ...
-}
-```
-
-(`mapViews` is helper function used to iterate through main and slots views more easily, it's definition can be seen in `lib/utils.js` on any new widget.)
-
-As you can see, we're not doing anything special. We're basically extracting view and container selector from `widgetProperties` into our own helper factory function, which is used in `client.js` and `server.js` directly, instead of extracting `View` from widget instance passed into each lifecycle method. Then we only need to make sure to not only render/mount the main view, but also the each slot in it's own container and view with the same widget instance and that's basically it.
+This factory function is then used in lifecycle methods in `client.js` and `server.js` entry files to properly render widget instance into the main view and all it's slots. You can override framework specific entry files if you defined `./src/entries/client.js` and `./src/entries/server.js` files in your project.
