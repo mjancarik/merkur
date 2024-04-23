@@ -23,12 +23,24 @@ program
   .option('--buildFolder <string>', 'Build folder.')
   .option('--staticFolder <string>', 'Static folder.')
   .option('--staticPath <string>', 'The static path for dev server and widget server.')
+  .option('--hasRunDevServer', 'Flag for starting dev server')
+  .option('--hasRunWidgetServer', 'Flag for starting widget server')
   .option('--inspect', 'Debugging widget server')
   .option('--verbose', 'Verbose mode which show debug information.')
   .version(packageFile.version);
 
 program.command(COMMAND_NAME.DEV).description('Dev command').action(async (options, cmd) => {
-  const args = { ...{ writeToDisk: false, watch: true, runTask: ['node', 'es13'] }, ...cmd.optsWithGlobals(), ...options };
+  const args = {
+    ...{
+      writeToDisk: false,
+      watch: true,
+      runTask: ['node', 'es13'],
+      hasRunDevServer: true,
+      hasRunWidgetServer: true,
+    },
+    ...cmd.optsWithGlobals(),
+    ...options,
+  };
   process.env.NODE_ENV = process.env.NODE_ENV ?? 'development';
 
   dev({ args, command: COMMAND_NAME.DEV });
@@ -45,7 +57,7 @@ program.command(COMMAND_NAME.BUILD).action(async (options, cmd) => {
 
 program.command(COMMAND_NAME.START).action(async (options, cmd) => {
   const args = {
-    ...{ watch: false }, ...cmd.optsWithGlobals(), ...options
+    ...{ watch: false, hasRunWidgetServer: true }, ...cmd.optsWithGlobals(), ...options
   };
   process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
 

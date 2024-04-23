@@ -11,7 +11,7 @@
   <% } %>
   <%if (asset.type==='inlineStyle' ) { %>
     <style data-name="<%= asset.name %>">
-      <%= asset.source %>
+      <%- asset.source %>
     </style>
   <% } %>
 

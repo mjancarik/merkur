@@ -20,6 +20,8 @@ export async function createCLIConfig({ args, context, command } = {}) {
       buildFolder: args?.buildFolder ?? './build',
       staticFolder: args?.staticFolder ?? './build/static',
       staticPath: args?.staticPath ?? '/static',
+      hasRunDevServer: args?.hasRunDevServer ?? false,
+      hasRunWidgetServer: args?.hasRunWidgetServer ?? false,
       inspect: args.inspect ?? false,
       verbose: args.verbose ?? false,
     },

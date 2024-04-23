@@ -15,6 +15,8 @@ export interface CLIConfig {
   buildFolder: string;
   staticFolder: string;
   staticPath: string;
+  hasRunDevServer: boolean;
+  hasRunWidgetServer: boolean;
   inspect: boolean;
   verbose: boolean;
 }
@@ -46,6 +48,7 @@ export interface Playground {
   templateFolder: string;
   path: string;
   widgetHandler(req: Request, res: Response): Record<string, unknown>;
+  widgetParams(req: Request): URLSearchParams;
 }
 
 export interface SocketServer {

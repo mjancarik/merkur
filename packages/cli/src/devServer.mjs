@@ -84,17 +84,17 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
                   }
 
                   if (asset.type.includes('inline')) {
-                    const path = asset.source.replace(origin, '');
+                    const assetPath = asset.source.replace(origin, '');
                     if (writeToDisk) {
                       asset.source = fs.readFileSync(
                         path.join(
                           path.resolve(projectFolder, buildFolder),
-                          path,
+                          assetPath,
                         ),
                         'utf8',
                       );
                     } else {
-                      asset.source = context.memory[path]?.text;
+                      asset.source = context.memory[assetPath]?.text;
                     }
                   }
                 });

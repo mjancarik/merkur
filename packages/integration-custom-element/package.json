@@ -7,6 +7,7 @@
   "unpkg": "lib/index.umd.js",
   "sideEffects": false,
   "exports": {
+    "./cli": "./cli/index.mjs",
     ".": {
       "import": "./lib/index.mjs",
       "require": "./lib/index.cjs"

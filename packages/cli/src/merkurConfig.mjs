@@ -186,8 +186,10 @@ emitter.on(
       widgetHandler: async (req) => {
         const { protocol, host } = merkurConfig.widgetServer;
         let widgetProperties = null;
+        const params = merkurConfig.playground.widgetParams(req);
+
         const response = await fetch(
-          `${protocol}//${host}/widget?${new URLSearchParams(req.params)}`,
+          `${protocol}//${host}/widget${params?.size > 0 ? `?${params}` : ``}`,
         );
 
         widgetProperties = await response.json();
@@ -198,6 +200,9 @@ emitter.on(
         }
 
         return widgetProperties;
+      },
+      widgetParams: (req) => {
+        return new URLSearchParams(req.query);
       },
       ...merkurConfig.playground,
     };

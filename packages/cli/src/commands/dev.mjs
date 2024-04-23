@@ -53,7 +53,9 @@ export async function dev({ args, command }) {
 
   await Promise.all(Object.values(task));
 
-  await runDevServer({ merkurConfig, cliConfig, context });
+  cliConfig.hasRunDevServer &&
+    (await runDevServer({ merkurConfig, cliConfig, context }));
   await runSocketServer({ merkurConfig, cliConfig, context });
-  await runWidgetServer({ merkurConfig, cliConfig, context });
+  cliConfig.hasRunWidgetServer &&
+    (await runWidgetServer({ merkurConfig, cliConfig, context }));
 }
