@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.4](https://github.com/mjancarik/merkur/compare/v0.35.3...v0.35.4) (2024-04-23)
+
+### Features
+
+- 🎸 add playgroud.widgetParams function to merkur ([a0a0e9c](https://github.com/mjancarik/merkur/commit/a0a0e9cb3b5439d8162635c3855eb033568d433e))
+
 ## [0.35.3](https://github.com/mjancarik/merkur/compare/v0.35.2...v0.35.3) (2024-04-14)
 
 **Note:** Version bump only for package @merkur/integration-custom-element
