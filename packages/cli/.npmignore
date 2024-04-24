@@ -4,3 +4,4 @@
 !bin/**/*
 !src/**/*
 !package.json
+!types.d.ts
