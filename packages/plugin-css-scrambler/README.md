@@ -1,4 +1,4 @@
-# Merkur - plugin-css-scrambler
+# Merkur - plugin-css-scrambler - deprectecated
 
 [![Build Status](https://github.com/mjancarik/merkur/workflows/CI/badge.svg)](https://travis-ci.com/mjancarik/merkur)
 [![NPM package version](https://img.shields.io/npm/v/@merkur/plugin-css-scrambler/latest.svg)](https://www.npmjs.com/package/@merkur/plugin-css-scrambler)
