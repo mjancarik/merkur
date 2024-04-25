@@ -148,9 +148,10 @@ export default defineWidget({
 });
 ```
 
-Merkur resolve current route from pathname in `widget.props`. So we must set it in `./server/routes/widget/widgetAPI.js`. Logic for defined `pathname` is on your use case.
+Merkur resolve current route from pathname in `widget.props`. So we must set it in `./server/routes/widget/widgetAPI.js`. Logic for defined `pathname` is on your use case. For example you can read it from `req.query.pathname` and you must update `merkur.config.mjs` file to send `pathname` from playground page to widget API throught `playground.widgetParams` method and of course change `playground.path` for extending playground page to works for more paths than default '/' path.
 
-```javascript
+```javascrip
+// ./server/routes/widget/widgetAPI.js
 router.get(
   '/widget',
   asyncMiddleware(async (req, res) => {
@@ -159,11 +160,31 @@ router.get(
       props: {
         name: req.query.name,
         environment: widgetEnvironment,
-        pathname: '/',
+        pathname: req.query.pathname,
       },
     });
 
     const { html, slot = {} } = await widget.mount();
+```
+
+```javascrip
+// ./merkur.config.mjs
+
+/**
+ * @type import('@merkur/cli').defineConfig
+ */
+export default function () {
+	return {
+    //...
+		},
+		playground: {
+			widgetParams: (req) => {
+				return new URLSearchParams({ ...req.query, pathname: req.path });
+			},
+			path: new RegExp('(\/$|\/some-page\/.*)', 'g'),
+		}
+	};
+}
 ```
 
 Now you have install router plugin to your widget.
