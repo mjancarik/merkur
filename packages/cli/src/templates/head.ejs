@@ -23,4 +23,17 @@
       <script src='<%= asset.source.es13 %>' defer='true' data-name="<%= asset.name %>"></script>
     <% } %>
   <% } %>
+
+  <%if (asset.type==='inlineScript' ) { %>
+    <%if (typeof asset.source==='string' ) { %>
+      <script data-name="<%= asset.name %>">
+        <%- asset.source %>
+      </script>
+    <% } %>
+    <%if (typeof asset.source==='object' ) { %>
+      <script data-name="<%= asset.name %>">
+        <%- asset.source %>
+      </script>
+    <% } %>
+  <% } %>
 <% }); %>
