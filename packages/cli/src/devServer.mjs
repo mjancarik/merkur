@@ -25,8 +25,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
     path: playgroundPath,
     widgetHandler,
   } = merkurConfig.playground;
-  const { cliFolder, command, writeToDisk, buildFolder, projectFolder } =
-    cliConfig;
+  const { cliFolder, command, writeToDisk } = cliConfig;
 
   return new Promise((resolve, reject) => {
     const app = express();
