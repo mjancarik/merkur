@@ -25,11 +25,7 @@ Now we must update storybook file `./storybook/preview.js` similarly to the exam
 
 ```javascript
 // ./storybook/preview.js
-// register our widget to Merkur
-import '../src/client';
-
-// receive widget properties for creating our Merkur widget instance
-import widgetProperties from '../src/widget';
+import { createPreactWidget } from '@merkur/preact/client';
 
 // helper method for creating storybook loader, which async creates our widget instance.
 import { createWidgetLoader } from '@merkur/tool-storybook';
@@ -39,6 +35,11 @@ import { FORCE_RE_RENDER } from '@storybook/core-events';
 import { addons } from '@storybook/preview-api';
 
 import WidgetContext from '../src/components/WidgetContext';
+// receive widget properties for creating our Merkur widget instance
+import widgetProperties from '../src/widget';
+
+// register our widget to Merkur
+createPreactWidget(widgetProperties);
 
 // defined our custom widget loader
 export const loaders = [
