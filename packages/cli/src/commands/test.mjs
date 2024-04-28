@@ -1,6 +1,8 @@
 import { spawn } from 'node:child_process';
 import process from 'node:process';
 
+import { npmRunPath } from 'npm-run-path';
+
 import { createCLIConfig } from '../CLIConfig.mjs';
 import { createContext } from '../context.mjs';
 import { createLogger } from '../logger.mjs';
@@ -25,6 +27,7 @@ export async function test({ args, command }) {
   const runner = spawn('./node_modules/.bin/jest', args, {
     env: {
       ...process.env,
+      PATH: npmRunPath(),
       NODE_CONFIG_DIR: './server/config',
       MERKUR_CONFIG: JSON.stringify(merkurConfig),
       CLI_CONFIG: JSON.stringify(cliConfig),
