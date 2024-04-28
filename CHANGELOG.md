@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.5](https://github.com/mjancarik/merkur/compare/v0.35.4...v0.35.5) (2024-04-28)
+
+### Bug Fixes
+
+- 🐛 keep types file in published module ([4288098](https://github.com/mjancarik/merkur/commit/4288098344729cecb3052fb5bd45dbfaaf39910b))
+- 🐛 support for inlineScript, inline source with writeToDisk ([0141f6e](https://github.com/mjancarik/merkur/commit/0141f6e8dac53aa73f98a5da770f66f2dae81a81))
+
+### Features
+
+- 🎸 add support test command for monorepo ([415a941](https://github.com/mjancarik/merkur/commit/415a94110b35260cba43f01804d13c3b6873e069))
+
 ## [0.35.4](https://github.com/mjancarik/merkur/compare/v0.35.3...v0.35.4) (2024-04-23)
 
 ### Features
