@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.6](https://github.com/mjancarik/merkur/compare/v0.35.5...v0.35.6) (2024-04-29)
+
+### Bug Fixes
+
+- 🐛 remove node_modules path ([d4dc7d4](https://github.com/mjancarik/merkur/commit/d4dc7d4453fb3f7e490fa1cbf011f95627d9f963))
+
 ## [0.35.5](https://github.com/mjancarik/merkur/compare/v0.35.4...v0.35.5) (2024-04-28)
 
 ### Bug Fixes
