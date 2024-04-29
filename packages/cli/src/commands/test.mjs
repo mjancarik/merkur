@@ -24,7 +24,7 @@ export async function test({ args, command }) {
   args.unshift('./jest.config.js');
   args.unshift('-c');
 
-  const runner = spawn('./node_modules/.bin/jest', args, {
+  const runner = spawn('jest', args, {
     env: {
       ...process.env,
       PATH: npmRunPath(),
