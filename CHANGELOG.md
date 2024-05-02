@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.7](https://github.com/mjancarik/merkur/compare/v0.35.6...v0.35.7) (2024-05-02)
+
+### Bug Fixes
+
+- 🐛 emit CLI_CONFIG event after loaded merkur.config.mjs ([107f317](https://github.com/mjancarik/merkur/commit/107f3177849a5c7af48313a75abb5b4ac1085840))
+- 🐛 filter only node task ([82a9b3b](https://github.com/mjancarik/merkur/commit/82a9b3b0c5fedf9c1e053c3ebd2ed136578068ea))
+
+### Features
+
+- 🎸 allow override body part in playground template ([2375d4d](https://github.com/mjancarik/merkur/commit/2375d4deb68c5a0b394da9e7159fc2e1a3e9db05))
+
 ## [0.35.6](https://github.com/mjancarik/merkur/compare/v0.35.5...v0.35.6) (2024-04-29)
 
 ### Bug Fixes

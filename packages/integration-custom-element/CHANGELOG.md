@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.7](https://github.com/mjancarik/merkur/compare/v0.35.6...v0.35.7) (2024-05-02)
+
+### Bug Fixes
+
+- 🐛 filter only node task ([82a9b3b](https://github.com/mjancarik/merkur/commit/82a9b3b0c5fedf9c1e053c3ebd2ed136578068ea))
+
 ## [0.35.4](https://github.com/mjancarik/merkur/compare/v0.35.3...v0.35.4) (2024-04-23)
 
 ### Features
