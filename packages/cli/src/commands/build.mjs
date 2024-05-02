@@ -14,9 +14,10 @@ export async function build({ args, command }) {
   const buildTime = time();
 
   const context = await createContext();
-  const baseCliConfig = await createCLIConfig({ args, context, command });
+  const baseCliConfig = await createCLIConfig({ args, command });
 
   const { merkurConfig, cliConfig } = await createMerkurConfig({
+    args,
     cliConfig: baseCliConfig,
     context,
   });

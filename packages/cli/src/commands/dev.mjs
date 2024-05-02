@@ -11,9 +11,10 @@ import { handleExit } from '../handleExit.mjs';
 
 export async function dev({ args, command }) {
   const context = await createContext();
-  const baseCliConfig = await createCLIConfig({ args, context, command });
+  const baseCliConfig = await createCLIConfig({ args, command });
 
   const { merkurConfig, cliConfig } = await createMerkurConfig({
+    args,
     cliConfig: baseCliConfig,
     context,
   });

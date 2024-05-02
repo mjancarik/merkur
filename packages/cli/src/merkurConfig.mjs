@@ -1,6 +1,7 @@
 import path from 'node:path';
 
 import { EMITTER_EVENTS, emitter, RESULT_KEY } from './emitter.mjs';
+import { updateCLIConfig } from './CLIConfig.mjs';
 import { createLogger } from './logger.mjs';
 import { devPlugin } from './plugins/devPlugin.mjs';
 import { deepMerge } from './utils.mjs';
@@ -8,7 +9,7 @@ import { COMMAND_NAME } from './commands/constant.mjs';
 
 const MERKUR_CONFIG_FILE = 'merkur.config.mjs';
 
-export async function createMerkurConfig({ cliConfig, context } = {}) {
+export async function createMerkurConfig({ cliConfig, context, args } = {}) {
   const logger = createLogger('merkurConfig', cliConfig);
   const { projectFolder } = cliConfig;
   let merkurConfig;
@@ -29,11 +30,13 @@ export async function createMerkurConfig({ cliConfig, context } = {}) {
     logger.error(error);
   }
 
-  cliConfig = { ...(merkurConfig?.cliConfig ?? {}), ...cliConfig };
+  cliConfig = { ...cliConfig, ...(merkurConfig?.cliConfig ?? {}), ...args };
 
   await loadExtender({ merkurConfig, cliConfig, logger, context });
 
   await registerHooks({ merkurConfig });
+
+  cliConfig = await updateCLIConfig({ args, cliConfig, context });
 
   let event = {
     merkurConfig: {
