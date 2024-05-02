@@ -25,7 +25,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
     path: playgroundPath,
     widgetHandler,
   } = merkurConfig.playground;
-  const { cliFolder, command, writeToDisk } = cliConfig;
+  const { cliFolder, projectFolder, command, writeToDisk } = cliConfig;
 
   return new Promise((resolve, reject) => {
     const app = express();
@@ -118,7 +118,11 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           const playgroundTemplate = ejs.compile(
             fs.readFileSync(template, 'utf8'),
             {
-              views: [path.dirname(template), templateFolder],
+              views: [
+                path.dirname(template),
+                templateFolder,
+                `${projectFolder}/server/playground/templates/`,
+              ],
             },
           );
 

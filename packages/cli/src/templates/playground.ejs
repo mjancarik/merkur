@@ -9,25 +9,8 @@
 </head>
 
 <body>
-  <% if(widgetProperties?.slot?.headline?.html){ %>
-    <div class="headline-view"><%- widgetProperties && widgetProperties.slot && widgetProperties.slot.headline && widgetProperties.slot.headline.html %>
-  <% } %>
-  </div>
-  <div class="merkur-view"><%- html %></div>
-  <script>
-    window.addEventListener('load', function () {
-      __merkur__.create(<%- JSON.stringify(widgetProperties) %>)
-        .then(function (widget) {
-          widget.containerSelector = '.merkur-view';
-          if (widget?.slot?.headline) {
-            widget.slot.headline.containerSelector = '.headline-view';
-          }
-
-          widget.mount();
-        });
-    });
-  </script>
-    <%- include('./footer.ejs', {assets, merkurConfig, devClient, widgetProperties}) %>
+  <%- include('./body.ejs', {assets, merkurConfig, devClient, widgetProperties}) %>
+  <%- include('./footer.ejs', {assets, merkurConfig, devClient, widgetProperties}) %>
 </body>
 
 </html>
