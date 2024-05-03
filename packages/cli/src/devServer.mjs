@@ -119,9 +119,9 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
             fs.readFileSync(template, 'utf8'),
             {
               views: [
+                `${projectFolder}/server/playground/templates/`,
                 path.dirname(template),
                 templateFolder,
-                `${projectFolder}/server/playground/templates/`,
               ],
             },
           );
