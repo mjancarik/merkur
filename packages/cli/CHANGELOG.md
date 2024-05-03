@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.8](https://github.com/mjancarik/merkur/compare/v0.35.7...v0.35.8) (2024-05-03)
+
+### Bug Fixes
+
+- 🐛 allow easy override part playground templates ([cb08339](https://github.com/mjancarik/merkur/commit/cb08339904a3895439a4a316f891f9b0ac31f01c))
+
 ## [0.35.7](https://github.com/mjancarik/merkur/compare/v0.35.6...v0.35.7) (2024-05-02)
 
 ### Bug Fixes
