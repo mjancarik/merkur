@@ -37,7 +37,7 @@ function registerCustomElement(options) {
     constructor() {
       super();
 
-      const widget = callbacks?.getSingleton();
+      const widget = callbacks?.getSingleton?.();
 
       if (widget && widget.name && widget.version) {
         this._widget = widget;
@@ -62,7 +62,7 @@ function registerCustomElement(options) {
           this._widget = await createSPAWidget(widgetDefinition);
           this._widget.mount();
 
-          callbacks?.constructor(this._widget);
+          callbacks?.constructor?.(this._widget);
         } catch (error) {
           console.error(error);
         }
@@ -70,19 +70,19 @@ function registerCustomElement(options) {
     }
 
     connectedCallback() {
-      callbacks?.connectedCallback(this._widget);
+      callbacks?.connectedCallback?.(this._widget);
     }
 
     disconnectedCallback() {
-      callbacks?.disconnectedCallback(this._widget);
+      callbacks?.disconnectedCallback?.(this._widget);
     }
 
     adoptedCallback() {
-      callbacks?.adoptedCallback(this._widget);
+      callbacks?.adoptedCallback?.(this._widget);
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-      callbacks?.attributeChangedCallback(
+      callbacks?.attributeChangedCallback?.(
         this._widget,
         name,
         oldValue,
