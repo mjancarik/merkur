@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.10](https://github.com/mjancarik/merkur/compare/v0.35.9...v0.35.10) (2024-05-08)
+
+### Bug Fixes
+
+- 🐛 clone registerCustomElement options ([c8c30cb](https://github.com/mjancarik/merkur/commit/c8c30cb7e5e1bcd206fb9011bb117239404cc72a))
+
 ## [0.35.9](https://github.com/mjancarik/merkur/compare/v0.35.8...v0.35.9) (2024-05-08)
 
 ### Features
