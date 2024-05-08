@@ -9,6 +9,7 @@ import { createMerkurConfig } from '../merkurConfig.mjs';
 import { createLogger } from '../logger.mjs';
 import { time } from '../utils.mjs';
 import { handleExit } from '../handleExit.mjs';
+import { clearBuildFolder } from '../clearBuildFolder.mjs';
 
 export async function build({ args, command }) {
   const buildTime = time();
@@ -24,6 +25,8 @@ export async function build({ args, command }) {
   const logger = createLogger(undefined, cliConfig);
 
   await handleExit({ context });
+
+  await clearBuildFolder({ merkurConfig, cliConfig });
 
   const task = await Object.keys(merkurConfig.task).reduce(
     async (result, key) => {

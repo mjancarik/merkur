@@ -8,6 +8,7 @@ import { createMerkurConfig } from '../merkurConfig.mjs';
 import { runSocketServer } from '../websocket.mjs';
 import { runWidgetServer } from '../widgetServer.mjs';
 import { handleExit } from '../handleExit.mjs';
+import { clearBuildFolder } from '../clearBuildFolder.mjs';
 
 export async function dev({ args, command }) {
   const context = await createContext();
@@ -20,6 +21,8 @@ export async function dev({ args, command }) {
   });
 
   await handleExit({ context });
+
+  await clearBuildFolder({ merkurConfig, cliConfig });
 
   const task = await Object.keys(merkurConfig.task).reduce(
     async (result, key) => {

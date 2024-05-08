@@ -35,6 +35,10 @@ export default function ({ emitter, EMITTER_EVENTS }) {
   );
 
   emitter.on(EMITTER_EVENTS.CLI_CONFIG, function removeNodeTask({ cliConfig }) {
+    if (cliConfig.runTask.length === 0) {
+      cliConfig.runTask = ['es13', 'es9'];
+    }
+
     cliConfig.runTask = cliConfig.runTask.filter((task) => task !== 'node');
     return cliConfig;
   });
