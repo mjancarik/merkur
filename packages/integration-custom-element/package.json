@@ -1,6 +1,6 @@
 {
   "name": "@merkur/integration-custom-element",
-  "version": "0.35.7",
+  "version": "0.35.9",
   "description": "Merkur module for easy integration with other apps with custom element.",
   "main": "lib/index",
   "module": "lib/index",

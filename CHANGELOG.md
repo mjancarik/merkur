@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.9](https://github.com/mjancarik/merkur/compare/v0.35.8...v0.35.9) (2024-05-08)
+
+### Features
+
+- 🎸 clear build folder before dev and build commands ([6add7e3](https://github.com/mjancarik/merkur/commit/6add7e35350d135e81000780157ffba38673599b))
+
 ## [0.35.8](https://github.com/mjancarik/merkur/compare/v0.35.7...v0.35.8) (2024-05-03)
 
 ### Bug Fixes
