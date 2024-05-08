@@ -31,7 +31,8 @@ function afterDOMLoad() {
   });
 }
 
-function registerCustomElement({ widgetDefinition, callbacks }) {
+function registerCustomElement(options) {
+  const { widgetDefinition, callbacks } = deepMerge({}, options);
   class WidgetElement extends HTMLElement {
     constructor() {
       super();
