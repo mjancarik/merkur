@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.12](https://github.com/mjancarik/merkur/compare/v0.35.11...v0.35.12) (2024-05-08)
+
+### Bug Fixes
+
+- 🐛 all callbacks are optional ([52e7b99](https://github.com/mjancarik/merkur/commit/52e7b99d46974632a716c8897fd425a06893022d))
+
 ## [0.35.11](https://github.com/mjancarik/merkur/compare/v0.35.10...v0.35.11) (2024-05-08)
 
 ### Features
