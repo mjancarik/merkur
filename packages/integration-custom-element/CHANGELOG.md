@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.11](https://github.com/mjancarik/merkur/compare/v0.35.10...v0.35.11) (2024-05-08)
+
+### Features
+
+- 🎸 add getSingleton method to callbacks ([3b33e89](https://github.com/mjancarik/merkur/commit/3b33e898cdb542fdc7c11e5062c5ec2131110b16))
+
 ## [0.35.10](https://github.com/mjancarik/merkur/compare/v0.35.9...v0.35.10) (2024-05-08)
 
 ### Bug Fixes
