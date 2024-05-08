@@ -37,6 +37,14 @@ function registerCustomElement(options) {
     constructor() {
       super();
 
+      const widget = callbacks?.getSingleton();
+
+      if (widget && widget.name && widget.version) {
+        this._widget = widget;
+
+        return;
+      }
+
       const shadow = this.attachShadow({ mode: 'open' });
 
       (async () => {
