@@ -228,8 +228,13 @@ export function copyResponse(response) {
   };
 }
 
+const PROTECTED_FIELDS = ['__proto__', 'prototype', 'constructor'];
 function assign(target, source = {}, parentField = null) {
   for (const field of Object.keys(source)) {
+    if (PROTECTED_FIELDS.includes(field)) {
+      return;
+    }
+
     const value = source[field];
     const fieldPath = parentField ? parentField + '.' + field : field;
 
