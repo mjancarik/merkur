@@ -1,6 +1,6 @@
 {
   "name": "@merkur/create-widget",
-  "version": "0.35.12",
+  "version": "0.35.13",
   "description": "CLI for creating merkur widget easily.",
   "bin": {
     "merkur-create-widget": "./bin/createWidget.mjs"

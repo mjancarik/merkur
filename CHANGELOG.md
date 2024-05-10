@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.13](https://github.com/mjancarik/merkur/compare/v0.35.12...v0.35.13) (2024-05-10)
+
+### Bug Fixes
+
+- 🐛 exclude object internals ([85bb3b7](https://github.com/mjancarik/merkur/commit/85bb3b74a1db5bfda9a3aa02a62690f4566e6fdb))
+- 🐛 tree shaking for package.json ([ec29152](https://github.com/mjancarik/merkur/commit/ec291527d634b11e733c271a923b2017f5cb5044))
+
+### Features
+
+- 🎸 allow async getSingleton function ([9f5401a](https://github.com/mjancarik/merkur/commit/9f5401a5b0e79b18a1a8d335b085c03382cdd5de))
+
 ## [0.35.12](https://github.com/mjancarik/merkur/compare/v0.35.11...v0.35.12) (2024-05-08)
 
 ### Bug Fixes

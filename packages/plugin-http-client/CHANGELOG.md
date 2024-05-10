@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.35.13](https://github.com/mjancarik/merkur/compare/v0.35.12...v0.35.13) (2024-05-10)
+
+### Bug Fixes
+
+- 🐛 exclude object internals ([85bb3b7](https://github.com/mjancarik/merkur/commit/85bb3b74a1db5bfda9a3aa02a62690f4566e6fdb))
+
 # [0.35.0](https://github.com/mjancarik/merkur/compare/v0.34.6...v0.35.0) (2024-04-09)
 
 **Note:** Version bump only for package @merkur/plugin-http-client
