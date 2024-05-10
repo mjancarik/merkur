@@ -4,7 +4,7 @@ import { loadAssets } from '@merkur/integration';
 async function createSPAWidget(widgetDefinition) {
   const definition = {
     ...widgetDefinition,
-    createWidget: widgetDefinition.createWidget || createMerkurWidget,
+    createWidget: widgetDefinition.createWidget || createMerkurWidget, // TODO remove createMerkurWidget keep only one way
   };
 
   getMerkur().register(definition);
@@ -37,18 +37,20 @@ function registerCustomElement(options) {
     constructor() {
       super();
 
-      const widget = callbacks?.getSingleton?.();
-
-      if (widget && widget.name && widget.version) {
-        this._widget = widget;
-
-        return;
-      }
-
-      const shadow = this.attachShadow({ mode: 'open' });
-
       (async () => {
+        const shadow = this.attachShadow({ mode: 'open' });
+
+        // TODO allow same UI for two custom element
+        const widget = await callbacks?.getSingleton?.();
+
+        if (widget && widget.name && widget.version) {
+          this._widget = widget;
+
+          return;
+        }
+
         try {
+          // TODO widget root remove
           widgetDefinition.root = shadow;
           widgetDefinition.customElement = this;
 
@@ -60,9 +62,10 @@ function registerCustomElement(options) {
           widgetDefinition.root.appendChild(widgetDefinition.container);
 
           this._widget = await createSPAWidget(widgetDefinition);
-          this._widget.mount();
 
           callbacks?.constructor?.(this._widget);
+
+          await this._widget.mount();
         } catch (error) {
           console.error(error);
         }
@@ -96,6 +99,7 @@ function registerCustomElement(options) {
   }
 }
 
+const PROTECTED_FIELDS = ['__proto__', 'prototype', 'constructor'];
 function deepMerge(target, source) {
   const isObject = (obj) => !!obj && obj.constructor === Object;
 
@@ -104,6 +108,10 @@ function deepMerge(target, source) {
   }
 
   Object.keys(source).forEach((key) => {
+    if (PROTECTED_FIELDS.includes(key)) {
+      return;
+    }
+
     const targetValue = target[key];
     const sourceValue = source[key];
 
