@@ -3,12 +3,12 @@ import { componentPlugin } from '@merkur/plugin-component';
 import { errorPlugin } from '@merkur/plugin-error';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 
-import pkg from '../package.json';
+import { name, version } from '../package.json';
 import './style.css';
 
 export default defineWidget({
-  name: pkg.name,
-  version: pkg.version,
+  name,
+  version,
   $plugins: [componentPlugin, eventEmitterPlugin, errorPlugin],
   assets: [
     {
