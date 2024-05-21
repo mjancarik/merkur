@@ -3,6 +3,10 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.36.0](https://github.com/mjancarik/merkur/compare/v0.35.13...v0.36.0) (2024-05-21)
+
+**Note:** Version bump only for package @merkur/integration-react
+
 ## [0.35.3](https://github.com/mjancarik/merkur/compare/v0.35.2...v0.35.3) (2024-04-14)
 
 **Note:** Version bump only for package @merkur/integration-react

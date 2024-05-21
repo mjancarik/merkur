@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.36.0](https://github.com/mjancarik/merkur/compare/v0.35.13...v0.36.0) (2024-05-21)
+
+### Bug Fixes
+
+- 🐛 devPlugin is only supported for dev command ([1f058ae](https://github.com/mjancarik/merkur/commit/1f058ae9f9c6fc1821e9d93168561de9aa4304bc))
+
+### Features
+
+- 🎸 better support for new @merkur/{framework} ([e197b95](https://github.com/mjancarik/merkur/commit/e197b95129345315b7823b0aa94830b5100c0c06))
+
 ## [0.35.13](https://github.com/mjancarik/merkur/compare/v0.35.12...v0.35.13) (2024-05-10)
 
 ### Bug Fixes
