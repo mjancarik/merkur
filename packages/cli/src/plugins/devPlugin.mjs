@@ -5,6 +5,7 @@ import chalk from 'chalk';
 import { createClient } from '../websocket.mjs';
 
 import { createLogger } from '../logger.mjs';
+import { COMMAND_NAME } from '../commands/constant.mjs';
 
 export function devPlugin({ definition, merkurConfig, cliConfig }) {
   const logger = createLogger('devPlugin', cliConfig);
@@ -18,7 +19,7 @@ export function devPlugin({ definition, merkurConfig, cliConfig }) {
     setup(build) {
       logger.debug(`Setup plugin for "${chalk.cyan(definition.name)}" task.`);
 
-      if (cliConfig.isProduction) {
+      if (cliConfig.command !== COMMAND_NAME.DEV) {
         return;
       }
 
