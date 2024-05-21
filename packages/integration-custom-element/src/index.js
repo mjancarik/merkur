@@ -1,16 +1,19 @@
-import { getMerkur, createMerkurWidget } from '@merkur/core';
+import { getMerkur } from '@merkur/core';
 import { loadAssets } from '@merkur/integration';
 
-async function createSPAWidget(widgetDefinition) {
+async function createSPAWidget(widgetDefinition, root) {
   const definition = {
     ...widgetDefinition,
-    createWidget: widgetDefinition.createWidget || createMerkurWidget, // TODO remove createMerkurWidget keep only one way
+    createWidget: widgetDefinition.createWidget,
   };
 
-  getMerkur().register(definition);
+  const merkur = getMerkur();
+  if (!merkur.isRegistered(definition.name + definition.version)) {
+    getMerkur().register(definition);
+  }
 
   await afterDOMLoad();
-  await loadAssets(definition.assets, definition.root);
+  await loadAssets(definition.assets, root);
 
   return await getMerkur().create(definition);
 }
@@ -37,35 +40,66 @@ function registerCustomElement(options) {
     constructor() {
       super();
 
+      const customWidgetDefinition = deepMerge({}, widgetDefinition);
+
       (async () => {
-        const shadow = this.attachShadow({ mode: 'open' });
+        this._shadow = this.attachShadow({ mode: 'open' });
 
-        // TODO allow same UI for two custom element
-        const widget = await callbacks?.getSingleton?.();
+        try {
+          const widget = await callbacks?.getInstance?.();
 
-        if (widget && widget.name && widget.version) {
-          this._widget = widget;
+          if (widget && widget.name && widget.version) {
+            this._widget = widget;
+
+            await afterDOMLoad();
+            await loadAssets(widget.assets, this._shadow);
+
+            await callbacks?.reconstructor?.(this._widget, {
+              shadow: this._shadow,
+              customElement: this,
+            });
+
+            (await callbacks?.remount?.(this._widget, {
+              shadow: this._shadow,
+              customElement: this,
+            })) ?? this._shadow.appendChild(widget.container);
+
+            return;
+          }
+        } catch (error) {
+          console.error(error);
 
           return;
         }
 
         try {
-          // TODO widget root remove
-          widgetDefinition.root = shadow;
-          widgetDefinition.customElement = this;
+          customWidgetDefinition.root = this._shadow;
+          customWidgetDefinition.customElement = this;
 
-          if (!widgetDefinition.container) {
-            widgetDefinition.container = document.createElement('div');
-            widgetDefinition.container.setAttribute('id', 'merkur-container');
+          if (!customWidgetDefinition.container) {
+            customWidgetDefinition.container = document.createElement('div');
+            customWidgetDefinition.container.setAttribute(
+              'id',
+              'merkur-container',
+            );
           }
 
-          widgetDefinition.root.appendChild(widgetDefinition.container);
+          this._shadow.appendChild(customWidgetDefinition.container);
 
-          this._widget = await createSPAWidget(widgetDefinition);
+          this._widget = await createSPAWidget(
+            customWidgetDefinition,
+            this._shadow,
+          );
 
-          callbacks?.constructor?.(this._widget);
+          await callbacks?.constructor?.(this._widget, {
+            shadow: this._shadow,
+            customElement: this,
+          });
 
-          await this._widget.mount();
+          (await callbacks?.mount?.(this._widget, {
+            shadow: this._shadow,
+            customElement: this,
+          })) ?? (await this._widget.mount());
         } catch (error) {
           console.error(error);
         }
@@ -73,23 +107,62 @@ function registerCustomElement(options) {
     }
 
     connectedCallback() {
-      callbacks?.connectedCallback?.(this._widget);
+      this._widget?.connectedCallback?.({
+        shadow: this._shadow,
+        customElement: this,
+      });
+
+      callbacks?.connectedCallback?.(this._widget, {
+        shadow: this._shadow,
+        customElement: this,
+      });
     }
 
     disconnectedCallback() {
-      callbacks?.disconnectedCallback?.(this._widget);
+      this._widget?.disconnectedCallback?.({
+        shadow: this._shadow,
+        customElement: this,
+      });
+
+      callbacks?.disconnectedCallback?.(this._widget, {
+        shadow: this._shadow,
+        customElement: this,
+      });
     }
 
     adoptedCallback() {
-      callbacks?.adoptedCallback?.(this._widget);
+      this._widget?.adoptedCallback?.({
+        shadow: this._shadow,
+        customElement: this,
+      });
+
+      callbacks?.adoptedCallback?.(this._widget, {
+        shadow: this._shadow,
+        customElement: this,
+      });
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
+      this._widget?.attributeChangedCallback?.(
+        this._widget,
+        name,
+        oldValue,
+        newValue,
+        {
+          shadow: this._shadow,
+          customElement: this,
+        },
+      );
+
       callbacks?.attributeChangedCallback?.(
         this._widget,
         name,
         oldValue,
         newValue,
+        {
+          shadow: this._shadow,
+          customElement: this,
+        },
       );
     }
   }
