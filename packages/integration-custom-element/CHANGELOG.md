@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.36.1](https://github.com/mjancarik/merkur/compare/v0.36.0...v0.36.1) (2024-05-23)
+
+### Bug Fixes
+
+- 🐛 auto appendChild works only for not defined remount ([a4a761a](https://github.com/mjancarik/merkur/commit/a4a761a3f8a53b9a52a73c1d103923ddc26e0fac))
+
 # [0.36.0](https://github.com/mjancarik/merkur/compare/v0.35.13...v0.36.0) (2024-05-21)
 
 ### Features
