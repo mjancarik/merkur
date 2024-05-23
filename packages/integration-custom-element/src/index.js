@@ -59,10 +59,16 @@ function registerCustomElement(options) {
               customElement: this,
             });
 
-            (await callbacks?.remount?.(this._widget, {
-              shadow: this._shadow,
-              customElement: this,
-            })) ?? this._shadow.appendChild(widget.container);
+            if (typeof callbacks?.remount === 'function') {
+              await callbacks?.remount?.(this._widget, {
+                shadow: this._shadow,
+                customElement: this,
+              });
+            } else {
+              widget.root = this._shadow;
+              widget.customElement = this;
+              this._shadow.appendChild(widget.container);
+            }
 
             return;
           }

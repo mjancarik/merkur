@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@merkur/uhtml": "0.35.0"
+    "@merkur/uhtml": "0.36.0"
   },
   "devDependencies": {}
 }
