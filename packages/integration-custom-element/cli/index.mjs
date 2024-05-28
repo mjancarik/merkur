@@ -34,6 +34,15 @@ export default function ({ emitter, EMITTER_EVENTS }) {
     },
   );
 
+  emitter.on(
+    EMITTER_EVENTS.MERKUR_CONFIG,
+    function turnOffHMR({ merkurConfig }) {
+      merkurConfig.HMR = false;
+
+      return merkurConfig;
+    },
+  );
+
   emitter.on(EMITTER_EVENTS.CLI_CONFIG, function removeNodeTask({ cliConfig }) {
     if (cliConfig.runTask.length === 0) {
       cliConfig.runTask = ['es13', 'es9'];
