@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.36.2](https://github.com/mjancarik/merkur/compare/v0.36.1...v0.36.2) (2024-05-28)
+
+### Features
+
+- 🎸 turn off HMR for custom element ([5340b95](https://github.com/mjancarik/merkur/commit/5340b958792bb392205d3909385aa9da1cbcfe32))
+
 ## [0.36.1](https://github.com/mjancarik/merkur/compare/v0.36.0...v0.36.1) (2024-05-23)
 
 ### Bug Fixes

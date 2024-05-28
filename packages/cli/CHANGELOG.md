@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.36.2](https://github.com/mjancarik/merkur/compare/v0.36.1...v0.36.2) (2024-05-28)
+
+### Bug Fixes
+
+- 🐛 creating merkur widget in playground ([6b639ed](https://github.com/mjancarik/merkur/commit/6b639ed15ab2eac04a7acbbc9c893896845c5244))
+
 # [0.36.0](https://github.com/mjancarik/merkur/compare/v0.35.13...v0.36.0) (2024-05-21)
 
 ### Bug Fixes
