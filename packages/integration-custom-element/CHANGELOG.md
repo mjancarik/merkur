@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.36.3](https://github.com/mjancarik/merkur/compare/v0.36.2...v0.36.3) (2024-06-02)
+
+### Features
+
+- 🎸 add css bundle support to custom element ([753915d](https://github.com/mjancarik/merkur/commit/753915dc90006326dd4d585bcc9e76097fa3ded3))
+
 ## [0.36.2](https://github.com/mjancarik/merkur/compare/v0.36.1...v0.36.2) (2024-05-28)
 
 ### Features
