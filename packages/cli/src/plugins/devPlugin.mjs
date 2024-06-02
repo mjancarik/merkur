@@ -9,7 +9,7 @@ import { COMMAND_NAME } from '../commands/constant.mjs';
 
 export function devPlugin({ definition, merkurConfig, cliConfig }) {
   const logger = createLogger('devPlugin', cliConfig);
-  const { projectFolder, buildDir } = cliConfig;
+  const { projectFolder, buildFolder } = cliConfig;
   let memory = {};
   let changed = [];
   let errors = [];
@@ -25,10 +25,14 @@ export function devPlugin({ definition, merkurConfig, cliConfig }) {
 
       build.onEnd((result) => {
         errors = result.errors.map((error) => {
-          const source = fs.readFileSync(
-            `${projectFolder}/${error.location.file}`,
-            'utf-8',
-          );
+          let source = null;
+
+          try {
+            source = fs.readFileSync(
+              `${projectFolder}/${error.location.file}`,
+              'utf-8',
+            );
+          } catch (_) {} //eslint-disable-line
 
           return {
             ...error,
@@ -44,7 +48,7 @@ export function devPlugin({ definition, merkurConfig, cliConfig }) {
           result?.outputFiles?.reduce((changed, file) => {
             const name = file.path
               .replace(projectFolder, '')
-              .replace(buildDir, '')
+              .replace(buildFolder, '')
               .split('/')
               .pop();
 

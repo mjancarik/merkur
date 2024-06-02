@@ -8,6 +8,7 @@
   "sideEffects": false,
   "exports": {
     "./cli": "./cli/index.mjs",
+    "./cssBundle": "./cli/cssBundle.mjs",
     ".": {
       "import": "./lib/index.mjs",
       "require": "./lib/index.cjs"
