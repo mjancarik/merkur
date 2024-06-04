@@ -44,7 +44,7 @@ export default function () {
 }
 ```
 
-The `@merkur/integration-custom-element/cli` modify default `@merkur/cli` configuration (chang playground widgetHandler to skip `/widget` request, turn off widget server because custom element works only in browser, turn off HMR and use hot reload instead, filter node platform tasks, force generated files to be saved to filesystem as writeToDisk = true, register css bundle plugin for including bundled css file to js).
+The `@merkur/integration-custom-element/cli` modify default `@merkur/cli` configuration (change playground widgetHandler to skip `/widget` request, turn off widget server because custom element works only in browser, turn off HMR and use hot reload instead, filter node platform tasks, force generated files to be saved to filesystem as writeToDisk = true, register css bundle plugin for including bundled css file to js).
 
 ### Widget part
 
@@ -80,7 +80,7 @@ export default {
 };
 ```
 
-We add our resolved environment to widget `props.environment` property in `/src/widget.js`. Same as it works in default Merkur template. The custom element don't support Merkur slots. So we set `slotFactories` to empty array. Then you can remove `src/components/slots` folder.
+We add our resolved environment to widget `props.environment` property in `/src/widget.js`. Same as it works in default Merkur template. The custom element don't support Merkur slots. So we set `slotFactories` to empty array. Then you can remove `src/components/slots` folder. If you want to inline css bundle to resulted JS file then add `import cssBundle from '@merkur/integration-custom-element/cssBundle'` and define `inlineStyle` asset with cssBundle as source. At the end register your widget as custom element with `registerCustomElement` method which alive widget and connect widget with custom element. 
 
 ```javascript
 /* eslint-disable no-unused-vars */
