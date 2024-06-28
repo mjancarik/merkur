@@ -34,6 +34,11 @@ async function processAssetInFolder({
         path.join(staticFolder, folder, fileName),
         { encoding: 'utf-8' },
       );
+
+      // Remove source mapping URL comment for inline assets
+      asset.source = asset.source
+        .replace(/\/\*# sourceMappingURL=.*\.map \*\//g, '')
+        .trim();
     } catch (error) {
       // TODO remove (process.env.NODE_ENV !== 'development' && !cliConfig)
       if (
