@@ -5,7 +5,7 @@ title: HTTP client plugin - Merkur
 
 # HTTP client plugin
 
-The HTTP client plugin adds `http` property to your widget with a `request` method. Under the hood this plugin uses native browser [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API and for server-side the [node-fetch](https://www.npmjs.com/package/node-fetch) polyfill.
+The HTTP client plugin adds `http` property to your widget with a `request` method. Under the hood this plugin uses native browser and Node.js [fetch](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API) API.
 
 ## Installation
 
@@ -21,10 +21,6 @@ export const widgetProperties = {
   $plugins: [httpClientPlugin],
   // ... other properties
 };
-
-// ./src/polyfill.js
-import 'whatwg-fetch';
-import 'abort-controller/polyfill';
 ```
 
 After that we have an `http.request` method available on the widget.
