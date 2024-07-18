@@ -70,6 +70,9 @@ export default function ({ cliConfig, emitter,  }) {
       origin: 'http://localhost:4444'
     },
     HMR: true,
+    constant: {
+      HOST: 'localhost',
+    }
     onCliConfig, Function, //extending hook for cli config,
     onMerkurConfig: Function, // extending hook for merkur config,
     onTaskConfig: Function, // extending hook for task config,

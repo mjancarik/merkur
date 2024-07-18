@@ -253,8 +253,20 @@ emitter.on(
     return merkurConfig;
   },
 );
-emitter.on(EMITTER_EVENTS.MERKUR_CONFIG, function devServer({ merkurConfig }) {
-  merkurConfig.HMR = merkurConfig?.HMR ?? true;
+
+emitter.on(EMITTER_EVENTS.MERKUR_CONFIG, function hmr({ merkurConfig }) {
+  merkurConfig.HMR = merkurConfig.HMR ?? true;
+
+  return merkurConfig;
+});
+
+emitter.on(EMITTER_EVENTS.MERKUR_CONFIG, function constant({ merkurConfig }) {
+  merkurConfig.constant = {
+    ...{
+      HOST: 'localhost',
+    },
+    ...merkurConfig.constant,
+  };
 
   return merkurConfig;
 });

@@ -9,6 +9,10 @@ import express from 'express';
 import { createLogger } from './logger.mjs';
 import { COMMAND_NAME } from './commands/constant.mjs';
 
+function escapeToJSON(object) {
+  return JSON.stringify(object).replace(/<\/script/gi, '<\\/script');
+}
+
 function asyncMiddleware(fn) {
   return (req, res, next) => {
     Promise.resolve(fn(req, res, next)).catch(next);
@@ -135,6 +139,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
               merkurConfig,
               devClient,
               html,
+              escapeToJSON,
             }),
           );
         }),
@@ -167,7 +172,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           },
         });
       })
-      .listen(port, () => {
+      .listen({ port, host: merkurConfig.constant.HOST }, () => {
         logger.info(`Playground: ${chalk.green(`${protocol}//${host}`)}`);
         resolve(app);
       });

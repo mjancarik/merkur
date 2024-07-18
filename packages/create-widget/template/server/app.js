@@ -7,7 +7,9 @@ const morgan = require('morgan');
 
 const { resolveConfig } = require('@merkur/cli/server');
 
-const { merkurConfig } = resolveConfig();
+const {
+  merkurConfig: { widgetServer, devServer },
+} = resolveConfig();
 
 const {
   apiErrorMiddleware,
@@ -38,18 +40,17 @@ app
       crossOriginEmbedderPolicy: false,
     }),
   )
-  .use(cors())
-  .use(compression())
   .use(
-    merkurConfig.widgetServer.staticPath,
-    express.static(merkurConfig.widgetServer.staticFolder),
+    cors({
+      origin: devServer.origin,
+      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+    }),
   )
+  .use(compression())
+  .use(widgetServer.staticPath, express.static(widgetServer.staticFolder))
   .use(
-    merkurConfig.widgetServer.staticPath,
-    expressStaticGzip(
-      merkurConfig.widgetServer.staticFolder,
-      expressStaticConfig,
-    ),
+    widgetServer.staticPath,
+    expressStaticGzip(widgetServer.staticFolder, expressStaticConfig),
   )
   .use(widgetAPI.router)
   .use(error.router)
