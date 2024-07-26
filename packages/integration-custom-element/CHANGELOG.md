@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.36.4](https://github.com/mjancarik/merkur/compare/v0.36.3...v0.36.4) (2024-07-26)
+
+### Bug Fixes
+
+- 🐛 security improvements ([42212a5](https://github.com/mjancarik/merkur/commit/42212a5dccda7d55ae7c8cff827817d0173a08f3))
+
 ## [0.36.3](https://github.com/mjancarik/merkur/compare/v0.36.2...v0.36.3) (2024-06-02)
 
 ### Features
