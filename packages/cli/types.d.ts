@@ -68,8 +68,13 @@ export interface WidgetServer {
   clusters: number;
 }
 
+export interface Constant {
+  HOST: string;
+}
+
 export interface MerkurConfig {
   HMR: boolean;
+  constant: Constant;
   cliConfig: CLIConfig;
   extends: Extend[];
   task: {

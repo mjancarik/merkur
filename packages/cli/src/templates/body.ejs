@@ -5,7 +5,7 @@
 <div class="merkur-view"><%- html %></div>
 <script>
   window.addEventListener('load', function () {
-    __merkur__.create(<%- JSON.stringify(widgetProperties) %>)
+    __merkur__.create(<%- escapeToJSON(widgetProperties) %>)
       .then(function (widget) {
         widget.containerSelector = '.merkur-view';
         if (widget?.slot?.headline) {

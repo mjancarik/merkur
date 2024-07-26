@@ -47,14 +47,15 @@ export function merkurCustomElementCssBundlePlugin({ cliConfig, config }) {
                 encoding: 'utf8',
                 flag: 'r',
               });
-              css = css.replace(/\n/g, ' ');
+              css = JSON.stringify(css.replace(/\n/g, ' '));
 
               let js = fs.readFileSync(`${projectFolder}/${key}`, {
                 encoding: 'utf8',
                 flag: 'r',
               });
-              js = js.replace('{__bundle__:""}', `\`${css}\``);
-              js = js.replace('{ __bundle__: "" };', `\`${css}\``);
+
+              js = js.replace('{__bundle__:""}', `${css}`);
+              js = js.replace('{ __bundle__: "" };', `${css}`);
 
               fs.writeFileSync(`${projectFolder}/${key}`, js);
             } catch (error) {
