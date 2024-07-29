@@ -47,6 +47,7 @@ describe('createWidget method with router plugin', () => {
       "isBootstrapCalled": false,
       "isMounting": false,
       "isRouteActivated": false,
+      "options": {},
       "pathname": null,
       "route": null,
     },
@@ -151,6 +152,27 @@ describe('createWidget method with router plugin', () => {
 
       createRouter(widget, routes);
       jest.clearAllMocks();
+    });
+
+    it('should generate absolute url for defined options protocol and host', async () => {
+      createRouter(widget, routes, {
+        protocol: 'https:',
+        host: 'merkur.js.org',
+      });
+      await widget.mount();
+
+      expect(widget.router.link('home')).toEqual('https://merkur.js.org');
+      expect(widget.router.link('other')).toEqual(
+        'https://merkur.js.org/other',
+      );
+    });
+
+    it('should generate absolute url withour protocol for defined host', async () => {
+      createRouter(widget, routes, { host: 'merkur.js.org' });
+      await widget.mount();
+
+      expect(widget.router.link('home')).toEqual('//merkur.js.org');
+      expect(widget.router.link('other')).toEqual('//merkur.js.org/other');
     });
 
     it('should resolve route to home', async () => {

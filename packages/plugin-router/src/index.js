@@ -25,6 +25,7 @@ export function createRouter(widget, routes, options) {
   widget.$dependencies.link = generateUrls(widget.$dependencies.router, {
     stringifyQueryParams: (params) => new URLSearchParams(params).toString(),
   });
+  widget.$in.router.options = options;
 }
 
 export function routerPlugin() {
@@ -34,6 +35,7 @@ export function routerPlugin() {
 
       widget.$in.router = {
         route: null,
+        options: {},
         pathname: null,
         isMounting: false,
         isRouteActivated: false,
@@ -75,6 +77,20 @@ export function routerPlugin() {
   };
 }
 
+function getOrigin(widget) {
+  const { protocol, host } = widget.$in.router.options;
+
+  if (!host) {
+    return '';
+  }
+
+  if (!protocol) {
+    return `//${host}`;
+  }
+
+  return `${protocol.replace(':', '').trim()}://${host.trim()}`;
+}
+
 function routerAPI() {
   return {
     router: {
@@ -82,7 +98,14 @@ function routerAPI() {
         widget.emit(RouterEvents.REDIRECT, { url, ...data });
       },
       link(widget, routeName, data = {}) {
-        return widget.$dependencies.link(routeName, data);
+        const origin = getOrigin(widget);
+        const path = widget.$dependencies.link(routeName, data);
+
+        if (origin && path === '/') {
+          return origin;
+        }
+
+        return `${origin}${path}`;
       },
       getCurrentRoute(widget) {
         return widget.$in.router.route;

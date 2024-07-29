@@ -66,7 +66,7 @@ export default defineWidget({
 
 We have a `router.{link|redirect|getCurrentRoute}` methods available on the widget now.
 
-After that we must initialize universal router with own routes and options in setup phase of creation widget where structure for `routes` and `options` are defined from [universal-router](https://github.com/kriasoft/universal-router/blob/main/docs/api.md) and returns type from `route.action` method is defined by Merkur router plugin. It is a object with `PageView` as main rendered component for defined path and controller life cycle methods **(init, load, activate, deactivate, destroy)** which extend `load`, `mount`, `unmount` methods from `@merkur/plugin-component` and other controller custom methods with logic for defined path. 
+After that we must initialize universal router with own routes and options in setup phase of creation widget where structure for `routes` and `options` are defined from [universal-router](https://github.com/kriasoft/universal-router/blob/main/docs/api.md). The `options` are extended by Merkur with optional settings `protocol` and `host` for generating absolute url address from `link` method. Returns type from `route.action` method is defined by Merkur router plugin. It is a object with `PageView` as main rendered component for defined path and controller life cycle methods **(init, load, activate, deactivate, destroy)** which extend `load`, `mount`, `unmount` methods from `@merkur/plugin-component` and other controller custom methods with logic for defined path. 
 The `mount` method use under the hood `widget.viewFactory` method to resolving component for render. So we must set View in createViewFactory as route PageView. If you don't have slots you can set `slotFactories` as empty array or set as route slots. 
 
 ```javascript
@@ -81,7 +81,7 @@ export default defineWidget({
     slotFactories: [],
   })),
   $plugins: [componentPlugin, eventEmitterPlugin, routerPlugin, errorPlugin],
-  setup(widget) {
+  setup(widget) { 
     const routes = [
       {
         name: 'home',
@@ -113,8 +113,13 @@ export default defineWidget({
       },
     ];
 
+
     const options = {
       baseUrl: ``,
+      // other options from https://github.com/kriasoft/universal-router/blob/main/docs/api.md
+      // merkur specific options for generating absolute url from link method
+      protocol: 'https',
+      host: 'www.example.com',
     };
 
     createRouter(widget, routes, options);
@@ -148,26 +153,38 @@ export default defineWidget({
 });
 ```
 
-Merkur resolve current route from pathname in `widget.props`. So we must set it in `./server/routes/widget/widgetAPI.js`. Logic for defined `pathname` is on your use case. For example you can read it from `req.query.pathname` and you must update `merkur.config.mjs` file to send `pathname` from playground page to widget API throught `playground.widgetParams` method and of course change `playground.path` for extending playground page to works for more paths than default '/' path.
+Merkur resolve current route from pathname in `widget.props`. So we must set it in `./server/routes/widget/widgetAPI.js`. Logic for defined `pathname` is on your use case. For example you can read it from `req.query.pathname`. The `req.query.*` or `req.body.*` are inputs to your API endpoint widget. You must validate it before you use in `widget.props`. 
 
-```javascrip
+```javascript
 // ./server/routes/widget/widgetAPI.js
+function getStringQueryParams(req) {
+	return Object.entries(req.query).reduce((params, [key, value]) => {
+		params[key] = Array.isArray(value) ? value.pop() : value;
+
+		return params;
+	}, {});
+}
+
 router.get(
   '/widget',
   asyncMiddleware(async (req, res) => {
+    const { name, pathname } = getStringQueryParams(req);
+
     const merkurModule = requireUncached(`${buildFolder}/widget.cjs`);
     const widget = await merkurModule.createWidget({
       props: {
-        name: req.query.name,
+        name,
         environment: widgetEnvironment,
-        pathname: req.query.pathname,
+        pathname,
       },
     });
 
     const { html, slot = {} } = await widget.mount();
 ```
 
-```javascrip
+ After that you must update `merkur.config.mjs` file to send `pathname` from playground page to widget API through `playground.widgetParams` method and of course change `playground.path` for extending playground page to works for more paths than default '/' path.
+
+```javascript
 // ./merkur.config.mjs
 
 /**
@@ -198,7 +215,7 @@ Returned object from `route.action` method for current route.
  - name - route defined name
  - data - route arguments
 
-Returns url for route name with filling route pattern with data.
+Returns url for route name with filling route pattern with data. If you define `protocol` and `host` settings in createRouter options then the url address generated from link method will be absolute. 
 
 ### redirect
  - url - redirecting url
