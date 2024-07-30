@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.36.5](https://github.com/mjancarik/merkur/compare/v0.36.4...v0.36.5) (2024-07-30)
+
+### Features
+
+- 🎸 add possibility to generate absolute url address ([b2c01dd](https://github.com/mjancarik/merkur/commit/b2c01dd49dbc19ae62d66df9a37631bc0bcedd78))
+
 ## [0.36.4](https://github.com/mjancarik/merkur/compare/v0.36.3...v0.36.4) (2024-07-26)
 
 ### Bug Fixes
