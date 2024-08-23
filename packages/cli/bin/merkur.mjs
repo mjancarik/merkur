@@ -15,6 +15,7 @@ program
   .name('merkur')
   .description('CLI for Merkur framework.')
   .option('--writeToDisk', 'Write built files to disk.')
+  .option('--sourcemap', 'Generate sourcemap.')
   .option('--runTask [runTask...]', 'Run only defined task.')
   .option('--outFile <string>', 'Server out file configuration in es-build.')
   .option('--port <number>', 'Widget server port.')

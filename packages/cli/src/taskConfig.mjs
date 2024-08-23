@@ -9,6 +9,7 @@ export async function createTaskConfig({
     config: {
       isServer: definition?.build?.platform === 'node',
       writeToDisk: definition?.build?.write ?? cliConfig.writeToDisk,
+      sourcemap: definition?.build?.sourcemap ?? cliConfig.sourcemap,
       ...definition.config,
     },
     definition,

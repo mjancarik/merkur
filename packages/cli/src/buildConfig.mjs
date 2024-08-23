@@ -5,6 +5,7 @@ import manifestPlugin from 'esbuild-plugin-manifest';
 import { EMITTER_EVENTS, emitter, RESULT_KEY } from './emitter.mjs';
 import { memoryStaticPlugin } from './plugins/memoryStaticPlugin.mjs';
 import { metaPlugin } from './plugins/metaPlugin.mjs';
+import { excludeVendorsFromSourceMapPlugin } from './plugins/excludeVendorsFromSourceMapPlugin.mjs';
 
 export async function createBuildConfig({
   definition,
@@ -13,7 +14,7 @@ export async function createBuildConfig({
   cliConfig,
   context,
 }) {
-  const { isServer, writeToDisk } = config;
+  const { isServer, writeToDisk, sourcemap } = config;
   const { isProduction, outFile, staticFolder, projectFolder } = cliConfig;
 
   const entries = await getEntries({ merkurConfig, cliConfig });
@@ -23,7 +24,7 @@ export async function createBuildConfig({
       entryPoints: isServer ? entries.server : entries.client,
       bundle: true,
       treeShaking: isProduction,
-      sourcemap: true,
+      sourcemap,
       minify: isProduction,
       target: 'es2022',
       write: writeToDisk,
@@ -60,6 +61,7 @@ export async function createBuildConfig({
             },
           }),
         !writeToDisk && memoryStaticPlugin,
+        sourcemap && excludeVendorsFromSourceMapPlugin,
         metaPlugin,
         ...(definition.build?.plugins ?? []),
       ]
