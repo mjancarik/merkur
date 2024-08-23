@@ -10,6 +10,7 @@ export async function createCLIConfig({ args, command } = {}) {
     command: command ?? 'unknown',
     watch: args?.watch ?? !isProduction,
     writeToDisk: args?.writeToDisk ?? isProduction,
+    sourcemap: args?.sourcemap ?? !isProduction,
     outFile: args?.outFile ?? './build/widget.cjs',
     port: args?.port ?? 4444,
     runTask: args?.runTask ?? [],
