@@ -55,6 +55,7 @@ export function createSvelteWidget({
           slot: Object.keys(slot).reduce<SSRMountResult['slot']>((acc, cur) => {
             acc[cur] = {
               name: slot[cur].name,
+              containerSelector: slot[cur].containerSelector,
               html: renderView(slot[cur].View),
             };
 
