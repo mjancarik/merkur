@@ -22,7 +22,7 @@ export type MapViewArgs = {
 
 export type SSRMountResult = {
   html: string;
-  slot: Record<string, { name: string; html: string }>;
+  slot: Record<string, { name: string; html: string, containerSelector?: string }>;
 };
 
 export interface WidgetState {}
@@ -91,6 +91,7 @@ export interface ViewFactoryResult {
 
 export interface ViewFactorySlotType {
   name: string;
+  containerSelector?: string, 
   View: ViewType;
 }
 

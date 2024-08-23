@@ -1,6 +1,7 @@
 <% if(widgetProperties?.slot?.headline?.html){ %>
-  <div class="headline-view"><%- widgetProperties && widgetProperties.slot && widgetProperties.slot.headline &&
-      widgetProperties.slot.headline.html %></div>
+  <div class="<%= (widgetProperties?.slot?.title?.containerSelector ?? 'headline-view').replace('.', '') %>">
+    <%- widgetProperties?.slot?.headline?.html %>
+  </div>
 <% } %>
 <div class="merkur-view"><%- html %></div>
 <script>
