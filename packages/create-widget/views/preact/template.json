@@ -3,9 +3,8 @@
     "@merkur/preact": "0.36.0"
   },
   "devDependencies": {
-    "enzyme": "3.11.0",
-    "identity-obj-proxy": "^3.0.0",
-    "enzyme-adapter-preact-pure": "4.1.0",
-    "enzyme-to-json": "3.6.2"
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/preact": "^3.2.4",
+    "identity-obj-proxy": "^3.0.0"
   }
 }
