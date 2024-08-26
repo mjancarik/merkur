@@ -98,6 +98,7 @@ emitter.on(
       },
       es13: {
         name: 'es13',
+        folder: 'es13',
         build: {
           platform: 'browser',
           outdir: `${staticFolder}/es13`,
@@ -106,6 +107,7 @@ emitter.on(
       },
       es9: {
         name: 'es9',
+        folder: 'es9',
         build: {
           platform: 'browser',
           target: 'es2018',
