@@ -1,8 +1,13 @@
 /**
  * @jest-environment jsdom
  */
-
-import { shallow } from 'enzyme';
+import {
+  render,
+  fireEvent,
+  cleanup,
+  prettyDOM,
+  screen,
+} from '@testing-library/preact';
 
 import { createMerkurWidget } from '@merkur/core';
 
@@ -15,15 +20,36 @@ describe('View', () => {
   beforeEach(async () => {
     widget = await createMerkurWidget({
       ...widgetProperties,
-      mount() {
-        return shallow(View(widget));
+      mount(widget) {
+        widget.$external.result = render(View(widget));
+        return widget.$external.result;
+      },
+      unmount() {
+        cleanup();
+      },
+      update() {
+        return widget.$external.result.rerender(View(widget));
       },
     });
   });
 
-  it('should display main view', async () => {
-    const wrapper = await widget.mount();
+  afterEach(() => {
+    widget.unmount();
+  });
 
-    expect(wrapper).toMatchSnapshot();
+  it('should display main view', async () => {
+    const { container } = await widget.mount();
+
+    expect(prettyDOM(container)).toMatchSnapshot();
+  });
+
+  it('should increase counter', async () => {
+    const { container } = await widget.mount();
+
+    const button = screen.getByText('increase counter');
+
+    fireEvent.click(button);
+
+    expect(prettyDOM(container)).toMatchSnapshot();
   });
 });
