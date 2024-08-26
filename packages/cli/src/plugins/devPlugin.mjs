@@ -72,7 +72,14 @@ export function devPlugin({ definition, merkurConfig, cliConfig }) {
         });
 
         client.on('open', function open() {
-          if (merkurConfig.HMR && !(cliConfig.writeToDisk && changed.length === 0 && errors.length === 0)) {
+          if (
+            merkurConfig.HMR &&
+            !(
+              cliConfig.writeToDisk &&
+              changed.length === 0 &&
+              errors.length === 0
+            )
+          ) {
             client.send(
               JSON.stringify({
                 to: 'browser',
