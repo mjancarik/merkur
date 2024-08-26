@@ -13,7 +13,7 @@ export async function createCLIConfig({ args, command } = {}) {
     sourcemap: args?.sourcemap ?? !isProduction,
     outFile: args?.outFile ?? './build/widget.cjs',
     port: args?.port ?? 4444,
-    runTask: args?.runTask ?? [],
+    runTasks: args?.runTasks ?? [],
     devServerPort: args?.devServerPort ?? 4445,
     projectFolder: args?.projectFolder ?? process.cwd(),
     cliFolder: import.meta.dirname,

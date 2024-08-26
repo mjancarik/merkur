@@ -84,7 +84,7 @@ async function registerHooks({ merkurConfig }) {
 emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function defaultTask({ merkurConfig, cliConfig }) {
-    const { staticFolder, runTask } = cliConfig;
+    const { staticFolder, runTasks } = cliConfig;
 
     merkurConfig.task = merkurConfig.task ?? {};
 
@@ -130,9 +130,9 @@ emitter.on(
       );
     });
 
-    if (runTask.length !== 0) {
+    if (runTasks.length !== 0) {
       Object.keys(merkurConfig.task)
-        .filter((taskName) => !runTask.includes(taskName))
+        .filter((taskName) => !runTasks.includes(taskName))
         .forEach((taskKey) => {
           delete merkurConfig.task[taskKey];
         });
