@@ -78,7 +78,7 @@ async function createAssets({
     folders ||
     Object.values(merkurConfig?.task)
       .filter((task) => task.build.platform !== 'node')
-      .map((task) => task.name);
+      .map((task) => task.folder);
 
   const processedAssets = await folders.reduce(
     async (assets, folder) => {
