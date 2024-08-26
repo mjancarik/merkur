@@ -48,6 +48,7 @@ export async function createBuildConfig({
         !isServer &&
           manifestPlugin({
             shortNames: true,
+            append: true,
             generate: (manifest) => {
               return Object.keys(manifest).reduce((result, originalKey) => {
                 const key = originalKey
