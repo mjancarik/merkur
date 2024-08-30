@@ -1,4 +1,5 @@
 import fs from 'node:fs/promises';
+import path from 'node:path';
 
 import { createLogger } from '../logger.mjs';
 import { time } from '../utils.mjs';
@@ -31,7 +32,7 @@ export function metaPlugin({ definition, config, cliConfig }) {
 
           metaInformation = await Promise.all(
             generatedFiles.map(async (file) => {
-              const stat = await fs.stat(`${projectFolder}/${file}`);
+              const stat = await fs.stat(path.resolve(`${projectFolder}/${file}`));
 
               return { stat, file };
             }),

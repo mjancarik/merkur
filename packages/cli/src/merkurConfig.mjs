@@ -16,10 +16,10 @@ export async function createMerkurConfig({ cliConfig, context, args } = {}) {
 
   try {
     logger.debug(
-      `Load merkur config on path ${projectFolder}/${MERKUR_CONFIG_FILE}`,
+      `Load merkur config on path ${path.resolve(`${projectFolder}/${MERKUR_CONFIG_FILE}`)}`,
     );
 
-    const file = await import(`${projectFolder}/${MERKUR_CONFIG_FILE}`);
+    const file = await import(path.resolve(`${projectFolder}/${MERKUR_CONFIG_FILE}`));
     merkurConfig = await file.default({
       cliConfig,
       context,
@@ -28,6 +28,7 @@ export async function createMerkurConfig({ cliConfig, context, args } = {}) {
     });
   } catch (error) {
     logger.error(error);
+    process.exit(1);
   }
 
   cliConfig = { ...cliConfig, ...(merkurConfig?.cliConfig ?? {}), ...args };
@@ -101,7 +102,7 @@ emitter.on(
         folder: 'es13',
         build: {
           platform: 'browser',
-          outdir: `${staticFolder}/es13`,
+          outdir: path.resolve(`${staticFolder}/es13`),
           plugins: [devPlugin],
         },
       },
@@ -111,7 +112,7 @@ emitter.on(
         build: {
           platform: 'browser',
           target: 'es2018',
-          outdir: `${staticFolder}/es9`,
+          outdir: path.resolve(`${staticFolder}/es9`),
         },
       },
     };
@@ -172,8 +173,8 @@ emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function defaultEntries({ merkurConfig, cliConfig }) {
     merkurConfig.defaultEntries = {
-      client: [`${cliConfig.projectFolder}/src/entries/client.js`],
-      server: [`${cliConfig.projectFolder}/src/entries/server.js`],
+      client: [path.resolve(`${cliConfig.projectFolder}/src/entries/client.js`)],
+      server: [path.resolve(`${cliConfig.projectFolder}/src/entries/server.js`)],
       ...merkurConfig.defaultEntries,
     };
 
@@ -185,8 +186,8 @@ emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function playground({ merkurConfig, cliConfig }) {
     merkurConfig.playground = {
-      template: `${cliConfig.cliFolder}/templates/playground.ejs`,
-      templateFolder: `${cliConfig.cliFolder}/templates`,
+      template: path.resolve(`${cliConfig.cliFolder}/templates/playground.ejs`),
+      templateFolder: path.resolve(`${cliConfig.cliFolder}/templates`),
       path: '/',
       widgetHandler: async (req) => {
         const { protocol, host } = merkurConfig.widgetServer;

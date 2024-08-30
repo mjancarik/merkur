@@ -1,4 +1,5 @@
 import { readdir } from 'node:fs/promises';
+import path from 'node:path';
 
 import manifestPlugin from 'esbuild-plugin-manifest';
 
@@ -39,7 +40,7 @@ export async function createBuildConfig({
 
       // Alias
       alias: {
-        '@widget': `${projectFolder}/src/widget.js`,
+        '@widget': path.resolve(`${projectFolder}/src/widget.js`),
         ...definition.build.alias,
       },
 
@@ -91,14 +92,14 @@ async function getEntries({ merkurConfig, cliConfig }) {
   };
 
   try {
-    const files = await readdir(`${cliConfig.projectFolder}/src/entries/`);
+    const files = await readdir(path.resolve(`${cliConfig.projectFolder}/src/entries/`));
     const FILENAMES = ['client', 'server'];
 
     files.forEach((file) => {
       FILENAMES.forEach((filename) => {
         if (file.startsWith(filename)) {
           entries[filename] = [
-            `${cliConfig.projectFolder}/src/entries/${file}`,
+            path.resolve(`${cliConfig.projectFolder}/src/entries/${file}`),
           ];
         }
       });
