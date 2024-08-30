@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "esbuild-svelte": "^0.8.0",
-    "svelte": "^3.59.2",
+    "svelte": "^4.2.19",
     "svelte-loader": "^3.2.0"
   }
 }
