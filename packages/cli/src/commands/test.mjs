@@ -9,7 +9,7 @@ import { createLogger } from '../logger.mjs';
 import { createMerkurConfig } from '../merkurConfig.mjs';
 import { handleExit } from '../handleExit.mjs';
 
-export async function test({ args, command }) {
+export async function test({ args, commandArgs, command }) {
   const context = await createContext();
   let baseCliConfig = await createCLIConfig({ args, command });
 
@@ -22,10 +22,10 @@ export async function test({ args, command }) {
 
   await handleExit({ context });
 
-  args.unshift('./jest.config.js');
-  args.unshift('-c');
+  commandArgs.unshift('./jest.config.js');
+  commandArgs.unshift('-c');
 
-  const runner = spawn('jest', args, {
+  const runner = spawn('jest', commandArgs, {
     env: {
       ...process.env,
       PATH: npmRunPath(),
@@ -37,7 +37,7 @@ export async function test({ args, command }) {
   });
 
   runner.on('spawn', () => {
-    logger.debug(`Run test runner ${args.join(', ')}`);
+    logger.debug(`Run test runner ${commandArgs.join(', ')}`);
   });
   runner.on('exit', (code, signal) => {
     logger.info(`child process exited with code ${code} and signal ${signal}`);
