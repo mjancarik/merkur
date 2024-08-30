@@ -6,7 +6,7 @@ const { merkurConfig } = resolveConfig();
 
 const { app } = require('./app');
 
-const { widgetServer, constant } = merkurConfig;
+const { widgetServer } = merkurConfig;
 
 process.on('uncaughtException', (error) => {
   console.error(error);
@@ -17,7 +17,7 @@ process.on('unhandledRejection', (error) => {
 });
 
 if (!widgetServer.clusters || !cluster.isMaster) {
-  const server = app.listen({ port: widgetServer.port, host: constant.HOST });
+  const server = app.listen({ port: widgetServer.port });
 
   const handleExit = () => {
     server.close(() => {
