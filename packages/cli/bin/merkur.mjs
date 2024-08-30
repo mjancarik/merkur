@@ -29,20 +29,6 @@ const verboseOption = new Option('--verbose', 'Verbose mode which show debug inf
 program
   .name('merkur')
   .description('CLI for Merkur framework.')
-  // .option('--writeToDisk', 'Write built files to disk.')
-  // .option('--sourcemap', 'Generate sourcemap.')
-  // .option('--runTasks [runTasks...]', 'Run only defined tasks.')
-  // .option('--outFile <string>', 'Server out file configuration in es-build.')
-  // .option('--port <number>', 'Widget server port.')
-  // .option('--devServerPort <number>', 'Dev server port.')
-  // .option('--projectFolder <string>', 'Project folder.')
-  // .option('--buildFolder <string>', 'Build folder.')
-  // .option('--staticFolder <string>', 'Static folder.')
-  // .option('--staticPath <string>', 'The static path for dev server and widget server.')
-  // .option('--hasRunDevServer', 'Flag for starting dev server')
-  // .option('--hasRunWidgetServer', 'Flag for starting widget server')
-  // .option('--inspect', 'Debugging widget server')
-  // .option('--verbose', 'Verbose mode which show debug information.')
   .version(packageFile.version);
 
 program.command(COMMAND_NAME.DEV)
