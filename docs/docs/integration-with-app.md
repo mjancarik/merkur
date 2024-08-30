@@ -296,6 +296,23 @@ Below you can see visualization of how the react component handles synchronizati
   <img class="responsive" src="{{ '/assets/images/merkur-integration-lifecycle.png?v=' | append: site.github.build_revision | relative_url }}" alt="Merkur - integration React - lifecycle methods" />
 </a>
 
+If you have some problems with integration you can turn on debug mode which can be helpful for solving your problems. 
+
+```jsx
+return (
+  <MerkurWidget
+      debug={true}
+      widgetProperties={widgetProperties}
+      onWidgetMounted={widget => this._widgetMounted()}
+      onWidgetUnmouting={widget => this._widgetUnmounting()}
+      onError={error => this._handleError(error)}>
+    <div>
+      Fallback for undefined widgetProperties
+    </div>
+  </MerkurWidget>
+);
+```
+
 
 ### Slots
 
