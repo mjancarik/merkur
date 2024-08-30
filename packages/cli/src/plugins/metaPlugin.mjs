@@ -32,7 +32,9 @@ export function metaPlugin({ definition, config, cliConfig }) {
 
           metaInformation = await Promise.all(
             generatedFiles.map(async (file) => {
-              const stat = await fs.stat(path.resolve(`${projectFolder}/${file}`));
+              const stat = await fs.stat(
+                path.resolve(`${projectFolder}/${file}`),
+              );
 
               return { stat, file };
             }),

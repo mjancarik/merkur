@@ -8,7 +8,6 @@ import { createContext } from '../context.mjs';
 import { createLogger } from '../logger.mjs';
 import { createMerkurConfig } from '../merkurConfig.mjs';
 import { handleExit } from '../handleExit.mjs';
-import cli from '@merkur/integration-custom-element/cli';
 
 export async function test({ args, commandArgs, command }) {
   const context = await createContext();
@@ -24,7 +23,7 @@ export async function test({ args, commandArgs, command }) {
   await handleExit({ context });
 
   commandArgs.unshift('./jest.config.js');
-  commandArgs.unshift('-c')
+  commandArgs.unshift('-c');
 
   const runner = spawn('jest', commandArgs, {
     env: {

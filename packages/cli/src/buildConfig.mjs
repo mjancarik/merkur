@@ -92,7 +92,9 @@ async function getEntries({ merkurConfig, cliConfig }) {
   };
 
   try {
-    const files = await readdir(path.resolve(`${cliConfig.projectFolder}/src/entries/`));
+    const files = await readdir(
+      path.resolve(`${cliConfig.projectFolder}/src/entries/`),
+    );
     const FILENAMES = ['client', 'server'];
 
     files.forEach((file) => {

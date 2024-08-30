@@ -116,7 +116,10 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           }
 
           const devClient = isDevCommand
-            ? fs.readFileSync(path.resolve(`${cliFolder}/../lib/devClient.mjs`), 'utf8')
+            ? fs.readFileSync(
+                path.resolve(`${cliFolder}/../lib/devClient.mjs`),
+                'utf8',
+              )
             : '';
 
           const playgroundTemplate = ejs.compile(

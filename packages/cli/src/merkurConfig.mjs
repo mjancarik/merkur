@@ -19,7 +19,9 @@ export async function createMerkurConfig({ cliConfig, context, args } = {}) {
       `Load merkur config on path ${path.resolve(`${projectFolder}/${MERKUR_CONFIG_FILE}`)}`,
     );
 
-    const file = await import(path.resolve(`${projectFolder}/${MERKUR_CONFIG_FILE}`));
+    const file = await import(
+      path.resolve(`${projectFolder}/${MERKUR_CONFIG_FILE}`)
+    );
     merkurConfig = await file.default({
       cliConfig,
       context,
@@ -173,8 +175,12 @@ emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function defaultEntries({ merkurConfig, cliConfig }) {
     merkurConfig.defaultEntries = {
-      client: [path.resolve(`${cliConfig.projectFolder}/src/entries/client.js`)],
-      server: [path.resolve(`${cliConfig.projectFolder}/src/entries/server.js`)],
+      client: [
+        path.resolve(`${cliConfig.projectFolder}/src/entries/client.js`),
+      ],
+      server: [
+        path.resolve(`${cliConfig.projectFolder}/src/entries/server.js`),
+      ],
       ...merkurConfig.defaultEntries,
     };
 
