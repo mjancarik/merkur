@@ -1,5 +1,5 @@
 <% if(widgetProperties?.slot?.headline?.html){ %>
-  <div class="<%= (widgetProperties?.slot?.title?.containerSelector ?? 'headline-view').replace('.', '') %>">
+  <div class="<%= (widgetProperties?.slot?.headline?.containerSelector ?? 'headline-view').replace('.', '') %>">
     <%- widgetProperties?.slot?.headline?.html %>
   </div>
 <% } %>
@@ -9,7 +9,7 @@
     __merkur__.create(<%- escapeToJSON(widgetProperties) %>)
       .then(function (widget) {
         widget.containerSelector = '.merkur-view';
-        if (widget?.slot?.headline) {
+        if (widget?.slot?.headline && !widget?.slot?.headline?.containerSelector) {
           widget.slot.headline.containerSelector = '.headline-view';
         }
 
