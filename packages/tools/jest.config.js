@@ -1,7 +1,7 @@
 const testGroupRegexes = {
   unit: '(/__tests__/).*(Spec|test)\\.[jt]sx?$',
   integration: '(/__integration__/).*(Spec|test)\\.[jt]sx?$',
-  all: '(/__integration__/)|(/__tests__/).*(Spec|test)\\.[jt]sx?$',
+  all: '((/__integration__/)|(/__tests__/)).*(Spec|test)\\.[jt]sx?$',
 };
 
 const testGroup =
