@@ -73,7 +73,14 @@ function httpClientAPI() {
         );
 
         if (!response.ok) {
-          return Promise.reject({ request, response });
+          const error = new Error(`${response.statusText}: ${request.url}`, {
+            cause: { request, response },
+          });
+          // keep compatablity
+          error.request = request;
+          error.response = response;
+
+          return Promise.reject(error);
         }
 
         return { request, response };
@@ -94,10 +101,10 @@ async function runTransformers(widget, transformers, method, ...rest) {
 
 function getFetchAPI() {
   if (typeof window === 'undefined') {
-    return global.fetch;
+    return global?.fetch;
   }
 
-  return window.fetch.bind(window);
+  return window?.fetch?.bind?.(window);
 }
 
 export function transformQuery() {
