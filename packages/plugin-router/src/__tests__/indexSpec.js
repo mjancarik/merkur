@@ -44,6 +44,7 @@ describe('createWidget method with router plugin', () => {
       "event": {},
     },
     "router": {
+      "context": null,
       "isBootstrapCalled": false,
       "isMounting": false,
       "isRouteActivated": false,
@@ -86,6 +87,7 @@ describe('createWidget method with router plugin', () => {
     "pathname": "/my-route",
   },
   "router": {
+    "getCurrentContext": [Function],
     "getCurrentRoute": [Function],
     "link": [Function],
     "redirect": [Function],

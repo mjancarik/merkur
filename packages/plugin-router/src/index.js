@@ -21,7 +21,27 @@ const ENV =
     : DEV;
 
 export function createRouter(widget, routes, options) {
-  widget.$dependencies.router = new UniversalRouter(routes, options);
+  let wrappedRoutes = routes.reduce((result, route) => {
+    const clonedRoute = { ...route };
+
+    if (isFunction(clonedRoute.action)) {
+      const originAction = clonedRoute.action;
+      clonedRoute.action = (...rest) => {
+        // @TODO UniversalRouter don't parse query from url so context.params are only named route parameters
+        // For some application can be helpful to have named route parameters and query parameters merged
+        // because link method support both named parameters and query parameters
+        widget.$in.router.context = rest[0];
+
+        return originAction(...rest);
+      };
+    }
+
+    result.push(clonedRoute);
+
+    return result;
+  }, []);
+
+  widget.$dependencies.router = new UniversalRouter(wrappedRoutes, options);
   widget.$dependencies.link = generateUrls(widget.$dependencies.router, {
     stringifyQueryParams: (params) => new URLSearchParams(params).toString(),
   });
@@ -35,6 +55,7 @@ export function routerPlugin() {
 
       widget.$in.router = {
         route: null,
+        context: null,
         options: {},
         pathname: null,
         isMounting: false,
@@ -110,6 +131,9 @@ function routerAPI() {
       getCurrentRoute(widget) {
         return widget.$in.router.route;
       },
+      getCurrentContext(widget) {
+        return widget.$in.router.context;
+      },
     },
   };
 }
@@ -143,6 +167,7 @@ async function loadHook(widget, originalLoad, ...rest) {
     : Promise.resolve({});
   const routeStatePromise = plugin.route.load(widget, {
     route: plugin.route,
+    context: plugin.context,
     args: rest,
     globalState: globalStatePromise,
   });
@@ -168,7 +193,11 @@ async function mountHook(widget, originalMount, ...rest) {
   const result = await originalMount(...rest);
 
   if (plugin.isMounting && isFunction(plugin.route.init)) {
-    await plugin.route.init(widget, { route: plugin.route, args: rest });
+    await plugin.route.init(widget, {
+      route: plugin.route,
+      context: plugin.context,
+      args: rest,
+    });
   }
 
   if (
@@ -177,7 +206,11 @@ async function mountHook(widget, originalMount, ...rest) {
     !plugin.isRouteActivated
   ) {
     plugin.isRouteActivated = true;
-    plugin.route.activate(widget, { route: plugin.route, args: rest });
+    plugin.route.activate(widget, {
+      route: plugin.route,
+      context: plugin.context,
+      args: rest,
+    });
   }
 
   plugin.isMounting = false;
@@ -197,7 +230,11 @@ async function updateHook(widget, originalUpdate, ...rest) {
     !plugin.isRouteActivated
   ) {
     plugin.isRouteActivated = true;
-    plugin.route.activate(widget, { route: plugin.route, args: rest });
+    plugin.route.activate(widget, {
+      route: plugin.route,
+      context: plugin.context,
+      args: rest,
+    });
   }
 
   return result;
@@ -238,9 +275,10 @@ async function resolveRoute(widget) {
 
 async function setupRouterCycle(widget, ...rest) {
   const route = await resolveRoute(widget);
+  const plugin = widget.$in.router;
 
   if (isFunction(route.init)) {
-    await route.init(widget, { route, args: rest });
+    await route.init(widget, { route, context: plugin.context, args: rest });
   }
 }
 
@@ -251,11 +289,19 @@ async function tearDownRouterCycle(widget, ...rest) {
 
   if (route) {
     if (isFunction(route.deactivate) && isRouteActivated === true) {
-      await route.deactivate(widget, { route, args: rest });
+      await route.deactivate(widget, {
+        route,
+        context: plugin.context,
+        args: rest,
+      });
     }
 
     if (isFunction(route.destroy)) {
-      await route.destroy(widget, { route, args: rest });
+      await route.destroy(widget, {
+        route,
+        context: plugin.context,
+        args: rest,
+      });
     }
   }
 
