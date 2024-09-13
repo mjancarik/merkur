@@ -72,7 +72,7 @@ The package.json contains predefined dependencies and defines some scripts, whic
 
 ### merkur.config.mjs
 
-The configuration file for Merkur [CLI]({{ '/docs/merkur-cli' | relative_url }})
+The [configuration file]({{ '/docs/merkur-config' | relative_url }}) for Merkur [CLI]({{ '/docs/merkur-cli' | relative_url }})
 
 ### src
 
