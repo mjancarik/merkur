@@ -70,6 +70,14 @@
       "url": "/docs/register-custom-element"
     },
     {
+      "title": "CLI",
+      "url": "/docs/merkur-cli"
+    },
+    {
+      "title": "Merkur config file",
+      "url": "/docs/merkur-config"
+    },
+    {
       "title": "Plugins",
       "url": "/docs/plugins"
     },

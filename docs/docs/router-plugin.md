@@ -5,7 +5,7 @@ title: Router plugin - Merkur
 
 # Router plugin
 
-The Merkur router plugin is integration of [universal-router](https://www.npmjs.com/package/universal-router) to Merkur ecosystem and extend `@merkur/plugin-component` for activation only part of widget functionality (controller) for defined path. The plugin adds `router` property to your widget with a `link`, `redirect` and `getCurrentRoute` methods.
+The Merkur router plugin is integration of [universal-router](https://www.npmjs.com/package/universal-router) to Merkur ecosystem and extend `@merkur/plugin-component` for activation only part of widget functionality (controller) for defined path. The plugin adds `router` property to your widget with a `link`, `redirect`, `getCurrentRoute` and `getCurrentContext`(context from [universal-router](https://www.npmjs.com/package/universal-router)) methods.
 
 ## Installation
 
@@ -64,7 +64,7 @@ export default defineWidget({
 
 ```
 
-We have a `router.{link|redirect|getCurrentRoute}` methods available on the widget now.
+We have a `router.{link|redirect|getCurrentRoute|getCurrentContext}` methods available on the widget now.
 
 After that we must initialize universal router with own routes and options in setup phase of creation widget where structure for `routes` and `options` are defined from [universal-router](https://github.com/kriasoft/universal-router/blob/main/docs/api.md). The `options` are extended by Merkur with optional settings `protocol` and `host` for generating absolute url address from `link` method. Returns type from `route.action` method is defined by Merkur router plugin. It is a object with `PageView` as main rendered component for defined path and controller life cycle methods **(init, load, activate, deactivate, destroy)** which extend `load`, `mount`, `unmount` methods from `@merkur/plugin-component` and other controller custom methods with logic for defined path. 
 The `mount` method use under the hood `widget.viewFactory` method to resolving component for render. So we must set View in createViewFactory as route PageView. If you don't have slots you can set `slotFactories` as empty array or set as route slots. 
@@ -210,6 +210,9 @@ Now you have install router plugin to your widget.
 
 ### getCurrentRoute
 Returned object from `route.action` method for current route. 
+
+### getCurrentContext
+Returned context(first argument) from `route.action` method for current route. 
 
 ### link
  - name - route defined name
