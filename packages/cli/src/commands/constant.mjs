@@ -3,4 +3,5 @@ export const COMMAND_NAME = {
   DEV: 'dev',
   BUILD: 'build',
   TEST: 'test',
+  CUSTOM: 'custom',
 };

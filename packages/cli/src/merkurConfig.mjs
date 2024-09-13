@@ -194,6 +194,9 @@ emitter.on(
     merkurConfig.playground = {
       template: path.resolve(`${cliConfig.cliFolder}/templates/playground.ejs`),
       templateFolder: path.resolve(`${cliConfig.cliFolder}/templates`),
+      serverTemplateFolder: path.resolve(
+        `${cliConfig.projectFolder}/server/playground/templates`,
+      ),
       path: '/',
       widgetHandler: async (req) => {
         const { protocol, host } = merkurConfig.widgetServer;

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
-import { Command, Option } from 'commander';
+import { Command, Option, Argument } from 'commander';
 import { dev } from '../src/commands/dev.mjs';
 import { build } from '../src/commands/build.mjs';
 import { start } from '../src/commands/start.mjs';
 import { test } from '../src/commands/test.mjs';
+import { custom, CUSTOM_PART } from '../src/commands/custom.mjs';
 import { COMMAND_NAME } from '../src/commands/constant.mjs';
 
 // eslint-disable-next-line 
@@ -66,6 +67,7 @@ program.command(COMMAND_NAME.DEV)
 
 program
   .command(COMMAND_NAME.BUILD)
+  .description('Build command')
   .addOption(writeToDiskOption)
   .addOption(sourcemapOption)
   .addOption(runTasksOption)
@@ -85,6 +87,7 @@ program
 
 program
   .command(COMMAND_NAME.START)
+  .description('Start widget server')
   .addOption(portOption)
   .addOption(devServerPortOption)
   .addOption(projectFolderOption)
@@ -106,6 +109,7 @@ program
 
 program
   .command(COMMAND_NAME.TEST)
+  .description('Test widget')
   .allowUnknownOption()
   .action(async (options, cmd) => {
   process.env.NODE_ENV = process.env.NODE_ENV ?? 'test';
@@ -116,5 +120,20 @@ program
 
     await test({ args, commandArgs: cmd.args, command: COMMAND_NAME.TEST });
 });
+
+program
+  .command(COMMAND_NAME.CUSTOM)
+  .description('Customize template')
+  .addArgument(new Argument('<part>', 'custom part').choices(Object.values(CUSTOM_PART)))
+  .addOption(verboseOption)
+  .allowUnknownOption()
+  .action(async (part, options, cmd) => {
+    const args = {
+      ...options,
+      part,
+    };
+
+    await custom({ args, commandArgs: cmd.args, command: COMMAND_NAME.CUSTOM });
+  });
 
 program.parse(process.argv);

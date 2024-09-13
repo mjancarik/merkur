@@ -30,6 +30,7 @@ export type Extend =
 
 export interface Task {
   name: 'es13' | 'es9' | 'node' | string;
+  folder: 'es13' | 'es9' | string;
   build: BuildOptions;
   [key: string]: any;
 }
@@ -46,6 +47,7 @@ export interface DevServer {
 export interface Playground {
   template: string;
   templateFolder: string;
+  serverTemplateFolder: string;
   path: string;
   widgetHandler(req: Request, res: Response): Record<string, unknown>;
   widgetParams(req: Request): URLSearchParams;
