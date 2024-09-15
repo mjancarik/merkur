@@ -92,18 +92,18 @@ For example we create custom task for bundling ES11 version of Merkur widget ver
 /**
  * @type import('@merkur/cli').defineConfig
  */
-export default function ({ cliConfig, emitter,  }) {
+export default function ({ cliConfig, emitter, }) {
   return {
     task: {
       es11: {
-				name: 'es11',
+        name: 'es11',
         folder: 'es11',
-				build: { // ESBuildConfiguration option
-					platform: 'browser',
-					target: 'es2020',
-					outdir: `${cliConfig.staticFolder}/es11`
-				}
-			}
+        build: { // ESBuildConfiguration option
+          platform: 'browser',
+          target: 'es2020',
+          outdir: `${cliConfig.staticFolder}/es11`
+        }
+      }
     },
   };
 }
