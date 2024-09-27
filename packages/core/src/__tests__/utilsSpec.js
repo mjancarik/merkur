@@ -46,6 +46,12 @@ describe('utils function', () => {
 
       expect(original).toEqual({});
     });
+
+    it('should create copy of default value', () => {
+      const newObject = setDefaultValueForUndefined({}, ['a', 'b'], {});
+
+      expect(newObject.a !== newObject.b).toBeTruthy();
+    });
   });
 
   describe('bindWidgetToFunctions', () => {
