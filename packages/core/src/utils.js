@@ -4,11 +4,20 @@ function createBoundedFunction(widget, originalFunction) {
   };
 }
 
+// @TODO in future use structuredClone instead of JSON.parse
+function clone(object) {
+  try {
+    return JSON.parse(JSON.stringify(object));
+  } catch (_) {
+    return object;
+  }
+}
+
 export function setDefaultValueForUndefined(object, keys, value = {}) {
   let objectClone = { ...object };
 
   keys.forEach((key) => {
-    objectClone[key] = objectClone[key] || value;
+    objectClone[key] = objectClone[key] || clone(value);
   });
 
   return objectClone;
