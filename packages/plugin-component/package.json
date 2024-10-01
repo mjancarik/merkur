@@ -14,7 +14,7 @@
       "require": "./lib/index.cjs"
     },
     "./helpers": {
-      "types": "./lib/helpers.d.ts",
+      "types": "./helpers.d.ts",
       "import": "./lib/helpers.mjs",
       "require": "./lib/helpers.cjs"
     },
