@@ -2,8 +2,6 @@ import {
   createRollupESConfig,
   createRollupES9Config,
   createRollupUMDConfig,
-  createRollupTypescriptES9Config,
-  createRollupTypescriptConfig,
 } from '../../createRollupConfig.mjs';
 
 let esConfig = createRollupESConfig();
@@ -14,10 +12,10 @@ export default [
   esConfig,
   es9Config,
   umdConfig,
-  createRollupTypescriptConfig({
-    input: './src/helpers.ts',
+  createRollupESConfig({
+    input: './src/helpers.js',
   }),
-  createRollupTypescriptES9Config({
-    input: './src/helpers.ts',
+  createRollupES9Config({
+    input: './src/helpers.js',
   }),
 ];
