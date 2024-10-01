@@ -227,10 +227,13 @@ function createRollupTypescriptConfig(options = {}) {
     },
   ];
 
+  config.external = [...config.external, ...(options?.external ?? [])];
+
   config.plugins.push(
     typescript({
       target: options?.target ?? 'ES2020',
       outDir: options?.dir ?? './lib',
+      sourceMap: options.watchMode,
     }),
     options.watchMode &&
       run({
