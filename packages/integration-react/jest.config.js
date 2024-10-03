@@ -12,7 +12,10 @@ defaultConfig.transform = {
 };
 defaultConfig.transformIgnorePatterns = [];
 defaultConfig.moduleNameMapper = {
-  'cheerio/lib/utils': '<rootDir>/node_modules/cheerio/lib/utils.js',
+  'cheerio/lib/utils': [
+    '<rootDir>/node_modules/cheerio/lib/utils.js',
+    '<rootDir>/../../node_modules/cheerio/lib/utils.js',
+  ],
 };
 
 module.exports = { ...defaultConfig };
