@@ -47,77 +47,81 @@ function registerCustomElement(options) {
 
   class WidgetElement extends HTMLCustomElement {
     _init() {
-      super._init();
-      const customWidgetDefinition = deepMerge({}, widgetDefinition);
+      try {
+        super._init();
+        const customWidgetDefinition = deepMerge({}, widgetDefinition);
 
-      (async () => {
-        this._shadow = this.attachShadow({ mode: 'open' });
+        (async () => {
+          this._shadow = this.attachShadow({ mode: 'open' });
 
-        try {
-          const widget = await callbacks?.getInstance?.();
+          try {
+            const widget = await callbacks?.getInstance?.();
 
-          if (widget && widget.name && widget.version) {
-            this._widget = widget;
+            if (widget && widget.name && widget.version) {
+              this._widget = widget;
 
-            await afterDOMLoad();
-            await loadAssets(widget.assets, this._shadow);
+              await afterDOMLoad();
+              await loadAssets(widget.assets, this._shadow);
 
-            await callbacks?.reconstructor?.(this._widget, {
+              await callbacks?.reconstructor?.(this._widget, {
+                shadow: this._shadow,
+                customElement: this,
+              });
+
+              if (typeof callbacks?.remount === 'function') {
+                await callbacks?.remount?.(this._widget, {
+                  shadow: this._shadow,
+                  customElement: this,
+                });
+              } else {
+                widget.root = this._shadow;
+                widget.customElement = this;
+                this._shadow.appendChild(widget.container);
+              }
+
+              return;
+            }
+          } catch (error) {
+            console.error(error);
+
+            return;
+          }
+
+          try {
+            customWidgetDefinition.root = this._shadow;
+            customWidgetDefinition.customElement = this;
+
+            if (!customWidgetDefinition.container) {
+              customWidgetDefinition.container = document.createElement('div');
+              customWidgetDefinition.container.setAttribute(
+                'id',
+                'merkur-container',
+              );
+            }
+
+            this._shadow.appendChild(customWidgetDefinition.container);
+
+            this._widget = await createSPAWidget(
+              customWidgetDefinition,
+              this._shadow,
+            );
+
+            await callbacks?.constructor?.(this._widget, {
               shadow: this._shadow,
               customElement: this,
             });
 
-            if (typeof callbacks?.remount === 'function') {
-              await callbacks?.remount?.(this._widget, {
-                shadow: this._shadow,
-                customElement: this,
-              });
-            } else {
-              widget.root = this._shadow;
-              widget.customElement = this;
-              this._shadow.appendChild(widget.container);
-            }
-
-            return;
+            (await callbacks?.mount?.(this._widget, {
+              shadow: this._shadow,
+              customElement: this,
+            })) ?? (await this._widget.mount());
+          } catch (error) {
+            console.error(error);
           }
-        } catch (error) {
-          console.error(error);
-
-          return;
-        }
-
-        try {
-          customWidgetDefinition.root = this._shadow;
-          customWidgetDefinition.customElement = this;
-
-          if (!customWidgetDefinition.container) {
-            customWidgetDefinition.container = document.createElement('div');
-            customWidgetDefinition.container.setAttribute(
-              'id',
-              'merkur-container',
-            );
-          }
-
-          this._shadow.appendChild(customWidgetDefinition.container);
-
-          this._widget = await createSPAWidget(
-            customWidgetDefinition,
-            this._shadow,
-          );
-
-          await callbacks?.constructor?.(this._widget, {
-            shadow: this._shadow,
-            customElement: this,
-          });
-
-          (await callbacks?.mount?.(this._widget, {
-            shadow: this._shadow,
-            customElement: this,
-          })) ?? (await this._widget.mount());
-        } catch (error) {
-          console.error(error);
-        }
-      })();
+        })();
+      } catch (error) {
+        console.error(error);
+      }
     }
 
     connectedCallback() {
