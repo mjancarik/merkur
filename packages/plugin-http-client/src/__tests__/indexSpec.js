@@ -77,61 +77,58 @@ describe('createWidget method with http client plugin', () => {
 
   it('should create empty widget', async () => {
     expect(widget).toMatchInlineSnapshot(`
-      {
-        "$dependencies": {
-          "AbortController": [Function],
-          "fetch": [Function],
-        },
-        "$external": {
-          "AbortController": [Function],
-          "fetch": [Function],
-        },
-        "$in": {
-          "httpClient": {
-            "cache": {},
-            "defaultConfig": {
-              "baseUrl": "http://localhost:4444",
-              "headers": {},
-              "method": "GET",
-              "query": {},
-              "timeout": 15000,
-              "transformers": [
-                {
-                  "transformResponse": [Function],
-                },
-                {
-                  "transformRequest": [Function],
-                  "transformResponse": [Function],
-                },
-                {
-                  "transformRequest": [Function],
-                },
-                {
-                  "transformRequest": [Function],
-                  "transformResponse": [Function],
-                },
-                {
-                  "transformRequest": [Function],
-                },
-              ],
-            },
-          },
-        },
-        "$plugins": [
+{
+  "$dependencies": {
+    "AbortController": [Function],
+    "fetch": [Function],
+  },
+  "$external": {},
+  "$in": {
+    "httpClient": {
+      "cache": {},
+      "defaultConfig": {
+        "baseUrl": "http://localhost:4444",
+        "headers": {},
+        "method": "GET",
+        "query": {},
+        "timeout": 15000,
+        "transformers": [
           {
-            "create": [Function],
-            "setup": [Function],
+            "transformResponse": [Function],
+          },
+          {
+            "transformRequest": [Function],
+            "transformResponse": [Function],
+          },
+          {
+            "transformRequest": [Function],
+          },
+          {
+            "transformRequest": [Function],
+            "transformResponse": [Function],
+          },
+          {
+            "transformRequest": [Function],
           },
         ],
-        "create": [Function],
-        "http": {
-          "request": [Function],
-        },
-        "name": "my-widget",
-        "setup": [Function],
-        "version": "1.0.0",
-      }
-    `);
+      },
+    },
+  },
+  "$plugins": [
+    {
+      "create": [Function],
+      "setup": [Function],
+    },
+  ],
+  "create": [Function],
+  "http": {
+    "request": [Function],
+  },
+  "name": "my-widget",
+  "setup": [Function],
+  "version": "1.0.0",
+}
+`);
   });
 
   describe('API request', () => {
