@@ -36,10 +36,18 @@ function afterDOMLoad() {
 
 function registerCustomElement(options) {
   const { widgetDefinition, callbacks } = deepMerge({}, options);
-  class WidgetElement extends HTMLElement {
-    constructor() {
-      super();
+  class HTMLCustomElement extends HTMLElement {
+    constructor(...$) {
+      const _ = super(...$);
+      _._init();
+      return _;
+    }
+    _init() {}
+  }
 
+  class WidgetElement extends HTMLCustomElement {
+    _init() {
+      super._init();
       const customWidgetDefinition = deepMerge({}, widgetDefinition);
 
       (async () => {
