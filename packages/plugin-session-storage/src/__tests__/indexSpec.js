@@ -49,47 +49,39 @@ describe('Session Storage plugin', () => {
 
   it('should create empty widget', async () => {
     expect(widget).toMatchInlineSnapshot(`
-      {
-        "$dependencies": {
-          "sessionStorage": {
-            "_storage": Map {},
-            "clear": [MockFunction],
-            "getItem": [MockFunction],
-            "removeItem": [MockFunction],
-            "setItem": [MockFunction],
-          },
-        },
-        "$external": {
-          "sessionStorage": {
-            "_storage": Map {},
-            "clear": [MockFunction],
-            "getItem": [MockFunction],
-            "removeItem": [MockFunction],
-            "setItem": [MockFunction],
-          },
-        },
-        "$in": {
-          "sessionStorage": {
-            "keyPrefix": "__widget__my-widget__1.0.0__2023__",
-          },
-        },
-        "$plugins": [
-          {
-            "create": [Function],
-            "setup": [Function],
-          },
-        ],
-        "create": [Function],
-        "name": "my-widget",
-        "sessionStorage": {
-          "delete": [Function],
-          "get": [Function],
-          "set": [Function],
-        },
-        "setup": [Function],
-        "version": "1.0.0",
-      }
-    `);
+{
+  "$dependencies": {
+    "sessionStorage": {
+      "_storage": Map {},
+      "clear": [MockFunction],
+      "getItem": [MockFunction],
+      "removeItem": [MockFunction],
+      "setItem": [MockFunction],
+    },
+  },
+  "$external": {},
+  "$in": {
+    "sessionStorage": {
+      "keyPrefix": "__widget__my-widget__1.0.0__2023__",
+    },
+  },
+  "$plugins": [
+    {
+      "create": [Function],
+      "setup": [Function],
+    },
+  ],
+  "create": [Function],
+  "name": "my-widget",
+  "sessionStorage": {
+    "delete": [Function],
+    "get": [Function],
+    "set": [Function],
+  },
+  "setup": [Function],
+  "version": "1.0.0",
+}
+`);
   });
 
   it(`should prefix an item key with ${keyPrefix} in sessionStorage`, () => {

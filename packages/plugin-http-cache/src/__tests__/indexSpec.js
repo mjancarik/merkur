@@ -74,10 +74,7 @@ describe('createWidget method with http client plugin', () => {
     "AbortController": [Function],
     "fetch": [MockFunction],
   },
-  "$external": {
-    "AbortController": [Function],
-    "fetch": [MockFunction],
-  },
+  "$external": {},
   "$in": {
     "component": {
       "isHydrated": false,
@@ -171,10 +168,7 @@ describe('createWidget method with http client plugin', () => {
   "setProps": [Function],
   "setState": [Function],
   "setup": [Function],
-  "slot": {
-    "AbortController": [Function],
-    "fetch": [MockFunction],
-  },
+  "slot": {},
   "state": {},
   "unmount": [Function],
   "update": [Function],

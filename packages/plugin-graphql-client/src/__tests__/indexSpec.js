@@ -70,10 +70,7 @@ describe('createWidget method with graphql client plugin', () => {
     "AbortController": [Function],
     "fetch": [Function],
   },
-  "$external": {
-    "AbortController": [Function],
-    "fetch": [Function],
-  },
+  "$external": {},
   "$in": {
     "component": {
       "isHydrated": false,
@@ -157,10 +154,7 @@ describe('createWidget method with graphql client plugin', () => {
   "setProps": [Function],
   "setState": [Function],
   "setup": [Function],
-  "slot": {
-    "AbortController": [Function],
-    "fetch": [Function],
-  },
+  "slot": {},
   "state": {},
   "unmount": [Function],
   "update": [Function],
