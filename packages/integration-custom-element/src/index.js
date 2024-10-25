@@ -40,7 +40,9 @@ function registerCustomElement(options) {
     options,
   );
   class HTMLCustomElement extends HTMLElement {
-    static observedAttributes = observedAttributes;
+    static get observedAttributes() {
+      return observedAttributes ?? [];
+    }
     constructor(...$) {
       const _ = super(...$);
       _._init();
