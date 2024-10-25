@@ -176,7 +176,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           },
         });
       })
-      .listen({ port, host: merkurConfig.constant.HOST }, () => {
+      .listen({ port }, () => {
         logger.info(`Playground: ${chalk.green(`${protocol}//${host}`)}`);
         resolve(app);
       });

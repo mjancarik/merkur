@@ -16,7 +16,6 @@ export async function runSocketServer({ merkurConfig, context }) {
   try {
     const server = new WebSocketServer({
       port: merkurConfig.socketServer.port,
-      host: merkurConfig.constant.HOST,
     });
 
     server.on('connection', function connection(ws) {
