@@ -48,10 +48,10 @@ export async function custom({ args, command }) {
     const dest = path.resolve(
       `${merkurConfig.playground.serverTemplateFolder}/${file}`,
     );
-    const dir = path.dirname(dest);
+    const dirFolder = path.dirname(dest);
 
-    logger.debug(`Create directory ${dir}`);
-    await fs.mkdir(dir, { recursive: true });
+    logger.debug(`Create directory ${dirFolder}`);
+    await fs.mkdir(dirFolder, { recursive: true });
 
     logger.debug(`Copy file from ${src} to ${dest}`);
     await fs.copyFile(src, dest);
