@@ -75,7 +75,21 @@
     },
     {
       "title": "Merkur config file",
-      "url": "/docs/merkur-config"
+      "url": "/docs/merkur-config",
+      "submenu": [
+        {
+          "title": "Custom task",
+          "url": "/docs/merkur-config#how-to-define-custom-task"
+        },
+        {
+          "title": "Esbuild plugin",
+          "url": "/docs/merkur-config#how-to-add-esbuild-plugin"
+        },
+        {
+          "title": "Override playground",
+          "url": "/docs/merkur-config#how-to-override-playground-widgetparams-to-widget-api"
+        }
+      ]
     },
     {
       "title": "Plugins",

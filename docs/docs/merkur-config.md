@@ -71,6 +71,16 @@ export default function ({ cliConfig, emitter,  }) {
       buildFolder: '{project_folder}/build',
       clusters: 3,
       origin: 'http://localhost:4444'
+      cors: {
+        options: {
+            origin: [
+              new RegExp('^https?://localhost(:[0-9]+)?$'),
+              new RegExp('^https?://127\\.0\\.0\\.1(:[0-9]+)?$'),
+            ],
+            methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+            optionsSuccessStatus: 200,
+        }
+      }
     },
     HMR: true,
     constant: {
@@ -184,7 +194,7 @@ export default function ({ cliConfig, emitter,  }) {
 ```
 The `esbuild-plugin-*` must be dynamic imported with `try/catch` block because `merkur.config.js` is used for all Merkur [CLI]({{ '/docs/merkur-cli' | relative_url }}) commands and of course for `merkur start` where dev dependencies can be missed. It depends on your CI/CD workflow. But we predict that you run `merkur start` command only with production dependencies where dev dependencies miss. 
 
-Or you want to use [Tailwind CSS](https://tailwindui.com/) framework. You must install esbuild plugin with `npm install esbuild-plugin-tailwindcss --save dev` command. Then add new installed package in `merkur.config.js` to [esbuild](https://esbuild.github.io/) configuration. 
+Or you want to use [Tailwind CSS](https://tailwindui.com/) framework. You must install esbuild plugin with `npm install esbuild-plugin-tailwindcss --save-dev` command. Then add new installed package in `merkur.config.js` to [esbuild](https://esbuild.github.io/) configuration. 
 
 ```javascript
 /**
