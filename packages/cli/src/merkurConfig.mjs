@@ -255,6 +255,16 @@ emitter.on(
       buildFolder: path.resolve(cliConfig.projectFolder, cliConfig.buildFolder),
       clusters: cliConfig.command === COMMAND_NAME.DEV ? 0 : 3,
       ...merkurConfig.widgetServer,
+      cors: {
+        options: {
+          origin: [
+            new RegExp('^https?://localhost(:[0-9]+)?$'),
+            new RegExp('^https?://127\\.0\\.0\\.1(:[0-9]+)?$'),
+          ],
+          methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+          ...merkurConfig.widgetServer?.cors?.options,
+        },
+      },
     };
 
     const { origin, host, protocol } = merkurConfig.widgetServer;

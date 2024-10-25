@@ -8,7 +8,7 @@ const morgan = require('morgan');
 const { resolveConfig } = require('@merkur/cli/server');
 
 const {
-  merkurConfig: { widgetServer, devServer },
+  merkurConfig: { widgetServer },
 } = resolveConfig();
 
 const {
@@ -40,12 +40,7 @@ app
       crossOriginEmbedderPolicy: false,
     }),
   )
-  .use(
-    cors({
-      origin: devServer.origin,
-      optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
-    }),
-  )
+  .use(cors(widgetServer.cors.options))
   .use(compression())
   .use(widgetServer.staticPath, express.static(widgetServer.staticFolder))
   .use(

@@ -1,5 +1,6 @@
 import type { BuildOptions } from 'esbuild';
 import type { Request, Response } from '@types/express';
+import type { CorsOptions } from '@types/cors';
 
 export interface CLIConfig {
   environment: string;
@@ -68,6 +69,9 @@ export interface WidgetServer {
   staticPath: string;
   buildFolder: string;
   clusters: number;
+  cors: {
+    options: CorsOptions;
+  };
 }
 
 export interface Constant {
