@@ -35,8 +35,14 @@ function afterDOMLoad() {
 }
 
 function registerCustomElement(options) {
-  const { widgetDefinition, callbacks } = deepMerge({}, options);
+  const { widgetDefinition, callbacks, observedAttributes } = deepMerge(
+    {},
+    options,
+  );
   class HTMLCustomElement extends HTMLElement {
+    static get observedAttributes() {
+      return observedAttributes ?? [];
+    }
     constructor(...$) {
       const _ = super(...$);
       _._init();
