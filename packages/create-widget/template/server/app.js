@@ -42,7 +42,6 @@ app
   )
   .use(cors(widgetServer.cors.options))
   .use(compression())
-  .use(widgetServer.staticPath, express.static(widgetServer.staticFolder))
   .use(
     widgetServer.staticPath,
     expressStaticGzip(widgetServer.staticFolder, expressStaticConfig),
