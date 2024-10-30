@@ -261,3 +261,30 @@ export default function ({ cliConfig, emitter, }) {
   }
 }
 ```
+
+## Custom function in playground templates
+
+In some use case you need use custom helper function in playground templates. For that use case you can use `playground` property in `merkur.config.mjs` file to define your custom function as show example below. 
+
+```javascript
+function helperFunction() {
+  return 'Hello world';
+}
+
+/**
+ * @type import('@merkur/cli').defineConfig
+ */
+export default function ({ cliConfig, emitter, }) {
+  return {
+    playground: {
+      utils: {
+        helperFunction
+      }
+    }
+  }
+}
+```
+
+```ejs
+<div><%- merkurConfig.playground.utils.helperFunction() %></div> // result <div>Hello world</div>
+```
