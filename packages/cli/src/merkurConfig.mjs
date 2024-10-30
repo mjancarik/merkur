@@ -262,6 +262,7 @@ emitter.on(
             new RegExp('^https?://127\\.0\\.0\\.1(:[0-9]+)?$'),
           ],
           methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+          optionsSuccessStatus: 200,
           ...merkurConfig.widgetServer?.cors?.options,
         },
       },

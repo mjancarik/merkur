@@ -1,19 +1,6 @@
 <% if(widgetProperties?.slot?.headline?.html){ %>
-  <div class="<%= (widgetProperties?.slot?.headline?.containerSelector ?? 'headline-view').replace('.', '') %>">
+  <div class="<%= (widgetProperties?.slot?.headline?.containerSelector ?? 'merkur-headline').replace('.', '') %>">
     <%- widgetProperties?.slot?.headline?.html %>
   </div>
 <% } %>
-<div class="merkur-view"><%- html %></div>
-<script>
-  window.addEventListener('load', function () {
-    __merkur__.create(<%- escapeToJSON(widgetProperties) %>)
-      .then(function (widget) {
-        widget.containerSelector = '.merkur-view';
-        if (widget?.slot?.headline && !widget?.slot?.headline?.containerSelector) {
-          widget.slot.headline.containerSelector = '.headline-view';
-        }
-
-        widget.mount();
-      });
-  });
-</script>
+<div class="<%= (widgetProperties?.containerSelector ?? 'merkur-main').replace('.', '') %>"><%- html %></div>

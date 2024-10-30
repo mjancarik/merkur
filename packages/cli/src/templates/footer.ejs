@@ -1,0 +1,25 @@
+<script>
+  window.addEventListener('load', function () {
+    __merkur__.create(<%- escapeToJSON(widgetProperties) %>)
+      .then(function (widget) {
+        widget.containerSelector = widget.containerSelector ?? '.merkur-main';
+
+        if (widget.slot && Object.keys(widget.slot).length > 0) {
+          Object.keys(widget.slot).forEach(function (slotName) {
+            widget.slot[slotName].containerSelector = widget.slot[slotName].containerSelector ?? '.merkur-' + slotName;
+          });
+        }
+
+        // support for router plugin
+        if (widget.router) {
+          widget.on('@merkur/plugin-router.redirect', function (_, url) {
+            var parsedUrl = new URL(url.url);
+            window.location = parsedUrl.href;
+          });
+        }
+
+        // mount widget to DOM
+        widget.mount();
+      });
+  });
+</script>

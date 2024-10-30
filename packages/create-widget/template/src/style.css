@@ -15,32 +15,29 @@ button {
   margin: 0 auto;
 }
 
-.merkur__page {
-}
-
-.merkur__headline {
+.merkur-headline {
   background-color: #282c34;
   padding: 120px 10px 80px 10px;
   color: #a2a8b6;
   text-align: center;
 }
 
-.merkur__headline a {
+.merkur-headline a {
   color: white;
   text-decoration: none;
 }
 
-.merkur__headline h1 {
+.merkur-headline h1 {
   font-size: 60px;
   margin: 0 0 20px 0;
 }
 
-.merkur__headline h2 {
+.merkur-headline h2 {
   margin: 0;
   line-height: 1.3;
 }
 
-.merkur__headline h3 {
+.merkur-headline h3 {
   margin: 40px 0 16px 0;
   line-height: 1.3;
 }
