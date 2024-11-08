@@ -4,6 +4,7 @@ import path from 'node:path';
 import manifestPlugin from 'esbuild-plugin-manifest';
 
 import { EMITTER_EVENTS, emitter, RESULT_KEY } from './emitter.mjs';
+import { aliasPlugin } from './plugins/aliasPlugin.mjs';
 import { memoryStaticPlugin } from './plugins/memoryStaticPlugin.mjs';
 import { metaPlugin } from './plugins/metaPlugin.mjs';
 import { excludeVendorsFromSourceMapPlugin } from './plugins/excludeVendorsFromSourceMapPlugin.mjs';
@@ -15,7 +16,7 @@ export async function createBuildConfig({
   cliConfig,
   context,
 }) {
-  const { isServer, writeToDisk, sourcemap } = config;
+  const { isServer, writeToDisk, sourcemap, analyze } = config;
   const { isProduction, outFile, staticFolder, projectFolder } = cliConfig;
 
   const entries = await getEntries({ merkurConfig, cliConfig });
@@ -31,6 +32,7 @@ export async function createBuildConfig({
       write: writeToDisk,
       entryNames: isServer || !isProduction ? 'widget' : 'widget.[hash]',
       format: isServer ? 'cjs' : 'iife',
+      metafile: analyze,
       mainFields: isServer ? ['module', 'main'] : ['browser', 'module', 'main'],
 
       //@TODO map right versions
@@ -62,6 +64,7 @@ export async function createBuildConfig({
               }, {});
             },
           }),
+        aliasPlugin,
         !writeToDisk && memoryStaticPlugin,
         sourcemap && excludeVendorsFromSourceMapPlugin,
         metaPlugin,

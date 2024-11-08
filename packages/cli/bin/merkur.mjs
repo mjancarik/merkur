@@ -26,6 +26,7 @@ const hasRunDevServerOption = new Option('--hasRunDevServer', 'Flag for starting
 const hasRunWidgetServerOption = new Option('--hasRunWidgetServer', 'Flag for starting widget server');
 const inspectOption = new Option('--inspect', 'Debugging widget server');
 const verboseOption = new Option('--verbose', 'Verbose mode which show debug information.');
+const analyzeOption = new Option('--analyze', 'Analyze bundle.');
 
 program
   .name('merkur')
@@ -75,6 +76,7 @@ program
   .addOption(projectFolderOption)
   .addOption(buildFolderOption)
   .addOption(staticFolderOption)
+  .addOption(analyzeOption)
   .addOption(verboseOption)
   .action(async (options, cmd) => {
   const args = {

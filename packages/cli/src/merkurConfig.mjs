@@ -97,6 +97,7 @@ emitter.on(
         build: {
           platform: 'node',
           write: true,
+          metafile: false,
         },
       },
       es13: {

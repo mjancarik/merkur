@@ -23,6 +23,7 @@ export async function createCLIConfig({ args, command } = {}) {
     hasRunDevServer: args?.hasRunDevServer ?? false,
     hasRunWidgetServer: args?.hasRunWidgetServer ?? false,
     inspect: args.inspect ?? false,
+    analyze: args.analyze ?? false,
     verbose: args.verbose ?? false,
   };
 }

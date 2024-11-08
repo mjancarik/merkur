@@ -10,6 +10,7 @@ export async function createTaskConfig({
       isServer: definition?.build?.platform === 'node',
       writeToDisk: definition?.build?.write ?? cliConfig.writeToDisk,
       sourcemap: definition?.build?.sourcemap ?? cliConfig.sourcemap,
+      analyze: definition?.build?.metafile ?? cliConfig.analyze,
       ...definition.config,
     },
     definition,
