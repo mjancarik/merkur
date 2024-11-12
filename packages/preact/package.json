@@ -1,6 +1,6 @@
 {
   "name": "@merkur/preact",
-  "version": "0.36.0",
+  "version": "0.37.0",
   "description": "Collection of helpers to aid with Preact integration to @merkur",
   "scripts": {
     "test": "echo 'Tests pass.'",

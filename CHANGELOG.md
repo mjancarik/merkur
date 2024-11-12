@@ -3,6 +3,45 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.37.0](https://github.com/mjancarik/merkur/compare/v0.36.5...v0.37.0) (2024-11-12)
+
+### Bug Fixes
+
+- 🐛 create folder structure for copied file ([a345b06](https://github.com/mjancarik/merkur/commit/a345b065cfc9c81a6b1bf317930afa4995b2dac2))
+- 🐛 custom element caveats ([2c06691](https://github.com/mjancarik/merkur/commit/2c0669151fc6fe0a809e8f3af4606cb0c689114c))
+- 🐛 HMR works only for memory mode ([d8baf8e](https://github.com/mjancarik/merkur/commit/d8baf8ea118260f5248c9333cc4ec883225e5b5a))
+- 🐛 Merkur CLI show options for --help argument ([ec156f1](https://github.com/mjancarik/merkur/commit/ec156f1c60ffabda31add7daf421808d479fa99b))
+- 🐛 playground template for defined containerSelector ([60427ac](https://github.com/mjancarik/merkur/commit/60427acbdf3758a028bdbf64231e458032954987))
+- 🐛 regular for test:all ([833db58](https://github.com/mjancarik/merkur/commit/833db58be4073b9a9d2d8ff06387a7ce267ed1b5))
+- 🐛 resolve path for projectFoler and cliFolder ([bf61497](https://github.com/mjancarik/merkur/commit/bf6149709df01bd77ee3d4dd5415cfed25eed338))
+- 🐛 setDefaultValueForUndefined clone defined value ([1387e99](https://github.com/mjancarik/merkur/commit/1387e99e4952bfc7f396a793b27a9bfa65eb189c))
+
+### Code Refactoring
+
+- 💡 cli option runTask is replaced with runTasks ([f2b872d](https://github.com/mjancarik/merkur/commit/f2b872da700876bcc0df92a667e735a0f8509b05))
+
+### Features
+
+- 🎸 add @/_ alias for ./src/_ ([98fae2b](https://github.com/mjancarik/merkur/commit/98fae2bfe83fb0a08743b0f7b4417fe8c770faf8))
+- 🎸 add cors options to widgetServer configuration ([70e4d4a](https://github.com/mjancarik/merkur/commit/70e4d4a88238bbb33d8aac36110455011ca9b73c))
+- 🎸 add new --analyze CLI flags for build task ([16e9ec4](https://github.com/mjancarik/merkur/commit/16e9ec48ad373e422c84ccf72edac246ee12c8bc))
+- 🎸 add new custom command for extendability ([a8990d4](https://github.com/mjancarik/merkur/commit/a8990d4f59d84025024b3c407cff8581f535d404))
+- 🎸 add new getCurrentContext method ([bcc94c1](https://github.com/mjancarik/merkur/commit/bcc94c15874e9a31d6f06c955ad24d4af89702f2))
+- 🎸 allow define containerSelector for slot from widget API ([dfeb3b0](https://github.com/mjancarik/merkur/commit/dfeb3b09da3cbbfe88e8ee1448f4f932304134ca))
+- 🎸 dev servers listen on ipv4 and ipv6 ([6408c24](https://github.com/mjancarik/merkur/commit/6408c246ebaf679e37352d55847d6db3b0dc684a))
+- 🎸 first integration of testing-library ([0f47141](https://github.com/mjancarik/merkur/commit/0f471411d4856894a162ddb5f5692d33302a0c26)), closes [#63](https://github.com/mjancarik/merkur/issues/63)
+- 🎸 http.request returns error for rejected promise ([b1427af](https://github.com/mjancarik/merkur/commit/b1427afd4bfbde351f2e6f8e696051006a6d4403))
+- 🎸 sourcemap exclude vendors and auto turn on only for dev ([f0e8cd1](https://github.com/mjancarik/merkur/commit/f0e8cd1c81dd1cc8d6a11c11240911354f908639))
+- 🎸 support for other tasks with different entries ([ef462f8](https://github.com/mjancarik/merkur/commit/ef462f868eaf845174d03b3d41cd466d9e09a77f))
+- 🎸 support for other tasks with different entries ([6aabcf8](https://github.com/mjancarik/merkur/commit/6aabcf8ad90738878981c3ed36022cf564df437c))
+- 🎸 update body.ejs and footer.ejs template ([acca4ef](https://github.com/mjancarik/merkur/commit/acca4efd2c1a1b72dfc325bbecf09ba348c3e94f))
+
+### BREAKING CHANGES
+
+- 🧨 The JS part of playground was moved from body.ejs to footer.ejs
+  template.
+- 🧨 CLI option runTask is replaced with runTasks.
+
 ## [0.36.5](https://github.com/mjancarik/merkur/compare/v0.36.4...v0.36.5) (2024-07-30)
 
 ### Features

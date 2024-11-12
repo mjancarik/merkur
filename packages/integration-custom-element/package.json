@@ -1,6 +1,6 @@
 {
   "name": "@merkur/integration-custom-element",
-  "version": "0.36.4",
+  "version": "0.37.0",
   "description": "Merkur module for easy integration with other apps with custom element.",
   "main": "lib/index",
   "module": "lib/index",
@@ -51,8 +51,8 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.36.0",
-    "@merkur/integration": "^0.36.0"
+    "@merkur/core": "^0.37.0",
+    "@merkur/integration": "^0.37.0"
   },
   "peerDependencies": {
     "@merkur/core": "*",

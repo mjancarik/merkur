@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.37.0](https://github.com/mjancarik/merkur/compare/v0.36.5...v0.37.0) (2024-11-12)
+
+### Bug Fixes
+
+- 🐛 custom element caveats ([2c06691](https://github.com/mjancarik/merkur/commit/2c0669151fc6fe0a809e8f3af4606cb0c689114c))
+
+### Code Refactoring
+
+- 💡 cli option runTask is replaced with runTasks ([f2b872d](https://github.com/mjancarik/merkur/commit/f2b872da700876bcc0df92a667e735a0f8509b05))
+
+### BREAKING CHANGES
+
+- 🧨 CLI option runTask is replaced with runTasks.
+
 ## [0.36.4](https://github.com/mjancarik/merkur/compare/v0.36.3...v0.36.4) (2024-07-26)
 
 ### Bug Fixes

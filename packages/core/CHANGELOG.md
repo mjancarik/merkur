@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.37.0](https://github.com/mjancarik/merkur/compare/v0.36.5...v0.37.0) (2024-11-12)
+
+### Bug Fixes
+
+- 🐛 setDefaultValueForUndefined clone defined value ([1387e99](https://github.com/mjancarik/merkur/commit/1387e99e4952bfc7f396a793b27a9bfa65eb189c))
+
 # [0.36.0](https://github.com/mjancarik/merkur/compare/v0.35.13...v0.36.0) (2024-05-21)
 
 **Note:** Version bump only for package @merkur/core

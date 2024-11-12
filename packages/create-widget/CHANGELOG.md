@@ -3,6 +3,24 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.37.0](https://github.com/mjancarik/merkur/compare/v0.36.5...v0.37.0) (2024-11-12)
+
+### Bug Fixes
+
+- 🐛 Merkur CLI show options for --help argument ([ec156f1](https://github.com/mjancarik/merkur/commit/ec156f1c60ffabda31add7daf421808d479fa99b))
+
+### Features
+
+- 🎸 add @/_ alias for ./src/_ ([98fae2b](https://github.com/mjancarik/merkur/commit/98fae2bfe83fb0a08743b0f7b4417fe8c770faf8))
+- 🎸 add cors options to widgetServer configuration ([70e4d4a](https://github.com/mjancarik/merkur/commit/70e4d4a88238bbb33d8aac36110455011ca9b73c))
+- 🎸 first integration of testing-library ([0f47141](https://github.com/mjancarik/merkur/commit/0f471411d4856894a162ddb5f5692d33302a0c26)), closes [#63](https://github.com/mjancarik/merkur/issues/63)
+- 🎸 update body.ejs and footer.ejs template ([acca4ef](https://github.com/mjancarik/merkur/commit/acca4efd2c1a1b72dfc325bbecf09ba348c3e94f))
+
+### BREAKING CHANGES
+
+- 🧨 The JS part of playground was moved from body.ejs to footer.ejs
+  template.
+
 ## [0.36.5](https://github.com/mjancarik/merkur/compare/v0.36.4...v0.36.5) (2024-07-30)
 
 **Note:** Version bump only for package @merkur/create-widget

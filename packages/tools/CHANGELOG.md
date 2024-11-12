@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.37.0](https://github.com/mjancarik/merkur/compare/v0.36.5...v0.37.0) (2024-11-12)
+
+### Bug Fixes
+
+- 🐛 regular for test:all ([833db58](https://github.com/mjancarik/merkur/commit/833db58be4073b9a9d2d8ff06387a7ce267ed1b5))
+
 # [0.36.0](https://github.com/mjancarik/merkur/compare/v0.35.13...v0.36.0) (2024-05-21)
 
 **Note:** Version bump only for package @merkur/tools
