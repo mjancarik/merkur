@@ -1,6 +1,6 @@
 <script>
   window.addEventListener('load', function () {
-    __merkur__.create(<%- escapeToJSON(widgetProperties) %>)
+    window?.__merkur__?.create(<%- escapeToJSON(widgetProperties) %>)
       .then(function (widget) {
         widget.containerSelector = widget.containerSelector ?? '.merkur-main';
 
