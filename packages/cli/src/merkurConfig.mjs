@@ -87,7 +87,7 @@ async function registerHooks({ merkurConfig }) {
 emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function defaultTask({ merkurConfig, cliConfig }) {
-    const { staticFolder, runTasks } = cliConfig;
+    const { staticFolder } = cliConfig;
 
     merkurConfig.task = merkurConfig.task ?? {};
 
