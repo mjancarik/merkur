@@ -15,12 +15,14 @@ webSocket.subscribe(reload);
 webSocket.subscribe(hmr);
 
 addEventListener('load', function hookMerkurCreate() {
-  const originalMerkurCreate = window.__merkur__.create;
-  window.__merkur__.create = async function devClientHook(...rest) {
-    const widget = await originalMerkurCreate(...rest);
+  if (window?.__merkur__?.create) {
+    const originalMerkurCreate = window.__merkur__.create;
+    window.__merkur__.create = async function devClientHook(...rest) {
+      const widget = await originalMerkurCreate(...rest);
 
-    __merkur_dev__.widgets.push(widget);
+      __merkur_dev__.widgets.push(widget);
 
-    return widget;
-  };
+      return widget;
+    };
+  }
 });
