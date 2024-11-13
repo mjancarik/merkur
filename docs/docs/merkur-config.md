@@ -102,7 +102,7 @@ For example we create custom task for bundling ES11 version of Merkur widget ver
 /**
  * @type import('@merkur/cli').defineConfig
  */
-export default function ({ cliConfig, emitter, }) {
+export default function ({ cliConfig }) {
   return {
     task: {
       es11: {
@@ -125,37 +125,42 @@ Or If you want to bundle Merkur widget and some JS asset for your Merkur widget 
 /**
  * @type import('@merkur/cli').defineConfig
  */
-export default function ({ cliConfig, emitter,  }) {
+export default function () {
   return {
-    task: {
-      es13Asset: {
+    onMerkurConfig({ cliConfig, merkurConfig }) {
+      const { projectFolder, isProduction, staticFolder } = cliConfig;
+
+      merkurConfig.task.es13Asset = {
         name: 'es13Asset',
         folder: 'es13',
-        build: { 
-          entryPoints: `${cliConfig.projectFolder}/src/customAsset.js`,
-          entryNames: !cliConfig.isProduction ? 'customAsset' : 'customAsset.[hash]',
+        build: {
+          entryPoints: [`${projectFolder}/src/customAsset.js`],
+          entryNames: !isProduction ? 'customAsset' : 'customAsset.[hash]',
           platform: 'browser',
           outdir: `${staticFolder}/es13`,
           plugins: merkurConfig.task['es13'].build.plugins,
         },
-      },
-      es9Asset: {
+      };
+
+      merkurConfig.task.es9Asset = {
         name: 'es9Asset',
         folder: 'es9',
         build: {
-          entryPoints: `${cliConfig.projectFolder}/src/customAsset.js`,
-          entryNames: !cliConfig.isProduction ? 'customAsset' : 'customAsset.[hash]',
+          entryPoints: [`${projectFolder}/src/customAsset.js`],
+          entryNames: !isProduction ? 'customAsset' : 'customAsset.[hash]',
           platform: 'browser',
           target: 'es2018',
           outdir: `${staticFolder}/es9`,
           plugins: merkurConfig.task['es9'].build.plugins,
         },
-      }
+      };
+
+      return merkurConfig;
     },
     onCliConfig({ cliConfig }) {
       // add es13Asset task to be run for `merkur dev`
       if (cliConfig.command === 'dev') {
-        cliConfig.runTask.push('es13Asset');
+        cliConfig.runTasks.push('es13Asset');
       }
     },
   };

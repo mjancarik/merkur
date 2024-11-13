@@ -108,7 +108,4 @@ export interface MerkurConfig {
   }) => Partial<BuildOptions>;
 }
 
-export function defineConfig({
-  merkurConfig: MerkurConfig,
-  cliConfig: CLIConfig,
-}): Partial<MerkurConfig>;
+export function defineConfig({ cliConfig: CLIConfig }): Partial<MerkurConfig>;

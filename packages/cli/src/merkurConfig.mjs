@@ -134,14 +134,6 @@ emitter.on(
       );
     });
 
-    if (runTasks.length !== 0) {
-      Object.keys(merkurConfig.task)
-        .filter((taskName) => !runTasks.includes(taskName))
-        .forEach((taskKey) => {
-          delete merkurConfig.task[taskKey];
-        });
-    }
-
     return merkurConfig;
   },
 );

@@ -1,40 +1,44 @@
-import fs from 'node:fs/promises';
+import { createBuildConfig } from './buildConfig.mjs';
+import { createTaskConfig } from './taskConfig.mjs';
+import { runBuild } from './runBuild.mjs';
 
-import esbuild from 'esbuild';
-import { createLogger } from './logger.mjs';
+export async function runTask({ cliConfig, merkurConfig, context }) {
+  const { runTasks } = cliConfig;
+  let task = { ...merkurConfig.task };
 
-export async function runTask({ cliConfig, build, config }) {
-  const logger = createLogger(undefined, cliConfig);
-  const { watch } = cliConfig;
+  if (runTasks.length !== 0) {
+    Object.keys(task)
+      .filter((taskName) => !runTasks.includes(taskName))
+      .forEach((taskKey) => {
+        delete task[taskKey];
+      });
+  }
 
-  //es6 === es2015, es9 === es2018, es11 === es2020 es13 ===es2022
-  try {
-    const result = await (watch
-      ? esbuild.context(build)
-      : esbuild.build(build));
+  return Object.keys(task).reduce(async (result, key) => {
+    const definition = task[key];
 
-    if (config.analyze && result.metafile) {
-      logger.log(
-        await esbuild.analyzeMetafile(result.metafile, {
-          verbose: cliConfig.verbose,
-        }),
-      );
-
-      if (build.outdir) {
-        await fs.writeFile(
-          `${build.outdir}/${build.entryNames ?? config.name}.meta.json`,
-          JSON.stringify(result.metafile),
-        );
-      }
-    }
-
-    if (watch) {
-      await result.watch();
-    }
+    const config = await createTaskConfig({
+      definition,
+      merkurConfig,
+      cliConfig,
+      context,
+    });
+    const build = await createBuildConfig({
+      definition,
+      config,
+      merkurConfig,
+      cliConfig,
+      context,
+    });
+    result[definition.name] = await runBuild({
+      definition,
+      build,
+      merkurConfig,
+      cliConfig,
+      config,
+      context,
+    });
 
     return result;
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
+  }, context.task);
 }

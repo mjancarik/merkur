@@ -1,9 +1,7 @@
 import chalk from 'chalk';
 
-import { createBuildConfig } from '../buildConfig.mjs';
 import { createCLIConfig } from '../CLIConfig.mjs';
 import { createContext } from '../context.mjs';
-import { createTaskConfig } from '../taskConfig.mjs';
 import { runTask } from '../runTask.mjs';
 import { createMerkurConfig } from '../merkurConfig.mjs';
 import { createLogger } from '../logger.mjs';
@@ -28,36 +26,7 @@ export async function build({ args, command }) {
 
   await clearBuildFolder({ merkurConfig, cliConfig });
 
-  const task = await Object.keys(merkurConfig.task).reduce(
-    async (result, key) => {
-      const definition = merkurConfig.task[key];
-
-      const config = await createTaskConfig({
-        definition,
-        merkurConfig,
-        cliConfig,
-        context,
-      });
-      const build = await createBuildConfig({
-        definition,
-        config,
-        merkurConfig,
-        cliConfig,
-        context,
-      });
-      result[definition.name] = await runTask({
-        definition,
-        build,
-        merkurConfig,
-        cliConfig,
-        config,
-        context,
-      });
-
-      return result;
-    },
-    context.task,
-  );
+  const task = await runTask({ merkurConfig, cliConfig, context });
 
   await Promise.all(Object.values(task));
 
