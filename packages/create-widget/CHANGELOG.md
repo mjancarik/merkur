@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.1](https://github.com/mjancarik/merkur/compare/v0.37.0...v0.37.1) (2024-11-14)
+
+### Bug Fixes
+
+- 🐛 definition of custom tasks ([de74901](https://github.com/mjancarik/merkur/commit/de74901fa9140c14b9d86043e8ed49489038484b))
+
 # [0.37.0](https://github.com/mjancarik/merkur/compare/v0.36.5...v0.37.0) (2024-11-12)
 
 ### Bug Fixes

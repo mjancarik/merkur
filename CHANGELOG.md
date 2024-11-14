@@ -3,6 +3,15 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.1](https://github.com/mjancarik/merkur/compare/v0.37.0...v0.37.1) (2024-11-14)
+
+### Bug Fixes
+
+- 🐛 add better error message for undefined Merkur ([a2095c3](https://github.com/mjancarik/merkur/commit/a2095c3613d63904c43af48fbe06160d6c82c1e9))
+- 🐛 add better error message for undefined Merkur ([48407e0](https://github.com/mjancarik/merkur/commit/48407e0f1c838c6b70b376011b8abfb9ddf28720))
+- 🐛 attach devClientHook only if entry point exists ([0152316](https://github.com/mjancarik/merkur/commit/0152316a614ee9feec3c33c53b3f187bfa386da3))
+- 🐛 definition of custom tasks ([de74901](https://github.com/mjancarik/merkur/commit/de74901fa9140c14b9d86043e8ed49489038484b))
+
 # [0.37.0](https://github.com/mjancarik/merkur/compare/v0.36.5...v0.37.0) (2024-11-12)
 
 ### Bug Fixes
