@@ -1,6 +1,11 @@
 <script>
   window.addEventListener('load', function () {
-    window?.__merkur__?.create(<%- escapeToJSON(widgetProperties) %>)
+    if (!window.__merkur__) {
+      console.error('Merkur is not available in the global scope. Make sure you have included Merkur in your project.');
+      return;
+    }
+
+    window.__merkur__.create(<%- escapeToJSON(widgetProperties) %>)
       .then(function (widget) {
         widget.containerSelector = widget.containerSelector ?? '.merkur-main';
 
