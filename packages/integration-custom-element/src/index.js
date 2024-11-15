@@ -57,7 +57,7 @@ function registerCustomElement(options) {
         super._init();
         const customWidgetDefinition = deepMerge({}, widgetDefinition);
 
-        (async () => {
+        this._widgetPromise = (async () => {
           this._shadow = this.attachShadow({ mode: 'open' });
 
           try {
@@ -167,27 +167,29 @@ function registerCustomElement(options) {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-      this._widget?.attributeChangedCallback?.(
-        this._widget,
-        name,
-        oldValue,
-        newValue,
-        {
-          shadow: this._shadow,
-          customElement: this,
-        },
-      );
+      this._widgetPromise.then(() => {
+        this._widget?.attributeChangedCallback?.(
+          this._widget,
+          name,
+          oldValue,
+          newValue,
+          {
+            shadow: this._shadow,
+            customElement: this,
+          },
+        );
 
-      callbacks?.attributeChangedCallback?.(
-        this._widget,
-        name,
-        oldValue,
-        newValue,
-        {
-          shadow: this._shadow,
-          customElement: this,
-        },
-      );
+        callbacks?.attributeChangedCallback?.(
+          this._widget,
+          name,
+          oldValue,
+          newValue,
+          {
+            shadow: this._shadow,
+            customElement: this,
+          },
+        );
+      });
     }
   }
 
