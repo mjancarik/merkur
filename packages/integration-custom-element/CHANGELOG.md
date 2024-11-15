@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.2](https://github.com/mjancarik/merkur/compare/v0.37.1...v0.37.2) (2024-11-15)
+
+### Bug Fixes
+
+- 🐛 lifecycle callbacks are called after creating widget ([45b4c21](https://github.com/mjancarik/merkur/commit/45b4c211591bf393c90e67b873a4eeed23e47d91))
+
 # [0.37.0](https://github.com/mjancarik/merkur/compare/v0.36.5...v0.37.0) (2024-11-12)
 
 ### Bug Fixes
