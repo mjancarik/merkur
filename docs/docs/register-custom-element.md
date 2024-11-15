@@ -21,10 +21,16 @@ The default Merkur template is prepared for SSR so we will remove in below secti
 
 ### Server part
 
-After created new Merkur widget you change your playground template for creating `/server/playground/templates/body.ejs` file to:
+After created new Merkur widget you change your playground template for creating `/server/playground/templates/body.ejs` and `/server/playground/templates/footer.ejs` files or run `merkur custom playground:body` and `merkur custom playground:footer`. Then after creating files in your project change files to:
 
 ```javascript
+// body.ejs
 <{package.name}></{package-name}> // something like <merkur-widget></merkur-widget>
+```
+
+```javascript
+// footer.ejs
+// keep empty
 ```
 
 We changed logic for reviveling widget in playground and added only custom element with name from `package.json` to the body part of html. The custom element auto revive Merkur widget. Now you can remove other files in `/server/*` folder. 
