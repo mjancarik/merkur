@@ -4,7 +4,7 @@ export function excludeVendorsFromSourceMapPlugin() {
   return {
     name: 'excludeVendorsFromSourceMapPlugin',
     setup(build) {
-      build.onLoad({ filter: /node_modules/ }, async (args) => {
+      build.onLoad({ filter: /\/node_modules\/.*\.js?$/ }, async (args) => {
         const contents = await fs.readFile(args.path, { encoding: 'utf8' });
 
         return {
