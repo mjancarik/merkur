@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.3](https://github.com/mjancarik/merkur/compare/v0.37.2...v0.37.3) (2024-11-18)
+
+### Bug Fixes
+
+- 🐛 exclude only js files (keep \*.less and others) ([efa24c4](https://github.com/mjancarik/merkur/commit/efa24c4fcbed90ba865412c00bf7b9410c10d164))
+
 ## [0.37.2](https://github.com/mjancarik/merkur/compare/v0.37.1...v0.37.2) (2024-11-15)
 
 ### Bug Fixes
