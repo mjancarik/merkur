@@ -73,9 +73,12 @@ function httpClientAPI() {
         );
 
         if (!response.ok) {
-          const error = new Error(`${response.statusText}: ${request.url}`, {
-            cause: { request, response },
-          });
+          const error = new Error(
+            `Received ${response.status} status code when requesting ${request.url}`,
+            {
+              cause: { request, response },
+            },
+          );
           // keep compatablity
           error.request = request;
           error.response = response;
