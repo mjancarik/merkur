@@ -79,6 +79,7 @@ export async function createBuildConfig({
     },
     definition,
     config,
+    merkurConfig,
     cliConfig,
     context,
     [RESULT_KEY]: 'build',
