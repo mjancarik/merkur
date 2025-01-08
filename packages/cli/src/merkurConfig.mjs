@@ -37,7 +37,7 @@ export async function createMerkurConfig({ cliConfig, context, args } = {}) {
 
   await loadExtender({ merkurConfig, cliConfig, logger, context });
 
-  await registerHooks({ merkurConfig });
+  registerHooks({ merkurConfig });
 
   cliConfig = await updateCLIConfig({ args, cliConfig, context });
 
@@ -70,7 +70,6 @@ async function loadExtender({ merkurConfig, cliConfig, logger, context }) {
         });
 
         registerHooks({ merkurConfig: hooks ?? {} });
-
       } catch (error) {
         logger.error(error);
       }
@@ -78,7 +77,7 @@ async function loadExtender({ merkurConfig, cliConfig, logger, context }) {
   );
 }
 
-async function registerHooks({ merkurConfig }) {
+function registerHooks({ merkurConfig }) {
   Object.values(EMITTER_EVENTS)
     .filter((eventName) => eventName in merkurConfig)
     .forEach((eventName) => {
