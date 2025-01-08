@@ -60,13 +60,17 @@ async function loadExtender({ merkurConfig, cliConfig, logger, context }) {
     merkurConfig?.extends?.map(async (modulePath) => {
       try {
         const file = await import(`${modulePath}`);
-        await file.default({
+        const hooks = await file.default({
           cliConfig,
           merkurConfig,
           context,
           emitter,
           EMITTER_EVENTS,
+          logger,
         });
+
+        registerHooks({ merkurConfig: hooks ?? {} });
+
       } catch (error) {
         logger.error(error);
       }
