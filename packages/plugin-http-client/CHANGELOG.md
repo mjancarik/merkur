@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.4](https://github.com/mjancarik/merkur/compare/v0.37.3...v0.37.4) (2025-01-24)
+
+### Bug Fixes
+
+- 🐛 error message missing status in http2 ([181302a](https://github.com/mjancarik/merkur/commit/181302a32af3e02dae73a1bff0a574ee2c55ceed))
+
 # [0.37.0](https://github.com/mjancarik/merkur/compare/v0.36.5...v0.37.0) (2024-11-12)
 
 ### Features

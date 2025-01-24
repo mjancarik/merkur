@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.4](https://github.com/mjancarik/merkur/compare/v0.37.3...v0.37.4) (2025-01-24)
+
+### Features
+
+- 🎸 added possibility for presets return extending hooks ([94215d7](https://github.com/mjancarik/merkur/commit/94215d7f68b22ac6068e5b5d3c47aa6cc470ab36))
+
 ## [0.37.3](https://github.com/mjancarik/merkur/compare/v0.37.2...v0.37.3) (2024-11-18)
 
 ### Bug Fixes
