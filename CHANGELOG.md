@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.5](https://github.com/mjancarik/merkur/compare/v0.37.4...v0.37.5) (2025-03-03)
+
+### Features
+
+- 🎸 added gzip meta information to build command ([3e470e2](https://github.com/mjancarik/merkur/commit/3e470e2b8499ad7344f299d47144403e5c0f807a))
+
 ## [0.37.4](https://github.com/mjancarik/merkur/compare/v0.37.3...v0.37.4) (2025-01-24)
 
 ### Bug Fixes
