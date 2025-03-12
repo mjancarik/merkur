@@ -7,7 +7,10 @@ import { test } from '../src/commands/test.mjs';
 import { custom, CUSTOM_PART } from '../src/commands/custom.mjs';
 import { COMMAND_NAME } from '../src/commands/constant.mjs';
 
-// eslint-disable-next-line 
+import path from 'path';
+import fs from 'fs';
+
+// eslint-disable-next-line
 import packageFile from '../package.json' with { type: 'json' };
 
 const program = new Command();
@@ -27,6 +30,36 @@ const hasRunWidgetServerOption = new Option('--hasRunWidgetServer', 'Flag for st
 const inspectOption = new Option('--inspect', 'Debugging widget server');
 const verboseOption = new Option('--verbose', 'Verbose mode which show debug information.');
 const analyzeOption = new Option('--analyze', 'Analyze bundle.');
+
+let customCommands = [];
+
+// Extend commands from directory
+const extendCommandsFromDir = async commandsDir => {
+  customCommands = customCommands.concat(
+    fs.readdirSync(commandsDir)
+      .map(command => ({ dir: commandsDir, command }))
+      .filter(
+        ({ command, dir }) => !customCommands.some(({ command: existingCommand }) => existingCommand === command) &&
+        fs.statSync(path.join(dir, command)).isFile() &&
+        (command.endsWith('.js') || command.endsWith('.mjs'))
+      )
+  );
+};
+
+// Get merkur custom commands
+const merkurDir = path.resolve(process.cwd(), 'node_modules/@merkur');
+if (fs.existsSync(merkurDir)) {
+    let dirs = [];
+    dirs = fs.readdirSync(merkurDir)
+      .map(dir => ({ dir }))
+
+    for (const { dir } of dirs) {
+        const fullPath = path.join(merkurDir, `${dir}/lib/commands`);
+        if (fs.existsSync(fullPath)) {
+            await extendCommandsFromDir(fullPath);
+        }
+    };
+}
 
 program
   .name('merkur')
@@ -137,5 +170,11 @@ program
 
     await custom({ args, commandArgs: cmd.args, command: COMMAND_NAME.CUSTOM });
   });
+
+// Load custom commands
+for (const { command, dir } of customCommands) {
+  const commandModule = await import(path.join(dir, command));
+  await commandModule.default.default(({ program }));
+};
 
 program.parse(process.argv);
