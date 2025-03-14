@@ -168,8 +168,9 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           return next(error);
         }
 
-        logger.error(error);
-        res.status(500).json({
+        logger.error(error)
+        // TODO send html page with preview of error for better DX
+        res.status(error?.status ?? 500).json({
           error: {
             message: `Something is wrong with the @merkur/cli/devServer: ${error.message}`,
             stack: error.stack,
