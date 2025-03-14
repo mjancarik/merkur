@@ -41,7 +41,7 @@ const extendCommandsFromDir = async commandsDir => {
       .filter(
         ({ command, dir }) => !customCommands.some(({ command: existingCommand }) => existingCommand === command) &&
         fs.statSync(path.join(dir, command)).isFile() &&
-        (command.endsWith('.js') || command.endsWith('.mjs'))
+        (command.endsWith('.js') || command.endsWith('.mjs') || command.endsWith('.cjs'))
       )
   );
 };
@@ -49,11 +49,9 @@ const extendCommandsFromDir = async commandsDir => {
 // Get merkur custom commands
 const merkurDir = path.resolve(process.cwd(), 'node_modules/@merkur');
 if (fs.existsSync(merkurDir)) {
-    let dirs = [];
-    dirs = fs.readdirSync(merkurDir)
-      .map(dir => ({ dir }))
+    let dirs = fs.readdirSync(merkurDir)
 
-    for (const { dir } of dirs) {
+    for (const dir of dirs) {
         const fullPath = path.join(merkurDir, `${dir}/lib/commands`);
         if (fs.existsSync(fullPath)) {
             await extendCommandsFromDir(fullPath);
