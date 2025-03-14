@@ -168,7 +168,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           return next(error);
         }
 
-        logger.error(error)
+        logger.error(error);
         // TODO send html page with preview of error for better DX
         res.status(error?.status ?? 500).json({
           error: {
