@@ -27,10 +27,41 @@ function setEntityClasses(widget, entityClasses) {
   widget.$in.graphqlClient.entityClasses = buildTypeToEntityMap(entityClasses);
 }
 
+function graphqlClientPluginMultiple(config) {
+  return {
+    async setup(widget) {
+      assignMissingKeys(widget, graphqlClientAPI(config));
+
+      widget.$in.graphqlClient = {
+        endpointUrl: '',
+        entityClasses: {},
+      };
+
+      return widget;
+    },
+    async create(widget) {
+      if (ENV === DEV && !widget.$in.httpClient) {
+        throw new Error(
+          'You must install missing plugin: npm i @merkur/plugin-http-client',
+        );
+      }
+
+      bindWidgetToFunctions(widget, widget[config.name]);
+
+      return widget;
+    },
+  };
+}
+
 function graphqlClientPlugin() {
   return {
     async setup(widget) {
-      assignMissingKeys(widget, graphqlClientAPI());
+      assignMissingKeys(
+        widget,
+        graphqlClientAPI({
+          name: 'graphql',
+        }),
+      );
 
       widget.$in.graphqlClient = {
         endpointUrl: '',
@@ -53,17 +84,20 @@ function graphqlClientPlugin() {
   };
 }
 
-function graphqlClientAPI() {
+function graphqlClientAPI({ name = 'graphql', endpointUrl, entityClasses }) {
   return {
-    graphql: {
+    [name]: {
       async request(widget, operation, variables = {}, options = {}) {
-        const { endpointUrl, entityClasses } = widget.$in.graphqlClient;
+        const {
+          endpointUrl: endpointUrlDefault,
+          entityClasses: entityClassesDefault,
+        } = widget.$in.graphqlClient;
         const { headers = {}, body = {}, ...restOptions } = options;
 
         operation = addTypenameToSelections(operation);
 
         const { response } = await widget.http.request({
-          url: endpointUrl,
+          url: endpointUrl || endpointUrlDefault,
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -93,7 +127,7 @@ function graphqlClientAPI() {
           );
         }
 
-        return processResponseData(data, entityClasses);
+        return processResponseData(data, entityClasses || entityClassesDefault);
       },
     },
   };
@@ -188,6 +222,7 @@ function addTypenameToSelections(document) {
 
 export {
   graphqlClientPlugin,
+  graphqlClientPluginMultiple,
   setEndpointUrl,
   setEntityClasses,
   GraphQLError,
