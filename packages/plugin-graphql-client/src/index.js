@@ -19,24 +19,23 @@ const ENV =
     ? process.env.NODE_ENV
     : DEV;
 
-function setEndpointUrl(widget, url) {
-  widget.$in.graphqlClient.endpointUrl = url;
+function setEndpointUrl(widget, url, name = 'graphql') {
+  widget.$in.graphqlClient[name].endpointUrl = url;
 }
 
-function setEntityClasses(widget, entityClasses) {
-  widget.$in.graphqlClient.entityClasses = buildTypeToEntityMap(entityClasses);
+function setEntityClasses(widget, entityClasses, name = 'graphql') {
+  widget.$in.graphqlClient[name].entityClasses =
+    buildTypeToEntityMap(entityClasses);
 }
 
-function graphqlClientPlugin(config = null) {
-  if (config === null) {
-    config = { name: 'graphql' };
-  }
-
+function graphqlClientPlugin(name = 'graphql') {
   return {
     async setup(widget) {
-      assignMissingKeys(widget, graphqlClientAPI(config));
+      assignMissingKeys(widget, graphqlClientAPI(name));
 
-      widget.$in.graphqlClient = {
+      if (!widget.$in.graphqlClient) widget.$in.graphqlClient = {};
+
+      widget.$in.graphqlClient[name] = {
         endpointUrl: '',
         entityClasses: {},
       };
@@ -50,27 +49,24 @@ function graphqlClientPlugin(config = null) {
         );
       }
 
-      bindWidgetToFunctions(widget, widget[config.name]);
+      bindWidgetToFunctions(widget, widget[name]);
 
       return widget;
     },
   };
 }
 
-function graphqlClientAPI({ name, endpointUrl, entityClasses }) {
+function graphqlClientAPI(name = 'graphql') {
   return {
     [name]: {
       async request(widget, operation, variables = {}, options = {}) {
-        const {
-          endpointUrl: endpointUrlDefault,
-          entityClasses: entityClassesDefault,
-        } = widget.$in.graphqlClient;
+        const { endpointUrl, entityClasses } = widget.$in.graphqlClient[name];
         const { headers = {}, body = {}, ...restOptions } = options;
 
         operation = addTypenameToSelections(operation);
 
         const { response } = await widget.http.request({
-          url: endpointUrl || endpointUrlDefault,
+          url: endpointUrl,
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -100,7 +96,7 @@ function graphqlClientAPI({ name, endpointUrl, entityClasses }) {
           );
         }
 
-        return processResponseData(data, entityClasses || entityClassesDefault);
+        return processResponseData(data, entityClasses);
       },
     },
   };
