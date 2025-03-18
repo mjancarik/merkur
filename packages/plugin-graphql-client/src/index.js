@@ -27,7 +27,11 @@ function setEntityClasses(widget, entityClasses) {
   widget.$in.graphqlClient.entityClasses = buildTypeToEntityMap(entityClasses);
 }
 
-function graphqlClientPluginMultiple(config) {
+function graphqlClientPlugin(config = null) {
+  if (config === null) {
+    config = { name: 'graphql' };
+  }
+
   return {
     async setup(widget) {
       assignMissingKeys(widget, graphqlClientAPI(config));
@@ -53,38 +57,7 @@ function graphqlClientPluginMultiple(config) {
   };
 }
 
-function graphqlClientPlugin() {
-  return {
-    async setup(widget) {
-      assignMissingKeys(
-        widget,
-        graphqlClientAPI({
-          name: 'graphql',
-        }),
-      );
-
-      widget.$in.graphqlClient = {
-        endpointUrl: '',
-        entityClasses: {},
-      };
-
-      return widget;
-    },
-    async create(widget) {
-      if (ENV === DEV && !widget.$in.httpClient) {
-        throw new Error(
-          'You must install missing plugin: npm i @merkur/plugin-http-client',
-        );
-      }
-
-      bindWidgetToFunctions(widget, widget.graphql);
-
-      return widget;
-    },
-  };
-}
-
-function graphqlClientAPI({ name = 'graphql', endpointUrl, entityClasses }) {
+function graphqlClientAPI({ name, endpointUrl, entityClasses }) {
   return {
     [name]: {
       async request(widget, operation, variables = {}, options = {}) {
@@ -222,7 +195,6 @@ function addTypenameToSelections(document) {
 
 export {
   graphqlClientPlugin,
-  graphqlClientPluginMultiple,
   setEndpointUrl,
   setEntityClasses,
   GraphQLError,
