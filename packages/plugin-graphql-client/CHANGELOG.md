@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.7](https://github.com/mjancarik/merkur/compare/v0.37.6...v0.37.7) (2025-03-19)
+
+### Features
+
+- 🎸 Multiple gql plugin instances ([99b7af2](https://github.com/mjancarik/merkur/commit/99b7af259eda43b88b0e0003dbdc81104d0c55aa))
+- 🎸 small changes ([5070d59](https://github.com/mjancarik/merkur/commit/5070d590a1bb2dca48d1cc85e2797be501bb0667))
+- 🎸 support for set methods ([d6b0947](https://github.com/mjancarik/merkur/commit/d6b094796021cf9c58e97fc0951bf4dead35e138))
+
 ## [0.37.4](https://github.com/mjancarik/merkur/compare/v0.37.3...v0.37.4) (2025-01-24)
 
 **Note:** Version bump only for package @merkur/plugin-graphql-client

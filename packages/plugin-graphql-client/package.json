@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-graphql-client",
-  "version": "0.37.4",
+  "version": "0.37.7",
   "description": "Merkur event emitter plugin.",
   "main": "lib/index",
   "module": "lib/index",
