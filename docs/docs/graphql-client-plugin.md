@@ -5,7 +5,7 @@ title: GraphQL client plugin - Merkur
 
 # GraphQL client plugin
 
-The GraphQL client plugin adds `graphql` property to your widget with a `request` method. Under the hood this plugin uses [HTTP Client plugin](https://merkur.js.org/docs/http-client-plugin)
+The GraphQL client plugin adds `graphql` (or any name you chose) property to your widget with a `request` method. Under the hood this plugin uses [HTTP Client plugin](https://merkur.js.org/docs/http-client-plugin)
 
 ## Installation
 
@@ -26,6 +26,27 @@ export const widgetProperties = {
 
 After that we have an `graphql.request` method available on the widget.
 
+Or you can return the function with a specific name. This is handy if you want to use more then one plugin, for example, with a different API end point.
+
+
+```javascript
+// ./src/widget.js
+import { httpClientPlugin } from '@merkur/plugin-http-client';
+import { graphqlClientPlugin } from '@merkur/plugin-graphql-client';
+
+const gqlPluginOne = () => graphqlClientPlugin('graphqlOne');
+const gqlPluginTwo = () => graphqlClientPlugin('graphqlTwo');
+
+export const widgetProperties = {
+  name,
+  version,
+  $plugins: [httpClientPlugin, gqlPluginOne, gqlPluginTwo],
+  // ... other properties
+};
+```
+
+After than we have an `graphqlOne.request` and `graphqlTwo.request` method available.
+
 We must add graphql loader from `@merkur/plugin-graphql-client/webpack` to webpack config. To add support for importing `.graphql/.gql` files.
 
 ```javascript
@@ -41,7 +62,10 @@ module.exports = createLiveReloadServer().then(() =>
 .
 .
 ```
+
 We can set GraphQL endpoint URL with `setEndpointUrl` method from `@merkur/plugin-graphql-client` and set default request config with `setDefaultConfig` method from `@merkur/plugin-http-client`.
+
+Method `setEndpointUrl` third parameter takes the name of the given graphql API. (For example 'graphqlOne' and 'graphqlTwo')
 
 ```javascript
 // ./src/widget.js
@@ -92,6 +116,8 @@ try {
 
 You can register classes that will be instantiated with data for specific GraphQL Node. For that purpouse import `setEntityClasses` method from `@merkur/plugin-graphql-client`.
 
+Method `setEntityClasses` third parameter is name of given graphql API. (For example 'graphqlOne' and 'graphqlTwo')
+
 ```javascript
 // ./src/graphql/entity/UserEntity.js
 export default class UserEntity {
@@ -128,7 +154,3 @@ export default class ConnectionEntity {
   // ...
 }
 ```
-
-
-
-
