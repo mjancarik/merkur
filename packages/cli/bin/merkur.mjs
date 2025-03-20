@@ -39,9 +39,10 @@ const extendCommandsFromDir = async commandsDir => {
     fs.readdirSync(commandsDir)
       .map(command => ({ dir: commandsDir, command }))
       .filter(
-        ({ command, dir }) => !customCommands.some(({ command: existingCommand }) => existingCommand === command) &&
-        fs.statSync(path.join(dir, command)).isFile() &&
-        (command.endsWith('.js') || command.endsWith('.mjs') || command.endsWith('.cjs'))
+        ({ command, dir }) => {
+              return fs.statSync(path.join(dir, command)).isFile() &&
+              (command.endsWith('.js') || command.endsWith('.mjs') || command.endsWith('.cjs'));
+        }
       )
   );
 };
@@ -170,9 +171,21 @@ program
   });
 
 // Load custom commands
+let definedCommands = [];
 for (const { command, dir } of customCommands) {
+  const programCustom = new Command();
   const commandModule = await import(path.join(dir, command));
-  await commandModule.default.default(({ program }));
+  const commandName = commandModule.default.default(({ program: programCustom })).name();
+
+  if (definedCommands.includes(commandName)) {
+    console.warn(`Command "${commandName}" from ${dir} package cannot be used because a command with the same name already exists.`);
+    continue;
+  }
+
+  definedCommands.push(commandName);
+  programCustom.commands.forEach(cmd => {
+    program.addCommand(cmd);
+  });
 };
 
 program.parse(process.argv);
