@@ -48,22 +48,27 @@ const extendCommandsFromDir = async commandsDir => {
 };
 
 // Get merkur custom commands
-const merkurDir = path.resolve(process.cwd(), 'node_modules/@merkur');
-if (fs.existsSync(merkurDir)) {
+const files = fs.readdirSync(process.cwd());
+const existsMerkurConfig = files.some(file => /^merkur\.config\.(js|mjs)$/.test(file));
+
+if (existsMerkurConfig) {
+  const merkurDir = path.resolve(process.cwd(), 'node_modules/@merkur');
+  if (fs.existsSync(merkurDir)) {
     let dirs = fs.readdirSync(merkurDir)
 
     for (const dir of dirs) {
-        const fullPath = path.join(merkurDir, `${dir}/lib/commands`);
-        if (fs.existsSync(fullPath)) {
-            await extendCommandsFromDir(fullPath);
-        }
+      const fullPath = path.join(merkurDir, `${dir}/lib/commands`);
+      if (fs.existsSync(fullPath)) {
+        await extendCommandsFromDir(fullPath);
+      }
     };
+  }
 }
 
 program
   .name('merkur')
   .description('CLI for Merkur framework.')
-  .version(packageFile.version);
+  .version(packageFile.version)
 
 program.command(COMMAND_NAME.DEV)
   .description('Dev command')
