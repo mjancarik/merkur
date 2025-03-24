@@ -18,7 +18,45 @@ The [Merkur](https://merkur.js.org/) is tiny extensible javascript library for f
  - Usable with all tech stacks
  - SSR-ready by default
  - Easy extensible with plugins
- - Tiny - 1 KB minified + gzipped 
+ - Tiny - 1 KB minified + gzipped
+
+## Create custom command for @merkur/cli
+
+1. Create new folder `commands` in your package.
+2. Create a new file and name it after the command. Eg. `cssVarsGenerator.js`
+3. In the file create new command.  
+You can use following template:
+```
+import chalk from 'chalk';
+import path from 'path';
+import { flattenObject } from '../src/utils.js';
+
+export default ({ program }) => program
+  .command('cssVarsGenerator')
+  .description('Generate css variables from layout.js')
+  .argument('<layout>', 'layout config')
+  .argument('<cssVarPrefix>', 'css var prefix')
+  .allowUnknownOption()
+  .action(async (layout, cssVarPrefix) => {
+    function generateLayoutConfigCssVariables(layoutConfig) {
+        const cssVars = [];
+        const flatObj = flattenObject(layoutConfig);
+
+        for (const key in flatObj) {
+          cssVars.push(`${cssVarPrefix}${key}: ${flatObj[key]};`);
+        }
+
+        return cssVars.join('\n');
+    }
+    const layoutConfig = require(path.resolve(layout));
+
+    console.log('\n\n');
+    console.log(chalk.green.bold('CSS Variables:'));
+    console.log('-----------------------------------');
+    console.log(chalk.blue.bold(generateLayoutConfigCssVariables(layoutConfig)));
+});
+```
+4. Update your `rollup.config.mjs` file and make sure your newly created file's going to be build.
 
 ## Getting started
 

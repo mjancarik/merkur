@@ -7,7 +7,10 @@ import { test } from '../src/commands/test.mjs';
 import { custom, CUSTOM_PART } from '../src/commands/custom.mjs';
 import { COMMAND_NAME } from '../src/commands/constant.mjs';
 
-// eslint-disable-next-line 
+import path from 'path';
+import fs from 'fs';
+
+// eslint-disable-next-line
 import packageFile from '../package.json' with { type: 'json' };
 
 const program = new Command();
@@ -28,10 +31,44 @@ const inspectOption = new Option('--inspect', 'Debugging widget server');
 const verboseOption = new Option('--verbose', 'Verbose mode which show debug information.');
 const analyzeOption = new Option('--analyze', 'Analyze bundle.');
 
+let customCommands = [];
+
+// Extend commands from directory
+const extendCommandsFromDir = async commandsDir => {
+  customCommands = customCommands.concat(
+    fs.readdirSync(commandsDir)
+      .map(command => ({ dir: commandsDir, command }))
+      .filter(
+        ({ command, dir }) => {
+              return fs.statSync(path.join(dir, command)).isFile() &&
+              (command.endsWith('.js') || command.endsWith('.mjs') || command.endsWith('.cjs'));
+        }
+      )
+  );
+};
+
+// Get merkur custom commands
+const files = fs.readdirSync(process.cwd());
+const existsMerkurConfig = files.some(file => /^merkur\.config\.(js|mjs)$/.test(file));
+
+if (existsMerkurConfig) {
+  const merkurDir = path.resolve(process.cwd(), 'node_modules/@merkur');
+  if (fs.existsSync(merkurDir)) {
+    let dirs = fs.readdirSync(merkurDir)
+
+    for (const dir of dirs) {
+      const fullPath = path.join(merkurDir, `${dir}/lib/commands`);
+      if (fs.existsSync(fullPath)) {
+        await extendCommandsFromDir(fullPath);
+      }
+    };
+  }
+}
+
 program
   .name('merkur')
   .description('CLI for Merkur framework.')
-  .version(packageFile.version);
+  .version(packageFile.version)
 
 program.command(COMMAND_NAME.DEV)
   .description('Dev command')
@@ -137,5 +174,23 @@ program
 
     await custom({ args, commandArgs: cmd.args, command: COMMAND_NAME.CUSTOM });
   });
+
+// Load custom commands
+let definedCommands = [];
+for (const { command, dir } of customCommands) {
+  const programCustom = new Command();
+  const commandModule = await import(path.join(dir, command));
+  const commandName = commandModule.default.default(({ program: programCustom })).name();
+
+  if (definedCommands.includes(commandName)) {
+    console.warn(`Command "${commandName}" from ${dir} package cannot be used because a command with the same name already exists.`);
+    continue;
+  }
+
+  definedCommands.push(commandName);
+  programCustom.commands.forEach(cmd => {
+    program.addCommand(cmd);
+  });
+};
 
 program.parse(process.argv);
