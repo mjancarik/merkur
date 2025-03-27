@@ -1,5 +1,7 @@
 import testScript from './testScript';
 
+const cache = {};
+
 function _loadScript(asset, root) {
   return new Promise((resolve, reject) => {
     const scriptElement = root.querySelector(`script[src='${asset.source}']`);
@@ -74,10 +76,11 @@ function _loadStyle(asset, root) {
   });
 }
 
-function loadStyleAssets(assets, root = document.head) {
+function loadStyleAssets(assets, root = document.head, shouldLoadLazy = false) {
   const styleElements = root.querySelectorAll('style');
   const stylesToRender = assets.filter(
     (asset) =>
+      ((asset.lazy && shouldLoadLazy) || (!asset.lazy && !shouldLoadLazy)) &&
       asset.source &&
       ((asset.type === 'stylesheet' &&
         !root.querySelector(`link[href='${asset.source}']`)) ||
@@ -94,15 +97,23 @@ function loadStyleAssets(assets, root = document.head) {
   return Promise.all(stylesToRender.map((asset) => _loadStyle(asset, root)));
 }
 
-async function loadScriptAssets(assets, root = document.head) {
+async function loadScriptAssets(
+  assets,
+  root = document.head,
+  shouldLoadLazy = false,
+) {
   const scriptElements = root.querySelectorAll('script');
   const scriptsToRender = assets.reduce((scripts, asset) => {
-    const { source } = asset;
-    const _asset = Object.assign({}, asset);
-
-    if (_asset.type !== 'script' && _asset.type !== 'inlineScript') {
+    if (
+      (asset.type !== 'script' && asset.type !== 'inlineScript') ||
+      (asset.lazy && !shouldLoadLazy) ||
+      (!asset.lazy && shouldLoadLazy)
+    ) {
       return scripts;
     }
+
+    const { source } = asset;
+    const _asset = Object.assign({}, asset);
 
     if (source === Object(source)) {
       if (source.es13 && testScript.isES13Supported()) {
@@ -158,4 +169,140 @@ function loadAssets(assets, root) {
   ]);
 }
 
-export { testScript, loadAssets, loadStyleAssets, loadScriptAssets };
+async function _loadJsonAsset(asset) {
+  try {
+    const response = await fetch(asset.source);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch from '${asset.source}' with status ${response.status} ${response.statusText}.`,
+      );
+    }
+
+    cache[asset.name] = await response.json();
+
+    return cache[asset.name];
+  } catch (error) {
+    console.warn(`Error loading JSON asset '${asset.name}': ${error.message}`);
+
+    return null;
+  }
+}
+
+function loadJsonAssets(assets, assetNames) {
+  let containsPromise = false;
+
+  const results = assetNames.map((assetName) => {
+    const asset = assets.find(
+      (asset) =>
+        asset.name === assetName && ['json', 'inlineJson'].includes(asset.type),
+    );
+
+    if (!asset || !asset.source) {
+      return null;
+    }
+
+    if (cache[assetName]) {
+      return cache[assetName];
+    }
+
+    if (asset.type === 'inlineJson') {
+      return asset.source;
+    }
+
+    containsPromise = true;
+
+    return _loadJsonAsset(asset);
+  });
+
+  return containsPromise ? Promise.all(results) : results;
+}
+
+function mapAssetsToFlatArray(assetsByType, assetIndexMap) {
+  return assetIndexMap.map(
+    ({ typeIndex, index }) => assetsByType[typeIndex][index] || null,
+  );
+}
+
+function loadLazyAssets(assets, assetNames, root) {
+  const SCRIPT_INDEX = 0;
+  const STYLE_INDEX = 1;
+  const JSON_INDEX = 2;
+  const INVALID_INDEX = 3;
+
+  const assetIndexMap = [];
+  const assetsByType = [];
+  assetsByType[SCRIPT_INDEX] = [];
+  assetsByType[STYLE_INDEX] = [];
+  assetsByType[JSON_INDEX] = [];
+  assetsByType[INVALID_INDEX] = [];
+
+  const scriptsToLoad = [];
+  const stylesToLoad = [];
+  const jsonsToLoad = [];
+
+  assetNames.forEach((assetName, index) => {
+    const asset = assets.find((asset) => asset?.name === assetName);
+
+    if (
+      (asset?.type === 'script' || asset?.type === 'inlineScript') &&
+      asset?.lazy
+    ) {
+      assetIndexMap[index] = {
+        typeIndex: SCRIPT_INDEX,
+        index: scriptsToLoad.length,
+      };
+      scriptsToLoad.push(asset);
+    } else if (
+      (asset?.type === 'stylesheet' || asset?.type === 'inlineStyle') &&
+      asset?.lazy
+    ) {
+      assetIndexMap[index] = {
+        typeIndex: STYLE_INDEX,
+        index: stylesToLoad.length,
+      };
+      stylesToLoad.push(asset);
+    } else if (asset?.type === 'json' || asset?.type === 'inlineJson') {
+      assetIndexMap[index] = {
+        typeIndex: JSON_INDEX,
+        index: jsonsToLoad.length,
+      };
+      jsonsToLoad.push(asset);
+    } else {
+      assetIndexMap[index] = {
+        typeIndex: INVALID_INDEX,
+        index: assetsByType[INVALID_INDEX].length,
+      };
+      assetsByType[INVALID_INDEX].push(null);
+    }
+  });
+
+  if (scriptsToLoad.length) {
+    assetsByType[SCRIPT_INDEX] = loadScriptAssets(scriptsToLoad, root, true);
+  }
+
+  if (stylesToLoad.length) {
+    assetsByType[STYLE_INDEX] = loadStyleAssets(stylesToLoad, root, true);
+  }
+
+  if (jsonsToLoad.length) {
+    assetsByType[JSON_INDEX] = loadJsonAssets(jsonsToLoad, assetNames);
+  }
+
+  if (assetsByType.some((asset) => asset instanceof Promise)) {
+    return Promise.all(assetsByType).then((loadedAssets) =>
+      mapAssetsToFlatArray(loadedAssets, assetIndexMap),
+    );
+  }
+
+  return mapAssetsToFlatArray(assetsByType, assetIndexMap);
+}
+
+export {
+  testScript,
+  loadAssets,
+  loadJsonAssets,
+  loadLazyAssets,
+  loadStyleAssets,
+  loadScriptAssets,
+};
