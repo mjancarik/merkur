@@ -16,15 +16,15 @@ function _loadScript(asset, root) {
     return asset.source;
   }
 
-  loadingAssets[asset.name] = new Promise((resolve, reject) => {
+  loadingAssets[asset.source] = new Promise((resolve, reject) => {
     const script = document.createElement('script');
     script.defer = true;
     script.onload = () => {
-      delete loadingAssets[asset.name];
+      delete loadingAssets[asset.source];
       resolve(asset.source);
     };
     script.onerror = () => {
-      delete loadingAssets[asset.name];
+      delete loadingAssets[asset.source];
       script.remove();
       const message = `Error loading script '${asset.source}'.`;
 
@@ -57,7 +57,7 @@ function _loadScript(asset, root) {
     root.appendChild(script);
   });
 
-  return loadingAssets[asset.name];
+  return loadingAssets[asset.source];
 }
 
 function _loadStyle(asset, root) {
@@ -73,14 +73,14 @@ function _loadStyle(asset, root) {
     return asset.source;
   }
 
-  loadingAssets[asset.name] = new Promise((resolve) => {
+  loadingAssets[asset.source] = new Promise((resolve) => {
     const link = document.createElement('link');
     link.onload = () => {
-      delete loadingAssets[asset.name];
+      delete loadingAssets[asset.source];
       resolve(asset.source);
     };
     link.onerror = () => {
-      delete loadingAssets[asset.name];
+      delete loadingAssets[asset.source];
       link.remove();
       console.warn(`Error loading stylesheet '${asset.source}'.`);
       resolve(null);
@@ -91,7 +91,7 @@ function _loadStyle(asset, root) {
     root.appendChild(link);
   });
 
-  return loadingAssets[asset.name];
+  return loadingAssets[asset.source];
 }
 
 function loadStyleAssets(assets, root = document.head, shouldLoadLazy = false) {
@@ -106,8 +106,8 @@ function loadStyleAssets(assets, root = document.head, shouldLoadLazy = false) {
       return null;
     }
 
-    if (loadingAssets[asset.name]) {
-      return loadingAssets[asset.name];
+    if (loadingAssets[asset.source]) {
+      return loadingAssets[asset.source];
     }
 
     if (
@@ -147,10 +147,6 @@ async function loadScriptAssets(
       return null;
     }
 
-    if (loadingAssets[asset.name]) {
-      return loadingAssets[asset.name];
-    }
-
     const { source } = asset;
     const _asset = Object.assign({}, asset);
 
@@ -178,6 +174,10 @@ async function loadScriptAssets(
         console.warn(message);
         return null;
       }
+    }
+
+    if (loadingAssets[_asset.source]) {
+      return loadingAssets[_asset.source];
     }
 
     if (
@@ -218,9 +218,9 @@ async function _loadJsonAsset(asset) {
       );
     }
 
-    cache[asset.name] = await response.json();
+    cache[asset.source] = await response.json();
 
-    return cache[asset.name];
+    return cache[asset.source];
   } catch (error) {
     console.warn(`Error loading JSON asset '${asset.name}': ${error.message}`);
 
@@ -241,12 +241,12 @@ function loadJsonAssets(assets, assetNames) {
       return null;
     }
 
-    if (cache[assetName]) {
-      return cache[assetName];
-    }
-
     if (asset.type === 'inlineJson') {
       return asset.source;
+    }
+
+    if (cache[asset.source]) {
+      return cache[asset.source];
     }
 
     containsPromise = true;
