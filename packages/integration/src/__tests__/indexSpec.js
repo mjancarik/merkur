@@ -257,31 +257,19 @@ describe('Merkur component', () => {
         .spyOn(rootElement, 'querySelector')
         .mockImplementationOnce(() => fakeAssetObject);
       performance.getEntriesByName = jest.fn(() => []);
+      const script = {
+        name: 'test.js',
+        type: 'script',
+        optional: true,
+        source: {
+          es9: 'http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js',
+        },
+      };
 
-      loadScriptAssets(
-        [
-          {
-            name: 'test.js',
-            type: 'script',
-            optional: true,
-            source: {
-              es9: 'http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js',
-            },
-          },
-        ],
-        rootElement,
-      )
-        .then(() => {
-          expect(fakeAssetObject.addEventListener).toHaveBeenCalledWith(
-            'load',
-            expect.any(Function),
-          );
-          expect(fakeAssetObject.addEventListener).toHaveBeenCalledWith(
-            'error',
-            expect.any(Function),
-          );
-          expect(fakeAssetObject.addEventListener).toHaveBeenCalledTimes(2);
+      loadScriptAssets([script], rootElement)
+        .then(([source]) => {
           expect(document.createElement).toHaveBeenCalledTimes(0);
+          expect(source).toBe(script.source.es9);
 
           done();
         })

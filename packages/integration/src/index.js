@@ -1,98 +1,132 @@
 import testScript from './testScript';
 
+const loadingAssets = {};
 const cache = {};
 
 function _loadScript(asset, root) {
-  return new Promise((resolve, reject) => {
-    const scriptElement = root.querySelector(`script[src='${asset.source}']`);
+  if (!asset || typeof asset !== 'object' || asset instanceof Promise) {
+    return asset;
+  }
 
-    if (scriptElement) {
-      if (!asset.test || testScript.test(asset.test)) {
-        resolve();
-      }
-
-      scriptElement.addEventListener('load', resolve);
-      scriptElement.addEventListener(
-        'error',
-        asset.optional ? resolve : reject,
-      );
-      return;
-    }
-
+  if (asset.type === 'inlineScript') {
     const script = document.createElement('script');
+    script.text = asset.source;
+    root.appendChild(script);
 
-    if (asset.type === 'script') {
-      script.defer = true;
-      script.onload = resolve;
-      script.onerror = (error) => {
-        script.remove();
+    return asset.source;
+  }
 
-        asset.optional ? resolve(error) : reject(error);
-      };
-      script.src = asset.source;
+  loadingAssets[asset.name] = new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.defer = true;
+    script.onload = () => {
+      delete loadingAssets[asset.name];
+      resolve(asset.source);
+    };
+    script.onerror = () => {
+      delete loadingAssets[asset.name];
+      script.remove();
+      const message = `Error loading script '${asset.source}'.`;
 
-      const { attr } = asset;
-      if (attr && Object.keys(attr).length) {
-        for (const name in attr) {
-          const value = attr[name];
+      if (asset.optional) {
+        console.warn(message);
+        resolve(null);
+      } else {
+        reject(new Error(message));
+      }
+    };
+    script.src = asset.source;
 
-          if (typeof value === 'boolean') {
-            if (value) {
-              script.setAttribute(name, '');
-            } else {
-              script.removeAttribute(name);
-            }
+    const { attr } = asset;
+    if (attr && Object.keys(attr).length) {
+      for (const name in attr) {
+        const value = attr[name];
+
+        if (typeof value === 'boolean') {
+          if (value) {
+            script.setAttribute(name, '');
           } else {
-            script.setAttribute(name, value);
+            script.removeAttribute(name);
           }
+        } else {
+          script.setAttribute(name, value);
         }
       }
-    } else {
-      script.text = asset.source;
-      resolve();
     }
 
     root.appendChild(script);
   });
+
+  return loadingAssets[asset.name];
 }
 
 function _loadStyle(asset, root) {
-  return new Promise((resolve, reject) => {
-    if (asset.type === 'stylesheet') {
-      const link = document.createElement('link');
-      link.onload = resolve;
-      link.onerror = reject;
-      link.rel = 'stylesheet';
-      link.href = asset.source;
+  if (!asset || typeof asset !== 'object' || asset instanceof Promise) {
+    return asset;
+  }
 
-      root.appendChild(link);
-    } else {
-      const style = document.createElement('style');
-      style.innerHTML = asset.source;
+  if (asset.type === 'inlineStyle') {
+    const style = document.createElement('style');
+    style.innerHTML = asset.source;
+    root.appendChild(style);
 
-      root.appendChild(style);
-      resolve();
-    }
+    return asset.source;
+  }
+
+  loadingAssets[asset.name] = new Promise((resolve) => {
+    const link = document.createElement('link');
+    link.onload = () => {
+      delete loadingAssets[asset.name];
+      resolve(asset.source);
+    };
+    link.onerror = () => {
+      delete loadingAssets[asset.name];
+      link.remove();
+      console.warn(`Error loading stylesheet '${asset.source}'.`);
+      resolve(null);
+    };
+    link.rel = 'stylesheet';
+    link.href = asset.source;
+
+    root.appendChild(link);
   });
+
+  return loadingAssets[asset.name];
 }
 
 function loadStyleAssets(assets, root = document.head, shouldLoadLazy = false) {
   const styleElements = root.querySelectorAll('style');
-  const stylesToRender = assets.filter(
-    (asset) =>
-      ((asset.lazy && shouldLoadLazy) || (!asset.lazy && !shouldLoadLazy)) &&
-      asset.source &&
-      ((asset.type === 'stylesheet' &&
-        !root.querySelector(`link[href='${asset.source}']`)) ||
-        (asset.type === 'inlineStyle' &&
-          Array.from(styleElements).reduce((acc, cur) => {
-            if (cur.innerHTML === asset.source) {
-              return false;
-            }
+  const stylesToRender = assets.map((asset) => {
+    if (
+      !['stylesheet', 'inlineStyle'].includes(asset.type) ||
+      (asset.lazy && !shouldLoadLazy) ||
+      (!asset.lazy && shouldLoadLazy) ||
+      !asset.source
+    ) {
+      return null;
+    }
 
-            return acc;
-          }, true))),
-  );
+    if (loadingAssets[asset.name]) {
+      return loadingAssets[asset.name];
+    }
+
+    if (
+      (asset.type === 'stylesheet' &&
+        root.querySelector(`link[href='${asset.source}']`)) ||
+      (asset.type === 'inlineStyle' &&
+        Array.from(styleElements).reduce((acc, cur) => {
+          if (cur.innerHTML === asset.source) {
+            return true;
+          }
+
+          return acc;
+        }, false))
+    ) {
+      return asset.source;
+    }
+
+    return asset;
+  });
 
   return Promise.all(stylesToRender.map((asset) => _loadStyle(asset, root)));
 }
@@ -103,13 +137,18 @@ async function loadScriptAssets(
   shouldLoadLazy = false,
 ) {
   const scriptElements = root.querySelectorAll('script');
-  const scriptsToRender = assets.reduce((scripts, asset) => {
+  const scriptsToRender = assets.map((asset) => {
     if (
-      (asset.type !== 'script' && asset.type !== 'inlineScript') ||
+      !['script', 'inlineScript'].includes(asset.type) ||
       (asset.lazy && !shouldLoadLazy) ||
-      (!asset.lazy && shouldLoadLazy)
+      (!asset.lazy && shouldLoadLazy) ||
+      (asset.test && testScript.test(asset.test))
     ) {
-      return scripts;
+      return null;
+    }
+
+    if (loadingAssets[asset.name]) {
+      return loadingAssets[asset.name];
     }
 
     const { source } = asset;
@@ -137,27 +176,27 @@ async function loadScriptAssets(
         }
 
         console.warn(message);
-        return scripts;
+        return null;
       }
     }
 
     if (
-      Array.from(scriptElements).reduce((acc, cur) => {
-        if (cur.text === _asset.source) {
-          return true;
-        }
+      (asset.type === 'script' &&
+        root.querySelector(`script[src='${_asset.source}']`)) ||
+      (asset.type === 'inlineScript' &&
+        Array.from(scriptElements).reduce((acc, cur) => {
+          if (cur.text === _asset.source) {
+            return true;
+          }
 
-        return acc;
-      }, false) ||
-      (_asset.test ? testScript.test(_asset.test) : false)
+          return acc;
+        }, false))
     ) {
-      return scripts;
+      return _asset.source;
     }
 
-    scripts.push(_asset);
-
-    return scripts;
-  }, []);
+    return _asset;
+  });
 
   return Promise.all(scriptsToRender.map((asset) => _loadScript(asset, root)));
 }
