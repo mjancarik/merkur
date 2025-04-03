@@ -44,10 +44,17 @@ async function processAssetInFolder({
 
   if (asset.type.includes('inline')) {
     try {
-      asset.source = await memoReadAssetFile(
+      const content = await memoReadAssetFile(
         path.join(staticFolder, folder, fileName),
         asset.type === 'inlineJson' ? JSON.parse : undefined,
       );
+
+      if (asset.type === 'inlineScript') {
+        asset.source = asset.source || {};
+        asset.source[folder] = content;
+      } else {
+        asset.source = content;
+      }
     } catch (error) {
       // TODO remove (process.env.NODE_ENV !== 'development' && !cliConfig)
       if (
