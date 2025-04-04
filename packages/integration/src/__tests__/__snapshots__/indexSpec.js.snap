@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Merkur component loadScriptAssets() function should create script elements for script assets 1`] = `
+exports[`Merkur component loadScriptAssets() function should create script elements for script assets and return their sources (except lazy ones) 1`] = `
 [
   {
     "addEventListener": [MockFunction],
@@ -50,13 +50,12 @@ exports[`Merkur component loadScriptAssets() function should create script eleme
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js",
     "text": "alert();",
   },
 ]
 `;
 
-exports[`Merkur component loadStyleAssets() function should create style elements for style assets 1`] = `
+exports[`Merkur component loadStyleAssets() function should create style elements for style assets and return their sources (except lazy ones) 1`] = `
 [
   {
     "addEventListener": [MockFunction],
@@ -67,7 +66,6 @@ exports[`Merkur component loadStyleAssets() function should create style element
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js",
   },
   {
     "addEventListener": [MockFunction],
@@ -87,7 +85,6 @@ exports[`Merkur component loadStyleAssets() function should create style element
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js",
   },
 ]
 `;

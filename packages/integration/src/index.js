@@ -208,24 +208,31 @@ function loadAssets(assets, root) {
   ]);
 }
 
-async function _loadJsonAsset(asset) {
-  try {
-    const response = await fetch(asset.source);
+function _loadJsonAsset(asset) {
+  cache[asset.source] = new Promise((resolve) => {
+    (async () => {
+      try {
+        const response = await fetch(asset.source);
 
-    if (!response.ok) {
-      throw new Error(
-        `Failed to fetch from '${asset.source}' with status ${response.status} ${response.statusText}.`,
-      );
-    }
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch from '${asset.source}' with status ${response.status} ${response.statusText}.`,
+          );
+        }
 
-    cache[asset.source] = await response.json();
+        cache[asset.source] = await response.json();
+        resolve(cache[asset.source]);
+      } catch (error) {
+        delete cache[asset.source];
+        console.warn(
+          `Error loading JSON asset '${asset.name}': ${error.message}`,
+        );
+        resolve(null);
+      }
+    })();
+  });
 
-    return cache[asset.source];
-  } catch (error) {
-    console.warn(`Error loading JSON asset '${asset.name}': ${error.message}`);
-
-    return null;
-  }
+  return cache[asset.source];
 }
 
 function loadJsonAssets(assets, assetNames) {
@@ -246,6 +253,10 @@ function loadJsonAssets(assets, assetNames) {
     }
 
     if (cache[asset.source]) {
+      if (cache[asset.source] instanceof Promise) {
+        containsPromise = true;
+      }
+
       return cache[asset.source];
     }
 
@@ -338,6 +349,7 @@ function loadLazyAssets(assets, assetNames, root) {
 }
 
 export {
+  cache,
   testScript,
   loadAssets,
   loadJsonAssets,
