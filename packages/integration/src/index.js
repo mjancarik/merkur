@@ -209,7 +209,7 @@ function loadAssets(assets, root) {
 }
 
 function _loadJsonAsset(asset) {
-  cache[asset.source] = new Promise((resolve) => {
+  loadingAssets[asset.source] = new Promise((resolve) => {
     (async () => {
       try {
         const response = await fetch(asset.source);
@@ -221,18 +221,19 @@ function _loadJsonAsset(asset) {
         }
 
         cache[asset.source] = await response.json();
+        delete loadingAssets[asset.source];
         resolve(cache[asset.source]);
       } catch (error) {
-        delete cache[asset.source];
         console.warn(
           `Error loading JSON asset '${asset.name}': ${error.message}`,
         );
+        delete loadingAssets[asset.source];
         resolve(null);
       }
     })();
   });
 
-  return cache[asset.source];
+  return loadingAssets[asset.source];
 }
 
 function loadJsonAssets(assets, assetNames) {
@@ -253,14 +254,14 @@ function loadJsonAssets(assets, assetNames) {
     }
 
     if (cache[asset.source]) {
-      if (cache[asset.source] instanceof Promise) {
-        containsPromise = true;
-      }
-
       return cache[asset.source];
     }
 
     containsPromise = true;
+
+    if (loadingAssets[asset.source]) {
+      return loadingAssets[asset.source];
+    }
 
     return _loadJsonAsset(asset);
   });
