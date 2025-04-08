@@ -1,90 +1,164 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Merkur component loadScriptAssets() function should create script elements for script assets and return their sources (except lazy ones) 1`] = `
+exports[`Merkur component loadScriptAssets() function should create script elements for script assets and return their sources 1`] = `
 [
   {
-    "addEventListener": [MockFunction],
-    "async": "",
-    "custom-element": "amp-fx-collection",
-    "onerror": [Function],
-    "onload": [Function],
-    "remove": [MockFunction],
-    "removeAttribute": [Function],
-    "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es11/widget.6541af42bfa3596bb129.js",
-  },
-  {
-    "addEventListener": [MockFunction],
-    "defer": true,
-    "onerror": [Function],
-    "onload": [Function],
-    "remove": [MockFunction],
-    "removeAttribute": [Function],
-    "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es9/undefined.6961af42bfa3596bb147.js",
-  },
-  {
-    "addEventListener": [MockFunction],
-    "defer": true,
-    "onerror": [Function],
-    "onload": [Function],
-    "remove": [MockFunction],
-    "removeAttribute": [Function],
-    "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js",
-  },
-  {
-    "addEventListener": [MockFunction],
-    "onerror": [MockFunction],
-    "onload": [MockFunction] {
+    "addEventListener": [MockFunction] {
       "calls": [
-        [],
+        [
+          "load",
+          [Function],
+        ],
+        [
+          "error",
+          [Function],
+        ],
       ],
       "results": [
         {
           "type": "return",
           "value": undefined,
         },
+        {
+          "type": "return",
+          "value": undefined,
+        },
       ],
     },
+    "async": "",
+    "custom-element": "amp-fx-collection",
+    "dataset": {},
+    "parentNode": {},
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
+    "src": "http://localhost:4444/static/es11/widget.6541af42bfa3596bb129.js",
+    "tagName": "script",
+    Symbol(loadingPromise): Promise {},
+  },
+  {
+    "addEventListener": [MockFunction] {
+      "calls": [
+        [
+          "load",
+          [Function],
+        ],
+        [
+          "error",
+          [Function],
+        ],
+      ],
+      "results": [
+        {
+          "type": "return",
+          "value": undefined,
+        },
+        {
+          "type": "return",
+          "value": undefined,
+        },
+      ],
+    },
+    "dataset": {},
+    "defer": true,
+    "parentNode": {},
+    "remove": [MockFunction],
+    "removeAttribute": [Function],
+    "setAttribute": [Function],
+    "src": "http://localhost:4444/static/es9/undefined.6961af42bfa3596bb147.js",
+    "tagName": "script",
+    Symbol(loadingPromise): Promise {},
+  },
+  {
+    "addEventListener": [MockFunction] {
+      "calls": [
+        [
+          "load",
+          [Function],
+        ],
+        [
+          "error",
+          [Function],
+        ],
+      ],
+      "results": [
+        {
+          "type": "return",
+          "value": undefined,
+        },
+        {
+          "type": "return",
+          "value": undefined,
+        },
+      ],
+    },
+    "dataset": {},
+    "defer": true,
+    "parentNode": {},
+    "remove": [MockFunction],
+    "removeAttribute": [Function],
+    "setAttribute": [Function],
+    "src": "http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js",
+    "tagName": "script",
+    Symbol(loadingPromise): Promise {},
+  },
+  {
+    "addEventListener": [MockFunction],
+    "dataset": {},
+    "parentNode": {},
+    "remove": [MockFunction],
+    "removeAttribute": [Function],
+    "setAttribute": [Function],
+    "tagName": "script",
     "text": "alert();",
   },
 ]
 `;
 
-exports[`Merkur component loadStyleAssets() function should create style elements for style assets and return their sources (except lazy ones) 1`] = `
+exports[`Merkur component loadStyleAssets() function should create style elements for style assets and return their sources 1`] = `
 [
   {
-    "addEventListener": [MockFunction],
-    "href": "http://localhost:4444/static/es11/widget.814e0cb568c7ddc0725d.css",
-    "onerror": [Function],
-    "onload": [Function],
-    "rel": "stylesheet",
-    "remove": [MockFunction],
-    "removeAttribute": [Function],
-    "setAttribute": [Function],
-  },
-  {
-    "addEventListener": [MockFunction],
-    "innerHTML": ".cssClass { margin-top: 5px; }",
-    "onerror": [MockFunction],
-    "onload": [MockFunction] {
+    "addEventListener": [MockFunction] {
       "calls": [
-        [],
+        [
+          "load",
+          [Function],
+        ],
+        [
+          "error",
+          [Function],
+        ],
       ],
       "results": [
         {
           "type": "return",
           "value": undefined,
         },
+        {
+          "type": "return",
+          "value": undefined,
+        },
       ],
     },
+    "dataset": {},
+    "href": "http://localhost:4444/static/es11/widget.814e0cb568c7ddc0725d.css",
+    "parentNode": {},
+    "rel": "stylesheet",
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
+    "tagName": "link",
+    Symbol(loadingPromise): Promise {},
+  },
+  {
+    "addEventListener": [MockFunction],
+    "dataset": {},
+    "innerHTML": ".cssClass { margin-top: 5px; }",
+    "parentNode": {},
+    "remove": [MockFunction],
+    "removeAttribute": [Function],
+    "setAttribute": [Function],
+    "tagName": "style",
   },
 ]
 `;
