@@ -3,6 +3,20 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.7](https://github.com/mjancarik/merkur/compare/v0.37.6...v0.37.7) (2025-03-19)
+
+### Features
+
+- 🎸 Multiple gql plugin instances ([99b7af2](https://github.com/mjancarik/merkur/commit/99b7af259eda43b88b0e0003dbdc81104d0c55aa))
+- 🎸 small changes ([5070d59](https://github.com/mjancarik/merkur/commit/5070d590a1bb2dca48d1cc85e2797be501bb0667))
+- 🎸 support for set methods ([d6b0947](https://github.com/mjancarik/merkur/commit/d6b094796021cf9c58e97fc0951bf4dead35e138))
+
+## [0.37.6](https://github.com/mjancarik/merkur/compare/v0.37.5...v0.37.6) (2025-03-14)
+
+### Bug Fixes
+
+- 🐛 devServer propagete status code from error ([71ef8d6](https://github.com/mjancarik/merkur/commit/71ef8d6b7e0bf162ab42729ae00e908589c2a508))
+
 ## [0.37.5](https://github.com/mjancarik/merkur/compare/v0.37.4...v0.37.5) (2025-03-03)
 
 ### Features

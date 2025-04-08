@@ -87,9 +87,11 @@ describe('createWidget method with graphql client plugin', () => {
       "suspendedTasks": [],
     },
     "graphqlClient": {
-      "endpointUrl": "http://localhost:4444",
-      "entityClasses": {
-        "FooNode": [Function],
+      "graphql": {
+        "endpointUrl": "http://localhost:4444",
+        "entityClasses": {
+          "FooNode": [Function],
+        },
       },
     },
     "httpClient": {

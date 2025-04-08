@@ -207,6 +207,7 @@ emitter.on(
         if (!response.ok) {
           const error = new Error(widgetProperties?.error?.message);
           error.stack = widgetProperties?.error?.stack;
+          error.status = response.status ?? 500;
           throw error;
         }
 

@@ -19,20 +19,23 @@ const ENV =
     ? process.env.NODE_ENV
     : DEV;
 
-function setEndpointUrl(widget, url) {
-  widget.$in.graphqlClient.endpointUrl = url;
+function setEndpointUrl(widget, url, name = 'graphql') {
+  widget.$in.graphqlClient[name].endpointUrl = url;
 }
 
-function setEntityClasses(widget, entityClasses) {
-  widget.$in.graphqlClient.entityClasses = buildTypeToEntityMap(entityClasses);
+function setEntityClasses(widget, entityClasses, name = 'graphql') {
+  widget.$in.graphqlClient[name].entityClasses =
+    buildTypeToEntityMap(entityClasses);
 }
 
-function graphqlClientPlugin() {
+function graphqlClientPlugin(name = 'graphql') {
   return {
     async setup(widget) {
-      assignMissingKeys(widget, graphqlClientAPI());
+      assignMissingKeys(widget, graphqlClientAPI(name));
 
-      widget.$in.graphqlClient = {
+      if (!widget.$in.graphqlClient) widget.$in.graphqlClient = {};
+
+      widget.$in.graphqlClient[name] = {
         endpointUrl: '',
         entityClasses: {},
       };
@@ -46,18 +49,18 @@ function graphqlClientPlugin() {
         );
       }
 
-      bindWidgetToFunctions(widget, widget.graphql);
+      bindWidgetToFunctions(widget, widget[name]);
 
       return widget;
     },
   };
 }
 
-function graphqlClientAPI() {
+function graphqlClientAPI(name = 'graphql') {
   return {
-    graphql: {
+    [name]: {
       async request(widget, operation, variables = {}, options = {}) {
-        const { endpointUrl, entityClasses } = widget.$in.graphqlClient;
+        const { endpointUrl, entityClasses } = widget.$in.graphqlClient[name];
         const { headers = {}, body = {}, ...restOptions } = options;
 
         operation = addTypenameToSelections(operation);
