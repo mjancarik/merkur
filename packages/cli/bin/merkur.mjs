@@ -183,7 +183,7 @@ for (const { command, dir } of customCommands) {
   const commandName = commandModule.default.default(({ program: programCustom })).name();
 
   if (definedCommands.includes(commandName)) {
-    console.warn(`Command "${commandName}" from ${dir} package cannot be used because a command with the same name already exists.`);
+    console.warn(`Command "${commandName}" from ${dir} package cannot be used.\nCommand with the same name already exists.`);
     continue;
   }
 
