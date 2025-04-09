@@ -3,6 +3,8 @@ import testScript from './testScript';
 function _addListenersToAssetElement(asset, element, resolve, reject) {
   element.addEventListener('load', () => {
     resolve(asset.source);
+    element[Symbol.for('isLoaded')] = true;
+    delete element[Symbol.for('loadingPromise')];
   });
   element.addEventListener('error', () => {
     if (element.parentNode) {
@@ -131,7 +133,7 @@ function _loadScript(asset, root) {
   return script[Symbol.for('loadingPromise')];
 }
 
-async function loadScriptAssets(assets, root = document.head) {
+function loadScriptAssets(assets, root = document.head) {
   const scriptElements = root.querySelectorAll('script');
 
   return _resolvePromisesInArray(
@@ -181,6 +183,10 @@ async function loadScriptAssets(assets, root = document.head) {
             return script[Symbol.for('loadingPromise')];
           }
 
+          if (script[Symbol.for('isLoaded')]) {
+            return _asset.source;
+          }
+
           return new Promise((resolve, reject) =>
             _addListenersToAssetElement(_asset, script, resolve, reject),
           );
@@ -203,7 +209,7 @@ async function loadScriptAssets(assets, root = document.head) {
   );
 }
 
-async function _fetchJsonData(source) {
+async function _fetchData(source) {
   const response = await fetch(source);
 
   if (!response.ok) {
@@ -212,7 +218,7 @@ async function _fetchJsonData(source) {
     );
   }
 
-  return response.json();
+  return response.text();
 }
 
 function _loadJsonAsset(asset, root) {
@@ -225,9 +231,10 @@ function _loadJsonAsset(asset, root) {
 
     (async () => {
       try {
-        script.dataset.jsonData = await _fetchJsonData(asset.source);
+        const textContent = await _fetchData(asset.source);
+        resolve(JSON.parse(textContent));
+        script.textContent = textContent;
         delete script[Symbol.for('loadingPromise')];
-        resolve(script.dataset.jsonData);
       } catch (error) {
         console.warn(
           `Error loading JSON asset '${asset.name}': ${error.message}`,
@@ -264,6 +271,24 @@ function loadJsonAssets(assets, root = document.head) {
         if (script[Symbol.for('loadingPromise')]) {
           return script[Symbol.for('loadingPromise')];
         }
+
+        if (script.textContent) {
+          try {
+            return JSON.parse(script.textContent);
+          } catch (error) {
+            console.warn(
+              `Error parsing JSON asset '${asset.name}': ${error.message}`,
+            );
+
+            return null;
+          }
+        }
+
+        console.warn(
+          `JSON asset '${asset.name}' is missing textContent and could not be loaded.`,
+        );
+
+        return null;
       }
 
       return _loadJsonAsset(asset, root);
@@ -271,11 +296,31 @@ function loadJsonAssets(assets, root = document.head) {
   );
 }
 
+function _mergeResults(results) {
+  //console.log(results);
+  return results.reduce((acc, results) => {
+    results.forEach((result, index) => {
+      if (!acc[index]) {
+        acc[index] = result;
+      }
+    });
+
+    return acc;
+  }, []);
+}
+
 function loadAssets(assets, root) {
-  return Promise.all([
+  const assetState = _resolvePromisesInArray([
     loadScriptAssets(assets, root),
     loadStyleAssets(assets, root),
+    loadJsonAssets(assets, root),
   ]);
+
+  if (assetState instanceof Promise) {
+    return assetState.then((results) => _mergeResults(results));
+  }
+
+  return _mergeResults(assetState);
 }
 
 export {

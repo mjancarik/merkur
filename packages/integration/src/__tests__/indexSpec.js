@@ -1,5 +1,5 @@
 import {
-  //loadAssets,
+  loadAssets,
   loadJsonAssets,
   loadScriptAssets,
   loadStyleAssets,
@@ -31,7 +31,7 @@ describe('Merkur component', () => {
         (el) =>
           (el.src && el.src === selector.match(/src='([^']+)'/)?.[1]) ||
           (el.href && el.href === selector.match(/href='([^']+)'/)?.[1]) ||
-          (el.dataset &&
+          (el.dataset?.src &&
             el.dataset.src === selector.match(/src='([^']+)'/)?.[1]),
       ),
     ),
@@ -108,7 +108,7 @@ describe('Merkur component', () => {
       ok: true,
       status: 200,
       statusText: `HTTP/1.1 200 OK`,
-      json: () => Promise.resolve(JSON.parse(defaultResponseBody)),
+      text: () => Promise.resolve(defaultResponseBody),
     },
     defaultResponseBody,
   }) => {
@@ -140,6 +140,7 @@ describe('Merkur component', () => {
         name: 'widget.js',
         type: 'script',
         source: {
+          es13: 'http://localhost:4444/static/es13/widget.6241af42bfa3596bb129.js',
           es11: 'http://localhost:4444/static/es11/widget.6541af42bfa3596bb129.js',
           es9: 'http://localhost:4444/static/es9/widget.6961af42bfa3596bb147.js',
         },
@@ -300,6 +301,8 @@ describe('Merkur component', () => {
     it('should return a promise that resolves when a style (not created by loadStyleAssets) is already present in the DOM and is already loaded', async () => {
       const link = fakeAssetObjectGenerator('link');
       link.href = assetsDictionary['widget.css'].source;
+      const noAssetStyle = fakeAssetObjectGenerator('style');
+      noAssetStyle.innerHTML = 'https://not-found.com/asset.css';
       const style = fakeAssetObjectGenerator('style');
       style.innerHTML = assetsDictionary['unnamed.css'].source;
       resolveFakeAssets();
@@ -346,7 +349,7 @@ describe('Merkur component', () => {
 
       expect(fakeAssetObjects).toMatchSnapshot();
       expect(sources).toStrictEqual([
-        assetsDictionary['widget.js'].source.es11,
+        assetsDictionary['widget.js'].source.es13,
         assetsDictionary['polyfill1.js'].source.es11,
         assetsDictionary['undefined.js'].source.es9, // es11 is undefined
         assetsDictionary['polyfill2.js'].source,
@@ -436,7 +439,7 @@ describe('Merkur component', () => {
 
     it('should resolve if a script (not created by loadScriptAssets) is already present in the DOM and is already loaded', async () => {
       const script = fakeAssetObjectGenerator('script');
-      script.src = assetsDictionary['widget.js'].source.es11;
+      script.src = assetsDictionary['widget.js'].source.es13;
       const inlineScript = fakeAssetObjectGenerator('script');
       inlineScript.text = assetsDictionary['unnamed.js'].source;
       resolveFakeAssets();
@@ -453,7 +456,7 @@ describe('Merkur component', () => {
 
     it('should resolve if a script (not created by loadScriptAssets) is already present in the DOM but not yet loaded', async () => {
       const script = fakeAssetObjectGenerator('script');
-      script.src = assetsDictionary['widget.js'].source.es11;
+      script.src = assetsDictionary['widget.js'].source.es13;
 
       const sciptsPromise = loadScriptAssets([
         { ...assetsDictionary['widget.js'] },
@@ -464,6 +467,21 @@ describe('Merkur component', () => {
 
       expect(document.createElement).toHaveBeenCalledTimes(0);
       expect(sources).toStrictEqual([script.src]);
+    });
+
+    it('should resolve if a script (created by loadScriptAsssets) is already present in the DOM and is already loaded', async () => {
+      const script = assetsDictionary['widget.js'];
+      const sciptsPromise = loadScriptAssets([script]);
+      resolveFakeAssets();
+      await sciptsPromise;
+
+      expect(document.createElement).toHaveBeenCalledTimes(1);
+      document.createElement.mockClear();
+
+      const sources = loadScriptAssets([script]); // it is resolved synchronously
+
+      expect(document.createElement).toHaveBeenCalledTimes(0);
+      expect(sources).toStrictEqual([script.source.es13]);
     });
 
     it('should resolve if a script (created by loadScriptAsssets) is already present in the DOM but not yet loaded', async () => {
@@ -481,7 +499,7 @@ describe('Merkur component', () => {
 
       const sources = await sciptsPromise;
 
-      expect(sources).toStrictEqual([script.source.es11]);
+      expect(sources).toStrictEqual([script.source.es13]);
     });
   });
 
@@ -659,17 +677,55 @@ describe('Merkur component', () => {
         assetsDictionary['maps/inline.json'].source,
       ]);
     });
+
+    it('should resolve to null if a JSON (not created by loadJsonAsssets) is already present in the DOM and it cannot be parsed', () => {
+      const script = fakeAssetObjectGenerator('script');
+      script.type = 'application/json';
+      script.dataset.src = assetsDictionary['maps/vectors.json'].source;
+      script.textContent = 'alert();';
+
+      const sources = loadJsonAssets([
+        assetsDictionary['maps/vectors.json'],
+        assetsDictionary['maps/inline.json'],
+      ]); // it is resolved synchronously
+
+      expect(sources).toStrictEqual([
+        null, // maps/vectors.json
+        assetsDictionary['maps/inline.json'].source,
+      ]);
+      expect(document.createElement).toHaveBeenCalledTimes(0);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(0);
+      expect(fakeAssetObjects[0].remove).not.toHaveBeenCalled();
+      expect(console.warn).toHaveBeenCalledTimes(1); // maps/vectors.json
+    });
+
+    it('should resolve to null if a JSON (not created by loadJsonAsssets) is already present in the DOM and does not have textContent', () => {
+      const script = fakeAssetObjectGenerator('script');
+      script.type = 'application/json';
+      script.dataset.src = assetsDictionary['maps/vectors.json'].source;
+
+      const sources = loadJsonAssets([
+        assetsDictionary['maps/vectors.json'],
+        assetsDictionary['maps/inline.json'],
+      ]); // it is resolved synchronously
+
+      expect(sources).toStrictEqual([
+        null, // maps/vectors.json
+        assetsDictionary['maps/inline.json'].source,
+      ]);
+      expect(document.createElement).toHaveBeenCalledTimes(0);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(0);
+      expect(fakeAssetObjects[0].remove).not.toHaveBeenCalled();
+      expect(console.warn).toHaveBeenCalledTimes(1); // maps/vectors.json
+    });
   });
 
-  /*describe.skip('loadLazyAssets() function', () => {
-    it('should load lazy assets including jsons (all jsons are lazy)', async () => {
+  describe('loadAssets() function', () => {
+    it('should load assets', async () => {
       global.fetch.mockImplementation(
         fetchMockImplementation({ defaultResponseBody: vectorsJsonContent }),
       );
-      const assetsPromise = loadLazyAssets(
-        assets,
-        Object.keys(assetsDictionary),
-      );
+      const assetsPromise = loadAssets(assets);
       resolveFakeAssets();
       assetLoadingDeferreds[
         assetsDictionary['maps/vectors.json'].source
@@ -677,29 +733,33 @@ describe('Merkur component', () => {
       const sources = await assetsPromise;
 
       expect(assetsPromise).toBeInstanceOf(Promise);
-      expect(document.createElement).toHaveBeenCalledTimes(2);
+      expect(document.createElement).toHaveBeenCalledTimes(7);
       expect(sources).toStrictEqual([
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        assetsDictionary['lazy.js'].source.es11,
-        assetsDictionary['lazy.css'].source,
+        assetsDictionary['widget.js'].source.es13,
+        assetsDictionary['polyfill1.js'].source.es11,
+        assetsDictionary['undefined.js'].source.es9,
+        assetsDictionary['polyfill2.js'].source,
+        assetsDictionary['unnamed.js'].source,
+        assetsDictionary['widget.css'].source,
+        assetsDictionary['unnamed.css'].source,
         JSON.parse(vectorsJsonContent),
         assetsDictionary['maps/inline.json'].source,
       ]);
       expect(console.warn).not.toHaveBeenCalled();
     });
 
-    it('should load inline JSON assets synchronously', () => {
-      const sources = loadLazyAssets(assets, ['maps/inline.json']);
+    it('should load inline assets synchronously', () => {
+      const sources = loadAssets([
+        assetsDictionary['unnamed.js'],
+        assetsDictionary['unnamed.css'],
+        assetsDictionary['maps/inline.json'],
+      ]); // it is resolved synchronously
 
       expect(sources).toStrictEqual([
+        assetsDictionary['unnamed.js'].source,
+        assetsDictionary['unnamed.css'].source,
         assetsDictionary['maps/inline.json'].source,
       ]);
     });
-  });*/
+  });
 });

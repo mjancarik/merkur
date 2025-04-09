@@ -32,9 +32,9 @@ exports[`Merkur component loadScriptAssets() function should create script eleme
     "remove": [MockFunction],
     "removeAttribute": [Function],
     "setAttribute": [Function],
-    "src": "http://localhost:4444/static/es11/widget.6541af42bfa3596bb129.js",
+    "src": "http://localhost:4444/static/es13/widget.6241af42bfa3596bb129.js",
     "tagName": "script",
-    Symbol(loadingPromise): Promise {},
+    Symbol(isLoaded): true,
   },
   {
     "addEventListener": [MockFunction] {
@@ -67,7 +67,7 @@ exports[`Merkur component loadScriptAssets() function should create script eleme
     "setAttribute": [Function],
     "src": "http://localhost:4444/static/es9/undefined.6961af42bfa3596bb147.js",
     "tagName": "script",
-    Symbol(loadingPromise): Promise {},
+    Symbol(isLoaded): true,
   },
   {
     "addEventListener": [MockFunction] {
@@ -100,7 +100,7 @@ exports[`Merkur component loadScriptAssets() function should create script eleme
     "setAttribute": [Function],
     "src": "http://localhost:4444/static/es9/polyfill.6961af42bfa3596bb147.js",
     "tagName": "script",
-    Symbol(loadingPromise): Promise {},
+    Symbol(isLoaded): true,
   },
   {
     "addEventListener": [MockFunction],
@@ -148,7 +148,7 @@ exports[`Merkur component loadStyleAssets() function should create style element
     "removeAttribute": [Function],
     "setAttribute": [Function],
     "tagName": "link",
-    Symbol(loadingPromise): Promise {},
+    Symbol(isLoaded): true,
   },
   {
     "addEventListener": [MockFunction],
