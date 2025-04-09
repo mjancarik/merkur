@@ -34,7 +34,7 @@ const analyzeOption = new Option('--analyze', 'Analyze bundle.');
 program
   .name('merkur')
   .description('CLI for Merkur framework.')
-  .version(packageFile.version)
+  .version(packageFile.version);
 
 program.command(COMMAND_NAME.DEV)
   .description('Dev command')
