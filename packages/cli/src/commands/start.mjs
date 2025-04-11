@@ -1,18 +1,12 @@
-import { createCLIConfig } from '../CLIConfig.mjs';
-import { createContext } from '../context.mjs';
+import { createCommandConfig } from '../commandConfig.mjs';
 import { runDevServer } from '../devServer.mjs';
-import { createMerkurConfig } from '../merkurConfig.mjs';
 import { runWidgetServer } from '../widgetServer.mjs';
 import { handleExit } from '../handleExit.mjs';
 
 export async function start({ args, command }) {
-  const context = await createContext();
-  let baseCliConfig = await createCLIConfig({ args, command });
-
-  const { merkurConfig, cliConfig } = await createMerkurConfig({
+  const { context, cliConfig, merkurConfig } = await createCommandConfig({
     args,
-    cliConfig: baseCliConfig,
-    context,
+    command,
   });
 
   await handleExit({ context });

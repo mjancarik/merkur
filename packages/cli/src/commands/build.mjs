@@ -1,9 +1,7 @@
 import chalk from 'chalk';
 
-import { createCLIConfig } from '../CLIConfig.mjs';
-import { createContext } from '../context.mjs';
+import { createCommandConfig } from '../commandConfig.mjs';
 import { runTask } from '../runTask.mjs';
-import { createMerkurConfig } from '../merkurConfig.mjs';
 import { createLogger } from '../logger.mjs';
 import { time } from '../utils.mjs';
 import { handleExit } from '../handleExit.mjs';
@@ -12,14 +10,11 @@ import { clearBuildFolder } from '../clearBuildFolder.mjs';
 export async function build({ args, command }) {
   const buildTime = time();
 
-  const context = await createContext();
-  const baseCliConfig = await createCLIConfig({ args, command });
-
-  const { merkurConfig, cliConfig } = await createMerkurConfig({
+  const { context, cliConfig, merkurConfig } = await createCommandConfig({
     args,
-    cliConfig: baseCliConfig,
-    context,
+    command,
   });
+
   const logger = createLogger(undefined, cliConfig);
 
   await handleExit({ context });

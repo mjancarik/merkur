@@ -3,10 +3,8 @@ import path from 'node:path';
 
 import chalk from 'chalk';
 
-import { createCLIConfig } from '../CLIConfig.mjs';
-import { createContext } from '../context.mjs';
+import { createCommandConfig } from '../commandConfig.mjs';
 import { createLogger } from '../logger.mjs';
-import { createMerkurConfig } from '../merkurConfig.mjs';
 import { handleExit } from '../handleExit.mjs';
 
 export const CUSTOM_PART = {
@@ -15,15 +13,10 @@ export const CUSTOM_PART = {
 };
 
 export async function custom({ args, command }) {
-  const context = await createContext();
-  let baseCliConfig = await createCLIConfig({ args, command });
-
-  const { merkurConfig, cliConfig } = await createMerkurConfig({
+  const { context, cliConfig, merkurConfig } = await createCommandConfig({
     args,
-    cliConfig: baseCliConfig,
-    context,
+    command,
   });
-
   const logger = createLogger('Custom command:', cliConfig);
 
   await handleExit({ context });
