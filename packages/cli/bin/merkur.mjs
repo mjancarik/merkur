@@ -8,7 +8,7 @@ import { custom, CUSTOM_PART } from '../src/commands/custom.mjs';
 import { COMMAND_NAME } from '../src/commands/constant.mjs';
 import { userDefinedCommandsPaths } from '../src/commands/userDefined.mjs';
 
-import path from 'path';
+import path from 'node:path';
 
 // eslint-disable-next-line
 import packageFile from '../package.json' with { type: 'json' };
