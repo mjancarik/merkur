@@ -194,7 +194,7 @@ emitter.on(
         `${cliConfig.projectFolder}/server/playground/templates`,
       ),
       path: '/',
-      widgetHandler: async (req) => {
+      widgetHandler: async (req, res, { merkurConfig }) => {
         const { protocol, host } = merkurConfig.widgetServer;
         let widgetProperties = null;
         const params = merkurConfig.playground.widgetParams(req);
