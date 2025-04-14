@@ -189,10 +189,20 @@ emitter.on(
   function playground({ merkurConfig, cliConfig }) {
     merkurConfig.playground = {
       template: path.resolve(`${cliConfig.cliFolder}/templates/playground.ejs`),
+      // @deprecated Use templateFolders instead.
       templateFolder: path.resolve(`${cliConfig.cliFolder}/templates`),
+      // @deprecated Use templateFolders instead.
       serverTemplateFolder: path.resolve(
         `${cliConfig.projectFolder}/server/playground/templates`,
       ),
+      /**
+       * This new variable will replace the old templateFolders. So we already
+       * include all of the default folders in here.
+       */
+      templateFolders: [
+        path.resolve(`${cliConfig.cliFolder}/templates`),
+        path.resolve(`${cliConfig.projectFolder}/server/playground/templates`),
+      ],
       path: '/',
       widgetHandler: async (req, res, { merkurConfig }) => {
         const { protocol, host } = merkurConfig.widgetServer;
