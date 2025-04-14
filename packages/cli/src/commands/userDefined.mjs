@@ -1,5 +1,5 @@
 import path from 'node:path';
-import fs from 'fs';
+import fs from 'node:fs';
 
 let userDefinedCommandsPaths = [];
 
@@ -24,10 +24,9 @@ const extendCommandsFromDir = async (commandsDir) => {
   );
 };
 
-const files = fs.readdirSync(process.cwd());
-const existsMerkurConfig = files.some((file) =>
-  /^merkur\.config\.(js|mjs)$/.test(file),
-);
+const existsMerkurConfig = fs
+  .readdirSync(process.cwd())
+  .includes('merkur.config.mjs');
 
 if (existsMerkurConfig) {
   const merkurDir = path.resolve(process.cwd(), 'node_modules/@merkur');

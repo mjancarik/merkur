@@ -146,7 +146,7 @@ let userDefinedCommands = [];
 for (const { command, dir } of userDefinedCommandsPaths) {
   const programCustom = new Command();
   const commandModule = await import(path.join(dir, command));
-  const commandName = commandModule.default.default(({ program: programCustom })).name();
+  const commandName = commandModule.default(({ program: programCustom })).name();
 
   if (userDefinedCommands.includes(commandName)) {
     console.warn(`Command "${commandName}" from ${dir} package cannot be used.\nCommand with the same name already exists.`);
