@@ -27,6 +27,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
     template,
     templateFolder,
     serverTemplateFolder,
+    templateFolders,
     path: playgroundPath,
     widgetHandler,
   } = merkurConfig.playground;
@@ -131,9 +132,12 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
             fs.readFileSync(template, 'utf8'),
             {
               views: [
-                serverTemplateFolder,
-                path.dirname(template),
-                templateFolder,
+                ...new Set([
+                  serverTemplateFolder,
+                  path.dirname(template),
+                  templateFolder,
+                  ...templateFolders,
+                ]),
               ],
             },
           );

@@ -47,8 +47,15 @@ export interface DevServer {
 
 export interface Playground {
   template: string;
+  /**
+   * @deprecated Use templateFolders instead.
+   */
   templateFolder: string;
+  /**
+   * @deprecated Use templateFolders instead.
+   */
   serverTemplateFolder: string;
+  templateFolders: string[];
   path: string;
   widgetHandler(req: Request, res: Response): Record<string, unknown>;
   widgetParams(req: Request): URLSearchParams;
