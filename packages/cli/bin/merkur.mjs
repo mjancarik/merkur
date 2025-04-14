@@ -6,8 +6,11 @@ import { start } from '../src/commands/start.mjs';
 import { test } from '../src/commands/test.mjs';
 import { custom, CUSTOM_PART } from '../src/commands/custom.mjs';
 import { COMMAND_NAME } from '../src/commands/constant.mjs';
+import { userDefinedCommandsPaths } from '../src/commands/userDefined.mjs';
 
-// eslint-disable-next-line 
+import path from 'node:path';
+
+// eslint-disable-next-line
 import packageFile from '../package.json' with { type: 'json' };
 
 const program = new Command();
@@ -137,5 +140,23 @@ program
 
     await custom({ args, commandArgs: cmd.args, command: COMMAND_NAME.CUSTOM });
   });
+
+// Load user-defined commands
+let userDefinedCommands = [];
+for (const { command, dir } of userDefinedCommandsPaths) {
+  const programCustom = new Command();
+  const commandModule = await import(path.join(dir, command));
+  const commandName = commandModule.default(({ program: programCustom })).name();
+
+  if (userDefinedCommands.includes(commandName)) {
+    console.warn(`Command "${commandName}" from ${dir} package cannot be used.\nCommand with the same name already exists.`);
+    continue;
+  }
+
+  userDefinedCommands.push(commandName);
+  programCustom.commands.forEach(cmd => {
+    program.addCommand(cmd);
+  });
+};
 
 program.parse(process.argv);
