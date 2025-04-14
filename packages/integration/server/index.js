@@ -16,6 +16,20 @@ function memo(fn, options = { generateKey: () => {} }) {
   };
 }
 
+async function readAssetFile(filePath, postProcess) {
+  const data = await fsp.readFile(filePath, { encoding: 'utf-8' });
+
+  if (postProcess) {
+    return postProcess(data);
+  }
+
+  return data;
+}
+
+const memoReadAssetFile = memo(readAssetFile, {
+  generateKey: (filePath) => filePath,
+});
+
 async function processAssetInFolder({
   asset,
   folder,
@@ -30,10 +44,17 @@ async function processAssetInFolder({
 
   if (asset.type.includes('inline')) {
     try {
-      asset.source = await fsp.readFile(
+      const content = await memoReadAssetFile(
         path.join(staticFolder, folder, fileName),
-        { encoding: 'utf-8' },
+        asset.type === 'inlineJson' ? JSON.parse : undefined,
       );
+
+      if (asset.type === 'inlineScript') {
+        asset.source = asset.source || {};
+        asset.source[folder] = content;
+      } else {
+        asset.source = content;
+      }
     } catch (error) {
       // TODO remove (process.env.NODE_ENV !== 'development' && !cliConfig)
       if (
@@ -49,7 +70,12 @@ async function processAssetInFolder({
     }
   }
 
-  if (asset.type === 'stylesheet' || asset.type === 'inlineStyle') {
+  if (
+    asset.type === 'stylesheet' ||
+    asset.type === 'inlineStyle' ||
+    asset.type === 'json' ||
+    asset.type === 'inlineJson'
+  ) {
     asset.source = `${staticBaseUrl}/${folder}/${fileName}`;
 
     return asset;
