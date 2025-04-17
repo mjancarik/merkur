@@ -27,6 +27,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
     template,
     templateFolder,
     serverTemplateFolder,
+    templateFolders,
     path: playgroundPath,
     widgetHandler,
   } = merkurConfig.playground;
@@ -52,7 +53,11 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
         asyncMiddleware(async (req, res) => {
           const isDevCommand = command === COMMAND_NAME.DEV;
 
-          const widgetProperties = await widgetHandler(req, res);
+          const widgetProperties = await widgetHandler(req, res, {
+            context,
+            merkurConfig,
+            cliConfig,
+          });
 
           // TODO refactor
           if (isDevCommand) {
@@ -127,9 +132,12 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
             fs.readFileSync(template, 'utf8'),
             {
               views: [
-                serverTemplateFolder,
-                path.dirname(template),
-                templateFolder,
+                ...new Set([
+                  serverTemplateFolder,
+                  path.dirname(template),
+                  templateFolder,
+                  ...templateFolders,
+                ]),
               ],
             },
           );

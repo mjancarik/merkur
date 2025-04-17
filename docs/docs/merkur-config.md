@@ -51,13 +51,15 @@ export default function ({ cliConfig, emitter,  }) {
     },
     playground: {
       template: '{project_folder}/node_modules/@merkur/cli/src/templates/playground.ejs',
-      templateFolder: '{project_folder}/node_modules/@merkur/cli/src/templates',
-      serverTemplateFolder: '{project_folder}/server/playground/templates',
+      templateFolders: [
+        '{project_folder}/node_modules/@merkur/cli/src/templates',
+        '{project_folder}/server/playground/templates',
+      ],
       path: '/',
       widgetHandler: AsyncFunction,
       widgetParams: Function,
     },
-    socketServer: { 
+    socketServer: {
       protocol: 'ws:',
       host: 'localhost:4321',
       port: 4321
@@ -197,9 +199,9 @@ export default function ({ cliConfig, emitter,  }) {
   };
 }
 ```
-The `esbuild-plugin-*` must be dynamic imported with `try/catch` block because `merkur.config.js` is used for all Merkur [CLI]({{ '/docs/merkur-cli' | relative_url }}) commands and of course for `merkur start` where dev dependencies can be missed. It depends on your CI/CD workflow. But we predict that you run `merkur start` command only with production dependencies where dev dependencies miss. 
+The `esbuild-plugin-*` must be dynamic imported with `try/catch` block because `merkur.config.js` is used for all Merkur [CLI]({{ '/docs/merkur-cli' | relative_url }}) commands and of course for `merkur start` where dev dependencies can be missed. It depends on your CI/CD workflow. But we predict that you run `merkur start` command only with production dependencies where dev dependencies miss.
 
-Or you want to use [Tailwind CSS](https://tailwindui.com/) framework. You must install esbuild plugin with `npm install esbuild-plugin-tailwindcss --save-dev` command. Then add new installed package in `merkur.config.js` to [esbuild](https://esbuild.github.io/) configuration. 
+Or you want to use [Tailwind CSS](https://tailwindui.com/) framework. You must install esbuild plugin with `npm install esbuild-plugin-tailwindcss --save-dev` command. Then add new installed package in `merkur.config.js` to [esbuild](https://esbuild.github.io/) configuration.
 
 ```javascript
 /**
@@ -269,7 +271,7 @@ export default function ({ cliConfig, emitter, }) {
 
 ## Custom function in playground templates
 
-In some use case you need use custom helper function in playground templates. For that use case you can use `playground` property in `merkur.config.mjs` file to define your custom function as show example below. 
+In some use case you need use custom helper function in playground templates. For that use case you can use `playground` property in `merkur.config.mjs` file to define your custom function as show example below.
 
 ```javascript
 function helperFunction() {

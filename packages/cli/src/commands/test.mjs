@@ -3,20 +3,14 @@ import process from 'node:process';
 
 import { npmRunPath } from 'npm-run-path';
 
-import { createCLIConfig } from '../CLIConfig.mjs';
-import { createContext } from '../context.mjs';
+import { createCommandConfig } from '../commandConfig.mjs';
 import { createLogger } from '../logger.mjs';
-import { createMerkurConfig } from '../merkurConfig.mjs';
 import { handleExit } from '../handleExit.mjs';
 
 export async function test({ args, commandArgs, command }) {
-  const context = await createContext();
-  let baseCliConfig = await createCLIConfig({ args, command });
-
-  const { merkurConfig, cliConfig } = await createMerkurConfig({
+  const { context, cliConfig, merkurConfig } = await createCommandConfig({
     args,
-    cliConfig: baseCliConfig,
-    context,
+    command,
   });
   const logger = createLogger('testRunner', cliConfig);
 
