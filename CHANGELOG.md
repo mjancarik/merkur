@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.8](https://github.com/mjancarik/merkur/compare/v0.37.7...v0.37.8) (2025-04-23)
+
+### Bug Fixes
+
+- 🐛 widgetHandler use final merkurConfig ([#224](https://github.com/mjancarik/merkur/issues/224)) ([6136dd8](https://github.com/mjancarik/merkur/commit/6136dd8bb4503b2637a84f3814a22704d6b3ce1c))
+
+### Features
+
+- 🎸 Added new `templateFolders` for ejs template dirs ([ade306d](https://github.com/mjancarik/merkur/commit/ade306d7882f25082c632221e4eb44592965759d))
+
 ## [0.37.7](https://github.com/mjancarik/merkur/compare/v0.37.6...v0.37.7) (2025-03-19)
 
 ### Features
