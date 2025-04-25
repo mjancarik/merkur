@@ -14,6 +14,7 @@ async function viewFactory(widget) {
 
   return {
     View,
+    ErrorView,
     slot,
   };
 }
