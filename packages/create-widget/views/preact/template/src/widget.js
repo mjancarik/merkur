@@ -9,6 +9,7 @@ import { errorPlugin } from '@merkur/plugin-error';
 import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
 
 import HeadlineSlot from './slots/HeadlineSlot';
+import ErrorView from './views/ErrorView';
 import View from './views/View';
 
 import pkg from '../package.json';
@@ -20,6 +21,7 @@ export default defineWidget({
   version: pkg.version,
   viewFactory: createViewFactory((widget) => ({
     View,
+    ErrorView,
     slotFactories: [
       createSlotFactory((widget) => ({
         name: 'headline',
