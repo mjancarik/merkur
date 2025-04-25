@@ -43,15 +43,18 @@ export async function mapViews(widget, viewFactory, callback) {
 }
 
 function mapResolvedViews(views, callback) {
-  return views.map(({ View, containerSelector, isSlot, container }) => {
-    callback({
-      View,
-      isSlot,
-      containerSelector,
-      container:
-        (containerSelector && document?.querySelector(containerSelector)) ||
-        container ||
-        null,
-    });
-  });
+  return views.map(
+    ({ View, ErrorView, containerSelector, isSlot, container }) => {
+      callback({
+        View,
+        ErrorView,
+        isSlot,
+        containerSelector,
+        container:
+          (containerSelector && document?.querySelector(containerSelector)) ||
+          container ||
+          null,
+      });
+    },
+  );
 }
