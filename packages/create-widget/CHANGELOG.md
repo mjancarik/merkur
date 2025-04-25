@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.9](https://github.com/mjancarik/merkur/compare/v0.37.8...v0.37.9) (2025-04-25)
+
+### Bug Fixes
+
+- 🐛 add default ErrorView to viewFactory ([5c4d2fb](https://github.com/mjancarik/merkur/commit/5c4d2fba7a8929185129bcaf1bd9c53b34001bf4))
+
 ## [0.37.8](https://github.com/mjancarik/merkur/compare/v0.37.7...v0.37.8) (2025-04-23)
 
 **Note:** Version bump only for package @merkur/create-widget

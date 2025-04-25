@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.9](https://github.com/mjancarik/merkur/compare/v0.37.8...v0.37.9) (2025-04-25)
+
+### Bug Fixes
+
+- 🐛 passing ErrorView to callback in mapResolvedViews ([e4a21ad](https://github.com/mjancarik/merkur/commit/e4a21ad0d92151c5fdd4464a78f056383edb8b90))
+
 # [0.37.0](https://github.com/mjancarik/merkur/compare/v0.36.5...v0.37.0) (2024-11-12)
 
 ### Features

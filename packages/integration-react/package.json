@@ -1,6 +1,6 @@
 {
   "name": "@merkur/integration-react",
-  "version": "0.37.0",
+  "version": "0.37.9",
   "description": "Merkur module for easy integration with react.",
   "main": "lib/index",
   "module": "lib/index",
@@ -48,7 +48,7 @@
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",
     "@merkur/core": "^0.37.0",
-    "@merkur/plugin-component": "^0.37.0",
+    "@merkur/plugin-component": "^0.37.9",
     "@merkur/plugin-event-emitter": "^0.37.0",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-replace": "^5.0.2",
