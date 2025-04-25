@@ -26,10 +26,6 @@ async function readAssetFile(filePath, postProcess) {
   return data;
 }
 
-const memoReadAssetFile = memo(readAssetFile, {
-  generateKey: (filePath) => filePath,
-});
-
 async function processAssetInFolder({
   asset,
   folder,
@@ -44,7 +40,7 @@ async function processAssetInFolder({
 
   if (asset.type.includes('inline')) {
     try {
-      const content = await memoReadAssetFile(
+      const content = await readAssetFile(
         path.join(staticFolder, folder, fileName),
         asset.type === 'inlineJson' ? JSON.parse : undefined,
       );

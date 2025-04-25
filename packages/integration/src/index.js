@@ -1,33 +1,48 @@
 import testScript from './testScript';
 
+const isLoadedSymbol = Symbol.for('isLoaded');
+const loadingPromiseSymbol = Symbol.for('loadingPromise');
+
+function _attachElementToAsset(asset, element) {
+  return {
+    ...asset,
+    element,
+  };
+}
+
+function _handleAssetError({
+  asset,
+  message = `Error loading asset ${asset.source}.`,
+}) {
+  if (asset.optional) {
+    console.warn(message);
+
+    return _attachElementToAsset(asset, null);
+  }
+
+  const error = new Error(message);
+  error.asset = asset;
+
+  throw error;
+}
+
 function _addListenersToAssetElement(asset, element, resolve, reject) {
   element.addEventListener('load', () => {
-    resolve(asset.source);
-    element[Symbol.for('isLoaded')] = true;
-    delete element[Symbol.for('loadingPromise')];
+    resolve(_attachElementToAsset(asset, element));
+    element[isLoadedSymbol] = true;
+    delete element[loadingPromiseSymbol];
   });
   element.addEventListener('error', () => {
     if (element.parentNode) {
       element.remove();
     }
 
-    const message = `Error loading asset '${asset.source}'.`;
-
-    if (asset.optional) {
-      console.warn(message);
-      resolve(null);
-    } else {
-      reject(new Error(message));
+    try {
+      resolve(_handleAssetError({ asset }));
+    } catch (error) {
+      reject(error);
     }
   });
-}
-
-function _resolvePromisesInArray(array) {
-  if (array.some((item) => item instanceof Promise)) {
-    return Promise.all(array);
-  }
-
-  return array;
 }
 
 function _loadStyle(asset, root) {
@@ -36,12 +51,12 @@ function _loadStyle(asset, root) {
     style.innerHTML = asset.source;
     root.appendChild(style);
 
-    return asset.source;
+    return _attachElementToAsset(asset, style);
   }
 
   const link = document.createElement('link');
 
-  link[Symbol.for('loadingPromise')] = new Promise((resolve, reject) => {
+  link[loadingPromiseSymbol] = new Promise((resolve, reject) => {
     _addListenersToAssetElement(asset, link, resolve, reject);
     link.rel = 'stylesheet';
     link.href = asset.source;
@@ -49,44 +64,41 @@ function _loadStyle(asset, root) {
     root.appendChild(link);
   });
 
-  return link[Symbol.for('loadingPromise')];
+  return link[loadingPromiseSymbol];
 }
 
-function loadStyleAssets(assets, root = document.head) {
-  const styleElements = root.querySelectorAll('style');
+async function loadStyleAssets(assets, root = document.head) {
+  const styleElements = Array.from(root.querySelectorAll('style'));
 
-  return _resolvePromisesInArray(
+  return Promise.all(
     assets.map((asset) => {
       if (
         !['stylesheet', 'inlineStyle'].includes(asset.type) ||
         !asset.source
       ) {
-        return null;
+        return _attachElementToAsset(asset, null);
       }
 
       if (asset.type === 'stylesheet') {
         const link = root.querySelector(`link[href='${asset.source}']`);
 
         if (link) {
-          if (link[Symbol.for('loadingPromise')]) {
-            return link[Symbol.for('loadingPromise')];
+          if (link[loadingPromiseSymbol]) {
+            return link[loadingPromiseSymbol];
           }
 
-          return asset.source;
+          return _attachElementToAsset(asset, link);
         }
       }
 
-      if (
-        asset.type === 'inlineStyle' &&
-        Array.from(styleElements).reduce((acc, cur) => {
-          if (cur.innerHTML === asset.source) {
-            return true;
-          }
+      if (asset.type === 'inlineStyle') {
+        const inlineStyle = styleElements.find(
+          (element) => element.innerHTML === asset.source,
+        );
 
-          return acc;
-        }, false)
-      ) {
-        return asset.source;
+        if (inlineStyle) {
+          return _attachElementToAsset(asset, inlineStyle);
+        }
       }
 
       return _loadStyle(asset, root);
@@ -94,18 +106,37 @@ function loadStyleAssets(assets, root = document.head) {
   );
 }
 
-function _loadScript(asset, root) {
-  if (asset.type === 'inlineScript') {
-    const script = document.createElement('script');
-    script.text = asset.source;
-    root.appendChild(script);
-
-    return asset.source;
+function _findScriptElement(scriptElements, asset) {
+  if (asset.type === 'json') {
+    return scriptElements.find(
+      (element) => element.dataset.src === asset.source,
+    );
   }
 
+  if (!['script', 'inlineScript', 'inlineJson'].includes(asset.type)) {
+    return null;
+  }
+
+  const attributeKey = asset.type === 'script' ? 'src' : 'textContent';
+  const source =
+    asset.type === 'inlineJson' ? JSON.stringify(asset.source) : asset.source;
+
+  return (
+    scriptElements.find((element) => element[attributeKey] === source) || null
+  );
+}
+
+function _loadScript(asset, root) {
   const script = document.createElement('script');
 
-  script[Symbol.for('loadingPromise')] = new Promise((resolve, reject) => {
+  if (asset.type === 'inlineScript') {
+    script.textContent = asset.source;
+    root.appendChild(script);
+
+    return _attachElementToAsset(asset, script);
+  }
+
+  script[loadingPromiseSymbol] = new Promise((resolve, reject) => {
     script.defer = true;
     _addListenersToAssetElement(asset, script, resolve, reject);
     script.src = asset.source;
@@ -130,16 +161,16 @@ function _loadScript(asset, root) {
     root.appendChild(script);
   });
 
-  return script[Symbol.for('loadingPromise')];
+  return script[loadingPromiseSymbol];
 }
 
-function loadScriptAssets(assets, root = document.head) {
-  const scriptElements = root.querySelectorAll('script');
+async function loadScriptAssets(assets, root = document.head) {
+  const scriptElements = Array.from(root.querySelectorAll('script'));
 
-  return _resolvePromisesInArray(
+  return Promise.all(
     assets.map((asset) => {
       if (!['script', 'inlineScript'].includes(asset.type) || !asset.source) {
-        return null;
+        return _attachElementToAsset(asset, null);
       }
 
       const { source } = asset;
@@ -157,51 +188,36 @@ function loadScriptAssets(assets, root = document.head) {
         }
 
         if (!_asset.source) {
-          const message = `Asset '${_asset.name}' is missing ES variant and could not be loaded.`;
-
-          if (!_asset.optional) {
-            const error = new Error(message);
-            error.asset = _asset;
-
-            throw error;
-          }
-
-          console.warn(message);
-          return null;
+          return _handleAssetError({
+            asset: _asset,
+            message: `Asset '${_asset.name}' is missing ES variant and could not be loaded.`,
+          });
         }
       }
 
       if (_asset.test && testScript.test(_asset.test)) {
-        return _asset.source;
+        return _attachElementToAsset(
+          _asset,
+          _findScriptElement(scriptElements, _asset),
+        );
       }
 
-      if (asset.type === 'script') {
-        const script = root.querySelector(`script[src='${_asset.source}']`);
+      const script = _findScriptElement(scriptElements, _asset);
 
-        if (script) {
-          if (script[Symbol.for('loadingPromise')]) {
-            return script[Symbol.for('loadingPromise')];
-          }
-
-          if (script[Symbol.for('isLoaded')]) {
-            return _asset.source;
-          }
-
-          return new Promise((resolve, reject) =>
-            _addListenersToAssetElement(_asset, script, resolve, reject),
-          );
+      if (script && _asset.type === 'script') {
+        if (script[loadingPromiseSymbol]) {
+          return script[loadingPromiseSymbol];
         }
-      } else if (
-        asset.type === 'inlineScript' &&
-        Array.from(scriptElements).reduce((acc, cur) => {
-          if (cur.text === _asset.source) {
-            return true;
-          }
 
-          return acc;
-        }, false)
-      ) {
-        return _asset.source;
+        if (script[isLoadedSymbol]) {
+          return _attachElementToAsset(_asset, script);
+        }
+
+        return new Promise((resolve, reject) =>
+          _addListenersToAssetElement(_asset, script, resolve, reject),
+        );
+      } else if (script && _asset.type === 'inlineScript') {
+        return _attachElementToAsset(_asset, script);
       }
 
       return _loadScript(_asset, root);
@@ -221,74 +237,85 @@ async function _fetchData(source) {
   return response.text();
 }
 
+function _removeElementAfterTimeout(element, timeout) {
+  if (timeout) {
+    setTimeout(() => {
+      if (element.parentNode) {
+        element.remove();
+      }
+    }, timeout);
+  }
+}
+
 function _loadJsonAsset(asset, root) {
   const script = document.createElement('script');
+  script.type = 'application/json';
 
-  script[Symbol.for('loadingPromise')] = new Promise((resolve) => {
-    script.type = 'application/json';
+  if (asset.type === 'inlineJson') {
+    script.textContent = JSON.stringify(asset.source);
+    root.appendChild(script);
+    _removeElementAfterTimeout(script, asset.ttl);
+
+    return _attachElementToAsset(asset, script);
+  }
+
+  script[loadingPromiseSymbol] = new Promise((resolve, reject) => {
     script.dataset.src = asset.source;
     root.appendChild(script);
 
     (async () => {
       try {
         const textContent = await _fetchData(asset.source);
-        resolve(JSON.parse(textContent));
         script.textContent = textContent;
-        delete script[Symbol.for('loadingPromise')];
+        delete script[loadingPromiseSymbol];
+        _removeElementAfterTimeout(script, asset.ttl);
+        resolve(_attachElementToAsset(asset, script));
       } catch (error) {
-        console.warn(
-          `Error loading JSON asset '${asset.name}': ${error.message}`,
-        );
         script.remove();
-        resolve(null);
+
+        try {
+          resolve(
+            _handleAssetError({
+              asset,
+              message: `Error loading JSON asset '${asset.name}': ${error.message}`,
+            }),
+          );
+        } catch (error) {
+          reject(error);
+        }
       }
     })();
   });
 
-  return script[Symbol.for('loadingPromise')];
+  return script[loadingPromiseSymbol];
 }
 
-function loadJsonAssets(assets, root = document.head) {
-  return _resolvePromisesInArray(
+async function loadJsonAssets(assets, root = document.head) {
+  const scriptElements = Array.from(
+    root.querySelectorAll('script[type="application/json"]'),
+  );
+
+  return Promise.all(
     assets.map((asset) => {
       if (!['json', 'inlineJson'].includes(asset.type) || !asset.source) {
-        return null;
+        return _attachElementToAsset(asset, null);
       }
 
-      if (asset.type === 'inlineJson') {
-        return asset.source;
-      }
-
-      const script = root.querySelector(
-        `script[type="application/json"][data-src='${asset.source}']`,
-      );
+      const script = _findScriptElement(scriptElements, asset);
 
       if (script) {
-        if (script.dataset.jsonData) {
-          return script.dataset.jsonData;
-        }
-
-        if (script[Symbol.for('loadingPromise')]) {
-          return script[Symbol.for('loadingPromise')];
+        if (script[loadingPromiseSymbol]) {
+          return script[loadingPromiseSymbol];
         }
 
         if (script.textContent) {
-          try {
-            return JSON.parse(script.textContent);
-          } catch (error) {
-            console.warn(
-              `Error parsing JSON asset '${asset.name}': ${error.message}`,
-            );
-
-            return null;
-          }
+          return _attachElementToAsset(asset, script);
         }
 
-        console.warn(
-          `JSON asset '${asset.name}' is missing textContent and could not be loaded.`,
-        );
-
-        return null;
+        return _handleAssetError({
+          asset,
+          message: `JSON asset '${asset.name}' is missing textContent and could not be loaded.`,
+        });
       }
 
       return _loadJsonAsset(asset, root);
@@ -297,10 +324,11 @@ function loadJsonAssets(assets, root = document.head) {
 }
 
 function _mergeResults(results) {
-  //console.log(results);
   return results.reduce((acc, results) => {
     results.forEach((result, index) => {
       if (!acc[index]) {
+        acc[index] = result;
+      } else if (result.element) {
         acc[index] = result;
       }
     });
@@ -309,21 +337,19 @@ function _mergeResults(results) {
   }, []);
 }
 
-function loadAssets(assets, root) {
-  const assetState = _resolvePromisesInArray([
+async function loadAssets(assets, root) {
+  const results = await Promise.all([
     loadScriptAssets(assets, root),
     loadStyleAssets(assets, root),
     loadJsonAssets(assets, root),
   ]);
 
-  if (assetState instanceof Promise) {
-    return assetState.then((results) => _mergeResults(results));
-  }
-
-  return _mergeResults(assetState);
+  return _mergeResults(results);
 }
 
 export {
+  isLoadedSymbol,
+  loadingPromiseSymbol,
   testScript,
   loadAssets,
   loadJsonAssets,

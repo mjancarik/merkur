@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Merkur component loadScriptAssets() function should create script elements for script assets and return their sources 1`] = `
+exports[`Merkur component loadScriptAssets() function should create script elements for script assets and return them in asset objects 1`] = `
 [
   {
     "addEventListener": [MockFunction] {
@@ -110,12 +110,12 @@ exports[`Merkur component loadScriptAssets() function should create script eleme
     "removeAttribute": [Function],
     "setAttribute": [Function],
     "tagName": "script",
-    "text": "alert();",
+    "textContent": "alert();",
   },
 ]
 `;
 
-exports[`Merkur component loadStyleAssets() function should create style elements for style assets and return their sources 1`] = `
+exports[`Merkur component loadStyleAssets() function should create style elements for style assets and return them in asset objects 1`] = `
 [
   {
     "addEventListener": [MockFunction] {

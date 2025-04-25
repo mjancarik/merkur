@@ -36,7 +36,11 @@ describe('Merkur component', () => {
       ),
     ),
     querySelectorAll: jest.fn((selector) =>
-      fakeAssetObjects.filter((el) => el.tagName === selector),
+      fakeAssetObjects.filter((el) =>
+        selector === 'script[type="application/json"]'
+          ? el.tagName === 'script' && el.type === 'application/json'
+          : el.tagName === selector,
+      ),
     ),
   };
   let originalFetch;
@@ -128,6 +132,16 @@ describe('Merkur component', () => {
         });
     };
   };
+
+  function getAssetWithElement(assetNameOrObject, element, additionalProps) {
+    return {
+      ...(typeof assetNameOrObject === 'string'
+        ? assetsDictionary[assetNameOrObject]
+        : assetNameOrObject),
+      element,
+      ...additionalProps,
+    };
+  }
 
   beforeAll(() => {
     originalFetch = global.fetch;
@@ -228,7 +242,7 @@ describe('Merkur component', () => {
   });
 
   describe('loadStyleAssets() function', () => {
-    it('should create style elements for style assets and return their sources', async () => {
+    it('should create style elements for style assets and return them in asset objects', async () => {
       const stylesPromise = loadStyleAssets(assets);
 
       expect(stylesPromise).toBeInstanceOf(Promise);
@@ -242,15 +256,15 @@ describe('Merkur component', () => {
 
       expect(fakeAssetObjects).toMatchSnapshot();
       expect(sources).toStrictEqual([
-        null,
-        null,
-        null,
-        null,
-        null,
-        assetsDictionary['widget.css'].source,
-        assetsDictionary['unnamed.css'].source,
-        null,
-        null,
+        getAssetWithElement('widget.js', null),
+        getAssetWithElement('polyfill1.js', null),
+        getAssetWithElement('undefined.js', null),
+        getAssetWithElement('polyfill2.js', null),
+        getAssetWithElement('unnamed.js', null),
+        getAssetWithElement('widget.css', fakeAssetObjects[0]),
+        getAssetWithElement('unnamed.css', fakeAssetObjects[1]),
+        getAssetWithElement('maps/vectors.json', null),
+        getAssetWithElement('maps/inline.json', null),
       ]);
     });
 
@@ -279,8 +293,12 @@ describe('Merkur component', () => {
     });
 
     it('should return a promise that resolves even if an optional style fails to load', async () => {
+      const widgetCss = {
+        ...assetsDictionary['widget.css'],
+        optional: true,
+      };
       const stylesPromise = loadStyleAssets([
-        { ...assetsDictionary['widget.css'], optional: true },
+        widgetCss,
         assetsDictionary['unnamed.css'],
       ]);
       rejectFakeAssets();
@@ -293,8 +311,8 @@ describe('Merkur component', () => {
       expect(fakeAssetObjects[0].remove).toHaveBeenCalledTimes(1); // widget.css
       expect(fakeAssetObjects[1].remove).not.toHaveBeenCalled(); // unnamed.css
       expect(sources).toStrictEqual([
-        null, // widget.css
-        assetsDictionary['unnamed.css'].source,
+        getAssetWithElement(widgetCss, null),
+        getAssetWithElement('unnamed.css', fakeAssetObjects[1]),
       ]);
     });
 
@@ -314,7 +332,10 @@ describe('Merkur component', () => {
       const sources = await stylesPromise;
 
       expect(document.createElement).toHaveBeenCalledTimes(0);
-      expect(sources).toStrictEqual([link.href, style.innerHTML]);
+      expect(sources).toStrictEqual([
+        getAssetWithElement('widget.css', link),
+        getAssetWithElement('unnamed.css', style),
+      ]);
     });
 
     it('should resolve if a style (created by loadStyleAssets) is already present in the DOM but not yet loaded', async () => {
@@ -332,12 +353,14 @@ describe('Merkur component', () => {
 
       const sources = await stylesPromise;
 
-      expect(sources).toStrictEqual([style.source]);
+      expect(sources).toStrictEqual([
+        getAssetWithElement('widget.css', fakeAssetObjects[0]),
+      ]);
     });
   });
 
   describe('loadScriptAssets() function', () => {
-    it('should create script elements for script assets and return their sources', async () => {
+    it('should create script elements for script assets and return them in asset objects', async () => {
       const scriptsPromise = loadScriptAssets(assets);
 
       expect(scriptsPromise).toBeInstanceOf(Promise);
@@ -349,15 +372,25 @@ describe('Merkur component', () => {
 
       expect(fakeAssetObjects).toMatchSnapshot();
       expect(sources).toStrictEqual([
-        assetsDictionary['widget.js'].source.es13,
-        assetsDictionary['polyfill1.js'].source.es11,
-        assetsDictionary['undefined.js'].source.es9, // es11 is undefined
-        assetsDictionary['polyfill2.js'].source,
-        assetsDictionary['unnamed.js'].source,
-        null,
-        null,
-        null,
-        null,
+        getAssetWithElement('widget.js', fakeAssetObjects[0], {
+          source: assetsDictionary['widget.js'].source.es13,
+        }),
+        getAssetWithElement('polyfill1.js', null, {
+          source: assetsDictionary['polyfill1.js'].source.es11,
+        }),
+        getAssetWithElement('undefined.js', fakeAssetObjects[1], {
+          source: assetsDictionary['undefined.js'].source.es9, // es11 is undefined
+        }),
+        getAssetWithElement('polyfill2.js', fakeAssetObjects[2], {
+          source: assetsDictionary['polyfill2.js'].source,
+        }),
+        getAssetWithElement('unnamed.js', fakeAssetObjects[3], {
+          source: assetsDictionary['unnamed.js'].source,
+        }),
+        getAssetWithElement('widget.css', null),
+        getAssetWithElement('unnamed.css', null),
+        getAssetWithElement('maps/vectors.json', null),
+        getAssetWithElement('maps/inline.json', null),
       ]);
     });
 
@@ -386,15 +419,16 @@ describe('Merkur component', () => {
     });
 
     it('should return a promise that resolves when an optional script fails to load', async () => {
-      const scriptsPromise = loadScriptAssets([
-        {
-          name: 'test.js',
-          type: 'script',
-          source: {
-            es9: 'http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js',
-          },
-          optional: true,
+      const testJs = {
+        name: 'test.js',
+        type: 'script',
+        source: {
+          es9: 'http://localhost:4444/static/es9/test.6961af42bfa3596bb147.js',
         },
+        optional: true,
+      };
+      const scriptsPromise = loadScriptAssets([
+        testJs,
         assetsDictionary['unnamed.js'],
       ]);
 
@@ -405,8 +439,10 @@ describe('Merkur component', () => {
 
       expect(fakeAssetObjects[0].remove).toHaveBeenCalledTimes(1);
       expect(sources).toStrictEqual([
-        null, // test.js
-        assetsDictionary['unnamed.js'].source,
+        getAssetWithElement(testJs, null, {
+          source: testJs.source.es9,
+        }),
+        getAssetWithElement('unnamed.js', fakeAssetObjects[1]),
       ]);
     });
 
@@ -441,17 +477,26 @@ describe('Merkur component', () => {
       const script = fakeAssetObjectGenerator('script');
       script.src = assetsDictionary['widget.js'].source.es13;
       const inlineScript = fakeAssetObjectGenerator('script');
-      inlineScript.text = assetsDictionary['unnamed.js'].source;
+      inlineScript.textContent = assetsDictionary['unnamed.js'].source;
       resolveFakeAssets();
 
+      const widgetJs = {
+        ...assetsDictionary['widget.js'],
+        test: 'return true',
+      };
       const sciptsPromise = loadScriptAssets([
-        { ...assetsDictionary['widget.js'], test: 'return true' },
+        widgetJs,
         assetsDictionary['unnamed.js'],
       ]);
       const sources = await sciptsPromise;
 
       expect(document.createElement).toHaveBeenCalledTimes(0);
-      expect(sources).toStrictEqual([script.src, inlineScript.text]);
+      expect(sources).toStrictEqual([
+        getAssetWithElement(widgetJs, script, {
+          source: assetsDictionary['widget.js'].source.es13,
+        }),
+        getAssetWithElement('unnamed.js', inlineScript),
+      ]);
     });
 
     it('should resolve if a script (not created by loadScriptAssets) is already present in the DOM but not yet loaded', async () => {
@@ -466,7 +511,11 @@ describe('Merkur component', () => {
       const sources = await sciptsPromise;
 
       expect(document.createElement).toHaveBeenCalledTimes(0);
-      expect(sources).toStrictEqual([script.src]);
+      expect(sources).toStrictEqual([
+        getAssetWithElement('widget.js', script, {
+          source: assetsDictionary['widget.js'].source.es13,
+        }),
+      ]);
     });
 
     it('should resolve if a script (created by loadScriptAsssets) is already present in the DOM and is already loaded', async () => {
@@ -478,10 +527,14 @@ describe('Merkur component', () => {
       expect(document.createElement).toHaveBeenCalledTimes(1);
       document.createElement.mockClear();
 
-      const sources = loadScriptAssets([script]); // it is resolved synchronously
+      const sources = await loadScriptAssets([script]);
 
       expect(document.createElement).toHaveBeenCalledTimes(0);
-      expect(sources).toStrictEqual([script.source.es13]);
+      expect(sources).toStrictEqual([
+        getAssetWithElement('widget.js', fakeAssetObjects[0], {
+          source: assetsDictionary['widget.js'].source.es13,
+        }),
+      ]);
     });
 
     it('should resolve if a script (created by loadScriptAsssets) is already present in the DOM but not yet loaded', async () => {
@@ -499,19 +552,23 @@ describe('Merkur component', () => {
 
       const sources = await sciptsPromise;
 
-      expect(sources).toStrictEqual([script.source.es13]);
+      expect(sources).toStrictEqual([
+        getAssetWithElement('widget.js', fakeAssetObjects[0], {
+          source: assetsDictionary['widget.js'].source.es13,
+        }),
+      ]);
     });
   });
 
   describe('loadJsonAssets() function', () => {
-    it('should fetch JSON assets and return their parsed content', async () => {
+    it('should create script elements (with type="application/json") for JSON assets and return them in asset objects', async () => {
       global.fetch.mockImplementation(
         fetchMockImplementation({ defaultResponseBody: vectorsJsonContent }),
       );
       const jsonsPromise = loadJsonAssets(assets);
 
-      expect(document.createElement).toHaveBeenCalledTimes(1); // maps/vectors.json
-      expect(document.head.appendChild).toHaveBeenCalledTimes(1); // maps/vectors.json
+      expect(document.createElement).toHaveBeenCalledTimes(2);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(2);
 
       assetLoadingDeferreds[
         assetsDictionary['maps/vectors.json'].source
@@ -519,21 +576,42 @@ describe('Merkur component', () => {
       const sources = await jsonsPromise;
 
       expect(sources).toStrictEqual([
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        null,
-        JSON.parse(vectorsJsonContent),
-        assetsDictionary['maps/inline.json'].source,
+        getAssetWithElement('widget.js', null),
+        getAssetWithElement('polyfill1.js', null),
+        getAssetWithElement('undefined.js', null),
+        getAssetWithElement('polyfill2.js', null),
+        getAssetWithElement('unnamed.js', null),
+        getAssetWithElement('widget.css', null),
+        getAssetWithElement('unnamed.css', null),
+        getAssetWithElement('maps/vectors.json', fakeAssetObjects[0]),
+        getAssetWithElement('maps/inline.json', fakeAssetObjects[1]),
       ]);
+      expect(fakeAssetObjects).toStrictEqual([
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: vectorsJsonContent,
+        }),
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: JSON.stringify(
+            assetsDictionary['maps/inline.json'].source,
+          ),
+        }),
+      ]);
+      expect(fakeAssetObjects[0].type).toBe('application/json');
+      expect(fakeAssetObjects[0].textContent).toBe(vectorsJsonContent);
+      expect(fakeAssetObjects[1].type).toBe('application/json');
+      expect(fakeAssetObjects[1].textContent).toBe(
+        JSON.stringify(assetsDictionary['maps/inline.json'].source),
+      );
       expect(console.warn).not.toHaveBeenCalled();
       expect(fakeAssetObjects[0].remove).not.toHaveBeenCalled();
     });
 
-    it('should return a promise that resolves even if a JSON fails to load due to 404 error', async () => {
+    it('should reject when a JSON fails to load due to 400 error', async () => {
+      expect.assertions(5);
       global.fetch.mockImplementation(
         fetchMockImplementation({ defaultResponseBody: vectorsJsonContent }),
       );
@@ -542,8 +620,8 @@ describe('Merkur component', () => {
         assetsDictionary['maps/inline.json'],
       ]);
 
-      expect(document.createElement).toHaveBeenCalledTimes(1); // maps/vectors.json
-      expect(document.head.appendChild).toHaveBeenCalledTimes(1); // maps/vectors.json
+      expect(document.createElement).toHaveBeenCalledTimes(2);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(2);
 
       assetLoadingDeferreds[
         assetsDictionary['maps/vectors.json'].source
@@ -551,17 +629,48 @@ describe('Merkur component', () => {
         ok: false,
         status: 404,
       });
+
+      try {
+        await jsonsPromise;
+      } catch (error) {
+        expect(fakeAssetObjects[0].remove).toHaveBeenCalledTimes(1);
+        expect(error).toBeInstanceOf(Error);
+        expect(error.asset).toEqual(assetsDictionary['maps/vectors.json']);
+      }
+    });
+
+    it('should resolve if an optional JSON fails to load due to 404 error', async () => {
+      global.fetch.mockImplementation(
+        fetchMockImplementation({ defaultResponseBody: vectorsJsonContent }),
+      );
+      const vectorsJson = {
+        ...assetsDictionary['maps/vectors.json'],
+        optional: true,
+      };
+      const jsonsPromise = loadJsonAssets([
+        vectorsJson,
+        assetsDictionary['maps/inline.json'],
+      ]);
+
+      expect(document.createElement).toHaveBeenCalledTimes(2);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(2);
+
+      assetLoadingDeferreds[vectorsJson.source][0].resolve({
+        ok: false,
+        status: 404,
+      });
       const sources = await jsonsPromise;
 
       expect(sources).toStrictEqual([
-        null, // maps/vectors.json
-        assetsDictionary['maps/inline.json'].source,
+        getAssetWithElement(vectorsJson, null),
+        getAssetWithElement('maps/inline.json', fakeAssetObjects[1]),
       ]);
       expect(console.warn).toHaveBeenCalledTimes(1); // maps/vectors.json
       expect(fakeAssetObjects[0].remove).toHaveBeenCalledTimes(1); // maps/vectors.json
     });
 
-    it('should return a promise that resolves even if a JSON fails to load due to network error', async () => {
+    it('should reject when a JSON fails to load due to network error', async () => {
+      expect.assertions(5);
       global.fetch.mockImplementation(
         fetchMockImplementation({ defaultResponseBody: vectorsJsonContent }),
       );
@@ -569,24 +678,49 @@ describe('Merkur component', () => {
         assetsDictionary['maps/vectors.json'],
         assetsDictionary['maps/inline.json'],
       ]);
-
-      expect(document.createElement).toHaveBeenCalledTimes(1); // maps/vectors.json
-      expect(document.head.appendChild).toHaveBeenCalledTimes(1); // maps/vectors.json
-
+      expect(document.createElement).toHaveBeenCalledTimes(2);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(2);
       assetLoadingDeferreds[
         assetsDictionary['maps/vectors.json'].source
       ][0].reject();
+
+      try {
+        await jsonsPromise;
+      } catch (error) {
+        expect(fakeAssetObjects[0].remove).toHaveBeenCalledTimes(1);
+        expect(error).toBeInstanceOf(Error);
+        expect(error.asset).toEqual(assetsDictionary['maps/vectors.json']);
+      }
+    });
+
+    it('should resolve if an optional JSON fails to load due to network error', async () => {
+      global.fetch.mockImplementation(
+        fetchMockImplementation({ defaultResponseBody: vectorsJsonContent }),
+      );
+      const vectorsJson = {
+        ...assetsDictionary['maps/vectors.json'],
+        optional: true,
+      };
+      const jsonsPromise = loadJsonAssets([
+        vectorsJson,
+        assetsDictionary['maps/inline.json'],
+      ]);
+
+      expect(document.createElement).toHaveBeenCalledTimes(2);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(2);
+
+      assetLoadingDeferreds[vectorsJson.source][0].reject();
       const sources = await jsonsPromise;
 
       expect(sources).toStrictEqual([
-        null, // maps/vectors.json
-        assetsDictionary['maps/inline.json'].source,
+        getAssetWithElement(vectorsJson, null),
+        getAssetWithElement('maps/inline.json', fakeAssetObjects[1]),
       ]);
       expect(console.warn).toHaveBeenCalledTimes(1); // maps/vectors.json
       expect(fakeAssetObjects[0].remove).toHaveBeenCalledTimes(1); // maps/vectors.json
     });
 
-    it('should get JSON data if a script (created by loadJsonAsssets) is already present in the DOM and is already loaded', async () => {
+    it('should resolve if a JSON script (created by loadJsonAsssets) is already present in the DOM and is already loaded', async () => {
       global.fetch.mockImplementation(
         fetchMockImplementation({ defaultResponseBody: vectorsJsonContent }),
       );
@@ -595,8 +729,8 @@ describe('Merkur component', () => {
         assetsDictionary['maps/inline.json'],
       ]);
 
-      expect(document.createElement).toHaveBeenCalledTimes(1); // maps/vectors.json
-      expect(document.head.appendChild).toHaveBeenCalledTimes(1); // maps/vectors.json
+      expect(document.createElement).toHaveBeenCalledTimes(2);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(2);
       document.createElement.mockClear();
 
       assetLoadingDeferreds[
@@ -604,11 +738,25 @@ describe('Merkur component', () => {
       ][0].resolve();
       const sources = await jsonsPromise;
 
-      const sources2 = loadJsonAssets([
-        assetsDictionary['maps/vectors.json'],
-        assetsDictionary['maps/inline.json'],
-      ]); // it is resolved synchronously
+      const sources2 = await loadJsonAssets([
+        getAssetWithElement('maps/vectors.json', fakeAssetObjects[0]),
+        getAssetWithElement('maps/inline.json', fakeAssetObjects[1]),
+      ]);
 
+      expect(fakeAssetObjects).toStrictEqual([
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: vectorsJsonContent,
+        }),
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: JSON.stringify(
+            assetsDictionary['maps/inline.json'].source,
+          ),
+        }),
+      ]);
       expect(sources).toStrictEqual(sources2);
       expect(global.fetch).toHaveBeenCalledTimes(1);
       expect(console.warn).not.toHaveBeenCalled();
@@ -616,7 +764,7 @@ describe('Merkur component', () => {
       expect(fakeAssetObjects[0].remove).not.toHaveBeenCalled();
     });
 
-    it('should get JSON data if a script (created by loadJsonAsssets) is already present in the DOM but not yet loaded', async () => {
+    it('should resolve if a JSON script (created by loadJsonAsssets) is already present in the DOM but not yet loaded', async () => {
       global.fetch.mockImplementation(
         fetchMockImplementation({ defaultResponseBody: vectorsJsonContent }),
       );
@@ -625,8 +773,8 @@ describe('Merkur component', () => {
         assetsDictionary['maps/inline.json'],
       ]);
 
-      expect(document.createElement).toHaveBeenCalledTimes(1); // maps/vectors.json
-      expect(document.head.appendChild).toHaveBeenCalledTimes(1); // maps/vectors.json
+      expect(document.createElement).toHaveBeenCalledTimes(2);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(2);
       document.createElement.mockClear();
 
       const jsonsPromise2 = loadJsonAssets([
@@ -640,8 +788,22 @@ describe('Merkur component', () => {
       const sources2 = await jsonsPromise2;
 
       expect(sources2).toStrictEqual([
-        JSON.parse(vectorsJsonContent),
-        assetsDictionary['maps/inline.json'].source,
+        getAssetWithElement('maps/vectors.json', fakeAssetObjects[0]),
+        getAssetWithElement('maps/inline.json', fakeAssetObjects[1]),
+      ]);
+      expect(fakeAssetObjects).toStrictEqual([
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: vectorsJsonContent,
+        }),
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: JSON.stringify(
+            assetsDictionary['maps/inline.json'].source,
+          ),
+        }),
       ]);
       expect(global.fetch).toHaveBeenCalledTimes(1);
       expect(console.warn).not.toHaveBeenCalled();
@@ -649,74 +811,144 @@ describe('Merkur component', () => {
       expect(fakeAssetObjects[0].remove).not.toHaveBeenCalled();
     });
 
-    it('should get JSON data if a script (not created by loadJsonAsssets) is already present in the DOM and is already loaded', () => {
+    it('should resolve if a JSON script (not created by loadJsonAsssets) is already present in the DOM and is already loaded', async () => {
       const script = fakeAssetObjectGenerator('script');
       script.type = 'application/json';
       script.dataset.src = assetsDictionary['maps/vectors.json'].source;
-      script.dataset.jsonData = JSON.parse(vectorsJsonContent);
+      script.textContent = vectorsJsonContent;
 
-      const sources = loadJsonAssets([
+      const sources = await loadJsonAssets([
         assetsDictionary['maps/vectors.json'],
         assetsDictionary['maps/inline.json'],
-      ]); // it is resolved synchronously
+      ]);
 
       expect(sources).toStrictEqual([
-        JSON.parse(vectorsJsonContent),
-        assetsDictionary['maps/inline.json'].source,
+        getAssetWithElement('maps/vectors.json', script),
+        getAssetWithElement('maps/inline.json', fakeAssetObjects[1]),
       ]);
-      expect(document.createElement).toHaveBeenCalledTimes(0);
-      expect(document.head.appendChild).toHaveBeenCalledTimes(0);
+      expect(fakeAssetObjects).toStrictEqual([
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: vectorsJsonContent,
+        }),
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: JSON.stringify(
+            assetsDictionary['maps/inline.json'].source,
+          ),
+        }),
+      ]);
+      expect(document.createElement).toHaveBeenCalledTimes(1); // maps/inline.json
+      expect(document.head.appendChild).toHaveBeenCalledTimes(1); // maps/inline.json
       expect(fakeAssetObjects[0].remove).not.toHaveBeenCalled();
       expect(console.warn).not.toHaveBeenCalled();
     });
 
-    it('should load inline JSON assets synchronously', () => {
-      const sources = loadJsonAssets([assetsDictionary['maps/inline.json']]);
-
-      expect(sources).toStrictEqual([
-        assetsDictionary['maps/inline.json'].source,
-      ]);
-    });
-
-    it('should resolve to null if a JSON (not created by loadJsonAsssets) is already present in the DOM and it cannot be parsed', () => {
-      const script = fakeAssetObjectGenerator('script');
-      script.type = 'application/json';
-      script.dataset.src = assetsDictionary['maps/vectors.json'].source;
-      script.textContent = 'alert();';
-
-      const sources = loadJsonAssets([
-        assetsDictionary['maps/vectors.json'],
-        assetsDictionary['maps/inline.json'],
-      ]); // it is resolved synchronously
-
-      expect(sources).toStrictEqual([
-        null, // maps/vectors.json
-        assetsDictionary['maps/inline.json'].source,
-      ]);
-      expect(document.createElement).toHaveBeenCalledTimes(0);
-      expect(document.head.appendChild).toHaveBeenCalledTimes(0);
-      expect(fakeAssetObjects[0].remove).not.toHaveBeenCalled();
-      expect(console.warn).toHaveBeenCalledTimes(1); // maps/vectors.json
-    });
-
-    it('should resolve to null if a JSON (not created by loadJsonAsssets) is already present in the DOM and does not have textContent', () => {
+    it('should reject if a JSON script (not created by loadJsonAsssets) is already present in the DOM and does not have textContent', async () => {
+      expect.assertions(3);
       const script = fakeAssetObjectGenerator('script');
       script.type = 'application/json';
       script.dataset.src = assetsDictionary['maps/vectors.json'].source;
 
-      const sources = loadJsonAssets([
-        assetsDictionary['maps/vectors.json'],
+      try {
+        await loadJsonAssets([
+          assetsDictionary['maps/vectors.json'],
+          assetsDictionary['maps/inline.json'],
+        ]);
+      } catch (error) {
+        expect(fakeAssetObjects[0].remove).not.toHaveBeenCalled();
+        expect(error).toBeInstanceOf(Error);
+        expect(error.asset).toEqual(assetsDictionary['maps/vectors.json']);
+      }
+    });
+
+    it('should resolve to an asset object with element: null if an optional JSON script (not created by loadJsonAsssets) is already present in the DOM and does not have textContent', async () => {
+      const script = fakeAssetObjectGenerator('script');
+      script.type = 'application/json';
+      script.dataset.src = assetsDictionary['maps/vectors.json'].source;
+
+      const vectorsJson = {
+        ...assetsDictionary['maps/vectors.json'],
+        optional: true,
+      };
+      const sources = await loadJsonAssets([
+        vectorsJson,
         assetsDictionary['maps/inline.json'],
-      ]); // it is resolved synchronously
+      ]);
 
       expect(sources).toStrictEqual([
-        null, // maps/vectors.json
-        assetsDictionary['maps/inline.json'].source,
+        getAssetWithElement(vectorsJson, null),
+        getAssetWithElement('maps/inline.json', fakeAssetObjects[1]),
       ]);
-      expect(document.createElement).toHaveBeenCalledTimes(0);
-      expect(document.head.appendChild).toHaveBeenCalledTimes(0);
+      expect(document.createElement).toHaveBeenCalledTimes(1); // maps/inline.json
+      expect(document.head.appendChild).toHaveBeenCalledTimes(1); // maps/inline.json
       expect(fakeAssetObjects[0].remove).not.toHaveBeenCalled();
       expect(console.warn).toHaveBeenCalledTimes(1); // maps/vectors.json
+    });
+
+    it('should remove a JSON script element if ttl is set after the timeout', async () => {
+      jest.useFakeTimers();
+      global.fetch.mockImplementation(
+        fetchMockImplementation({ defaultResponseBody: vectorsJsonContent }),
+      );
+      const ttl1 = 1000;
+      const ttl2 = 2000;
+      const vectorsJson = {
+        ...assetsDictionary['maps/vectors.json'],
+        ttl: ttl1,
+      };
+      const inlineJson = {
+        ...assetsDictionary['maps/inline.json'],
+        ttl: ttl2,
+      };
+      const jsonsPromise = loadJsonAssets([vectorsJson, inlineJson]);
+      expect(document.createElement).toHaveBeenCalledTimes(2);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(2);
+
+      assetLoadingDeferreds[
+        assetsDictionary['maps/vectors.json'].source
+      ][0].resolve();
+      const sources = await jsonsPromise;
+
+      expect(sources).toStrictEqual([
+        getAssetWithElement(vectorsJson, fakeAssetObjects[0]),
+        getAssetWithElement(inlineJson, fakeAssetObjects[1]),
+      ]);
+      expect(fakeAssetObjects).toStrictEqual([
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: vectorsJsonContent,
+        }),
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: JSON.stringify(
+            assetsDictionary['maps/inline.json'].source,
+          ),
+        }),
+      ]);
+      jest.advanceTimersByTime(ttl1 - 1);
+
+      expect(fakeAssetObjects[0].remove).not.toHaveBeenCalled();
+      expect(fakeAssetObjects[1].remove).not.toHaveBeenCalled();
+
+      jest.advanceTimersByTime(1);
+
+      expect(fakeAssetObjects[0].remove).toHaveBeenCalledTimes(1);
+      expect(fakeAssetObjects[1].remove).not.toHaveBeenCalled();
+
+      jest.advanceTimersByTime(ttl2 - ttl1 - 1);
+
+      expect(fakeAssetObjects[0].remove).toHaveBeenCalledTimes(1);
+      expect(fakeAssetObjects[1].remove).not.toHaveBeenCalled();
+
+      jest.advanceTimersByTime(1);
+
+      expect(fakeAssetObjects[0].remove).toHaveBeenCalledTimes(1);
+      expect(fakeAssetObjects[1].remove).toHaveBeenCalledTimes(1);
     });
   });
 
@@ -733,33 +965,44 @@ describe('Merkur component', () => {
       const sources = await assetsPromise;
 
       expect(assetsPromise).toBeInstanceOf(Promise);
-      expect(document.createElement).toHaveBeenCalledTimes(7);
+      expect(document.createElement).toHaveBeenCalledTimes(8);
       expect(sources).toStrictEqual([
-        assetsDictionary['widget.js'].source.es13,
-        assetsDictionary['polyfill1.js'].source.es11,
-        assetsDictionary['undefined.js'].source.es9,
-        assetsDictionary['polyfill2.js'].source,
-        assetsDictionary['unnamed.js'].source,
-        assetsDictionary['widget.css'].source,
-        assetsDictionary['unnamed.css'].source,
-        JSON.parse(vectorsJsonContent),
-        assetsDictionary['maps/inline.json'].source,
+        getAssetWithElement('widget.js', fakeAssetObjects[0], {
+          source: assetsDictionary['widget.js'].source.es13,
+        }),
+        getAssetWithElement('polyfill1.js', null, {
+          source: assetsDictionary['polyfill1.js'].source.es11,
+        }),
+        getAssetWithElement('undefined.js', fakeAssetObjects[1], {
+          source: assetsDictionary['undefined.js'].source.es9,
+        }),
+        getAssetWithElement('polyfill2.js', fakeAssetObjects[2], {
+          source: assetsDictionary['polyfill2.js'].source,
+        }),
+        getAssetWithElement('unnamed.js', fakeAssetObjects[3], {
+          source: assetsDictionary['unnamed.js'].source,
+        }),
+        getAssetWithElement('widget.css', fakeAssetObjects[4]),
+        getAssetWithElement('unnamed.css', fakeAssetObjects[5]),
+        getAssetWithElement('maps/vectors.json', fakeAssetObjects[6]),
+        getAssetWithElement('maps/inline.json', fakeAssetObjects[7]),
       ]);
+      expect([fakeAssetObjects[6], fakeAssetObjects[7]]).toStrictEqual([
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: vectorsJsonContent,
+        }),
+        expect.objectContaining({
+          tagName: 'script',
+          type: 'application/json',
+          textContent: JSON.stringify(
+            assetsDictionary['maps/inline.json'].source,
+          ),
+        }),
+      ]);
+
       expect(console.warn).not.toHaveBeenCalled();
-    });
-
-    it('should load inline assets synchronously', () => {
-      const sources = loadAssets([
-        assetsDictionary['unnamed.js'],
-        assetsDictionary['unnamed.css'],
-        assetsDictionary['maps/inline.json'],
-      ]); // it is resolved synchronously
-
-      expect(sources).toStrictEqual([
-        assetsDictionary['unnamed.js'].source,
-        assetsDictionary['unnamed.css'].source,
-        assetsDictionary['maps/inline.json'].source,
-      ]);
     });
   });
 });
