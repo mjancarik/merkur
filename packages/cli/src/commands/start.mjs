@@ -11,6 +11,8 @@ export async function start({ args, command }) {
 
   await handleExit({ context });
 
-  await runDevServer({ merkurConfig, cliConfig, context });
-  await runWidgetServer({ merkurConfig, cliConfig, context });
+  cliConfig.hasRunDevServer &&
+    (await runDevServer({ merkurConfig, cliConfig, context }));
+  cliConfig.hasRunWidgetServer &&
+    (await runWidgetServer({ merkurConfig, cliConfig, context }));
 }

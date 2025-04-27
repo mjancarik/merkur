@@ -102,7 +102,7 @@ program
   .addOption(verboseOption)
   .action(async (options, cmd) => {
   const args = {
-    ...{ watch: false, hasRunWidgetServer: true }, ...cmd.optsWithGlobals(), ...options
+    ...{ watch: false, hasRunWidgetServer: true, hasRunDevServer: true }, ...cmd.optsWithGlobals(), ...options
   };
   process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
 
