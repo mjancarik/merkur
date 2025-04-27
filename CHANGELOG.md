@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.10](https://github.com/mjancarik/merkur/compare/v0.37.9...v0.37.10) (2025-04-27)
+
+### Features
+
+- 🎸 start command is configurable by cli config for servers ([469980b](https://github.com/mjancarik/merkur/commit/469980ba198cafd57dc338fc79b24555a45af488))
+
 ## [0.37.9](https://github.com/mjancarik/merkur/compare/v0.37.8...v0.37.9) (2025-04-25)
 
 ### Bug Fixes
