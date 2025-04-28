@@ -17,7 +17,7 @@ npm i @merkur/integration-custom-element --save
 
 ## How to change default Merkur template
 
-The default Merkur template is prepared for SSR so we will remove in below sections useless parts and files to reconfigure default template to only client template. At first create new Merkur widget.
+The default Merkur template is prepared for SSR so we will remove in below sections useless parts and files to reconfigure default template to only client template. At first you should create new Merkur widget is described in [Getting started](https://merkur.js.org/docs/getting-started).
 
 ### Server part
 
