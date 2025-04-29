@@ -69,6 +69,8 @@ function registerCustomElement(options) {
               await afterDOMLoad();
               await loadAssets(widget.assets, this._shadow);
 
+              this._setDefaultProps();
+
               await callbacks?.reconstructor?.(this._widget, {
                 shadow: this._shadow,
                 customElement: this,
@@ -111,6 +113,8 @@ function registerCustomElement(options) {
               customWidgetDefinition,
               this._shadow,
             );
+
+            this._setDefaultProps();
 
             await callbacks?.constructor?.(this._widget, {
               shadow: this._shadow,
@@ -175,6 +179,8 @@ function registerCustomElement(options) {
     async attributeChangedCallback(name, oldValue, newValue) {
       await this._widgetPromise;
 
+      this._widget.setProps({ name: newValue });
+
       this._widget?.attributeChangedCallback?.(
         this._widget,
         name,
@@ -197,11 +203,25 @@ function registerCustomElement(options) {
         },
       );
     }
+
+    _setDefaultProps() {
+      const attributes = this.constructor.observedAttributes;
+      if (Array.isArray(attributes)) {
+        attributes.forEach((key) => {
+          if (this.hasAttribute(key)) {
+            this._widget.props[key] =
+              this.getAttribute(key) ?? this._widget.props[key];
+          }
+        });
+      }
+    }
   }
 
   if (customElements.get(widgetDefinition.name) === undefined) {
     customElements.define(widgetDefinition.name, WidgetElement);
   }
+
+  return WidgetElement;
 }
 
 const PROTECTED_FIELDS = ['__proto__', 'prototype', 'constructor'];
