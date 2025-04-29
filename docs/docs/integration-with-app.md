@@ -96,7 +96,12 @@ For downloading assets we can use the `loadAssets` method from `@merkur/integrat
 npm i @merkur/integration core-js --save
 ```
 
-Assets can have custom attributes defined in `attr` object. The only default attribute is `defer` and you can override it by setting it as a custom attribute with value `false`. Assets may contain also a test expression. If test expression evaluates to `false` the asset will be loaded. Scripts, that are not crucial for application can be flagged as `optional`. Optional scripts wont cause error and fallback render. A full example of a Merkur widget integration into an SPA application:
+Assets can have custom attributes defined in `attr` object. The only default attribute is `defer`, and you can override it by setting it as a custom attribute with the value `false`. Assets may also contain a test expression. If the test expression evaluates to `false`, the asset will be loaded. Assets that are not crucial for the application can be flagged as `optional`. Optional assets won't cause errors and will fall back gracefully.
+The function `loadAssets()` accepts an array of asset objects and returns a promise that resolves to an array of results. Each result is the original asset object augmented with an `element` property, which is the corresponding HTML element (`link`/`style` for styles, `script` for scripts, and `script` of type `application/json` for JSON assets). If an optional asset fails to load, its `element` property will be `null`.
+
+For JSON assets (with type: `json`/`inlineJson`), the JSON data can be accessed by parsing the `textContent` of the element using `JSON.parse`.
+
+A full example of a Merkur widget integration into an SPA application:
 
 ```javascript
 import { loadAssets } from '@merkur/integration';
@@ -115,22 +120,32 @@ import { getMerkur } from '@merkur/core';
       return data;
     });
 
-    // create widget container
-    const widgetContainer = document.createElement('div');
-    widgetContainer.classList.add(widgetClassName);
-    widgetContainer.innerHTML = widgetProperties.html;
+  // create widget container
+  const widgetContainer = document.createElement('div');
+  widgetContainer.classList.add(widgetClassName);
+  widgetContainer.innerHTML = widgetProperties.html;
 
-    // load widget assets
-    await loadAssets(widgetProperties.assets);
+  // load widget assets
+  const assets = await loadAssets(widgetProperties.assets);
+  assets.forEach((asset) => {
+    if (['json', 'inlineJson'].includes(asset.type) && asset.element) {
+      const jsonData = JSON.parse(asset.element.textContent);
+      console.log(`Loaded JSON asset ${asset.name} data:`, jsonData);
+    } else if (asset.element) {
+      console.log(`Loaded asset:`, asset);
+    } else {
+      console.warn(`Failed to load asset:`, asset);
+    }
+  });
 
-    // insert widget container to DOM
-    document.body.appendChild(widgetContainer);
+  // insert widget container to DOM
+  document.body.appendChild(widgetContainer);
 
-    // create instance of merkur widget
-    const widget = await getMerkur().create(widgetProperties);
+  // create instance of merkur widget
+  const widget = await getMerkur().create(widgetProperties);
 
-    // alive merkur widget
-    return widget.mount();
+  // alive merkur widget
+  return widget.mount();
 }();
 ```
 
