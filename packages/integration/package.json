@@ -1,6 +1,6 @@
 {
   "name": "@merkur/integration",
-  "version": "0.37.0",
+  "version": "0.37.11",
   "description": "Merkur module for easy integration with other apps.",
   "main": "lib/index",
   "module": "lib/index",
