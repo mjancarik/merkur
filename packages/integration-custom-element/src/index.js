@@ -179,7 +179,7 @@ function registerCustomElement(options) {
     async attributeChangedCallback(name, oldValue, newValue) {
       await this._widgetPromise;
 
-      this._widget?.setProps?.({ name: newValue });
+      this._widget?.setProps?.({ [name]: newValue });
 
       this._widget?.attributeChangedCallback?.(
         this._widget,
