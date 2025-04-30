@@ -179,7 +179,7 @@ function registerCustomElement(options) {
     async attributeChangedCallback(name, oldValue, newValue) {
       await this._widgetPromise;
 
-      this._widget.setProps({ name: newValue });
+      this._widget?.setProps?.({ name: newValue });
 
       this._widget?.attributeChangedCallback?.(
         this._widget,
@@ -206,7 +206,10 @@ function registerCustomElement(options) {
 
     _setDefaultProps() {
       const attributes = this.constructor.observedAttributes;
-      if (Array.isArray(attributes)) {
+      if (
+        Array.isArray(attributes) &&
+        typeof this._widget.setProps === 'function'
+      ) {
         attributes.forEach((key) => {
           if (this.hasAttribute(key)) {
             this._widget.props[key] =
