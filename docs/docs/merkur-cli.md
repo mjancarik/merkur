@@ -27,32 +27,49 @@ You can use following template:
 ```
 import chalk from 'chalk';
 import path from 'path';
+import { pathToFileURL } from 'url';
 import { flattenObject } from '../src/utils.js';
 
-export default ({ program }) => program
-  .command('cssVarsGenerator')
-  .description('Generate css variables from layout.js')
-  .argument('<layout>', 'layout config')
-  .argument('<cssVarPrefix>', 'css var prefix')
-  .allowUnknownOption()
-  .action(async (layout, cssVarPrefix) => {
-    function generateLayoutConfigCssVariables(layoutConfig) {
-        const cssVars = [];
-        const flatObj = flattenObject(layoutConfig);
+const commandName = 'cssVarsGenerator';
 
-        for (const key in flatObj) {
-          cssVars.push(`${cssVarPrefix}${key}: ${flatObj[key]};`);
-        }
+function generateLayoutConfigCssVariables(layoutConfig, cssVarPrefix) {
+  const cssVars = [];
+  const flatObj = flattenObject(layoutConfig);
 
-        return cssVars.join('\n');
-    }
-    const layoutConfig = require(path.resolve(layout));
+  for (const key in flatObj) {
+    cssVars.push(`${cssVarPrefix}${key}: ${flatObj[key]};`);
+  }
 
-    console.log('\n\n');
-    console.log(chalk.green.bold('CSS Variables:'));
-    console.log('-----------------------------------');
-    console.log(chalk.blue.bold(generateLayoutConfigCssVariables(layoutConfig)));
-});
+  return cssVars.join('\n');
+}
+
+export default ({ program, createCommandConfig }) =>
+  program
+    .command(commandName)
+    .description('Generate css variables from layout.js')
+    .argument('<layout>', 'path to layout config')
+    .allowUnknownOption()
+    .action(async (layout) => {
+      const { merkurConfig } = await createCommandConfig({
+        args: {},
+        command: commandName,
+      });
+      const layoutConfig = await import(
+        pathToFileURL(path.resolve(layout)).href
+      );
+
+      console.log('\n\n');
+      console.log(chalk.green.bold('CSS Variables:'));
+      console.log('-----------------------------------');
+      console.log(
+        chalk.blue.bold(
+          generateLayoutConfigCssVariables(
+            layoutConfig,
+            merkurConfig.cns.lessVariablePrefix,
+          ),
+        ),
+      );
+    });
 ```
 4. Update your `rollup.config.mjs` to ensure the newly created file is included in the build process.
 
