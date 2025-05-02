@@ -7,6 +7,7 @@ import { test } from '../src/commands/test.mjs';
 import { custom, CUSTOM_PART } from '../src/commands/custom.mjs';
 import { COMMAND_NAME } from '../src/commands/constant.mjs';
 import { userDefinedCommandsPaths } from '../src/commands/userDefined.mjs';
+import { createCommandConfig } from '../src/commandConfig.mjs';
 
 import path from 'node:path';
 
@@ -145,8 +146,15 @@ program
 let userDefinedCommands = [];
 for (const { command, dir } of userDefinedCommandsPaths) {
   const programCustom = new Command();
-  const commandModule = await import(path.join(dir, command));
-  const commandName = commandModule.default(({ program: programCustom })).name();
+  let commandName = '';
+
+  try {
+    const commandModule = await import(path.join(dir, command));
+    commandName = commandModule.default(({ program: programCustom, createCommandConfig })).name();
+  } catch (error) {
+    console.error(`Error loading command from ${dir}/${command} package:`, error);
+    continue;
+  }
 
   if (userDefinedCommands.includes(commandName)) {
     console.warn(`Command "${commandName}" from ${dir} package cannot be used.\nCommand with the same name already exists.`);
