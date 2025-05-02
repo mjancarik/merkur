@@ -15,6 +15,64 @@ Merkur CLI for building your widget use [esbuild](https://esbuild.github.io/) to
 - `merkur start` - run widget server and playground server
 - `merkur custom` - customize part of template (playground page)
 
+## Adding a custom command into @merkur/cli
+
+You can add your own command to the CLI.  
+Simply define your command in your Merkur package as described in the guide below.
+
+1. Create new folder `commands` in your package.
+2. Create a new file in `commands` folder and name it after the command. Eg. `cssVarsGenerator.js`
+3. Create new command in the file.  
+You can use following template:
+```
+import chalk from 'chalk';
+import path from 'path';
+import { pathToFileURL } from 'url';
+import { flattenObject } from '../src/utils.js';
+
+const commandName = 'cssVarsGenerator';
+
+function generateLayoutConfigCssVariables(layoutConfig, cssVarPrefix) {
+  const cssVars = [];
+  const flatObj = flattenObject(layoutConfig);
+
+  for (const key in flatObj) {
+    cssVars.push(`${cssVarPrefix}${key}: ${flatObj[key]};`);
+  }
+
+  return cssVars.join('\n');
+}
+
+export default ({ program, createCommandConfig }) =>
+  program
+    .command(commandName)
+    .description('Generate css variables from layout.js')
+    .argument('<layout>', 'path to layout config')
+    .allowUnknownOption()
+    .action(async (layout) => {
+      const { merkurConfig } = await createCommandConfig({
+        args: {},
+        command: commandName,
+      });
+      const layoutConfig = await import(
+        pathToFileURL(path.resolve(layout)).href
+      );
+
+      console.log('\n\n');
+      console.log(chalk.green.bold('CSS Variables:'));
+      console.log('-----------------------------------');
+      console.log(
+        chalk.blue.bold(
+          generateLayoutConfigCssVariables(
+            layoutConfig,
+            merkurConfig.cns.lessVariablePrefix,
+          ),
+        ),
+      );
+    });
+```
+4. Update your `rollup.config.mjs` to ensure the newly created file is included in the build process.
+
 ## Custom playground template
 
 At first run `merkur custom playground:body` command which create `body.ejs` file in your project in `/server/playground/templates` folder. Now you can modify playground page as you wish. 
