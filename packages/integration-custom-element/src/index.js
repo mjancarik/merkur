@@ -210,6 +210,7 @@ function registerCustomElement(options) {
         Array.isArray(attributes) &&
         typeof this._widget.setProps === 'function'
       ) {
+        this._widget.props = { ...this._widget.props };
         attributes.forEach((key) => {
           if (this.hasAttribute(key)) {
             this._widget.props[key] =
