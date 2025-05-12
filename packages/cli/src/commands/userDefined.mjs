@@ -34,7 +34,7 @@ if (existsMerkurConfig) {
     let dirs = fs.readdirSync(merkurDir);
 
     for (const dir of dirs) {
-      const fullPath = path.join(merkurDir, `${dir}/lib/commands`);
+      const fullPath = path.join(merkurDir, `${dir}/commands`);
       if (fs.existsSync(fullPath)) {
         await extendCommandsFromDir(fullPath);
       }

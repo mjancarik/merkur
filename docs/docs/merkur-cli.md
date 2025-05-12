@@ -18,7 +18,10 @@ Merkur CLI for building your widget use [esbuild](https://esbuild.github.io/) to
 ## Adding a custom command into @merkur/cli
 
 You can add your own command to the CLI.  
-Simply define your command in your Merkur package as described in the guide below.
+Simply define your command in your Merkur package as described in the guide below.  
+In the code the `program` is instance of `commander`.
+You can use `createCommandConfig` method as well.
+
 
 1. Create new folder `commands` in your package.
 2. Create a new file in `commands` folder and name it after the command. Eg. `cssVarsGenerator.js`
@@ -71,7 +74,7 @@ export default ({ program, createCommandConfig }) =>
       );
     });
 ```
-4. Update your `rollup.config.mjs` to ensure the newly created file is included in the build process.
+4. Add `!commands/**/*` into `.npmignore` file.
 
 ## Custom playground template
 
