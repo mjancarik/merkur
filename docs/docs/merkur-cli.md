@@ -19,19 +19,19 @@ Merkur CLI for building your widget use [esbuild](https://esbuild.github.io/) to
 
 You can add your own command to the CLI.  
 Simply define your command in your Merkur package as described in the guide below.  
-In the code the `program` is instance of `commander`.
-You can use `createCommandConfig` method as well.
+In the code the `program` is instance of [commander](https://www.npmjs.com/package/commander).
+You can use [createCommandConfig](https://github.com/mjancarik/merkur/blob/master/packages/cli/src/commandConfig.mjs#L5) method to get merkur/cli config.
 
 
 1. Create new folder `commands` in your package.
-2. Create a new file in `commands` folder and name it after the command. Eg. `cssVarsGenerator.js`
+2. Create a new **esm** file in `commands` folder and name it after the command. Eg. `cssVarsGenerator.mjs`
 3. Create new command in the file.  
 You can use following template:
 ```
 import chalk from 'chalk';
 import path from 'path';
 import { pathToFileURL } from 'url';
-import { flattenObject } from '../src/utils.js';
+import { flattenObject } from '../lib/index.mjs';
 
 const commandName = 'cssVarsGenerator';
 
