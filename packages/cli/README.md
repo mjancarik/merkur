@@ -18,7 +18,7 @@ The [Merkur](https://merkur.js.org/) is tiny extensible javascript library for f
  - Usable with all tech stacks
  - SSR-ready by default
  - Easy extensible with plugins
- - Tiny - 1 KB minified + gzipped 
+ - Tiny - 1 KB minified + gzipped
 
 ## Getting started
 
