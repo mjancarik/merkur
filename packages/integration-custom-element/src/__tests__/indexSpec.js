@@ -26,6 +26,11 @@ describe('Merkur integration custom element', () => {
           d: ['3', '4', '7'],
         },
       });
+
+      // let clonedTarget = deepMerge({}, target);
+      // let deepTarget = deepMerge({}, target);
+      // deepTarget.a = 2;
+      // expect(target.a !== deepTarget.a).toEqual(true);
     });
   });
 
