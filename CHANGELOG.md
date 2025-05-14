@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.37.12](https://github.com/mjancarik/merkur/compare/v0.37.11...v0.37.12) (2025-05-14)
+
+### Bug Fixes
+
+- 🐛 error only URLs with a scheme in: file and data for esm ([1ba3ac1](https://github.com/mjancarik/merkur/commit/1ba3ac17fbc777eb8f8c476c8818c01a6ef0a5f7))
+
+### Features
+
+- 🎸 custom commands definition in cli ([#217](https://github.com/mjancarik/merkur/issues/217)) ([f784813](https://github.com/mjancarik/merkur/commit/f784813b6fbf17e2ccf4ad55cfd920d6f06bcc9b)), closes [#cnsqa-1767](https://github.com/mjancarik/merkur/issues/cnsqa-1767) [#cnsqa-1767](https://github.com/mjancarik/merkur/issues/cnsqa-1767) [#cnsqa-1767](https://github.com/mjancarik/merkur/issues/cnsqa-1767) [#cnsqa-1767](https://github.com/mjancarik/merkur/issues/cnsqa-1767) [#cnsqa-1767](https://github.com/mjancarik/merkur/issues/cnsqa-1767) [#cnsqa-1767](https://github.com/mjancarik/merkur/issues/cnsqa-1767) [#cnsqa-1767](https://github.com/mjancarik/merkur/issues/cnsqa-1767)
+
 ## [0.37.11](https://github.com/mjancarik/merkur/compare/v0.37.10...v0.37.11) (2025-04-29)
 
 **Note:** Version bump only for package merkur-monorepo

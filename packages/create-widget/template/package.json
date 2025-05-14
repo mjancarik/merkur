@@ -16,7 +16,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@merkur/cli": "0.37.10",
+    "@merkur/cli": "0.37.12",
     "@merkur/core": "0.37.0",
     "@merkur/integration": "0.37.11",
     "@merkur/plugin-component": "0.37.9",
