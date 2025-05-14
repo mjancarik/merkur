@@ -1,4 +1,5 @@
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 import { EMITTER_EVENTS, emitter, RESULT_KEY } from './emitter.mjs';
 import { updateCLIConfig } from './CLIConfig.mjs';
@@ -20,7 +21,7 @@ export async function createMerkurConfig({ cliConfig, context, args } = {}) {
     );
 
     const file = await import(
-      path.resolve(`${projectFolder}/${MERKUR_CONFIG_FILE}`)
+      pathToFileURL(path.resolve(`${projectFolder}/${MERKUR_CONFIG_FILE}`))
     );
     merkurConfig = await file.default({
       cliConfig,
