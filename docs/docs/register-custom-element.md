@@ -5,27 +5,27 @@ title: Register Merkur widget as custom element
 
 # Register Merkur widget as custom element
 
-Merkur widget can be registered as custom element. It is helpful for use case where SSR is not important for Merkur widget. We predict that you serve your widget as single JavaScript file with defined assets.
+Merkur widgets can be registered as custom elements. This is useful for cases where SSR is not required. We assume that your widget is served as a single JavaScript file with defined assets.
 
 ## Installation
 
-For easy registration Merkur widget as custom element we created the `@merkur/integration-custom-element` module. The module is designed for only client-side.
+To easily register a Merkur widget as a custom element, use the `@merkur/integration-custom-element` module. This module is designed for client-side usage only.
 
 ```bash
 npm i @merkur/integration-custom-element --save
 ```
 
-## How to change default Merkur template
+## How to modify the default Merkur template
 
-The default Merkur template is prepared for SSR so we will remove in below sections useless parts and files to reconfigure default template to only client template. At first you should create new Merkur widget is described in [Getting started](https://merkur.js.org/docs/getting-started).
+The default Merkur template is prepared for SSR. In the following sections, we will remove unnecessary parts and files to reconfigure the template for client-side usage only. First, create a new Merkur widget as described in [Getting started](https://merkur.js.org/docs/getting-started).
 
 ### Server part
 
-After created new Merkur widget you change your playground template for creating `/server/playground/templates/body.ejs` and `/server/playground/templates/footer.ejs` files or run `merkur custom playground:body` and `merkur custom playground:footer`. Then after creating files in your project change files to:
+After creating a new Merkur widget, update your playground template by creating the `/server/playground/templates/body.ejs` and `/server/playground/templates/footer.ejs` files. You can also run `merkur custom playground:body` and `merkur custom playground:footer` to generate these files. Then, modify the files as follows:
 
 ```javascript
 // body.ejs
-<{package.name}></{package-name}> // something like <merkur-widget></merkur-widget>
+<{package.name}></{package-name}> // e.g., <merkur-widget></merkur-widget>
 ```
 
 ```javascript
@@ -33,11 +33,11 @@ After created new Merkur widget you change your playground template for creating
 // keep empty
 ```
 
-We changed logic for reviveling widget in playground and added only custom element with name from `package.json` to the body part of html. The custom element auto revive Merkur widget. Now you can remove other files in `/server/*` folder. 
+This changes the logic for reviving the widget in the playground by adding only the custom element with the name from `package.json` to the body of the HTML. The custom element will automatically revive the Merkur widget. You can now remove other files in the `/server/*` folder.
 
-### CLI config
+### CLI configuration
 
-You can change `merkur.config.mjs` file to add `@merkur/integration-custom-element/cli` to extends field.
+Update the `merkur.config.mjs` file to include `@merkur/integration-custom-element/cli` in the `extends` field.
 
 ```javascript
 /**
@@ -45,18 +45,25 @@ You can change `merkur.config.mjs` file to add `@merkur/integration-custom-eleme
  */
 export default function () {
   return {
-    extends: ['@merkur/preact/cli' ,'@merkur/integration-custom-element/cli'],
+    extends: ['@merkur/preact/cli', '@merkur/integration-custom-element/cli'],
   };
 }
 ```
 
-The `@merkur/integration-custom-element/cli` modify default `@merkur/cli` configuration (change playground widgetHandler to skip `/widget` request, turn off widget server because custom element works only in browser, turn off HMR and use hot reload instead, filter node platform tasks, force generated files to be saved to filesystem as writeToDisk = true, register css bundle plugin for including bundled css file to js).
+The `@merkur/integration-custom-element/cli` modifies the default `@merkur/cli` configuration by:
+- Skipping `/widget` requests in the playground widget handler.
+- Disabling the widget server (custom elements work only in the browser).
+- Turning off HMR and enabling hot reload instead.
+- Filtering out tasks for the Node.js platform.
+- Forcing generated files to be saved to the filesystem (`writeToDisk = true`).
+- Registering a CSS bundle plugin to include bundled CSS files in the JavaScript.
 
 ### Widget part
 
-The default Merkur template use `config` npm module for resolving application environment. But `config` module doesn't work in browser so we must add support for application environment to our client solution with custom element.
+The default Merkur template uses the `config` npm module for resolving the application environment. However, the `config` module does not work in the browser. To address this, add support for application environments in the client solution with custom elements.
 
-Create new `config` folder in `/src/` and then there create new file `/src/config/index.js` where copy paste code below which add support for two environments `development` and `production`. The `development` environment extends `production` environment. So you don't need copy all options. The webpack tree shaking logic helps removed `development` environment in `production` build.
+1. Create a new `config` folder in `/src/`.
+2. Inside the `config` folder, create a file `/src/config/index.js` with the following code:
 
 ```javascript
 import { deepMerge } from '@merkur/integration-custom-element';
@@ -74,7 +81,7 @@ if (process.env.NODE_ENV === 'production') {
 export { environment };
 ```
 
-Now you can create your own `production` and `development` environments in `/src/config/production.js` and `/src/config/development.js` files. For example `/src/config/production.js` file:
+3. Create `production` and `development` environment files in `/src/config/production.js` and `/src/config/development.js`. For example, `/src/config/production.js`:
 
 ```javascript
 export default {
@@ -86,65 +93,124 @@ export default {
 };
 ```
 
-We add our resolved environment to widget `props.environment` property in `/src/widget.js`. Same as it works in default Merkur template. The custom element don't support Merkur slots. So we set `slotFactories` to empty array. Then you can remove `src/components/slots` folder. If you want to inline css bundle to resulted JS file then add `import cssBundle from '@merkur/integration-custom-element/cssBundle'` and define `inlineStyle` asset with cssBundle as source. At the end register your widget as custom element with `registerCustomElement` method which alive widget and connect widget with custom element. 
+4. Add the resolved environment to the widget's `props.environment` property in `/src/widget.js`. Since custom elements do not support Merkur slots, set `slotFactories` to an empty array. You can also remove the `src/components/slots` folder.
+
+5. To inline the CSS bundle into the resulting JS file, add the following import and define an `inlineStyle` asset:
 
 ```javascript
-/* eslint-disable no-unused-vars */
-import { defineWidget } from '@merkur/core';
-import {
-  componentPlugin,
-  createViewFactory,
-  createSlotFactory,
-} from '@merkur/plugin-component';
-import { errorPlugin } from '@merkur/plugin-error';
-import { eventEmitterPlugin } from '@merkur/plugin-event-emitter';
-import { registerCustomElement } from '@merkur/integration-custom-element';
-
-import { environment } from './config';
-import View from './views/View';
-
-import { name, version } from '../package.json';
-
-import './style.css';
-
 import cssBundle from '@merkur/integration-custom-element/cssBundle';
 
-const widgetDefinition = defineWidget({
-  name,
-  version,
-  viewFactory: createViewFactory((widget) => ({
-    View,
-    slotFactories: [],
-  })),
-  props: {
-    environment,
+assets: [
+  {
+    name: 'widget.css',
+    type: 'inlineStyle',
+    source: cssBundle,
   },
-  $plugins: [componentPlugin, eventEmitterPlugin, errorPlugin],
-  assets: [
-    {
-      name: 'widget.css',
-      type: 'inlineStyle',
-      source: cssBundle,
-    },
-  ],
-  onClick(widget) {
-    widget.setState({ counter: widget.state.counter + 1 });
-  },
-  onReset(widget) {
-    widget.setState({ counter: 0 });
-  },
-  load(widget) {
-    // We don't want to set environment into app state
-    const { environment, ...restProps } = widget.props;
+],
+```
 
-    return {
-      counter: 0,
-      ...restProps,
-    };
-  },
-});
+6. Finally, register your widget as a custom element using the `registerCustomElement` method:
 
-export default widgetDefinition;
+```javascript
+import { registerCustomElement } from '@merkur/integration-custom-element';
+
+// ...existing code...
 
 registerCustomElement({ widgetDefinition });
 ```
+
+### Callbacks
+
+The `registerCustomElement` method accepts a `callbacks` object that allows you to hook into the lifecycle of the custom element. These callbacks include:
+
+- `constructor`: Called when the custom element is created.
+- `connectedCallback`: Called when the custom element is added to the DOM.
+- `disconnectedCallback`: Called when the custom element is removed from the DOM.
+- `adoptedCallback`: Called when the custom element is moved to a new document.
+- `attributeChangedCallback`: Called when an observed attribute changes.
+- `mount`: Called when the widget is mounted.
+- `remount`: Called when the widget is remounted.
+- `getInstance`: Called to retrieve an existing widget instance.
+
+Each callback receives the widget instance, the shadow DOM, and the custom element as arguments.
+
+#### Example
+
+Here is an example of how to use the `callbacks` object:
+
+```javascript
+import { registerCustomElement } from '@merkur/integration-custom-element';
+import widgetDefinition from './widget';
+
+registerCustomElement({
+  widgetDefinition,
+  callbacks: {
+    constructor(widget, { shadow, customElement }) {
+      console.log('Custom element created:', customElement);
+    },
+    connectedCallback(widget, { shadow, customElement }) {
+      console.log('Custom element added to DOM:', customElement);
+    },
+    disconnectedCallback(widget, { shadow, customElement }) {
+      console.log('Custom element removed from DOM:', customElement);
+    },
+    adoptedCallback(widget, { shadow, customElement }) {
+      console.log('Custom element moved to a new document:', customElement);
+    },
+    attributeChangedCallback(widget, name, oldValue, newValue, { shadow, customElement }) {
+      console.log(`Attribute "${name}" changed from "${oldValue}" to "${newValue}"`);
+    },
+    mount(widget, { shadow, customElement }) {
+      console.log('Widget mounted:', widget);
+    },
+    remount(widget, { shadow, customElement }) {
+      console.log('Widget remounted:', widget);
+    },
+    getInstance() {
+      console.log('Retrieving existing widget instance');
+      return null; // Return an existing widget instance if available
+    },
+  },
+});
+```
+
+This example demonstrates how to log messages during each lifecycle event of the custom element. You can replace the `console.log` statements with your own logic to handle these events.
+
+### `widget.root` and `widget.customElement`
+
+- `widget.root`: Refers to the root DOM node where the widget is rendered. For custom elements, this is typically the shadow DOM of the element.
+- `widget.customElement`: Refers to the custom element instance itself. This allows you to interact with the custom element directly from the widget.
+
+These properties are automatically set when the widget is registered as a custom element and can be used to manage the widget's lifecycle or interact with the DOM.
+
+### Default propagation of attributes to widget props
+
+When a custom element is registered, its attributes are automatically propagated to the widget's `props` object.
+
+#### How it works
+
+1. The `observedAttributes` property in the `registerCustomElement` options specifies which attributes the custom element observes. These attributes are automatically monitored for changes.
+2. When an observed attribute changes, the `attributeChangedCallback` is triggered. This callback updates the corresponding property in the widget's `props` object.
+3. Attribute names are automatically converted to camelCase.
+4. The `attributesParser` function can be used to customize how attributes are processed. For example, you can parse specific attributes like JSON strings.
+
+#### Example
+
+```javascript
+import { registerCustomElement } from '@merkur/integration-custom-element';
+import widgetDefinition from './widget';
+
+registerCustomElement({
+  widgetDefinition,
+  observedAttributes: ['title', 'theme', 'long-name', 'config'], // Attributes to observe
+  attributesParser: {
+    config: (value) => JSON.parse(value); 
+  }
+});
+```
+
+In this example:
+- The `observedAttributes` property specifies the attributes to observe (`title`, `theme`, `long-name` and `config`).
+- The widget's `props` are automatically updated when the observed attributes change.
+- The `config` attribute is parsed from a JSON string into an object.
+- The `long-name` attribute is automatically transformed into `longName` in the widget's `props`.
