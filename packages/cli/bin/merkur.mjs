@@ -117,6 +117,7 @@ program
   .command(COMMAND_NAME.TEST)
   .description('Test widget')
   .allowUnknownOption()
+  .allowExcessArguments()
   .action(async (options, cmd) => {
   process.env.NODE_ENV = process.env.NODE_ENV ?? 'test';
 
@@ -133,6 +134,7 @@ program
   .addArgument(new Argument('<part>', 'custom part').choices(Object.values(CUSTOM_PART)))
   .addOption(verboseOption)
   .allowUnknownOption()
+  .allowExcessArguments()
   .action(async (part, options, cmd) => {
     const args = {
       ...options,
