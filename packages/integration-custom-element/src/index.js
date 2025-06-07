@@ -35,10 +35,8 @@ function afterDOMLoad() {
 }
 
 function registerCustomElement(options) {
-  const { widgetDefinition, callbacks, observedAttributes } = deepMerge(
-    {},
-    options,
-  );
+  const { widgetDefinition, callbacks, observedAttributes, attributesParser } =
+    deepMerge({}, options);
   class HTMLCustomElement extends HTMLElement {
     static get observedAttributes() {
       return observedAttributes ?? [];
@@ -179,7 +177,10 @@ function registerCustomElement(options) {
     async attributeChangedCallback(name, oldValue, newValue) {
       await this._widgetPromise;
 
-      this._widget?.setProps?.({ [name]: newValue });
+      const camelCaseKey = name.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+      const parser = attributesParser?.[name] ?? ((value) => value);
+
+      this._widget?.setProps?.({ [camelCaseKey]: parser(newValue) });
 
       this._widget?.attributeChangedCallback?.(
         this._widget,
@@ -213,8 +214,14 @@ function registerCustomElement(options) {
         this._widget.props = { ...this._widget.props };
         attributes.forEach((key) => {
           if (this.hasAttribute(key)) {
-            this._widget.props[key] =
-              this.getAttribute(key) ?? this._widget.props[key];
+            const camelCaseKey = key.replace(/-([a-z])/g, (g) =>
+              g[1].toUpperCase(),
+            );
+            const parser = attributesParser?.[key] ?? ((value) => value);
+
+            this._widget.props[camelCaseKey] = parser(
+              this.getAttribute(key) ?? this._widget.props[key],
+            );
           }
         });
       }

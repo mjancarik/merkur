@@ -185,12 +185,14 @@ These properties are automatically set when the widget is registered as a custom
 
 ### Default propagation of attributes to widget props
 
-When a custom element is registered, its attributes are automatically propagated to the widget's `props` object. This allows you to configure the widget directly through the custom element's attributes in the HTML.
+When a custom element is registered, its attributes are automatically propagated to the widget's `props` object.
 
 #### How it works
 
 1. The `observedAttributes` property in the `registerCustomElement` options specifies which attributes the custom element observes. These attributes are automatically monitored for changes.
 2. When an observed attribute changes, the `attributeChangedCallback` is triggered. This callback updates the corresponding property in the widget's `props` object.
+3. Attribute names are automatically converted to camelCase.
+4. The `attributesParser` function can be used to customize how attributes are processed. For example, you can parse specific attributes like JSON strings.
 
 #### Example
 
@@ -200,10 +202,15 @@ import widgetDefinition from './widget';
 
 registerCustomElement({
   widgetDefinition,
-  observedAttributes: ['title', 'theme'], // Attributes to observe
+  observedAttributes: ['title', 'theme', 'long-name', 'config'], // Attributes to observe
+  attributesParser: {
+    config: (value) => JSON.parse(value); 
+  }
 });
 ```
 
 In this example:
-- The `observedAttributes` property specifies the attributes to observe (`title` and `theme`).
+- The `observedAttributes` property specifies the attributes to observe (`title`, `theme`, `long-name` and `config`).
 - The widget's `props` are automatically updated when the observed attributes change.
+- The `config` attribute is parsed from a JSON string into an object.
+- The `long-name` attribute is automatically transformed into `longName` in the widget's `props`.

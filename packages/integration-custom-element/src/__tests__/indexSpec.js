@@ -49,6 +49,10 @@ describe('Merkur integration custom element', () => {
       assets: [],
       props: {
         name: 'John',
+        multiName: ['John', 'Doe'],
+        config: {
+          key: 'value',
+        },
       },
       createWidget: () => {
         return widgetDefinition;
@@ -63,10 +67,20 @@ describe('Merkur integration custom element', () => {
     };
 
     const observedAttributes = ['name'];
+    const attributesParser = {
+      config: (value) => {
+        try {
+          return JSON.parse(value);
+        } catch (e) {
+          return null;
+        }
+      },
+    };
 
     let WidgetElement = registerCustomElement({
       widgetDefinition,
       observedAttributes,
+      attributesParser,
       callbacks,
     });
     beforeEach(() => {
@@ -92,13 +106,29 @@ describe('Merkur integration custom element', () => {
       await widgetElement._widgetPromise;
 
       await widgetElement.attributeChangedCallback('name', 'John', 'Jane');
+      await widgetElement.attributeChangedCallback(
+        'multi-name',
+        'John Doe',
+        'Jane Doe',
+      );
+      await widgetElement.attributeChangedCallback(
+        'config',
+        '{"key": "value"}',
+        '{"key": "newValue"}',
+      );
 
-      expect(callbacks.attributeChangedCallback).toHaveBeenCalledTimes(1);
+      expect(callbacks.attributeChangedCallback).toHaveBeenCalledTimes(3);
       expect(widgetDefinition.attributeChangedCallback).toHaveBeenCalledTimes(
-        1,
+        3,
       );
       expect(widgetDefinition.setProps).toHaveBeenCalledWith({
         name: 'Jane',
+      });
+      expect(widgetDefinition.setProps).toHaveBeenCalledWith({
+        multiName: 'Jane Doe',
+      });
+      expect(widgetDefinition.setProps).toHaveBeenCalledWith({
+        config: { key: 'newValue' },
       });
     });
   });
