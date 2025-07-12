@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.38.0](https://github.com/mjancarik/merkur/compare/v0.37.12...v0.38.0) (2025-07-12)
+
+### chore
+
+- 🤖 update dependencies ([eb593bc](https://github.com/mjancarik/merkur/commit/eb593bc2975bc6502c866bb6ddddb0d6edef812c))
+
+### BREAKING CHANGES
+
+- 🧨 Update production dependencies
+
 ## [0.37.12](https://github.com/mjancarik/merkur/compare/v0.37.11...v0.37.12) (2025-05-14)
 
 ### Bug Fixes

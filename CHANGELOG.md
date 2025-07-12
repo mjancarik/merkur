@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.38.0](https://github.com/mjancarik/merkur/compare/v0.37.12...v0.38.0) (2025-07-12)
+
+### Bug Fixes
+
+- 🐛 don't mutate original object for props ([2b08271](https://github.com/mjancarik/merkur/commit/2b08271b67e6dee2b8a1847d6ababc61357eadc1))
+- allow dynamic key in props ([6b321d6](https://github.com/mjancarik/merkur/commit/6b321d640fd676e60248eeed58f8eb35da2a780e))
+
+### chore
+
+- 🤖 update dependencies ([eb593bc](https://github.com/mjancarik/merkur/commit/eb593bc2975bc6502c866bb6ddddb0d6edef812c))
+
+### Features
+
+- 🎸 auto convert attribute name to camelCase and add parser ([aff53c1](https://github.com/mjancarik/merkur/commit/aff53c121965ab9af7df4c2ffabf786d9b9677b9))
+- 🎸 custom element attributes are propagated as widget prop ([01ee0b3](https://github.com/mjancarik/merkur/commit/01ee0b3ae661daba5ffc2f77db0879eee59fc21b))
+- 🎸 plugin-component is optional for custom-element ([741d421](https://github.com/mjancarik/merkur/commit/741d421527b96545acfb4015f26bbf8ada9646f4))
+
+### BREAKING CHANGES
+
+- 🧨 Update production dependencies
+- 🧨 We changing default behaviour which current do nothing but was possible
+  implemented it with callbacks. We repeated code with propagating custom
+  element attributes to widget.props in several widgets. So propagating is
+  now default and it looks that is usefull.
+
 ## [0.37.12](https://github.com/mjancarik/merkur/compare/v0.37.11...v0.37.12) (2025-05-14)
 
 ### Bug Fixes
