@@ -36,7 +36,7 @@ for PACKAGE in $PACKAGES ; do
     done
 
     sed -i "s#https://registry.npmjs.org/#${NPM_LOCAL_REGISTRY_URL}#" package.json
-    npm publish --registry $NPM_LOCAL_REGISTRY_URL
+    npm publish --registry $NPM_LOCAL_REGISTRY_URL --tag next
 done
 
 # Install @merkur scoped packages from local registry
