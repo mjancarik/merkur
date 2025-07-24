@@ -28,6 +28,9 @@ export async function createBuildConfig({
       treeShaking: isProduction,
       sourcemap,
       minify: isProduction,
+      supported: {
+        'inset-property': false,
+      },
       target: 'es2022',
       write: writeToDisk,
       entryNames: isServer || !isProduction ? 'widget' : 'widget.[hash]',
