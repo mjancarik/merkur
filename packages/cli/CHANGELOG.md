@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.38.1](https://github.com/mjancarik/merkur/compare/v0.38.0...v0.38.1) (2025-07-24)
+
+### Bug Fixes
+
+- 🐛 Force es build NOT TO shorthand css rules into inset rul ([9f4cbbe](https://github.com/mjancarik/merkur/commit/9f4cbbe3ed592aadbbc2db8f1b4657bb9f3d9db3))
+
 # [0.38.0](https://github.com/mjancarik/merkur/compare/v0.37.12...v0.38.0) (2025-07-12)
 
 ### chore

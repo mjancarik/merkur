@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.38.1](https://github.com/mjancarik/merkur/compare/v0.38.0...v0.38.1) (2025-07-24)
+
+### Bug Fixes
+
+- 🐛 add tag parameter for npm publish ([0b14b90](https://github.com/mjancarik/merkur/commit/0b14b90d3db57dc9f32ea7455f9020d95fa022a7))
+- 🐛 Force es build NOT TO shorthand css rules into inset rul ([9f4cbbe](https://github.com/mjancarik/merkur/commit/9f4cbbe3ed592aadbbc2db8f1b4657bb9f3d9db3))
+
+### Features
+
+- 🎸 update dependencies ([da83591](https://github.com/mjancarik/merkur/commit/da8359126092737aef118af9fdfa699a897b2546))
+
 # [0.38.0](https://github.com/mjancarik/merkur/compare/v0.37.12...v0.38.0) (2025-07-12)
 
 ### Bug Fixes
