@@ -122,12 +122,24 @@ function _findScriptElement(scriptElements, asset) {
     asset.type === 'inlineJson' ? JSON.stringify(asset.source) : asset.source;
 
   return (
-    scriptElements.find((element) => element[attributeKey] === source) || null
+    scriptElements.find((element) => {
+      // For module scripts, also check the type attribute
+      if (asset.module) {
+        return element[attributeKey] === source && element.type === 'module';
+      }
+      // For regular scripts, ensure type is not 'module' to avoid conflicts
+      return element[attributeKey] === source && element.type !== 'module';
+    }) || null
   );
 }
 
 function _loadScript(asset, root) {
   const script = document.createElement('script');
+
+  // Set script type to module if specified
+  if (asset.module) {
+    script.type = 'module';
+  }
 
   if (asset.type === 'inlineScript') {
     script.textContent = asset.source;
@@ -137,7 +149,10 @@ function _loadScript(asset, root) {
   }
 
   script[loadingPromiseSymbol] = new Promise((resolve, reject) => {
-    script.defer = true;
+    // Don't set defer for module scripts as it can interfere with module loading
+    if (!asset.module) {
+      script.defer = true;
+    }
     _addListenersToAssetElement(asset, script, resolve, reject);
     script.src = asset.source;
 
@@ -171,6 +186,11 @@ async function loadScriptAssets(assets, root = document.head) {
     assets.map((asset) => {
       if (!['script', 'inlineScript'].includes(asset.type) || !asset.source) {
         return _attachElementToAsset(asset, null);
+      }
+
+      // Module scripts should not use defer attribute as it can cause issues
+      if (asset.module && asset.attr && asset.attr.defer !== false) {
+        asset = { ...asset, attr: { ...asset.attr, defer: false } };
       }
 
       const { source } = asset;

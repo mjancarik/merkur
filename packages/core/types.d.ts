@@ -1,6 +1,7 @@
 export interface BaseWidgetAsset {
   type: 'stylesheet' | 'script' | 'inlineStyle';
   optional?: boolean;
+  module?: boolean;
   test?: string;
   attr?: Record<string, string | boolean>;
 }
