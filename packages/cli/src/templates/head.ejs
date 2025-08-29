@@ -17,10 +17,10 @@
 
   <%if (asset.type==='script' ) { %>
     <%if (typeof asset.source==='string' ) { %>
-      <script src='<%= asset.source %>' defer='true' <%- asset.module ? 'type="module"' : '' %> data-name="<%= asset.name %>"></script>
+      <script src='<%= asset.source %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-name="<%= asset.name %>"></script>
     <% } %>
     <%if (typeof asset.source==='object' ) { %>
-      <script src='<%= asset.source.es13 %>' defer='true' <%- asset.module ? 'type="module"' : '' %> data-name="<%= asset.name %>"></script>
+      <script src='<%= asset.source.es13 %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-name="<%= asset.name %>"></script>
     <% } %>
   <% } %>
 
