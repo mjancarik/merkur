@@ -1,4 +1,8 @@
-import { assignMissingKeys, setDefaultValueForUndefined } from '@merkur/core';
+import {
+  callPluginMethod,
+  assignMissingKeys,
+  setDefaultValueForUndefined,
+} from '@merkur/core';
 
 export function componentPlugin() {
   return {
@@ -112,6 +116,8 @@ function componentAPI() {
         widget.$in.component.suspendedTasks.push(() => widget.update(...args));
         return;
       }
+
+      callPluginMethod(widget, 'update', args);
 
       return callLifeCycleMethod(widget, 'update', args);
     },

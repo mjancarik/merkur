@@ -1,4 +1,8 @@
-import { createMerkurWidget, defineWidget } from './createMerkurWidget';
+import {
+  callPluginMethod,
+  createMerkurWidget,
+  defineWidget,
+} from './createMerkurWidget';
 import { createMerkur, removeMerkur, getMerkur } from './merkur';
 import {
   assignMissingKeys,
@@ -11,6 +15,7 @@ import {
 export {
   assignMissingKeys,
   bindWidgetToFunctions,
+  callPluginMethod,
   createMerkurWidget,
   createMerkur,
   getMerkur,
