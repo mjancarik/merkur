@@ -5,9 +5,9 @@
 ![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@merkur/plugin-component/latest)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
-The component plugin is one of the base Merkur plugins which adds base lifecycle methods and properties to your widget. Other Merkur plugins can depend on it.
+The select plugin allows to get widget state to nested components.
 
-**[Documentation for @merkur/plugin-component](https://merkur.js.org/docs/component-plugin).**
+**[Documentation for @merkur/plugin-select](https://merkur.js.org/docs/select-plugin).**
 
 ## About Merkur
 

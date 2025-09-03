@@ -53,13 +53,12 @@
     "reselect": "^4.1.8"
   },
   "devDependencies": {
-    "@merkur/core": "^0.38.0",
-    "@types/react": "^19.1.11",
-    "@types/reselect": "^2.2.0"
+    "@merkur/core": "^0.38.0"
   },
   "peerDependencies": {
     "@merkur/core": "*",
     "@merkur/plugin-component": "*",
-    "@merkur/plugin-event-emitter": "*"
+    "@merkur/plugin-event-emitter": "*",
+    "preact": "*"
   }
 }

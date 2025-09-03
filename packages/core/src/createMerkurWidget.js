@@ -4,7 +4,7 @@ import {
   isFunction,
 } from './utils';
 
-export async function callPluginMethod(widget, method, args) {
+async function callPluginMethod(widget, method, args) {
   for (const plugin of widget.$plugins) {
     if (isFunction(plugin[method])) {
       widget = await plugin[method](widget, ...args);
