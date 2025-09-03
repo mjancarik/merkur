@@ -53,7 +53,8 @@
     "reselect": "^4.1.8"
   },
   "devDependencies": {
-    "@merkur/core": "^0.38.0"
+    "@merkur/core": "^0.38.0",
+    "@testing-library/preact": "^3.2.4"
   },
   "peerDependencies": {
     "@merkur/core": "*",
