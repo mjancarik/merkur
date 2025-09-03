@@ -1,5 +1,7 @@
 import { createSelector } from 'reselect';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'preact/hooks';
+
+export const WIDGET_UPDATE_EVENT = 'widget:update';
 
 let creatorOfStateSelector = createStateSelector;
 
@@ -26,10 +28,10 @@ export function useSelect(widget, data, ...selectors) {
   });
 
   useEffect(() => {
-    widget.on('widget:update', afterChangeState.current);
+    widget.on(WIDGET_UPDATE_EVENT, afterChangeState.current);
 
     return function () {
-      widget.off('widget:update', afterChangeState.current);
+      widget.off(WIDGET_UPDATE_EVENT, afterChangeState.current);
     };
   }, []);
 

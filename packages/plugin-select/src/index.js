@@ -1,10 +1,11 @@
 import { hookMethod } from '@merkur/core';
+import { WIDGET_UPDATE_EVENT } from './useSelect';
 
 export function selectPlugin() {
   return {
     create(widget) {
       hookMethod(widget, 'update', (widget, originalFunction, ...args) => {
-        widget.emit('widget:update');
+        widget.emit(WIDGET_UPDATE_EVENT);
 
         return originalFunction(...args);
       });
@@ -14,9 +15,6 @@ export function selectPlugin() {
     setup(widget) {
       return widget;
     },
-    // async update(widget) {
-    //   widget.emit('widget:update');
-    // },
   };
 }
 
