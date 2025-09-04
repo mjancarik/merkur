@@ -1,4 +1,4 @@
-# Merkur - plugin-component
+# Merkur - plugin-select
 
 [![Build Status](https://github.com/mjancarik/merkur/workflows/CI/badge.svg)](https://travis-ci.com/mjancarik/merkur)
 [![NPM package version](https://img.shields.io/npm/v/@merkur/plugin-component/latest.svg)](https://www.npmjs.com/package/@merkur/plugin-component)
