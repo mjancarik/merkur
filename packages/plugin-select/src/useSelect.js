@@ -27,13 +27,7 @@ export function useSelect(widget, data, ...selectors) {
     }
   });
 
-  useEffect(() => {
-    widget.on(WIDGET_UPDATE_EVENT, afterChangeState.current);
-
-    return function () {
-      widget.off(WIDGET_UPDATE_EVENT, afterChangeState.current);
-    };
-  }, []);
+  }, [widget]);
 
   return [resolveNewState.current()];
 }
