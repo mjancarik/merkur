@@ -1,8 +1,8 @@
 # Merkur - plugin-select
 
 [![Build Status](https://github.com/mjancarik/merkur/workflows/CI/badge.svg)](https://travis-ci.com/mjancarik/merkur)
-[![NPM package version](https://img.shields.io/npm/v/@merkur/plugin-component/latest.svg)](https://www.npmjs.com/package/@merkur/plugin-component)
-![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@merkur/plugin-component/latest)
+[![NPM package version](https://img.shields.io/npm/v/@merkur/plugin-select/latest.svg)](https://www.npmjs.com/package/@merkur/plugin-select)
+![npm bundle size (scoped version)](https://img.shields.io/bundlephobia/minzip/@merkur/plugin-select/latest)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 
 The select plugin allows to get widget state to nested components.
