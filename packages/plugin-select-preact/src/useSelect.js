@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { useEffect, useRef, useState } from 'preact/hooks';
 
-export const WIDGET_UPDATE_EVENT = 'widget:update';
+export const WIDGET_UPDATE_EVENT = '@merkur/plugin-select-preact.update';
 
 let creatorOfStateSelector = createStateSelector;
 

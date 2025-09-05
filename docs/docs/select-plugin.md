@@ -1,6 +1,6 @@
 ---
 layout: docs
-title: Select plugin - Merkur
+title: Preact Select plugin - Merkur
 ---
 
 # Select plugin
@@ -13,7 +13,7 @@ To use the Select plugin, import `selectPlugin` and register it in the `$plugins
 
 ```javascript
 // ./src/widget.js
-import { selectPlugin } from '@merkur/plugin-select';
+import { selectPlugin } from '@merkur/plugin-select-preact';
 
 export const widgetProperties = {
 	name,
@@ -32,7 +32,7 @@ The Select plugin provides a `useSelect` hook for use in Preact components, allo
 The `useSelect` hook allows you to select and derive data from the widget's state. It uses memoization to avoid unnecessary recalculations and re-renders.
 
 ```javascript
-import { useSelect } from '@merkur/plugin-select';
+import { useSelect } from '@merkur/plugin-select-preact';
 
 function MyComponent({ widget }) {
 	const [selectedState] = useSelect(widget, null, (state) => ({
