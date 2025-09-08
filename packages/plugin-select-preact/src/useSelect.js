@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { useEffect, useRef, useState } from 'preact/hooks';
+import { useContext, useEffect, useRef, useState } from 'preact/hooks';
 
 export const WIDGET_UPDATE_EVENT = '@merkur/plugin-select-preact.update';
 
@@ -9,9 +9,10 @@ export function setCreatorOfStateSelector(createStateSelector) {
   creatorOfStateSelector = createStateSelector;
 }
 
-export function useSelect(widget, data, ...selectors) {
+export function useSelect(data, ...selectors) {
   const stateSelector = useRef(creatorOfStateSelector(...selectors));
   const currentData = useRef(data);
+  const widget = useContext(useContext);
 
   const resolveNewState = useRef(() => {
     return stateSelector.current(widget.state, currentData.current);
