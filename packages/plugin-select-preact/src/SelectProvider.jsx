@@ -1,4 +1,5 @@
-import { createContext } from 'preact';
+// eslint-disable-next-line no-unused-vars
+import { h, createContext } from 'preact';
 
 export const SelectContext = createContext(null);
 

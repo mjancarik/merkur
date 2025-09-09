@@ -19,4 +19,4 @@ export function selectPlugin() {
 }
 
 export { useSelect } from './useSelect';
-export { SelectProvider } from './SelectProvider';
+export { SelectProvider } from './SelectProvider.jsx';
