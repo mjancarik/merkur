@@ -109,20 +109,19 @@ function createRollupConfig() {
       moduleSideEffects: 'no-external',
     },
     plugins: [
-      // Add babel plugin to handle JSX/TSX input files
       babel({
         extensions: ['.js', '.jsx', '.ts', '.tsx'],
         babelHelpers: 'bundled',
         exclude: 'node_modules/**',
-        babelrc: false, // Disable babelrc
-        configFile: false, // Disable config file - this is the key fix
+        babelrc: false,
+        configFile: false,
         presets: [
           [
             '@babel/preset-react',
             {
               pragma: 'h',
               pragmaFrag: 'Fragment',
-              runtime: 'classic', // Use classic runtime to avoid conflicts
+              runtime: 'classic',
             },
           ],
         ],
