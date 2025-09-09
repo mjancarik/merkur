@@ -122,14 +122,7 @@ function _findScriptElement(scriptElements, asset) {
     asset.type === 'inlineJson' ? JSON.stringify(asset.source) : asset.source;
 
   return (
-    scriptElements.find((element) => {
-      // For module scripts, also check the type attribute
-      if (asset.module) {
-        return element[attributeKey] === source && element.type === 'module';
-      }
-      // For regular scripts, ensure type is not 'module' to avoid conflicts
-      return element[attributeKey] === source && element.type !== 'module';
-    }) || null
+    scriptElements.find((element) => element[attributeKey] === source) || null
   );
 }
 

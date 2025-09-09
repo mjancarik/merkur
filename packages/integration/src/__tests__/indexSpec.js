@@ -673,44 +673,6 @@ describe('Merkur component', () => {
       expect(document.createElement).toHaveBeenCalledTimes(0);
       expect(sources).toStrictEqual([getAssetWithElement('module.js', script)]);
     });
-
-    it('should not match regular scripts when looking for module scripts', async () => {
-      const regularScript = fakeAssetObjectGenerator('script');
-      regularScript.src = assetsDictionary['module.js'].source;
-      // regularScript.type is undefined (not 'module')
-
-      const scriptsPromise = loadScriptAssets([assetsDictionary['module.js']]);
-
-      expect(document.createElement).toHaveBeenCalledTimes(1); // Should create new module script
-      expect(fakeAssetObjects[1].type).toBe('module'); // The new script should be a module
-
-      resolveFakeAssets();
-      const sources = await scriptsPromise;
-
-      expect(sources).toStrictEqual([
-        getAssetWithElement('module.js', fakeAssetObjects[1]),
-      ]);
-    });
-
-    it('should not match module scripts when looking for regular scripts', async () => {
-      const moduleScript = fakeAssetObjectGenerator('script');
-      moduleScript.src = assetsDictionary['widget.js'].source.es13;
-      moduleScript.type = 'module';
-
-      const scriptsPromise = loadScriptAssets([assetsDictionary['widget.js']]);
-
-      expect(document.createElement).toHaveBeenCalledTimes(1); // Should create new regular script
-      expect(fakeAssetObjects[1].type).toBeUndefined(); // The new script should not be a module
-
-      resolveFakeAssets();
-      const sources = await scriptsPromise;
-
-      expect(sources).toStrictEqual([
-        getAssetWithElement('widget.js', fakeAssetObjects[1], {
-          source: assetsDictionary['widget.js'].source.es13,
-        }),
-      ]);
-    });
   });
 
   describe('loadJsonAssets() function', () => {
