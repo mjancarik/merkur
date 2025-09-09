@@ -1,28 +1,8 @@
 import { render, act } from '@testing-library/preact';
 import { useSelect, WIDGET_UPDATE_EVENT } from '../useSelect';
+import { SelectProvider } from '../SelectProvider.jsx';
 
 describe('useSelect', () => {
-  it('should select state property based on data prop', () => {
-    function DynamicSelectorComponent({ widget, data }) {
-      // selector uses data.key to select the corresponding state property
-      const [selected] = useSelect(widget, data, (state, data) => ({
-        value: state[data.key],
-      }));
-      return <div data-testid='selected'>{JSON.stringify(selected)}</div>;
-    }
-    const { getByTestId, rerender } = render(
-      <DynamicSelectorComponent widget={widget} data={{ key: 'count' }} />,
-    );
-    expect(getByTestId('selected').textContent).toBe(
-      JSON.stringify({ value: 1 }),
-    );
-    rerender(
-      <DynamicSelectorComponent widget={widget} data={{ key: 'value' }} />,
-    );
-    expect(getByTestId('selected').textContent).toBe(
-      JSON.stringify({ value: 'foo' }),
-    );
-  });
   let widget;
   let listeners;
 
@@ -42,15 +22,17 @@ describe('useSelect', () => {
     };
   });
 
-  function TestComponent({ widget, selector }) {
-    const [selected] = useSelect(widget, null, selector);
+  function TestComponent({ selector }) {
+    const [selected] = useSelect(null, selector);
     return <div data-testid='selected'>{JSON.stringify(selected)}</div>;
   }
 
   it('should select state using selector', () => {
     const selector = (state) => ({ count: state.count });
     const { getByTestId } = render(
-      <TestComponent widget={widget} selector={selector} />,
+      <SelectProvider widget={widget}>
+        <TestComponent selector={selector} />
+      </SelectProvider>,
     );
     expect(getByTestId('selected').textContent).toBe(
       JSON.stringify({ count: 1 }),
@@ -60,7 +42,9 @@ describe('useSelect', () => {
   it('should update when widget emits WIDGET_UPDATE_EVENT and state changes', () => {
     const selector = (state) => ({ count: state.count });
     const { getByTestId } = render(
-      <TestComponent widget={widget} selector={selector} />,
+      <SelectProvider widget={widget}>
+        <TestComponent selector={selector} />
+      </SelectProvider>,
     );
     expect(getByTestId('selected').textContent).toBe(
       JSON.stringify({ count: 1 }),
@@ -79,7 +63,9 @@ describe('useSelect', () => {
   it('should not update if selector result is the same', () => {
     const selector = () => ({ static: 1 });
     const { getByTestId } = render(
-      <TestComponent widget={widget} selector={selector} />,
+      <SelectProvider widget={widget}>
+        <TestComponent selector={selector} />
+      </SelectProvider>,
     );
     expect(getByTestId('selected').textContent).toBe(
       JSON.stringify({ static: 1 }),
@@ -98,7 +84,9 @@ describe('useSelect', () => {
   it('should unsubscribe on unmount', () => {
     const selector = (state) => ({ count: state.count });
     const { unmount } = render(
-      <TestComponent widget={widget} selector={selector} />,
+      <SelectProvider widget={widget}>
+        <TestComponent selector={selector} />
+      </SelectProvider>,
     );
     const cb = listeners[WIDGET_UPDATE_EVENT];
     unmount();
@@ -107,17 +95,20 @@ describe('useSelect', () => {
 
   it('should support multiple selectors', () => {
     // useSelect will merge the results of both selectors
-    function MultiSelectorComponent({ widget }) {
+    function MultiSelectorComponent() {
       // selectors: count and value
       const [selected] = useSelect(
-        widget,
         null,
         (state) => ({ count: state.count }),
         (state) => ({ value: state.value }),
       );
       return <div data-testid='selected'>{JSON.stringify(selected)}</div>;
     }
-    const { getByTestId } = render(<MultiSelectorComponent widget={widget} />);
+    const { getByTestId } = render(
+      <SelectProvider widget={widget}>
+        <MultiSelectorComponent />
+      </SelectProvider>,
+    );
     expect(getByTestId('selected').textContent).toBe(
       JSON.stringify({ count: 1, value: 'foo' }),
     );
@@ -131,21 +122,51 @@ describe('useSelect', () => {
   });
 
   it('should use data argument in selector', () => {
-    function DataSelectorComponent({ widget, data }) {
+    function DataSelectorComponent({ data }) {
       // selector uses data.prop to select the corresponding state property
-      const [selected] = useSelect(widget, data, (state, data) => ({
+      const [selected] = useSelect(data, (state, data) => ({
         value: state[data.prop],
       }));
       return <div data-testid='selected'>{JSON.stringify(selected)}</div>;
     }
     const { getByTestId, rerender } = render(
-      <DataSelectorComponent widget={widget} data={{ prop: 'count' }} />,
+      <SelectProvider widget={widget}>
+        <DataSelectorComponent data={{ prop: 'count' }} />
+      </SelectProvider>,
     );
     expect(getByTestId('selected').textContent).toBe(
       JSON.stringify({ value: 1 }),
     );
     rerender(
-      <DataSelectorComponent widget={widget} data={{ prop: 'value' }} />,
+      <SelectProvider widget={widget}>
+        <DataSelectorComponent data={{ prop: 'value' }} />
+      </SelectProvider>,
+    );
+    expect(getByTestId('selected').textContent).toBe(
+      JSON.stringify({ value: 'foo' }),
+    );
+  });
+
+  it('should select state property based on data prop', () => {
+    function DynamicSelectorComponent({ data }) {
+      // selector uses data.key to select the corresponding state property
+      const [selected] = useSelect(data, (state, data) => ({
+        value: state[data.key],
+      }));
+      return <div data-testid='selected'>{JSON.stringify(selected)}</div>;
+    }
+    const { getByTestId, rerender } = render(
+      <SelectProvider widget={widget}>
+        <DynamicSelectorComponent data={{ key: 'count' }} />
+      </SelectProvider>,
+    );
+    expect(getByTestId('selected').textContent).toBe(
+      JSON.stringify({ value: 1 }),
+    );
+    rerender(
+      <SelectProvider widget={widget}>
+        <DynamicSelectorComponent data={{ key: 'value' }} />
+      </SelectProvider>,
     );
     expect(getByTestId('selected').textContent).toBe(
       JSON.stringify({ value: 'foo' }),
