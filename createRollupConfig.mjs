@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import process from 'node:process';
 
 import terser from '@rollup/plugin-terser';
-import { getBabelOutputPlugin } from '@rollup/plugin-babel';
+import { getBabelOutputPlugin, babel } from '@rollup/plugin-babel';
 
 const { name, dependencies, peerDependencies } = JSON.parse(
   fs.readFileSync(process.cwd() + '/package.json'),
@@ -108,7 +108,25 @@ function createRollupConfig() {
     treeshake: {
       moduleSideEffects: 'no-external',
     },
-    plugins: [],
+    plugins: [
+      babel({
+        extensions: ['.js', '.jsx', '.ts', '.tsx'],
+        babelHelpers: 'bundled',
+        exclude: 'node_modules/**',
+        babelrc: false,
+        configFile: false,
+        presets: [
+          [
+            '@babel/preset-react',
+            {
+              pragma: 'h',
+              pragmaFrag: 'Fragment',
+              runtime: 'classic',
+            },
+          ],
+        ],
+      }),
+    ],
     external,
   };
 

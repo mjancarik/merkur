@@ -1,0 +1,65 @@
+{
+  "name": "@merkur/plugin-select-preact",
+  "version": "0.0.1",
+  "description": "Merkur select preact plugin.",
+  "main": "lib/index",
+  "module": "lib/index",
+  "types": "./types.d.ts",
+  "unpkg": "lib/index.umd.js",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./types.d.ts",
+      "import": "./lib/index.mjs",
+      "require": "./lib/index.cjs"
+    },
+    "./lib/index.es9.mjs": "./lib/index.es9.mjs",
+    "./lib/index.es9.cjs": "./lib/index.es9.cjs"
+  },
+  "browser": {
+    "./lib/index.js": "./lib/index.js",
+    "./lib/index.cjs": "./lib/index.cjs",
+    "./lib/index.mjs": "./lib/index.mjs",
+    "./lib/index.es9.mjs": "./lib/index.es9.mjs"
+  },
+  "scripts": {
+    "preversion": "npm test",
+    "test": "jest --no-watchman -c ./jest.config.js",
+    "test:es:version": "es-check es11 ./lib/index.mjs --module && es-check es9 ./lib/index.es9.mjs --module && es-check es9 ./lib/index.es9.cjs --module",
+    "build": "rollup -c rollup.config.mjs",
+    "prepare": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mjancarik/merkur.git"
+  },
+  "keywords": [
+    "merkur",
+    "plugin",
+    "microservices",
+    "microfrontends"
+  ],
+  "author": "Miroslav Jancarik",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mjancarik/merkur/issues"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
+  },
+  "homepage": "https://merkur.js.org/",
+  "dependencies": {
+    "reselect": "^4.1.8"
+  },
+  "devDependencies": {
+    "@merkur/core": "^0.38.0",
+    "@testing-library/preact": "^3.2.4"
+  },
+  "peerDependencies": {
+    "@merkur/core": "*",
+    "@merkur/plugin-component": "*",
+    "@merkur/plugin-event-emitter": "*",
+    "preact": "*"
+  }
+}
