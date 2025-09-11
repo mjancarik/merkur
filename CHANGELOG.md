@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.38.2](https://github.com/mjancarik/merkur/compare/v0.38.1...v0.38.2) (2025-09-11)
+
+### Bug Fixes
+
+- 🐛 Fix missing package in tests ([a3dfbf1](https://github.com/mjancarik/merkur/commit/a3dfbf197b5dfa2f9cfaf64aeef9e43164ab52ce))
+
+### Features
+
+- add plugin-select ([f11a832](https://github.com/mjancarik/merkur/commit/f11a83270d5714ca8348519af799eb98ab368912))
+
 ## [0.38.1](https://github.com/mjancarik/merkur/compare/v0.38.0...v0.38.1) (2025-07-24)
 
 ### Bug Fixes
