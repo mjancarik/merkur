@@ -1,4 +1,5 @@
 import {
+  isLoadedSymbol,
   loadAssets,
   loadJsonAssets,
   loadScriptAssets,
@@ -221,6 +222,30 @@ describe('Merkur component', () => {
     fakeAssetObjects = [];
     fakeAssetListeners = {};
     assetLoadingDeferreds = {};
+
+    // Add module script test assets
+    assetsDictionary['module.js'] = {
+      name: 'module.js',
+      type: 'script',
+      module: true,
+      source: 'http://localhost:4444/static/es13/module.123456.js',
+    };
+    assetsDictionary['inline-module.js'] = {
+      name: 'inline-module.js',
+      type: 'inlineScript',
+      module: true,
+      source: 'console.log("Hello from module!");',
+    };
+    assetsDictionary['module-with-attr.js'] = {
+      name: 'module-with-attr.js',
+      type: 'script',
+      module: true,
+      source: 'http://localhost:4444/static/es13/module-attr.123456.js',
+      attr: {
+        crossorigin: 'anonymous',
+        defer: true, // This should be overridden
+      },
+    };
 
     jest.spyOn(console, 'warn').mockImplementation(() => {});
     jest
@@ -557,6 +582,96 @@ describe('Merkur component', () => {
           source: assetsDictionary['widget.js'].source.es13,
         }),
       ]);
+    });
+
+    it('should create module script elements with type="module"', async () => {
+      const scriptsPromise = loadScriptAssets([assetsDictionary['module.js']]);
+
+      expect(scriptsPromise).toBeInstanceOf(Promise);
+      expect(document.createElement).toHaveBeenCalledTimes(1);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(1);
+
+      resolveFakeAssets();
+      const sources = await scriptsPromise;
+
+      expect(fakeAssetObjects[0].type).toBe('module');
+      expect(fakeAssetObjects[0].defer).toBeUndefined(); // defer should not be set for modules
+      expect(sources).toStrictEqual([
+        getAssetWithElement('module.js', fakeAssetObjects[0]),
+      ]);
+    });
+
+    it('should create inline module script elements with type="module"', async () => {
+      const scriptsPromise = loadScriptAssets([
+        assetsDictionary['inline-module.js'],
+      ]);
+
+      expect(scriptsPromise).toBeInstanceOf(Promise);
+      expect(document.createElement).toHaveBeenCalledTimes(1);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(1);
+
+      const sources = await scriptsPromise;
+
+      expect(fakeAssetObjects[0].type).toBe('module');
+      expect(fakeAssetObjects[0].textContent).toBe(
+        'console.log("Hello from module!");',
+      );
+      expect(sources).toStrictEqual([
+        getAssetWithElement('inline-module.js', fakeAssetObjects[0]),
+      ]);
+    });
+
+    it('should handle module scripts with custom attributes correctly', async () => {
+      const scriptsPromise = loadScriptAssets([
+        assetsDictionary['module-with-attr.js'],
+      ]);
+
+      expect(document.createElement).toHaveBeenCalledTimes(1);
+      expect(document.head.appendChild).toHaveBeenCalledTimes(1);
+
+      resolveFakeAssets();
+      const sources = await scriptsPromise;
+
+      expect(fakeAssetObjects[0].type).toBe('module');
+      expect(fakeAssetObjects[0].defer).toBeUndefined(); // defer should be overridden for modules
+      expect(fakeAssetObjects[0].crossorigin).toBe('anonymous'); // custom attributes should be preserved
+      expect(sources).toStrictEqual([
+        getAssetWithElement('module-with-attr.js', fakeAssetObjects[0], {
+          attr: {
+            crossorigin: 'anonymous',
+            defer: false, // defer should be overridden for modules
+          },
+        }),
+      ]);
+    });
+
+    it('should return a promise that rejects when a module script fails to load', async () => {
+      expect.assertions(3);
+      const scriptsPromise = loadScriptAssets([assetsDictionary['module.js']]);
+
+      expect(document.createElement).toHaveBeenCalledTimes(1);
+
+      rejectFakeAssets();
+
+      try {
+        await scriptsPromise;
+      } catch (error) {
+        expect(fakeAssetObjects[0].remove).toHaveBeenCalledTimes(1);
+        expect(error).toBeInstanceOf(Error);
+      }
+    });
+
+    it('should resolve if a module script (not created by loadScriptAssets) is already present in the DOM', async () => {
+      const script = fakeAssetObjectGenerator('script');
+      script.src = assetsDictionary['module.js'].source;
+      script.type = 'module';
+      script[isLoadedSymbol] = true; // Mark as already loaded
+
+      const scriptsPromise = loadScriptAssets([assetsDictionary['module.js']]);
+      const sources = await scriptsPromise;
+
+      expect(document.createElement).toHaveBeenCalledTimes(0);
+      expect(sources).toStrictEqual([getAssetWithElement('module.js', script)]);
     });
   });
 
@@ -1001,6 +1116,41 @@ describe('Merkur component', () => {
           ),
         }),
       ]);
+
+      expect(console.warn).not.toHaveBeenCalled();
+    });
+
+    it('should load module scripts correctly', async () => {
+      const assetsPromise = loadAssets([
+        assetsDictionary['module.js'],
+        assetsDictionary['inline-module.js'],
+        assetsDictionary['module-with-attr.js'],
+      ]);
+
+      resolveFakeAssets();
+      const sources = await assetsPromise;
+
+      expect(document.createElement).toHaveBeenCalledTimes(3);
+      expect(sources).toStrictEqual([
+        getAssetWithElement('module.js', fakeAssetObjects[0]),
+        getAssetWithElement('inline-module.js', fakeAssetObjects[1]),
+        getAssetWithElement('module-with-attr.js', fakeAssetObjects[2], {
+          attr: {
+            crossorigin: 'anonymous',
+            defer: false, // defer should be overridden for modules
+          },
+        }),
+      ]);
+
+      // Check that all scripts have the correct type
+      expect(fakeAssetObjects[0].type).toBe('module');
+      expect(fakeAssetObjects[1].type).toBe('module');
+      expect(fakeAssetObjects[2].type).toBe('module');
+
+      // Check that defer is not set for module scripts
+      expect(fakeAssetObjects[0].defer).toBeUndefined();
+      expect(fakeAssetObjects[1].defer).toBeUndefined();
+      expect(fakeAssetObjects[2].defer).toBeUndefined();
 
       expect(console.warn).not.toHaveBeenCalled();
     });
