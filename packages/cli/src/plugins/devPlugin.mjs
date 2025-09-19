@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 
 import chalk from 'chalk';
@@ -6,6 +7,12 @@ import { createClient } from '../websocket.mjs';
 
 import { createLogger } from '../logger.mjs';
 import { COMMAND_NAME } from '../commands/constant.mjs';
+
+function getFileHash(filePath) {
+  const fileContent = fs.readFileSync(filePath, 'utf-8');
+
+  return crypto.createHash('md5').update(fileContent).digest('hex');
+}
 
 export function devPlugin({ definition, merkurConfig, cliConfig }) {
   const logger = createLogger('devPlugin', cliConfig);
@@ -44,8 +51,15 @@ export function devPlugin({ definition, merkurConfig, cliConfig }) {
           };
         });
 
+        const outputFiles =
+          result?.outputFiles ??
+          Object.keys(result?.metafile?.outputs || {}).map((key) => ({
+            path: key,
+            hash: getFileHash(key),
+          }));
+
         changed =
-          result?.outputFiles?.reduce((changed, file) => {
+          outputFiles?.reduce((changed, file) => {
             const name = file.path
               .replace(projectFolder, '')
               .replace(buildFolder, '')
