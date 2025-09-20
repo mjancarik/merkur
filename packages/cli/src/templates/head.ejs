@@ -7,31 +7,31 @@
 </script>
 <% assets.forEach((asset)=> { %>
   <%if (asset.type==='stylesheet' ) { %>
-    <link rel='stylesheet' href='<%= asset.source %>' data-name="<%= asset.name %>" />
+    <link rel='stylesheet' href='<%= asset.source %>' data-merkur-asset-name="<%= asset.name %>" />
   <% } %>
   <%if (asset.type==='inlineStyle' ) { %>
-    <style data-name="<%= asset.name %>">
+    <style data-merkur-asset-name="<%= asset.name %>">
       <%- asset.source %>
     </style>
   <% } %>
 
   <%if (asset.type==='script' ) { %>
     <%if (typeof asset.source==='string' ) { %>
-      <script src='<%= asset.source %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-name="<%= asset.name %>"></script>
+      <script src='<%= asset.source %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-merkur-asset-name="<%= asset.name %>"></script>
     <% } %>
     <%if (typeof asset.source==='object' ) { %>
-      <script src='<%= asset.source.es13 %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-name="<%= asset.name %>"></script>
+      <script src='<%= asset.source.es13 %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-merkur-asset-name="<%= asset.name %>"></script>
     <% } %>
   <% } %>
 
   <%if (asset.type==='inlineScript' ) { %>
     <%if (typeof asset.source==='string' ) { %>
-      <script data-name="<%= asset.name %>">
+      <script data-merkur-asset-name="<%= asset.name %>">
         <%- asset.source %>
       </script>
     <% } %>
     <%if (typeof asset.source==='object' ) { %>
-      <script data-name="<%= asset.name %>">
+      <script data-merkur-asset-name="<%= asset.name %>">
         <%- asset.source %>
       </script>
     <% } %>

@@ -48,6 +48,7 @@ function _addListenersToAssetElement(asset, element, resolve, reject) {
 function _loadStyle(asset, root) {
   if (asset.type === 'inlineStyle') {
     const style = document.createElement('style');
+    style.dataset.merkurAssetName = asset.name;
     style.innerHTML = asset.source;
     root.appendChild(style);
 
@@ -59,6 +60,7 @@ function _loadStyle(asset, root) {
   link[loadingPromiseSymbol] = new Promise((resolve, reject) => {
     _addListenersToAssetElement(asset, link, resolve, reject);
     link.rel = 'stylesheet';
+    link.dataset.merkurAssetName = asset.name;
     link.href = asset.source;
 
     root.appendChild(link);
@@ -128,6 +130,7 @@ function _findScriptElement(scriptElements, asset) {
 
 function _loadScript(asset, root) {
   const script = document.createElement('script');
+  script.dataset.merkurAssetName = asset.name;
 
   // Set script type to module if specified
   if (asset.module) {
@@ -262,6 +265,7 @@ function _removeElementAfterTimeout(element, timeout) {
 
 function _loadJsonAsset(asset, root) {
   const script = document.createElement('script');
+  script.dataset.merkurAssetName = asset.name;
   script.type = 'application/json';
 
   if (asset.type === 'inlineJson') {

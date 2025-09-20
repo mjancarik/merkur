@@ -3,7 +3,9 @@ export async function hmr({ to, command, changed }) {
     await Promise.all(
       changed.map(async (asset) => {
         return new Promise((resolve) => {
-          const element = document.querySelector(`[data-name="${asset.name}"]`);
+          const element = document.querySelector(
+            `[data-merkur-asset-name="${asset.name}"]`,
+          );
 
           if (!element || element.nodeName === 'STYLE') {
             location.reload();
@@ -33,7 +35,7 @@ export async function hmr({ to, command, changed }) {
           if (element.nodeName === 'SCRIPT') {
             const url = new URL(element.src);
             newElement = document.createElement('script');
-            newElement.setAttribute('data-name', asset.name);
+            newElement.setAttribute('data-merkur-asset-name', asset.name);
             newElement.onload = () => {
               element.remove();
               resolve();

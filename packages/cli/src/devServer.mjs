@@ -48,6 +48,26 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
         next();
       })
       .use(compression())
+      .get('/__dev__/js/merkurDevClient.js', (req, res) => {
+        const script = fs.readFileSync(
+          path.resolve(`${cliFolder}/../lib/devClient.mjs`),
+          'utf8',
+        );
+        const globalDevEnv = `
+        window.__merkur_dev__ = window.__merkur_dev__ || {};
+        window.__merkur_dev__.merkurConfig = {};
+        window.__merkur_dev__.merkurConfig.socketServer = ${escapeToJSON(merkurConfig.socketServer)};
+        window.__merkur_dev__.assets = [];
+        window.__merkur_dev__.widgetProperties = {};
+        `;
+
+        if (script && command === COMMAND_NAME.DEV) {
+          res.set('Content-Type', 'application/javascript');
+          res.status(200).send(globalDevEnv + script);
+        } else {
+          res.status(404).send('MerkurDevClient not found.');
+        }
+      })
       .get(
         playgroundPath,
         asyncMiddleware(async (req, res) => {
