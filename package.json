@@ -52,7 +52,7 @@
     "stylelint:fix": "npm run stylelint -- --fix",
     "commit": "git-cz",
     "version": "node utils/bumpVersion.js && node utils/copyReadme.js && git add packages/create-widget/template/package.json && git add packages/**/README.md",
-    "prepare": "husky"
+    "prepare": "husky && npm run build"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "license": "MIT",
