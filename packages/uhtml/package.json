@@ -6,7 +6,6 @@
     "test": "echo 'Tests pass.'",
     "test:es:version": "echo 'Tests pass.'",
     "build": "rollup -c rollup.config.mjs",
-    "prepare": "npm run build",
     "dev": "rollup -c rollup.config.mjs -w"
   },
   "exports": {
