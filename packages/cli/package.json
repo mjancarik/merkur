@@ -59,10 +59,8 @@
     "ws": "^8.18.2"
   },
   "devDependencies": {
+    "@merkur/core": "^0.38.0",
     "@types/express": "^5.0.3"
-  },
-  "peerDependencies": {
-    "@merkur/tools": "*"
   },
   "engines": {
     "node": ">=20"
