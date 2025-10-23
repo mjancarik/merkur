@@ -58,10 +58,10 @@ const config: Config = {
     image: 'img/docusaurus-social-card.jpg',
     navbar: {
       title: 'Merkur',
-      // logo: {
-      //   alt: 'Merkur logo',
-      //   src: 'img/logo.svg',
-      // },
+      logo: {
+        alt: 'Merkur logo',
+        src: 'img/merkur-logo.png',
+      },
       items: [
         {
           type: 'docSidebar',
