@@ -28,7 +28,7 @@ You can use [createCommandConfig](https://github.com/mjancarik/merkur/blob/maste
 2. Create a new **esm** file in `commands` folder and name it after the command. Eg. `cssVarsGenerator.mjs`
 3. Create new command in the file.  
 You can use following template:
-```
+```javascript
 import chalk from 'chalk';
 import path from 'path';
 import { pathToFileURL } from 'url';
