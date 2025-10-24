@@ -10,7 +10,7 @@ Merkur CLI for building your widget use [esbuild](https://esbuild.github.io/) to
 
 ## Commands
 
-- `merkur dev` - build your widget with with NODE_ENV = 'development' and with watch mode
+- `merkur dev` - build your widget with NODE_ENV = 'development' and with watch mode. Enables [Merkur Dev Client](/docs/integration-with-app#merkur-dev-client) for hot module replacement
 - `merkur build` - build your widget with NODE_ENV = 'production'
 - `merkur test` - run defined widget tests with NODE_ENV = 'test'
 - `merkur start` - run widget server and playground server

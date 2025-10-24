@@ -122,4 +122,3 @@ TenCounter.args = {
 ```
 
 Now run command `npm run storybook` and you will see our Counter component with two settings.
-```

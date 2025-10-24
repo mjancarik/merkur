@@ -98,3 +98,24 @@ When an error is thrown, the plugin does the following:
   ```
 * [emit](/docs/event-emitter-plugin#emit) `ERROR` event with thrown error
 * Re-runs the function (if defined)
+
+The error object is available everywhere in the widget, as well as to the host application.
+
+## Limitations
+
+The plugin can't handle errors occurring outside of lifecycle functions.
+
+## Custom errors
+
+You can throw custom errors by instantiating `GenericError` class or create custom error classes that extend `GenericError`.
+
+`GenericError` class carries `status` param among with other params. This way error plugin can respond with adequate HTTP status and also include data for encountered error.
+
+```javascript
+import { GenericError } from '@merkur/plugin-error';
+
+throw new GenericError('Operation failed.', {
+  status: 500,
+  reason: 'api_error'
+})
+```

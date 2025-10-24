@@ -347,3 +347,30 @@ return (
   </MerkurSlot>
 )
 ```
+
+## Merkur Dev Client
+When integrating Merkur widgets into an existing application, developers often face challenges with the development workflow - particularly with hot module replacement (HMR). The Merkur Dev Client solves this problem by bringing the same seamless development experience you get in the playground directly to your integrated application.
+### Bringing Playground Experience to Your Application
+The Merkur Dev Client enables the same fluid development experience you enjoy in the playground environment when working with your widget in any integrated application:
+- **Real-time Widget Updates**: Edit your widget code and see changes instantly in your application
+- **No Application Refreshes**: Updates are applied without reloading the entire application
+- **Preserve Application State**: Keep authentication, form inputs, and application context intact during development
+### Enabling the Dev Client
+To enable the Dev Client in your host application, simply add the following script tag to your HTML head:
+```html
+<script src="http://localhost:4445/__dev__/js/merkurDevClient.js"></script>
+```
+For server-side templates (like EJS), you can conditionally include it only in development mode:
+```ejs
+<% if (process.env.NODE_ENV === 'development') { %>
+  <script src="http://localhost:4445/__dev__/js/merkurDevClient.js"></script>
+<% } %>
+```
+### How Dev Client Works
+The Dev Client works by:
+1. Establishing a WebSocket connection to your Merkur dev server
+2. Monitoring changes to Merkur widget assets (scripts, styles)
+3. Automatically replacing or updating affected assets when changes are detected
+4. Hooking into the Merkur widget creation process to track active widgets within your application
+Assets are tracked using the `data-merkur-asset-name` attribute, which the Dev Client uses to identify and update them without reloading the entire application page.
+The Dev Client is automatically configured when running your widget in development mode with the Merkur CLI (`merkur dev`), and only requires adding a single script tag to your host application.
