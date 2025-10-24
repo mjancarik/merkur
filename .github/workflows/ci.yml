@@ -73,6 +73,11 @@ jobs:
         run: npm run build
       - name: Script version check
         run: npm run test:es:version
+      - name: Build Docusaurus website
+        run: |
+          cd website
+          npm ci
+          npm run build
 
   release:
     name: Test release
@@ -194,6 +199,7 @@ jobs:
       - name: Build website
         run: |
           cd website
+          npm ci
           npm run build
 
       - name: Setup Pages
