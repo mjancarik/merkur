@@ -104,13 +104,22 @@ emitter.on(
           metafile: false,
         },
       },
+      es15: {
+        name: 'es15',
+        folder: 'es15',
+        build: {
+          platform: 'browser',
+          outdir: path.resolve(`${staticFolder}/es15`),
+          plugins: [devPlugin],
+        },
+      },
       es13: {
         name: 'es13',
         folder: 'es13',
         build: {
           platform: 'browser',
           outdir: path.resolve(`${staticFolder}/es13`),
-          plugins: [devPlugin],
+          target: 'es2022',
         },
       },
       es9: {

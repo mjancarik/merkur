@@ -73,6 +73,30 @@ describe('Merkur component', () => {
     });
   });
 
+  describe('isES15Supported() function', () => {
+    beforeEach(() => {
+      jest.spyOn(testScript, 'test');
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it('should return true', () => {
+      const isES15Supported = testScript.isES15Supported();
+
+      expect(isES15Supported).toEqual(true);
+      expect(testScript.test).toHaveBeenCalledTimes(2);
+    });
+
+    it('should return true but not test again', () => {
+      const isES15Supported = testScript.isES15Supported();
+
+      expect(isES15Supported).toEqual(true);
+      expect(testScript.test).toHaveBeenCalledTimes(0);
+    });
+  });
+
   describe('test() function', () => {
     it('should return true', () => {
       expect(testScript.test('return typeof window !== "undefined"')).toEqual(

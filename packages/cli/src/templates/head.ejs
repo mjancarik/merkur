@@ -20,7 +20,7 @@
       <script src='<%= asset.source %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-merkur-asset-name="<%= asset.name %>"></script>
     <% } %>
     <%if (typeof asset.source==='object' ) { %>
-      <script src='<%= asset.source.es13 %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-merkur-asset-name="<%= asset.name %>"></script>
+      <script src='<%= asset.source.es15 %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-merkur-asset-name="<%= asset.name %>"></script>
     <% } %>
   <% } %>
 

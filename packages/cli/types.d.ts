@@ -30,8 +30,8 @@ export type Extend =
   | undefined;
 
 export interface Task {
-  name: 'es13' | 'es9' | 'node' | string;
-  folder: 'es13' | 'es9' | string;
+  name: 'es15' | 'es13' | 'es9' | 'node' | string;
+  folder: 'es15' | 'es13' | 'es9' | string;
   build: BuildOptions;
   [key: string]: any;
 }
