@@ -1,6 +1,6 @@
 {
   "name": "@merkur/tool-storybook",
-  "version": "0.39.0",
+  "version": "0.40.0",
   "description": "Merkur integration to storybook tool.",
   "main": "lib/index",
   "module": "lib/index",
@@ -45,8 +45,8 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.39.0",
-    "@merkur/plugin-component": "^0.39.0"
+    "@merkur/core": "^0.40.0",
+    "@merkur/plugin-component": "^0.40.0"
   },
   "peerDependencies": {
     "@merkur/core": "*",
