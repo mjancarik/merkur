@@ -1,5 +1,10 @@
 import { createMerkurWidget } from '@merkur/core';
-import { errorPlugin, renderContent, setErrorInfo } from '../index';
+import {
+  errorPlugin,
+  renderContent,
+  setErrorInfo,
+  ERROR_EVENTS,
+} from '../index';
 import { componentPlugin } from '@merkur/plugin-component';
 
 describe('createWidget method with error plugin', () => {
@@ -111,6 +116,7 @@ describe('setErrorInfo', () => {
   beforeEach(() => {
     widgetMock = {
       error: {},
+      emit: jest.fn(),
     };
   });
 
@@ -126,6 +132,9 @@ describe('setErrorInfo', () => {
       setErrorInfo(widgetMock, err);
 
       expect(widgetMock.error).toMatchObject(expectedObject);
+      expect(widgetMock.emit).toBeCalledWith(ERROR_EVENTS.ERROR, {
+        error: err,
+      });
     }
   });
 });

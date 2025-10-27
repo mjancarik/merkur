@@ -9,3 +9,4 @@
 /packages/*/coverage
 /packages/*/node_modules
 /packages/cli/bin/merkur.mjs
+/website

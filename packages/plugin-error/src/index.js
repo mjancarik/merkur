@@ -61,7 +61,6 @@ async function loadHook(widget, originalLoad, ...rest) {
     error.status = error.status || 500;
 
     setErrorInfo(widget, error);
-    emitError(widget, error);
   }
 
   return result;
@@ -94,9 +93,7 @@ export function setErrorInfo(widget, error) {
   if (ENV === DEV) {
     widget.error.stack = error.stack;
   }
-}
 
-function emitError(widget, error) {
   widget.emit(ERROR_EVENTS.ERROR, { error });
 }
 
@@ -124,7 +121,6 @@ export async function renderContent(widget, method, properties) {
     // save error info
     err.status = err.status || 500;
     setErrorInfo(widget, err);
-    emitError(widget, err);
 
     // try rendering again
     return renderContent(widget, method, properties);

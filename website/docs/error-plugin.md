@@ -59,32 +59,6 @@ Set HTTP status in widget API response:
 
 ```
 
-**src/router/playground/playground.js**
-
-To allow widget playground to display the widget in error state, add playground error-handling middleware after playground route.
-
-```javascript
-//...
-const { playgroundErrorMiddleware } = require('@merkur/plugin-error/server');
-
-// ...
-
-const router = express.Router();
-const containerSelector = '.container';
-
-router
-  .get(
-    '/',
-    asyncMiddleware(async (req, res) => {
-      // ....
-      res
-        .status(200)
-        .send(playgroundTemplate({ widgetProperties, html, containerSelector }));
-    })
-  )
-  .use(playgroundErrorMiddleware({ renderPlayground: playgroundTemplate, containerSelector }))
-```
-
 ## Operation
 
 When an error is thrown, the plugin does the following:
@@ -100,6 +74,64 @@ When an error is thrown, the plugin does the following:
 * Re-runs the function (if defined)
 
 The error object is available everywhere in the widget, as well as to the host application.
+
+## API
+
+### `ERROR_EVENTS`
+
+A constant object containing event names used by the error plugin.
+
+```javascript
+import { ERROR_EVENTS } from '@merkur/plugin-error';
+
+// Listen for error events
+widget.on(ERROR_EVENTS.ERROR, ({ error }) => {
+  console.error('Widget error occurred:', error);
+  // Send error to monitoring service, etc.
+});
+```
+
+**Available events:**
+- `ERROR_EVENTS.ERROR` - Event name: `@merkur/plugin-error.error` - Emitted when an error is caught by the plugin
+
+### `setErrorInfo(widget, error)`
+
+Manually set error information on the widget. This function is used internally by the error plugin but can also be called directly if you need to manually set an error state.
+
+**Note:** This function automatically emits the `ERROR_EVENTS.ERROR` event after setting the error information.
+
+**Parameters:**
+- `widget` - The widget instance
+- `error` - Error object with `status` and `message` properties
+
+```javascript
+import { setErrorInfo } from '@merkur/plugin-error';
+
+const customError = new Error('Custom error message');
+customError.status = 503;
+
+setErrorInfo(widget, customError);
+
+console.log(widget.error);
+// {
+//   status: 503,
+//   message: 'Custom error message',
+//   url: undefined
+// }
+```
+
+In development mode (`NODE_ENV=development`), the error stack trace is also included:
+
+```javascript
+// In development
+console.log(widget.error);
+// {
+//   status: 503,
+//   message: 'Custom error message',
+//   url: undefined,
+//   stack: '...' // Full stack trace
+// }
+```
 
 ## Limitations
 
@@ -118,4 +150,99 @@ throw new GenericError('Operation failed.', {
   status: 500,
   reason: 'api_error'
 })
+```
+
+## Server-side Express Middleware
+
+The `@merkur/plugin-error/server` module provides Express middleware functions for handling errors in server-side rendering scenarios.
+
+### `logErrorMiddleware()`
+
+Simple Express middleware to log errors to console. This middleware logs the error and passes it to the next error handler in the chain.
+
+**Usage:**
+
+```javascript
+const { logErrorMiddleware } = require('@merkur/plugin-error/server');
+
+// Add as error handling middleware
+app.use(logErrorMiddleware());
+
+// Or in your router
+router.use(logErrorMiddleware());
+```
+
+**Example with complete error handling chain:**
+
+```javascript
+const express = require('express');
+const { logErrorMiddleware, apiErrorMiddleware } = require('@merkur/plugin-error/server');
+
+const app = express();
+
+// Your routes
+app.get('/widget', widgetHandler);
+
+// Error handling middleware (order matters!)
+app.use(logErrorMiddleware());  // First: log the error
+app.use(apiErrorMiddleware());  // Then: send error response
+```
+
+### `apiErrorMiddleware()`
+
+Express middleware that returns widget-like JSON on errors that couldn't be handled by the error plugin. This is useful for widget API endpoints.
+
+**Response format:**
+
+```javascript
+{
+  error: {
+    status: 500,
+    message: 'Error message'
+  }
+}
+```
+
+In development mode (`NODE_ENV=development`), the response also includes the error stack trace:
+
+```javascript
+{
+  error: {
+    status: 500,
+    message: 'Error message',
+    stack: '...' // Full stack trace in development only
+  }
+}
+```
+
+**Usage:**
+
+```javascript
+const { apiErrorMiddleware } = require('@merkur/plugin-error/server');
+
+// Add as the last error handling middleware
+app.use('/api/widget', widgetAPIHandler);
+app.use(apiErrorMiddleware());
+```
+
+**Complete example:**
+
+```javascript
+const express = require('express');
+const { logErrorMiddleware, apiErrorMiddleware } = require('@merkur/plugin-error/server');
+
+const app = express();
+
+// Widget API endpoint
+app.get('/api/widget', async (req, res) => {
+  // If an error occurs here, it will be caught by the middleware
+  const widget = await createWidget();
+  res.json(widget);
+});
+
+// Error handling middleware chain
+app.use(logErrorMiddleware());  // Log errors to console
+app.use(apiErrorMiddleware());  // Return error JSON to client
+
+app.listen(3000);
 ```
