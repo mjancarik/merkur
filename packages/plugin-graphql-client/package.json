@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-graphql-client",
-  "version": "0.38.0",
+  "version": "0.39.0",
   "description": "Merkur event emitter plugin.",
   "main": "lib/index",
   "module": "lib/index",
@@ -50,10 +50,10 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.38.0",
-    "@merkur/plugin-component": "^0.38.0",
-    "@merkur/plugin-error": "^0.38.0",
-    "@merkur/plugin-http-client": "^0.38.0"
+    "@merkur/core": "^0.39.0",
+    "@merkur/plugin-component": "^0.39.0",
+    "@merkur/plugin-error": "^0.39.0",
+    "@merkur/plugin-http-client": "^0.39.0"
   },
   "peerDependencies": {
     "@merkur/core": "*",

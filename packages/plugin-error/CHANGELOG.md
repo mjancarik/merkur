@@ -3,6 +3,23 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.39.0](https://github.com/mjancarik/merkur/compare/v0.38.2...v0.39.0) (2025-10-27)
+
+### Features
+
+- 🎸 setErrorInfo emit Error event, remove death code ([0fd8716](https://github.com/mjancarik/merkur/commit/0fd8716ac271f7806a61e7ee8c43c593177f4d91))
+
+### BREAKING CHANGES
+
+- 🧨 Removed playgroundErrorMiddleware from server exports: The
+  playgroundErrorMiddleware function has been removed from
+  @merkur/plugin-error/server. If you were using this middleware in your
+  playground setup, you'll need to implement custom error handling for
+  your playground pages. The setErrorInfo function sets error information
+  on the widget and automatically emits the ERROR_EVENTS.ERROR event.
+  Useful when you need to manually trigger error handling outside of
+  lifecycle methods.
+
 # [0.38.0](https://github.com/mjancarik/merkur/compare/v0.37.12...v0.38.0) (2025-07-12)
 
 **Note:** Version bump only for package @merkur/plugin-error

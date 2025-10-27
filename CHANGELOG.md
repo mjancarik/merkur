@@ -3,6 +3,31 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.39.0](https://github.com/mjancarik/merkur/compare/v0.38.2...v0.39.0) (2025-10-27)
+
+### Bug Fixes
+
+- 🐛 Fix HMR when the task's build.write is true ([b0907a2](https://github.com/mjancarik/merkur/commit/b0907a2dab04d0fc1018ecbb9283f726c5a0e396))
+
+### Features
+
+- 🎸 Added support for loading 'module' assets ([6e985ce](https://github.com/mjancarik/merkur/commit/6e985ce86f148be12ee96ba41cc2115600ebc207))
+- 🎸 allow HMR in integratied application ([6465454](https://github.com/mjancarik/merkur/commit/64654541c4708f9c239a1b5575d1df685cd3a3b6))
+- 🎸 setErrorInfo emit Error event, remove death code ([0fd8716](https://github.com/mjancarik/merkur/commit/0fd8716ac271f7806a61e7ee8c43c593177f4d91))
+
+### BREAKING CHANGES
+
+- 🧨 Removed playgroundErrorMiddleware from server exports: The
+  playgroundErrorMiddleware function has been removed from
+  @merkur/plugin-error/server. If you were using this middleware in your
+  playground setup, you'll need to implement custom error handling for
+  your playground pages. The setErrorInfo function sets error information
+  on the widget and automatically emits the ERROR_EVENTS.ERROR event.
+  Useful when you need to manually trigger error handling outside of
+  lifecycle methods.
+- 🧨 REMOVE @merkur/tools dependencies from @merkur/cli. All assets
+  integrated by merkur have always `data-merkur-asset-name` attribute.
+
 ## [0.38.2](https://github.com/mjancarik/merkur/compare/v0.38.1...v0.38.2) (2025-09-11)
 
 ### Bug Fixes

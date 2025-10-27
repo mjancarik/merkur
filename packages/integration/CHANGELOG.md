@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.39.0](https://github.com/mjancarik/merkur/compare/v0.38.2...v0.39.0) (2025-10-27)
+
+### Features
+
+- 🎸 Added support for loading 'module' assets ([6e985ce](https://github.com/mjancarik/merkur/commit/6e985ce86f148be12ee96ba41cc2115600ebc207))
+- 🎸 allow HMR in integratied application ([6465454](https://github.com/mjancarik/merkur/commit/64654541c4708f9c239a1b5575d1df685cd3a3b6))
+
+### BREAKING CHANGES
+
+- 🧨 REMOVE @merkur/tools dependencies from @merkur/cli. All assets
+  integrated by merkur have always `data-merkur-asset-name` attribute.
+
 # [0.38.0](https://github.com/mjancarik/merkur/compare/v0.37.12...v0.38.0) (2025-07-12)
 
 **Note:** Version bump only for package @merkur/integration
