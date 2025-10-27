@@ -44,9 +44,9 @@
     "access": "public"
   },
   "dependencies": {
-    "@babel/preset-react": "^7.24.1",
-    "preact": "^10.20.1",
-    "preact-render-to-string": "^6.4.1"
+    "@babel/preset-react": "^7.28.5",
+    "preact": "^10.27.2",
+    "preact-render-to-string": "^6.6.3"
   },
   "peerDependencies": {
     "@merkur/core": ">=0.34",
