@@ -7,7 +7,7 @@ export async function runBuild({ cliConfig, build, config }) {
   const logger = createLogger(undefined, cliConfig);
   const { watch } = cliConfig;
 
-  //es6 === es2015, es9 === es2018, es11 === es2020 es13 ===es2022
+  //es6 === es2015, es9 === es2018, es11 === es2020, es13 ===es2022, es15 === es2024
   try {
     const result = await (watch
       ? esbuild.context(build)

@@ -58,7 +58,7 @@ program.command(COMMAND_NAME.DEV)
     ...{
       writeToDisk: false,
       watch: true,
-      runTasks: ['node', 'es13'],
+      runTasks: ['node', 'es15'],
       hasRunDevServer: true,
       hasRunWidgetServer: true,
     },

@@ -1,6 +1,7 @@
 let _isES9Supported;
 let _isES11Supported;
 let _isES13Supported;
+let _isES15Supported;
 
 function isES9Supported() {
   if (_isES9Supported === undefined) {
@@ -37,6 +38,16 @@ function isES13Supported() {
   return _isES13Supported;
 }
 
+function isES15Supported() {
+  if (_isES15Supported === undefined) {
+    _isES15Supported =
+      exported.test('return typeof Promise.withResolvers === "function"') &&
+      exported.test('return typeof Object.groupBy === "function"');
+  }
+
+  return _isES15Supported;
+}
+
 function test(snippet) {
   try {
     const fn = new Function(snippet);
@@ -52,6 +63,7 @@ const exported = {
   isES9Supported,
   isES11Supported,
   isES13Supported,
+  isES15Supported,
   test,
 };
 

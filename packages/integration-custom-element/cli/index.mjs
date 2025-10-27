@@ -109,7 +109,7 @@ export default function ({ emitter, EMITTER_EVENTS }) {
 
   emitter.on(EMITTER_EVENTS.CLI_CONFIG, function removeNodeTask({ cliConfig }) {
     if (cliConfig.runTasks.length === 0) {
-      cliConfig.runTasks = ['es13', 'es9'];
+      cliConfig.runTasks = ['es15', 'es9'];
     }
 
     cliConfig.runTasks = cliConfig.runTasks.filter((task) => task !== 'node');

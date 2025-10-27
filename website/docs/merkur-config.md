@@ -17,21 +17,26 @@ The full merkur config can be look like:
 export default function ({ cliConfig, emitter,  }) {
   return {
     extends: [ '@merkur/preact/cli' ], // Merkur predefined extender
-    task: { // defined tasks to building your widget, default are node, es13 and es9
+    task: { // defined tasks to building your widget, default are node, es15 and es9
       node: {
         name: 'node',
         build: ESBuildConfiguration, // https://esbuild.github.io/api/#build
-      }
+      },
+      es15: {
+        name: 'es15',
+        folder: 'es15',
+        build: ESBuildConfiguration, // https://esbuild.github.io/api/#build
+      },
       es13: {
         name: 'es13',
         folder: 'es13',
         build: ESBuildConfiguration, // https://esbuild.github.io/api/#build
-      }
+      },
       es9: {
         name: 'es9',
         folder: 'es9',
         build: ESBuildConfiguration, // https://esbuild.github.io/api/#build
-      }
+      },
     },
     devServer: { // configuration for Merkur dev server
       protocol: 'http:',
@@ -133,15 +138,15 @@ export default function () {
     onMerkurConfig({ cliConfig, merkurConfig }) {
       const { projectFolder, isProduction, staticFolder } = cliConfig;
 
-      merkurConfig.task.es13Asset = {
-        name: 'es13Asset',
-        folder: 'es13',
+      merkurConfig.task.es15Asset = {
+        name: 'es15Asset',
+        folder: 'es15',
         build: {
           entryPoints: [`${projectFolder}/src/customAsset.js`],
           entryNames: !isProduction ? 'customAsset' : 'customAsset.[hash]',
           platform: 'browser',
-          outdir: `${staticFolder}/es13`,
-          plugins: merkurConfig.task['es13'].build.plugins,
+          outdir: `${staticFolder}/es15`,
+          plugins: merkurConfig.task['es15'].build.plugins,
         },
       };
 
@@ -161,9 +166,9 @@ export default function () {
       return merkurConfig;
     },
     onCliConfig({ cliConfig }) {
-      // add es13Asset task to be run for `merkur dev`
+      // add es15Asset task to be run for `merkur dev`
       if (cliConfig.command === 'dev') {
-        cliConfig.runTasks.push('es13Asset');
+        cliConfig.runTasks.push('es15Asset');
       }
     },
   };
