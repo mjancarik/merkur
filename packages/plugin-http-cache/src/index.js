@@ -83,7 +83,7 @@ export function cacheInTransformer() {
 export function cacheOutTransformer() {
   return {
     async transformRequest(widget, request, response) {
-      if (request.useCache) {
+      if (request.useCache && !request.revalidateCache) {
         const cachedResponse = widget.httpCache.get(getCacheKey(request));
 
         if (cachedResponse) {
