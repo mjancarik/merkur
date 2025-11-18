@@ -22,8 +22,16 @@ function asyncMiddleware(fn) {
 
 export async function runDevServer({ context, merkurConfig, cliConfig }) {
   const logger = createLogger('devServer', cliConfig);
-  const { protocol, host, port, staticPath, staticFolder, origin, httpsKey, httpsCert } =
-    merkurConfig.devServer;
+  const {
+    protocol,
+    host,
+    port,
+    staticPath,
+    staticFolder,
+    origin,
+    httpsKey,
+    httpsCert,
+  } = merkurConfig.devServer;
   const {
     template,
     templateFolder,
@@ -212,7 +220,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
     if (protocol === 'https:') {
       const httpsOptions = {
         key: httpsKey,
-        cert: httpsCert
+        cert: httpsCert,
       };
       server = https.createServer(httpsOptions, app);
     } else {
