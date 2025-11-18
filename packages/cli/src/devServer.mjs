@@ -1,5 +1,6 @@
 import path from 'node:path';
 import fs from 'node:fs';
+import https from 'node:https';
 import ejs from 'ejs';
 import chalk from 'chalk';
 
@@ -21,7 +22,7 @@ function asyncMiddleware(fn) {
 
 export async function runDevServer({ context, merkurConfig, cliConfig }) {
   const logger = createLogger('devServer', cliConfig);
-  const { protocol, host, port, staticPath, staticFolder, origin } =
+  const { protocol, host, port, staticPath, staticFolder, origin, httpsKey, httpsCert } =
     merkurConfig.devServer;
   const {
     template,
@@ -36,7 +37,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
   return new Promise((resolve, reject) => {
     const app = express();
 
-    const server = app
+    app
       .use((req, res, next) => {
         const headerOrigin = req.get('Origin');
         // Allow cors
@@ -204,15 +205,28 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
             stack: error.stack,
           },
         });
-      })
-      .listen({ port }, () => {
-        logger.info(`Playground: ${chalk.green(`${protocol}//${host}`)}`);
-        resolve(app);
       });
 
-    context.server.devServer = server;
+    // Create HTTPS server if protocol is https:
+    let server;
+    if (protocol === 'https:') {
+      const httpsOptions = {
+        key: httpsKey,
+        cert: httpsCert
+      };
+      server = https.createServer(httpsOptions, app);
+    } else {
+      server = app;
+    }
 
-    server.on('error', (error) => {
+    const httpServer = server.listen({ port }, () => {
+      logger.info(`Playground: ${chalk.green(`${protocol}//${host}`)}`);
+      resolve(app);
+    });
+
+    context.server.devServer = httpServer;
+
+    httpServer.on('error', (error) => {
       reject(error);
     });
   });
