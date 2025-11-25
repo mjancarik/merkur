@@ -202,6 +202,22 @@ describe('createWidget method with http client plugin', () => {
     expect(response.cached).toBeTruthy();
   });
 
+  it('should not read response from cache when revalidating', async () => {
+    const { request } = await widget.http.request({
+      path: '/path/to/url',
+      revalidateCache: true,
+    });
+
+    const cacheKey = getCacheKey(request);
+
+    expect(widget.$in.httpClient.cache.get).not.toHaveBeenCalled();
+    expect(widget.$in.httpClient.cache.set).toHaveBeenCalledWith(
+      cacheKey,
+      expect.any(CacheEntry),
+    );
+    expect(cacheMock[cacheKey]).toBeInstanceOf(CacheEntry);
+  });
+
   it('should keep same cached value when mutating response object', async () => {
     const { request } = await widget.http.request({ path: '/path/to/url' });
 

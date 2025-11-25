@@ -64,5 +64,11 @@ After that we have cache available.
 We can also set instructions for using cache for each request in request option.
 
 ```javascript
-const { response, request } = await widget.http.request({ path: '/detail/1' }, { useCache: true });
+const { response, request } = await widget.http.request({ path: '/detail/1', useCache: true });
+```
+
+And we can revalidate cache for specific request in request option.
+
+```javascript
+const { response, request } = await widget.http.request({ path: '/detail/1', useCache: true, revalidateCache: true });
 ```
