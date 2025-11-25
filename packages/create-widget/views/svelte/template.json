@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@merkur/svelte": "0.39.0"
+    "@merkur/svelte": "0.40.0"
   },
   "devDependencies": {}
 }

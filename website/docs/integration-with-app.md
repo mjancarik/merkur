@@ -288,7 +288,7 @@ return (
 You can also react to component events through callbacks.
 - When widget is mounted, a function passed through `onWidgetMounted` prop is called with the widget instance.
 - Before the widget is unmounted, `onWidgetUnmounting` is called.
-- Whenever error occurs during the widget lifetime, an `onError` function prop is called.
+- Whenever error occurs during the widget lifetime, an `onError` function prop is called. If the `onError` callback returns `true`, the default error fallback will **not** be displayed, allowing you to handle the error with your own custom UI or logic.
 
 ```jsx
 return (
@@ -296,7 +296,12 @@ return (
       widgetProperties={widgetProperties}
       onWidgetMounted={widget => this._widgetMounted()}
       onWidgetUnmouting={widget => this._widgetUnmounting()}
-      onError={error => this._handleError(error)}>
+      onError={error => {
+        console.error('Widget error:', error);
+        // Return true to prevent showing the default error fallback
+        // Return false or undefined to show the default error fallback
+        return this._handleError(error);
+      }}>
     <div>
       Fallback for undefined widgetProperties
     </div>
