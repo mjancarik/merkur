@@ -3,6 +3,16 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.42.0](https://github.com/mjancarik/merkur/compare/v0.41.1...v0.42.0) (2025-11-28)
+
+### Features
+
+- 🎸 Add helper function addServerConfig ([58a480e](https://github.com/mjancarik/merkur/commit/58a480e1bd31c00a1d56ca4f3c3a3d2c1fe18671))
+
+### BREAKING CHANGES
+
+- 🧨 Resolving order for dev server config changed
+
 ## [0.41.1](https://github.com/mjancarik/merkur/compare/v0.41.0...v0.41.1) (2025-11-19)
 
 **Note:** Version bump only for package merkur-monorepo

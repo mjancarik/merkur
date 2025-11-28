@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-select-preact",
-  "version": "0.41.0",
+  "version": "0.42.0",
   "description": "Merkur select preact plugin.",
   "main": "lib/index",
   "module": "lib/index",
@@ -52,7 +52,7 @@
     "reselect": "^4.1.8"
   },
   "devDependencies": {
-    "@merkur/core": "^0.41.0",
+    "@merkur/core": "^0.42.0",
     "@testing-library/preact": "^3.2.4"
   },
   "peerDependencies": {
