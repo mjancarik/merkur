@@ -31,3 +31,27 @@ export function deepMerge(target, source) {
 
   return target;
 }
+
+export function addServerConfig(serverConfig, { protocol, hostname, port }) {
+  if (protocol) {
+    serverConfig.protocol = protocol;
+  }
+  if (port) {
+    serverConfig.port = port;
+  }
+
+  const effectiveHostname =
+    hostname ?? (port ? serverConfig.host?.split(':')[0] : null);
+
+  if (effectiveHostname) {
+    serverConfig.host = `${effectiveHostname}:${serverConfig.port}`;
+  }
+
+  if (serverConfig.protocol && serverConfig.host) {
+    serverConfig.origin = new URL(
+      `${serverConfig.protocol}//${serverConfig.host}`,
+    ).origin;
+  }
+
+  return serverConfig;
+}

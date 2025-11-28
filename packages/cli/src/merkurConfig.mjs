@@ -1,5 +1,6 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
+import { addServerConfig } from './utils.mjs';
 
 import { EMITTER_EVENTS, emitter, RESULT_KEY } from './emitter.mjs';
 import { updateCLIConfig } from './CLIConfig.mjs';
@@ -155,23 +156,21 @@ emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function devServer({ merkurConfig, cliConfig }) {
     merkurConfig.devServer = {
+      ...addServerConfig(
+        {},
+        {
+          protocol: 'http:',
+          hostname: 'localhost',
+          port: 4445,
+        },
+      ),
+      staticPath: cliConfig.staticPath,
+      staticFolder: path.resolve(
+        cliConfig.projectFolder,
+        cliConfig.staticFolder,
+      ),
       ...merkurConfig.devServer,
-      ...{
-        protocol: 'http:',
-        host: 'localhost:4445',
-        port: 4445,
-        staticPath: cliConfig.staticPath,
-        staticFolder: path.resolve(
-          cliConfig.projectFolder,
-          cliConfig.staticFolder,
-        ),
-      },
     };
-
-    const { origin, host, protocol } = merkurConfig.devServer;
-
-    merkurConfig.devServer.origin =
-      origin ?? new URL(`${protocol}//${host}`).origin;
 
     return merkurConfig;
   },
@@ -247,9 +246,14 @@ emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function socketServer({ merkurConfig }) {
     merkurConfig.socketServer = {
-      protocol: 'ws:',
-      host: 'localhost:4321',
-      port: 4321,
+      ...addServerConfig(
+        {},
+        {
+          protocol: 'ws:',
+          hostname: 'localhost',
+          port: 4321,
+        },
+      ),
       ...merkurConfig.socketServer,
     };
 
@@ -261,9 +265,14 @@ emitter.on(
   EMITTER_EVENTS.MERKUR_CONFIG,
   function widgetServer({ merkurConfig, cliConfig }) {
     merkurConfig.widgetServer = {
-      protocol: 'http:',
-      host: 'localhost:4444',
-      port: 4444,
+      ...addServerConfig(
+        {},
+        {
+          protocol: 'http:',
+          hostname: 'localhost',
+          port: 4444,
+        },
+      ),
       staticPath: cliConfig.staticPath,
       staticFolder: path.resolve(
         cliConfig.projectFolder,
@@ -284,11 +293,6 @@ emitter.on(
         },
       },
     };
-
-    const { origin, host, protocol } = merkurConfig.widgetServer;
-
-    merkurConfig.widgetServer.origin =
-      origin ?? new URL(`${protocol}//${host}`).origin;
 
     return merkurConfig;
   },
