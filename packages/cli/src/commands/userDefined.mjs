@@ -29,6 +29,10 @@ const existsMerkurConfig = fs
   .includes('merkur.config.mjs');
 
 if (existsMerkurConfig) {
+  const projectCommandsDir = path.resolve(process.cwd(), 'cli/commands');
+  if (fs.existsSync(projectCommandsDir)) {
+    await extendCommandsFromDir(projectCommandsDir);
+  }
   const merkurDir = path.resolve(process.cwd(), 'node_modules/@merkur');
   if (fs.existsSync(merkurDir)) {
     let dirs = fs.readdirSync(merkurDir);
