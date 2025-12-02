@@ -22,7 +22,7 @@ The default Merkur template is prepared for SSR. In the following sections, we w
 
 ### Server part
 
-After creating a new Merkur widget, update your playground template by creating the `/server/playground/templates/body.ejs` and `/server/playground/templates/footer.ejs` files. You can also run `merkur custom playground:body` and `merkur custom playground:footer` to generate these files. Then, modify the files as follows:
+After creating a new Merkur widget, run `merkur custom playground:body` and `merkur custom playground:footer` to make local copies of the playground files and modify them as follows:
 
 ```javascript
 // body.ejs
