@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.43.0](https://github.com/mjancarik/merkur/compare/v0.42.0...v0.43.0) (2025-12-05)
+
+### Features
+
+- custom project commands ([78ac868](https://github.com/mjancarik/merkur/commit/78ac86830e085adc524f4a534bd6cb4b3f841575))
+
 # [0.42.0](https://github.com/mjancarik/merkur/compare/v0.41.1...v0.42.0) (2025-11-28)
 
 ### Features

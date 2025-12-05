@@ -1,6 +1,6 @@
 {
   "name": "@merkur/integration-react",
-  "version": "0.42.0",
+  "version": "0.43.0",
   "description": "Merkur module for easy integration with react.",
   "main": "lib/index",
   "module": "lib/index",
@@ -46,9 +46,9 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",
-    "@merkur/core": "^0.42.0",
-    "@merkur/plugin-component": "^0.42.0",
-    "@merkur/plugin-event-emitter": "^0.42.0",
+    "@merkur/core": "^0.43.0",
+    "@merkur/plugin-component": "^0.43.0",
+    "@merkur/plugin-event-emitter": "^0.43.0",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-replace": "^5.0.2",
     "cheerio": "1.0.0-rc.12",
@@ -64,6 +64,6 @@
     "react-dom": ">=16"
   },
   "dependencies": {
-    "@merkur/integration": "^0.42.0"
+    "@merkur/integration": "^0.43.0"
   }
 }
