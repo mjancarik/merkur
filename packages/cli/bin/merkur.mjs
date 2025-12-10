@@ -25,7 +25,9 @@ const inspectOption = new Option('--inspect', 'Debugging widget server');
 const outputFilesOption = new Option('--outFile <string>', 'Server out file configuration in es-build.');
 const portOption = new Option('--port <number>', 'Widget server port.');
 const projectFolderOption = new Option('--projectFolder <string>', 'Project folder.');
+const quietOption = new Option('--quiet', 'Hide all logs except errors.');
 const runTasksOption = new Option('--runTasks [runTasks...]', 'Run only defined tasks.');
+const silentOption = new Option('--silent', 'Hide all logs.');
 const sourcemapOption = new Option('--sourcemap', 'Generate sourcemap.');
 const staticFolderOption = new Option('--staticFolder <string>', 'Static folder.');
 const staticPathOption = new Option('--staticPath <string>', 'The static path for dev server and widget server.');
@@ -47,7 +49,9 @@ program.command(COMMAND_NAME.DEV)
   .addOption(outputFilesOption)
   .addOption(portOption)
   .addOption(projectFolderOption)
+  .addOption(quietOption)
   .addOption(runTasksOption)
+  .addOption(silentOption)
   .addOption(sourcemapOption)
   .addOption(staticFolderOption)
   .addOption(staticPathOption)
@@ -77,7 +81,9 @@ program
   .addOption(buildFolderOption)
   .addOption(outputFilesOption)
   .addOption(projectFolderOption)
+  .addOption(quietOption)
   .addOption(runTasksOption)
+  .addOption(silentOption)
   .addOption(sourcemapOption)
   .addOption(staticFolderOption)
   .addOption(verboseOption)
@@ -101,6 +107,8 @@ program
   .addOption(inspectOption)
   .addOption(portOption)
   .addOption(projectFolderOption)
+  .addOption(quietOption)
+  .addOption(silentOption)
   .addOption(staticFolderOption)
   .addOption(staticPathOption)
   .addOption(verboseOption)
@@ -116,6 +124,8 @@ program
 program
   .command(COMMAND_NAME.TEST)
   .description('Test widget')
+  .addOption(quietOption)
+  .addOption(silentOption)
   .allowUnknownOption()
   .allowExcessArguments()
   .action(async (options, cmd) => {
@@ -132,6 +142,8 @@ program
   .command(COMMAND_NAME.CUSTOM)
   .description('Customize template')
   .addArgument(new Argument('<part>', 'custom part').choices(Object.values(CUSTOM_PART)))
+  .addOption(quietOption)
+  .addOption(silentOption)
   .addOption(verboseOption)
   .allowUnknownOption()
   .allowExcessArguments()
