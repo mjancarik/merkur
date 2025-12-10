@@ -40,6 +40,36 @@ Contribute to this project via [Pull-Requests](https://github.com/mjancarik/merk
 
 We are following [Conventional Commits Specification](https://www.conventionalcommits.org/en/v1.0.0/#summary). To simplify the commit process, you can use `npm run commit` command. It opens an interactive interface, which should help you with commit message composition.
 
+### Release
+
+To release a version you must have the right permissions, please contact one of the repo maintainers.
+
+
+#### Regular version release
+
+To do a regular release, in the root of the monorepo run:
+
+```
+npm run release
+```
+
+#### RC (preversion) release
+
+1. From the specific package directory, use this `lerna version` command to bump package versions:
+  ```
+  npx lerna version <preminor | prepatch | prerelease> --no-git-tag-version --no-push
+  // prerelease increments the pre* version's last number, e.g. v0.44.0-rc.0 => v0.44.0-rc.1
+  ```
+2. restore all files not related to the package you intend to release (the whole lerna repo, `@merkur/create-widget`, other dependent packages).
+3. Commit the changes. 
+4. Tag the commit with the version (e.g. `v0.44.0-rc.0`). 
+5. Push the commit to the repo.
+6. Push the tag to the repo: `git push origin tag <tagname>` (e.g. `git push origin tag v0.44.0-rc.0`).
+
+The packages are released from a GitHub Action that is triggered when a new version tag is pushed to the repository.
+
+---
+
 Thank you to all the people who already contributed to Merkur!
 
 <a href="https://github.com/mjancarik/merkur/graphs/contributors">
