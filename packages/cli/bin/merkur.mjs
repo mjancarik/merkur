@@ -110,6 +110,7 @@ program
   .description('Build a static version of the widget playground')
   .action(async (options, cmd) => {
   const args = {
+    ...{ writeToDisk: true, watch: false, hasRunWidgetServer: true, hasRunDevServer: true },
     ...cmd.optsWithGlobals(),
     ...options,
   };
