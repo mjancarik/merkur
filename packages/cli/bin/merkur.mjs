@@ -2,6 +2,7 @@
 import { Command, Option, Argument } from 'commander';
 import { dev } from '../src/commands/dev.mjs';
 import { build } from '../src/commands/build.mjs';
+import { buildPlayground } from '../src/commands/buildPlayground.mjs';
 import { start } from '../src/commands/start.mjs';
 import { test } from '../src/commands/test.mjs';
 import { custom, CUSTOM_PART } from '../src/commands/custom.mjs';
@@ -31,6 +32,7 @@ const silentOption = new Option('--silent', 'Hide all logs.');
 const sourcemapOption = new Option('--sourcemap', 'Generate sourcemap.');
 const staticFolderOption = new Option('--staticFolder <string>', 'Static folder.');
 const staticPathOption = new Option('--staticPath <string>', 'The static path for dev server and widget server.');
+const staticPlaygroundOption = new Option('--staticPlayground <string>', 'Static playground folder.');
 const verboseOption = new Option('--verbose', 'Verbose mode which show debug information.');
 const writeToDiskOption = new Option('--writeToDisk', 'Write built files to disk.');
 
@@ -95,6 +97,25 @@ program
   process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
 
   await build({ args, command: COMMAND_NAME.BUILD });
+});
+
+program
+  .command(COMMAND_NAME.BUILD_PLAYGROUND)
+  .addOption(buildFolderOption)
+  .addOption(hasRunWidgetServerOption)
+  .addOption(quietOption)
+  .addOption(silentOption)
+  .addOption(staticPlaygroundOption)
+  .addOption(verboseOption)
+  .description('Build a static version of the widget playground')
+  .action(async (options, cmd) => {
+  const args = {
+    ...cmd.optsWithGlobals(),
+    ...options,
+  };
+  process.env.NODE_ENV = process.env.NODE_ENV ?? 'production';
+
+  await buildPlayground({ args, command: COMMAND_NAME.BUILD_PLAYGROUND });
 });
 
 program

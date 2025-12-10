@@ -24,6 +24,7 @@ export async function createCLIConfig({ args, command } = {}) {
     sourcemap: args?.sourcemap ?? !isProduction,
     staticFolder: args?.staticFolder ?? './build/static',
     staticPath: args?.staticPath ?? '/static',
+    staticPlayground: args?.staticPlayground ?? './playground-build',
     verbose: args.verbose ?? false,
     watch: args?.watch ?? !isProduction,
     writeToDisk: args?.writeToDisk ?? isProduction,
