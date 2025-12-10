@@ -3,20 +3,6 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
-# [0.44.0-rc.1](https://github.com/mjancarik/merkur/compare/v0.44.0-rc.0...v0.44.0-rc.1) (2025-12-10)
-
-**Note:** Version bump only for package @merkur/cli
-
-
-
-
-
-# [0.44.0-rc.0](https://github.com/mjancarik/merkur/compare/v0.43.1...v0.44.0-rc.0) (2025-12-10)
-
-### Features
-
-- 🎸 Add `quiet` and `silent` logging levels ([f9c2cfc](https://github.com/mjancarik/merkur/commit/f9c2cfc58255e1ec35141041954674f3ab1eaec2))
-- 🎸 Add command to render static playground ([1713cba](https://github.com/mjancarik/merkur/commit/1713cbab87f8c33c69bb9e33c15de4beb6d83a9a))
 
 # [0.43.0](https://github.com/mjancarik/merkur/compare/v0.42.0...v0.43.0) (2025-12-05)
 
