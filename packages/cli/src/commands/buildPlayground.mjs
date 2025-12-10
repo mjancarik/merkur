@@ -3,21 +3,14 @@ import { runDevServer } from '../devServer.mjs';
 import { runTask } from '../runTask.mjs';
 import { runSocketServer } from '../websocket.mjs';
 import { runWidgetServer } from '../widgetServer.mjs';
-import { handleExit } from '../handleExit.mjs';
-import { clearBuildFolder } from '../clearBuildFolder.mjs';
+import { handleExit, killProcesses } from '../handleExit.mjs';
+import { clearFolder, clearBuildFolder } from '../clearBuildFolder.mjs';
 import { time } from '../utils.mjs';
 import path from 'node:path';
 import chalk from 'chalk';
 import fs from 'node:fs/promises';
 import process from 'node:process';
 import { createLogger } from '../logger.mjs';
-
-// this vs handleExit? it overlaps, it's not the same thing, wtf
-function killServers(context) {
-  context?.process?.widgetServer?.kill();
-  context?.server?.devServer?.close();
-  context?.server?.socketServer?.close();
-}
 
 function createServerTimer({ logger, cliConfig }) {
   return function waitForServerReady(url, timeout = 10000, interval = 500) {
@@ -72,6 +65,9 @@ export async function buildPlayground({ args, command }) {
 
   const childProcessCliConfig = { ...cliConfig, silent: !cliConfig.verbose };
 
+  // TODO maybe skip building tasks, to be used in CI where there's a separate build step?
+
+  await clearFolder(cliConfig.staticPlayground);
   await clearBuildFolder({ merkurConfig, cliConfig: childProcessCliConfig });
 
   logger.info(`Running build tasks`);
@@ -106,7 +102,7 @@ export async function buildPlayground({ args, command }) {
     } catch (err) {
       logger.error(chalk.red.bold(`x Widget server failed to start:`));
       logger.error(chalk.red(err));
-      killServers(context);
+      killProcesses({ context });
       process.exit(1);
     }
   }
@@ -125,7 +121,7 @@ export async function buildPlayground({ args, command }) {
   } catch (err) {
     logger.error(chalk.red.bold('x Dev server failed to start:'));
     logger.error(chalk.red(err));
-    killServers(context);
+    killProcesses({ context });
     process.exit(1);
   }
 
@@ -162,10 +158,12 @@ export async function buildPlayground({ args, command }) {
       chalk.green.bold('Playground built successfully in: ') +
         chalk.green(playgroundFolderPath),
     );
+    killProcesses({ context });
+    process.exit(0);
   } catch (err) {
     logger.error(chalk.red.bold('x Failed to build static playground:'));
     logger.error(chalk.red(err));
-  } finally {
-    killServers(context);
+    killProcesses({ context });
+    process.exit(1);
   }
 }
