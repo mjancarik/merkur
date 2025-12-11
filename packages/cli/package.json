@@ -21,7 +21,7 @@
     "build": "node ./scripts/build.mjs",
     "test": "NODE_OPTIONS='--experimental-vm-modules' jest --no-watchman -c ./jest.config.js",
     "dev": "node ./scripts/build.mjs --watch",
-    "postrelease": "node ../../utils/restoreLatestTag.mjs"
+    "postpublish": "node ../../utils/restoreLatestTag.mjs"
   },
   "repository": {
     "type": "git",
