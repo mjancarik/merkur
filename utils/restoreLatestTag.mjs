@@ -5,11 +5,12 @@ import { promisify } from 'util';
 const exec = promisify(child_process.exec);
 
 function isStable(version) {
-  return !version.match(/-alpha|-beta|-rc/);
+  return version.match(/^\d+\.\d+\.\d+$/);
 }
 
 (async () => {
   const version = process.env.npm_package_version;
+
   const packageName = process.env.npm_package_name;
   if (!version || !packageName) {
     return;
@@ -24,10 +25,10 @@ function isStable(version) {
 
       let lastStable = null;
       let ver = versions.pop();
-      while (!isStable(ver) && versions.length) {
+      while (!lastStable && versions.length) {
         ver = versions.pop();
+        lastStable = isStable(ver) ? ver : null;
       }
-      lastStable = ver;
 
       if (!lastStable) {
         console.log('No stable version found to restore.');
