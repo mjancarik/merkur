@@ -1,10 +1,14 @@
 import { rm } from 'node:fs/promises';
 
-export async function clearBuildFolder({ merkurConfig }) {
+export async function clearFolder(folderPath) {
   try {
-    await rm(merkurConfig.widgetServer.buildFolder, {
+    await rm(folderPath, {
       recursive: true,
       force: true,
     });
   } catch {} //eslint-disable-line no-empty
+}
+
+export async function clearBuildFolder({ merkurConfig }) {
+  await clearFolder(merkurConfig.widgetServer.buildFolder);
 }

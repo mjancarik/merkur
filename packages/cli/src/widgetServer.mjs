@@ -32,7 +32,7 @@ export async function runWidgetServer({ merkurConfig, cliConfig, context }) {
       MERKUR_CONFIG: JSON.stringify(merkurConfig),
       CLI_CONFIG: JSON.stringify(cliConfig),
     },
-    stdio: 'inherit',
+    stdio: cliConfig.silent || cliConfig.quiet ? 'pipe' : 'inherit',
   });
 
   server.on('spawn', () => {
