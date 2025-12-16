@@ -60,8 +60,11 @@ npm run release
   npx lerna version <preminor | prepatch | prerelease> --no-git-tag-version --no-push
   // prerelease increments the pre* version's last number, e.g. v0.44.0-rc.0 => v0.44.0-rc.1
   ```
-2. restore all files not related to the package you intend to release (the whole lerna repo, `@merkur/create-widget`, other dependent packages).
-3. Commit the changes. 
+2. Restore all files not related to the package you intend to release. These files should remain:
+  - the package's own `package.json`
+  - `lerna.json` (otherwise lerna will stop incrementing the pre-version's number, for some reason)
+  - `package-lock.json`
+3. Commit the changes (must still be a conventional commit. Suggested: `chore(release): publish`). 
 4. Tag the commit with the version (e.g. `v0.44.0-rc.0`). 
 5. Push the commit to the repo.
 6. Push the tag to the repo: `git push origin tag <tagname>` (e.g. `git push origin tag v0.44.0-rc.0`).
