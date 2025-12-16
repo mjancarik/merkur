@@ -16,6 +16,7 @@ export async function createCLIConfig({ args, command } = {}) {
     inspect: args.inspect ?? false,
     isProduction,
     outFile: args?.outFile ?? './build/widget.cjs',
+    playgroundPath: args?.playgroundPath,
     port: args?.port ?? 4444,
     projectFolder: args?.projectFolder ?? process.cwd(),
     quiet: args?.quiet ?? false,

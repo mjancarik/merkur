@@ -33,6 +33,7 @@ const sourcemapOption = new Option('--sourcemap', 'Generate sourcemap.');
 const staticFolderOption = new Option('--staticFolder <string>', 'Static folder.');
 const staticPathOption = new Option('--staticPath <string>', 'The static path for dev server and widget server.');
 const staticPlaygroundOption = new Option('--staticPlayground <string>', 'Static playground folder.');
+const playgroundPathOption = new Option('--playgroundPath <string>', `Relative path the playground is served at. Set if your 'path' is a RegExp.`);
 const verboseOption = new Option('--verbose', 'Verbose mode which show debug information.');
 const writeToDiskOption = new Option('--writeToDisk', 'Write built files to disk.');
 
@@ -103,6 +104,7 @@ program
   .command(COMMAND_NAME.BUILD_PLAYGROUND)
   .addOption(buildFolderOption)
   .addOption(hasRunWidgetServerOption)
+  .addOption(playgroundPathOption)
   .addOption(quietOption)
   .addOption(silentOption)
   .addOption(staticPlaygroundOption)

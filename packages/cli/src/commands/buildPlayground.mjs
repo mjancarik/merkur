@@ -82,7 +82,7 @@ export async function buildPlayground({ args, command }) {
 
   const {
     devServer: { origin: devServerOrigin },
-    playground: { path: playgroundPath },
+    playground,
     widgetServer: { origin: widgetServerOrigin },
   } = merkurConfig;
 
@@ -125,6 +125,20 @@ export async function buildPlayground({ args, command }) {
     process.exit(1);
   }
 
+  let playgroundPath;
+
+  if (typeof playground?.path === 'string') {
+    playgroundPath = playground.path;
+  } else if (cliConfig.playgroundPath) {
+    playgroundPath = cliConfig.playgroundPath;
+  } else {
+    const isRegeExp = playground?.path?.constructor?.name === 'RegExp';
+    logger.warn(
+      `Static build requires a string playground path, but your path is ${isRegeExp ? 'a RegExp' : 'undefined'}. Using '/' as fallback; you can set the path path through the --playgroundPath CLI option.`,
+    );
+    playgroundPath = '/';
+  }
+
   const playgroundUrl = path.join(devServerOrigin, playgroundPath);
 
   logger.info(`Building playground`);
@@ -132,7 +146,12 @@ export async function buildPlayground({ args, command }) {
   try {
     const response = await fetch(playgroundUrl);
     if (!response.ok) {
-      throw new Error('Failed to fetch playground', response.body);
+      if (cliConfig.verbose) {
+        console.log(response); // eslint-disable-line no-console -- Debug log with maintained build-in code highlighting.
+      }
+      throw new Error(
+        `Failed to fetch playground (${response.status} ${response.statusText}).`,
+      );
     }
 
     let playgroundHtml = await response.text();
