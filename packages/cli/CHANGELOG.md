@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.44.0](https://github.com/mjancarik/merkur/compare/v0.43.1...v0.44.0) (2025-12-17)
+
+### Features
+
+- 🎸 Add `quiet` and `silent` logging levels ([f9c2cfc](https://github.com/mjancarik/merkur/commit/f9c2cfc58255e1ec35141041954674f3ab1eaec2))
+- 🎸 Add command to render static playground ([a9e92ca](https://github.com/mjancarik/merkur/commit/a9e92ca8bfca027bab9a9b6181602a483492ad08))
+
 # [0.43.0](https://github.com/mjancarik/merkur/compare/v0.42.0...v0.43.0) (2025-12-05)
 
 ### Features

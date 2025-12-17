@@ -1,6 +1,6 @@
 {
   "name": "@merkur/uhtml",
-  "version": "0.43.0",
+  "version": "0.44.0",
   "description": "Collection of helpers to aid with Svelte integration to @merkur",
   "scripts": {
     "test": "echo 'Tests pass.'",
