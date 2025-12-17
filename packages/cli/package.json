@@ -1,6 +1,6 @@
 {
   "name": "@merkur/cli",
-  "version": "0.43.0",
+  "version": "0.44.0-rc.6",
   "description": "Merkur is tiny and extensible library for creating front-end microservices.",
   "bin": {
     "merkur": "./bin/merkur.mjs"
