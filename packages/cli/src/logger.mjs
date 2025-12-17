@@ -27,14 +27,18 @@ export class Logger {
   }
 
   info(message, options) {
-    // if (!this.#cliConfig?.verbose) {
-    //   return;
-    // }
+    if (this.#cliConfig?.quiet || this.#cliConfig?.silent) {
+      return;
+    }
 
     this.#log('info', chalk.bold.cyan, message, options);
   }
 
   log(message, options) {
+    if (this.#cliConfig?.quiet || this.#cliConfig?.silent) {
+      return;
+    }
+
     this.#log(null, chalk.bold.cyan, message, options);
   }
 
@@ -47,10 +51,18 @@ export class Logger {
   }
 
   warn(message, options) {
+    if (this.#cliConfig?.quiet || this.#cliConfig?.silent) {
+      return;
+    }
+
     this.#log('warn', chalk.bold.yellow, message, options);
   }
 
   error(message, options) {
+    if (this.#cliConfig?.silent) {
+      return;
+    }
+
     if (message instanceof Error) {
       const [_, ...stackLines] = message.stack?.split('\n') ?? ''; //eslint-disable-line
 

@@ -2,6 +2,7 @@
 import { Command, Option, Argument } from 'commander';
 import { dev } from '../src/commands/dev.mjs';
 import { build } from '../src/commands/build.mjs';
+import { buildPlayground } from '../src/commands/buildPlayground.mjs';
 import { start } from '../src/commands/start.mjs';
 import { test } from '../src/commands/test.mjs';
 import { custom, CUSTOM_PART } from '../src/commands/custom.mjs';
@@ -16,21 +17,25 @@ import packageFile from '../package.json' with { type: 'json' };
 
 const program = new Command();
 
-const writeToDiskOption = new Option('--writeToDisk', 'Write built files to disk.');
-const sourcemapOption = new Option('--sourcemap', 'Generate sourcemap.');
-const runTasksOption = new Option('--runTasks [runTasks...]', 'Run only defined tasks.');
-const outputFilesOption = new Option('--outFile <string>', 'Server out file configuration in es-build.');
-const portOption = new Option('--port <number>', 'Widget server port.');
+const analyzeOption = new Option('--analyze', 'Analyze bundle.');
+const buildFolderOption = new Option('--buildFolder <string>', 'Build folder.');
 const devServerPortOption = new Option('--devServerPort <number>', 'Dev server port.');
-const projectFolderOption = new Option('--projectFolder <string>', 'Project folder.');
-const buildFolderOption = new Option('--buildFolder <string>', 'Build folder.')
-const staticFolderOption = new Option('--staticFolder <string>', 'Static folder.');
-const staticPathOption = new Option('--staticPath <string>', 'The static path for dev server and widget server.');
 const hasRunDevServerOption = new Option('--hasRunDevServer', 'Flag for starting dev server');
 const hasRunWidgetServerOption = new Option('--hasRunWidgetServer', 'Flag for starting widget server');
 const inspectOption = new Option('--inspect', 'Debugging widget server');
+const outputFilesOption = new Option('--outFile <string>', 'Server out file configuration in es-build.');
+const portOption = new Option('--port <number>', 'Widget server port.');
+const projectFolderOption = new Option('--projectFolder <string>', 'Project folder.');
+const quietOption = new Option('--quiet', 'Hide all logs except errors.');
+const runTasksOption = new Option('--runTasks [runTasks...]', 'Run only defined tasks.');
+const silentOption = new Option('--silent', 'Hide all logs.');
+const sourcemapOption = new Option('--sourcemap', 'Generate sourcemap.');
+const staticFolderOption = new Option('--staticFolder <string>', 'Static folder.');
+const staticPathOption = new Option('--staticPath <string>', 'The static path for dev server and widget server.');
+const staticPlaygroundOption = new Option('--staticPlayground <string>', 'Static playground folder.');
+const playgroundPathOption = new Option('--playgroundPath <string>', `Relative path the playground is served at. Set if your 'path' is a RegExp.`);
 const verboseOption = new Option('--verbose', 'Verbose mode which show debug information.');
-const analyzeOption = new Option('--analyze', 'Analyze bundle.');
+const writeToDiskOption = new Option('--writeToDisk', 'Write built files to disk.');
 
 program
   .name('merkur')
@@ -39,20 +44,22 @@ program
 
 program.command(COMMAND_NAME.DEV)
   .description('Dev command')
-  .addOption(writeToDiskOption)
-  .addOption(sourcemapOption)
-  .addOption(runTasksOption)
-  .addOption(outputFilesOption)
-  .addOption(portOption)
-  .addOption(devServerPortOption)
-  .addOption(projectFolderOption)
   .addOption(buildFolderOption)
-  .addOption(staticFolderOption)
-  .addOption(staticPathOption)
+  .addOption(devServerPortOption)
   .addOption(hasRunDevServerOption)
   .addOption(hasRunWidgetServerOption)
   .addOption(inspectOption)
+  .addOption(outputFilesOption)
+  .addOption(portOption)
+  .addOption(projectFolderOption)
+  .addOption(quietOption)
+  .addOption(runTasksOption)
+  .addOption(silentOption)
+  .addOption(sourcemapOption)
+  .addOption(staticFolderOption)
+  .addOption(staticPathOption)
   .addOption(verboseOption)
+  .addOption(writeToDiskOption)
   .action(async (options, cmd) => {
   const args = {
     ...{
@@ -73,15 +80,17 @@ program.command(COMMAND_NAME.DEV)
 program
   .command(COMMAND_NAME.BUILD)
   .description('Build command')
-  .addOption(writeToDiskOption)
-  .addOption(sourcemapOption)
-  .addOption(runTasksOption)
+  .addOption(analyzeOption)
+  .addOption(buildFolderOption)
   .addOption(outputFilesOption)
   .addOption(projectFolderOption)
-  .addOption(buildFolderOption)
+  .addOption(quietOption)
+  .addOption(runTasksOption)
+  .addOption(silentOption)
+  .addOption(sourcemapOption)
   .addOption(staticFolderOption)
-  .addOption(analyzeOption)
   .addOption(verboseOption)
+  .addOption(writeToDiskOption)
   .action(async (options, cmd) => {
   const args = {
     ...{ writeToDisk: true, watch: false, forceLegacy: true }, ...cmd.optsWithGlobals(), ...options
@@ -92,17 +101,40 @@ program
 });
 
 program
+  .command(COMMAND_NAME.BUILD_PLAYGROUND)
+  .addOption(buildFolderOption)
+  .addOption(hasRunWidgetServerOption)
+  .addOption(playgroundPathOption)
+  .addOption(quietOption)
+  .addOption(silentOption)
+  .addOption(staticPlaygroundOption)
+  .addOption(verboseOption)
+  .description('Build a static version of the widget playground')
+  .action(async (options, cmd) => {
+  const args = {
+    ...{ writeToDisk: true, watch: false, hasRunWidgetServer: true, hasRunDevServer: true },
+    ...cmd.optsWithGlobals(),
+    ...options,
+  };
+  process.env.NODE_ENV = process.env.NODE_ENV ?? 'development';
+
+  await buildPlayground({ args, command: COMMAND_NAME.BUILD_PLAYGROUND });
+});
+
+program
   .command(COMMAND_NAME.START)
   .description('Start widget server')
-  .addOption(portOption)
-  .addOption(devServerPortOption)
-  .addOption(projectFolderOption)
   .addOption(buildFolderOption)
-  .addOption(staticFolderOption)
-  .addOption(staticPathOption)
+  .addOption(devServerPortOption)
   .addOption(hasRunDevServerOption)
   .addOption(hasRunWidgetServerOption)
   .addOption(inspectOption)
+  .addOption(portOption)
+  .addOption(projectFolderOption)
+  .addOption(quietOption)
+  .addOption(silentOption)
+  .addOption(staticFolderOption)
+  .addOption(staticPathOption)
   .addOption(verboseOption)
   .action(async (options, cmd) => {
   const args = {
@@ -116,6 +148,8 @@ program
 program
   .command(COMMAND_NAME.TEST)
   .description('Test widget')
+  .addOption(quietOption)
+  .addOption(silentOption)
   .allowUnknownOption()
   .allowExcessArguments()
   .action(async (options, cmd) => {
@@ -132,6 +166,8 @@ program
   .command(COMMAND_NAME.CUSTOM)
   .description('Customize template')
   .addArgument(new Argument('<part>', 'custom part').choices(Object.values(CUSTOM_PART)))
+  .addOption(quietOption)
+  .addOption(silentOption)
   .addOption(verboseOption)
   .allowUnknownOption()
   .allowExcessArguments()
