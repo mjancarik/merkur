@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.44.1](https://github.com/mjancarik/merkur/compare/v0.44.0...v0.44.1) (2025-12-17)
+
+### Bug Fixes
+
+- 🐛 Update templates ([ee7fef3](https://github.com/mjancarik/merkur/commit/ee7fef3246ceca05d8fc669097d9e21feb003503))
+
 # [0.44.0](https://github.com/mjancarik/merkur/compare/v0.43.1...v0.44.0) (2025-12-17)
 
 ### Features
