@@ -16,7 +16,6 @@
     "./lib/index.es9.mjs": "./lib/index.es9.mjs",
     "./lib/index.es9.cjs": "./lib/index.es9.cjs",
     "./server": "./server/index.js",
-    "./server/": "./server/index.js",
     "./server/index.js": "./server/index.js"
   },
   "browser": {

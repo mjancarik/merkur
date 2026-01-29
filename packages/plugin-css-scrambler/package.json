@@ -17,7 +17,6 @@
     "./postcss/": "./postcss/index.js",
     "./postcss/index.js": "./postcss/index.js",
     "./server": "./server/index.js",
-    "./server/": "./server/index.js",
     "./server/index.js": "./server/index.js"
   },
   "browser": {
