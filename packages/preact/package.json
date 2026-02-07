@@ -12,7 +12,6 @@
   "exports": {
     "./entries/client.js": "./entries/client.js",
     "./entries/server.js": "./entries/server.js",
-    "./webpack": "./webpack/index.js",
     "./cli": "./cli/index.mjs",
     "./client": {
       "types": "./lib/client/client.d.ts",
@@ -45,14 +44,11 @@
     "access": "public"
   },
   "dependencies": {
-    "@babel/preset-react": "^7.28.5",
     "preact": "^10.27.2",
     "preact-render-to-string": "^6.6.3"
   },
   "peerDependencies": {
     "@merkur/core": ">=0.34",
-    "@merkur/plugin-component": ">=0.34",
-    "@merkur/tool-webpack": ">=0.28",
-    "babel-loader": ">=9"
+    "@merkur/plugin-component": ">=0.34"
   }
 }
