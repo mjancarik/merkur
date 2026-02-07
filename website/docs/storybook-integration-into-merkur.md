@@ -8,69 +8,117 @@ description: Learn how to integrate Storybook with your Merkur widget
 
 [Storybook](https://storybook.js.org/) is an open source tool for developing UI components in isolation for React, Vue, Angular, and more. It makes building stunning UIs organized and efficient.
 
+This guide requires Storybook version 9 or higher. Lower versions need a different setup, which is covered in previous versions of the documentation.
+
 ## Installation
 
-At first we must install storybook to our Merkur project. The best way is using the [Storybook CLI](https://storybook.js.org/docs/react/get-started/install) to install it in a single command.
+Since Preact and vanilla JavaScript are not in the automatic framework selection, you need to manually install Storybook packages.
+
+### For Preact Widgets
 
 ```bash
-npx storybook@latest init
+npm i -D @storybook/preact-vite storybook
 ```
 
-After that we install merkur module for easy integration.
+### For Vanilla JavaScript Widgets
 
 ```bash
-npm i @merkur/tool-storybook --save-dev
+npm i -D @storybook/html-vite storybook
 ```
 
-Now we must update storybook file `./storybook/preview.js` similarly to the example below.
+### Merkur Integration Package
+
+Then install the Merkur module for easy integration (required for both):
+
+```bash
+npm i -D @merkur/tool-storybook
+```
+
+## Configuration
+
+### Preact Widget
+
+For Preact widgets, configure Storybook to use the Preact framework and JSX transformation.
+
+#### `.storybook/main.mjs`
 
 ```javascript
-// ./storybook/preview.js
-import { createPreactWidget } from '@merkur/preact/client';
+const config = {
+  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  framework: {
+    name: '@storybook/preact-vite',
+  },
+  // Configure Vite to transform JSX to Preact's `h` function instead of React's `React.createElement`
+  // This automatically injects Preact imports so you don't need to import h and Fragment in every file
+  async viteFinal(config) {
+    config.esbuild = {
+      jsxFactory: 'h',
+      jsxFragment: 'Fragment',
+      jsxInject: `import { h, Fragment } from 'preact'`,
+    };
+    return config;
+  },
+};
 
-// helper method for creating storybook loader, which async creates our widget instance.
-import { createWidgetLoader } from '@merkur/tool-storybook';
+export default config;
+```
 
-// Imports for updating storybook playground.
-import { FORCE_RE_RENDER } from '@storybook/core-events';
-import { addons } from '@storybook/preview-api';
+#### `.storybook/preview.mjs`
 
-import WidgetContext from '../src/components/WidgetContext';
-// receive widget properties for creating our Merkur widget instance
-import widgetProperties from '../src/widget';
+```javascript
+import { createPreviewConfig } from '@merkur/tool-storybook';
+import widgetProperties from '../src/widget.js';
+import { decorators } from './decorators.jsx';
+import '../src/style.css';
 
-// register our widget to Merkur
-createPreactWidget(widgetProperties);
-
-// defined our custom widget loader
-export const loaders = [
-  createWidgetLoader({
-    render: () => {
-      addons.getChannel().emit(FORCE_RE_RENDER); // widget must be able to update the storybook playground
+const preview = {
+  ...createPreviewConfig({
+    widgetProperties,
+    render(widget) {
+      // This is called by the widget's update lifecycle
+      // Trigger the forceUpdate stored on the widget by the decorator
+      if (widget?.$in?._storybookForceUpdate) {
+        widget.$in._storybookForceUpdate();
+      }
     },
-    widgetProperties, // created widget properties
-  })
-];
+  }),
+  decorators,
+};
 
-// if you need Context in React or Preact widget you must define Context Provider.
+export default preview;
+```
+
+#### `.storybook/decorators.jsx`
+
+Create a decorators file to provide the WidgetContext to all stories and handle re-rendering on widget state updates:
+
+```jsx
+import { useState, useEffect } from 'preact/hooks';
+import WidgetContext from '../src/components/WidgetContext';
+
 export const decorators = [
-   (Story, { loaded: { widget }}) => {
-    return (
-      <WidgetContext.Provider value={widget}>
-        <Story />
-      </WidgetContext.Provider>
-    );
+  (Story, { loaded: { widget } }) => {
+    const [, forceUpdate] = useState(0);
+
+    useEffect(() => {
+      if (widget && widget.$in) {
+        // Store the forceUpdate function on the widget so the render callback can trigger it
+        widget.$in._storybookForceUpdate = () => forceUpdate((n) => n + 1);
+      }
+    }, [widget]);
+
+    return h(WidgetContext.Provider, { value: widget }, h(Story));
   },
 ];
 ```
 
-> Note: If you use any pre-processors (webpack loaders) for building CSS styles you should also define then in `webpackFinal` function by extending given `config` object. More on that topic can be found in [official Storybook documentation](https://storybook.js.org/docs/react/configure/styling-and-css).
+Note: The `h` and `Fragment` functions are automatically injected by the Vite configuration in `main.mjs`, so you don't need to import them in `.jsx` files.
 
-That's all. Now we can write our stories.
+### Vanilla JavaScript Widget
 
-## How to write stories
+For vanilla JavaScript widgets that render HTML strings, configure Storybook to use the HTML framework.
 
-You can use every [format](https://storybook.js.org/docs/react/writing-stories/introduction) which Storybook offers. For example we pick up `named exports` format and our counter component from demo page for `Preact` preview.
+#### `.storybook/main.mjs`
 
 ```javascript
 // /src/components/Counter.jsx
@@ -89,22 +137,23 @@ export default function Counter({ counter }) {
     </div>
   );
 }
+```
 
 // /src/components/Counter.stories.jsx
 import Counter from './Counter';
 
 export default {
-  title: 'Counter',
+  title: 'Components/Counter',
   args: {
     // Every Merkur story must have defined props property
     widget: {
       props: {},
-    }
+    },
   },
 };
 
 const Template = (args, { loaded: { widget } }) => {
-  return <Counter counter={widget.state.counter} />
+  return <Counter counter={widget.state.counter} />;
 };
 
 export const DefaultCounter = Template.bind({});
@@ -116,9 +165,151 @@ TenCounter.args = {
     // change default widget state from 0 to 10
     state: {
       counter: 10,
-      }
-  }
+    },
+  },
 };
 ```
 
-Now run command `npm run storybook` and you will see our Counter component with two settings.
+The decorator handles:
+- Providing `WidgetContext` to all components
+- Re-rendering when widget state changes (e.g., when clicking buttons)
+- Proper cleanup between story navigation
+
+### Vanilla JavaScript Widget Stories
+
+For vanilla widgets that return HTML strings:
+
+```javascript
+// /src/components/Counter.js
+export default function Counter(widget) {
+  return `
+    <div>
+      <h3>Counter widget:</h3>
+      <p>Count: <span data-merkur="counter">${widget.state.counter}</span></p>
+      <button data-merkur="on-increase">
+        increase counter
+      </button>
+      <button data-merkur="on-reset">
+        reset counter
+      </button>
+    </div>
+  `;
+}
+```
+
+**Note:** Vanilla components return HTML strings, so use `class` for CSS classes, not `className` (which is JSX-specific). For example: `<div class="my-class">` not `<div className="my-class">`.
+
+```javascript
+// /src/components/__tests__/Counter.stories.js
+import Counter from '../Counter';
+
+export default {
+  title: 'Components/Counter',
+  args: {
+    // Every Merkur story must have defined props property
+    widget: {
+      props: {},
+    },
+    // Specify which component to render
+    component: Counter,
+  },
+};
+
+// Simple story without custom args
+export const DefaultCounter = {};
+
+// Story with custom widget state
+export const TenCounter = {
+  args: {
+    widget: {
+      props: {},
+      // change default widget state from 0 to 10
+      state: {
+        counter: 10,
+      },
+    },
+  },
+};
+```
+
+The `createVanillaRenderer` in `preview.mjs` handles all the DOM creation and rendering automatically. You just need to:
+1. Import your component
+2. Add it to the `ViewComponent` map in `preview.mjs`
+3. Specify `component: YourComponent` in story args
+
+#### Custom Render Functions
+
+For stories that need custom logic (e.g., overriding specific widget properties), you can provide a custom render function:
+
+```javascript
+export const CustomWidget = {
+  render: (args, { loaded: { widget } }) => {
+    const container = document.createElement('div');
+    container.innerHTML = WidgetDescription({
+      ...widget,
+      name: args.name,
+      version: args.version,
+    });
+    return container;
+  },
+  args: {
+    name: 'my-custom-widget',
+    version: '2.0.0',
+  },
+};
+```
+
+## Running Storybook
+
+Start Storybook with:
+
+```bash
+npm run storybook
+```
+
+You will see your Counter component with different configurations in the Storybook UI. When you click buttons that modify the widget state, the component will automatically re-render thanks to the decorator's state management.
+
+## How Widget State Updates Work
+
+### Preact Widgets
+
+The setup ensures that when widget state changes (e.g., clicking a button):
+
+1. The widget's event handler (like `onClick`) updates the widget state
+2. The widget's `update` lifecycle method is triggered
+3. The `render()` callback in `preview.mjs` is called
+4. This triggers the `forceUpdate` function stored by the decorator
+5. Preact re-renders the story with the updated widget state
+
+This provides a seamless experience where interactive components work correctly in Storybook.
+
+### Vanilla Widgets
+
+For vanilla widgets with interactive elements:
+
+1. The widget's event handler updates the widget state
+2. The widget's `update` lifecycle method is triggered
+3. The `renderer.update()` callback (passed to `createPreviewConfig`) is called
+4. `createVanillaRenderer` re-renders the container with updated HTML
+5. The `bindEvents` function re-attaches all event listeners
+
+The `bindEvents` function is crucial for vanilla widgets as it reconnects event listeners after each re-render.
+
+## Key Differences
+
+- **Preact widgets**: 
+  - Use `.jsx` extension and JSX syntax
+  - Decorators provide context and handle re-rendering
+  - Stories use CSF3 format with `Template.bind({})`
+  - Components receive individual props
+  
+- **Vanilla widgets**:
+  - Use `.js` extension, components return HTML strings  
+  - `createVanillaRenderer` handles rendering and re-rendering
+  - Stories use simple CSF3 format with `component` in args
+  - Components receive full widget object
+  - Require `bindEvents` function for interactive elements
+  - Must use `class` not `className` in HTML strings
+  
+- **Framework config**: Preact uses `@storybook/preact-vite`, vanilla uses `@storybook/html-vite`
+- **State management**: Both setups include automatic re-rendering on widget state updates
