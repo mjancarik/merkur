@@ -4,10 +4,12 @@
   "description": "Merkur plugin for error handling.",
   "main": "lib/index",
   "module": "lib/index",
+  "types": "./types.d.ts",
   "unpkg": "lib/index.umd.js",
   "sideEffects": false,
   "exports": {
     ".": {
+      "types": "./types.d.ts",
       "import": "./lib/index.mjs",
       "require": "./lib/index.cjs"
     },

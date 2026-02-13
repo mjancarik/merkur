@@ -1,4 +1,7 @@
 import { WidgetState } from '@merkur/plugin-component';
+import { Widget, WidgetPlugin } from '@merkur/core';
+import { ComponentChildren } from 'preact';
+
 type Selector<
   D = null,
   R extends Record<string, unknown> = Record<string, unknown>,
@@ -8,6 +11,9 @@ type Intersection<
     [K in keyof T]: T[K];
   },
 > = T extends [infer Head, ...infer Tail] ? Head & Intersection<Tail> : unknown;
+
+export declare function selectPlugin(): WidgetPlugin;
+
 export declare function useSelect<
   D,
   R extends Record<string, any>[],
@@ -40,3 +46,12 @@ export declare function createStateSelector<
   > & {
     clearCache: () => void;
   };
+
+export interface SelectProviderProps {
+  widget: Widget;
+  children?: ComponentChildren;
+}
+
+export declare function SelectProvider(props: SelectProviderProps): any;
+
+export declare const SelectContext: any;
