@@ -99,10 +99,7 @@ function createVanillaRenderer(options) {
   let currentViewFunction = null;
 
   function getViewFunction(args, ViewComponent) {
-    if (typeof ViewComponent === 'function') {
-      return ViewComponent;
-    }
-
+    // Check args first to allow overriding
     if (args.viewComponent && ViewComponent[args.viewComponent]) {
       return ViewComponent[args.viewComponent];
     }
@@ -111,6 +108,11 @@ function createVanillaRenderer(options) {
       return typeof args.component === 'function'
         ? args.component
         : ViewComponent[args.component];
+    }
+
+    // Fall back to ViewComponent
+    if (typeof ViewComponent === 'function') {
+      return ViewComponent;
     }
 
     return ViewComponent.default || ViewComponent;
