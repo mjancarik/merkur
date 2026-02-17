@@ -107,7 +107,11 @@ export const decorators = [
       }
     }, [widget]);
 
-    return h(WidgetContext.Provider, { value: widget }, h(Story));
+    return (
+      <WidgetContext.Provider value={widget}>
+        <Story />
+      </WidgetContext.Provider>
+    );
   },
 ];
 ```
