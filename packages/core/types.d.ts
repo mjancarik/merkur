@@ -13,6 +13,7 @@ export interface SourceAsset extends BaseWidgetAsset {
   source: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface WidgetDependencies {}
 
 export interface WidgetProperties {
@@ -38,7 +39,9 @@ export interface WidgetDefinition {
 export interface WidgetPartial extends WidgetDefinition {}
 
 export interface WidgetParams {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface WidgetInternal {}
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface WidgetExternal {}
 
 export interface WidgetPlugin {
@@ -75,6 +78,7 @@ export interface Merkur {
 /**
  * Merkur API types
  */
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface CreateMerkurWidgetArgs {}
 export declare function createMerkurWidget<
   T extends WidgetDefinition & CreateMerkurWidgetArgs,
@@ -106,3 +110,27 @@ export declare function hookMethod(
   handler: (widget: Widget, originalFunction: any, ...args: any[]) => any,
 ): Promise<void>;
 
+export declare function assignMissingKeys<T extends object>(
+  target: T,
+  ...sources: Partial<T>[]
+): T;
+
+export declare function setDefaultValueForUndefined<T extends object>(
+  object: T,
+  keys: (keyof T)[],
+  value?: any,
+): T;
+
+export declare function bindWidgetToFunctions(
+  widget: Widget,
+  target?: any,
+): void;
+
+export declare function isFunction(
+  value: any,
+): value is (...args: any[]) => any;
+
+export declare function isUndefined(value: any): value is undefined;
+
+export declare function getMerkur(): Merkur;
+export declare function removeMerkur(): void;

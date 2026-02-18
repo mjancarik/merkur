@@ -1,13 +1,15 @@
 {
   "name": "@merkur/plugin-http-client",
-  "version": "0.44.0",
+  "version": "0.45.0",
   "description": "Merkur event emitter plugin.",
   "main": "lib/index",
   "module": "lib/index",
+  "types": "./types.d.ts",
   "unpkg": "lib/index.umd.js",
   "sideEffects": false,
   "exports": {
     ".": {
+      "types": "./types.d.ts",
       "import": "./lib/index.mjs",
       "require": "./lib/index.cjs"
     },
@@ -48,7 +50,7 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.44.0"
+    "@merkur/core": "^0.45.0"
   },
   "peerDependencies": {
     "@merkur/core": "*"

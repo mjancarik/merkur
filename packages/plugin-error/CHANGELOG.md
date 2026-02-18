@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.45.0](https://github.com/mjancarik/merkur/compare/v0.44.1...v0.45.0) (2026-02-01)
+
+### Bug Fixes
+
+- 🐛 remove non-standard exports which cause error in next.js ([1c42f80](https://github.com/mjancarik/merkur/commit/1c42f80d888283d89b9b9fcac1c3c7680becda1e))
+
 # [0.44.0](https://github.com/mjancarik/merkur/compare/v0.43.1...v0.44.0) (2025-12-17)
 
 **Note:** Version bump only for package @merkur/plugin-error

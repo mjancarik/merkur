@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-css-scrambler",
-  "version": "0.44.0",
+  "version": "0.45.0",
   "description": "Merkur plugin for scrambling CSS classes.",
   "main": "lib/index",
   "module": "lib/index",
@@ -17,7 +17,6 @@
     "./postcss/": "./postcss/index.js",
     "./postcss/index.js": "./postcss/index.js",
     "./server": "./server/index.js",
-    "./server/": "./server/index.js",
     "./server/index.js": "./server/index.js"
   },
   "browser": {
