@@ -1,4 +1,5 @@
 import { WidgetState } from '@merkur/plugin-component';
+import { WidgetPlugin } from '@merkur/core';
 type Selector<
   D = null,
   R extends Record<string, unknown> = Record<string, unknown>,
@@ -40,3 +41,4 @@ export declare function createStateSelector<
   > & {
     clearCache: () => void;
   };
+export declare function selectPlugin(): WidgetPlugin;

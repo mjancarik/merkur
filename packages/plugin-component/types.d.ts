@@ -33,13 +33,16 @@ declare module '@merkur/core' {
     viewFactory: ViewFactory;
   }
 
-  interface Widget {
+  interface WidgetDefinition {    
     container?: Element;
-    shouldHydrate: (viewArgs: MapViewArgs) => boolean;
-    mount: () => Promise<void | SSRMountResult>;
-    update: () => Promise<void>;
-    unmount: () => Promise<void>;
-    slot: Record<
+    shouldHydrate?: (widget: Widget, viewArgs: MapViewArgs) => boolean;
+    mount?: (widget: Widget) => Promise<void | SSRMountResult>;
+    update?: (widget: Widget) => Promise<void>;
+    unmount?: (widget: Widget) => Promise<void>;
+  }
+
+  interface WidgetPartial {
+      slot: Record<
       string,
       | {
           name: string;
@@ -52,19 +55,12 @@ declare module '@merkur/core' {
     state: WidgetState;
     props: WidgetProps;
   }
-
-  interface WidgetDefinition {
-    shouldHydrate: (widget: Widget, viewArgs: MapViewArgs) => boolean;
-    mount: (widget: Widget) => Promise<void | SSRMountResult>;
-    update: (widget: Widget) => Promise<void>;
-    unmount: (widget: Widget) => Promise<void>;
-  }
   interface WidgetInternal {
     component: {
-      lifeCycle: Record<string, function>;
+      lifeCycle: Record<string, Function>;
       isMounted: boolean;
       isHydrated: boolean;
-      suspendedTasks: Array<function>;
+      suspendedTasks: Array<Function>;
       resolvedViews: Map<ViewFactory, MapViewArgs[]>;
     };
   }
@@ -106,4 +102,4 @@ export declare function createViewFactory(
   creator: (widget: Widget) => ViewDefinition | Promise<ViewDefinition>,
 ): ViewFactory;
 
-export declare function componentPlugin();
+export declare function componentPlugin(): WidgetPlugin;
