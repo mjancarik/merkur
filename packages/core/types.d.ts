@@ -27,7 +27,6 @@ export interface WidgetDefinition {
   version: string;
   containerSelector?: string;
   assets?: (WidgetAsset | SourceAsset)[];
-  $in?: WidgetInternal;
   $external?: WidgetExternal;
   $dependencies?: WidgetDependencies;
   $plugins?: Array<() => WidgetPlugin>;
@@ -35,8 +34,12 @@ export interface WidgetDefinition {
   setup?: WidgetFunction;
 }
 
-// Type used during initialization (setup() method etc)
-export interface WidgetPartial extends WidgetDefinition {}
+// Type used during initialization within `createMerkurWidget()`
+// it initializes some properties (= they're not optional anymore)
+type WidgetWithRequiredIntermediary = WidgetDefinition & Required<Pick<WidgetDefinition, '$dependencies' | '$external' | 'create' | 'setup'>>;
+export interface WidgetPartial extends WidgetWithRequiredIntermediary {
+  $in: WidgetInternal;
+}
 
 export interface WidgetParams {}
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type

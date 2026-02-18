@@ -2,7 +2,6 @@ import { WidgetState } from '@merkur/plugin-component';
 import { Widget, WidgetPlugin } from '@merkur/core';
 import { ComponentChildren } from 'preact';
 
-import { WidgetPlugin } from '@merkur/core';
 type Selector<
   D = null,
   R extends Record<string, unknown> = Record<string, unknown>,
