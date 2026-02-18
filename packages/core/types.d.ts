@@ -27,7 +27,6 @@ export interface WidgetDefinition {
   version: string;
   containerSelector?: string;
   assets?: (WidgetAsset | SourceAsset)[];
-  $in?: WidgetInternal;
   $external?: WidgetExternal;
   $dependencies?: WidgetDependencies;
   $plugins?: Array<() => WidgetPlugin>;
@@ -35,8 +34,12 @@ export interface WidgetDefinition {
   setup?: WidgetFunction;
 }
 
-// Type used during initialization (setup() method etc)
-export interface WidgetPartial extends WidgetDefinition {}
+// Type used during initialization within `createMerkurWidget()`
+// it initializes some properties (= they're not optional anymore)
+type WidgetWithRequiredIntermediary = WidgetDefinition & Required<Pick<WidgetDefinition, '$dependencies' | '$external' | 'create' | 'setup'>>;
+export interface WidgetPartial extends WidgetWithRequiredIntermediary {
+  $in: WidgetInternal;
+}
 
 export interface WidgetParams {}
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
@@ -87,12 +90,14 @@ export declare function createMerkurWidget<
 // `createMerkurWidget()` binds all WidgetFunctions to the widget instance using `bindWidgetToFunctions()`
 // This series of types replicates that for the typing. 
 type TupleTail<T extends any[]> = T extends [any, ...infer Rest] ? Rest : never;
-type FunctionLike = (...args: any[]) => any;
-type BoundWidgetFunction<T extends FunctionLike> = (...args: TupleTail<Parameters<T>>) => ReturnType<T>;
-type BoundWidget<T> = {
+type FunctionLike = (widget: WidgetPartial, ...args: any[]) => any;
+type BoundWidgetFunction<T extends FunctionLike> = (
+  ...args: TupleTail<Parameters<T>>
+) => ReturnType<T>;
+export type WithBoundWidgetFunctions<T> = {
   [K in keyof T]: T[K] extends FunctionLike ? BoundWidgetFunction<T[K]> : T[K];
-}
-export interface Widget extends BoundWidget<WidgetPartial> {}
+};
+export interface Widget extends WithBoundWidgetFunctions<WidgetPartial> {}
 
 export type MerkurCreate = (
   widgetProperties: WidgetProperties,
