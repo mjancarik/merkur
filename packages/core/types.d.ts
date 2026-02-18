@@ -27,7 +27,6 @@ export interface WidgetDefinition {
   version: string;
   containerSelector?: string;
   assets?: (WidgetAsset | SourceAsset)[];
-  $in?: WidgetInternal;
   $external?: WidgetExternal;
   $dependencies?: WidgetDependencies;
   $plugins?: Array<() => WidgetPlugin>;
@@ -35,8 +34,13 @@ export interface WidgetDefinition {
   setup?: WidgetFunction;
 }
 
-// Type used during initialization (setup() method etc)
-export interface WidgetPartial extends WidgetDefinition {}
+// Type used during initialization within `createMerkurWidget()`
+// it initializes some properties (= they're not optional anymore)
+
+export interface WidgetPartial extends WidgetDefinition, Required<Pick<WidgetDefinition, '$dependencies' | '$external' | 'create' | 'setup'>> {
+  $in: WidgetInternal;
+  slot: Record<any, any>; // @merkur/core knows (incorrectly?) about slot and initializes it to an empty object.
+}
 
 export interface WidgetParams {}
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
