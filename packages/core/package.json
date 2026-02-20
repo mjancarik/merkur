@@ -1,6 +1,6 @@
 {
   "name": "@merkur/core",
-  "version": "0.45.0",
+  "version": "0.46.0-rc.0",
   "description": "Merkur is tiny and extensible library for creating front-end microservices.",
   "main": "lib/index",
   "module": "lib/index",
