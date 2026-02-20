@@ -1,7 +1,7 @@
 import { Widget } from '@merkur/core';
 
 export interface ViewType {
-  (widget: Widget): any;
+  (widget: WidgetPartial): any;
 }
 
 export type MapViewArgs = {
@@ -22,7 +22,10 @@ export type MapViewArgs = {
 
 export type SSRMountResult = {
   html: string;
-  slot: Record<string, { name: string; html: string, containerSelector?: string }>;
+  slot: Record<
+    string,
+    { name: string; html: string; containerSelector?: string }
+  >;
 };
 
 export interface WidgetState {}
@@ -33,12 +36,17 @@ declare module '@merkur/core' {
     viewFactory: ViewFactory;
   }
 
-  interface Widget {
+  interface WidgetDefinition {
+    bootstrap?: (widget: WidgetPartial) => void;
     container?: Element;
-    shouldHydrate: (viewArgs: MapViewArgs) => boolean;
-    mount: () => Promise<void | SSRMountResult>;
-    update: () => Promise<void>;
-    unmount: () => Promise<void>;
+    info?: (widget: WidgetPartial) => Promise<void>;
+    mount?: (widget: WidgetPartial) => Promise<void | SSRMountResult>;
+    shouldHydrate?: (widget: WidgetPartial, viewArgs: MapViewArgs) => boolean;
+    update?: (widget: WidgetPartial) => Promise<void>;
+    unmount?: (widget: WidgetPartial) => Promise<void>;
+  }
+
+  interface WidgetPartial {
     slot: Record<
       string,
       | {
@@ -51,20 +59,14 @@ declare module '@merkur/core' {
     >;
     state: WidgetState;
     props: WidgetProps;
-  }
-
-  interface WidgetDefinition {
-    shouldHydrate: (widget: Widget, viewArgs: MapViewArgs) => boolean;
-    mount: (widget: Widget) => Promise<void | SSRMountResult>;
-    update: (widget: Widget) => Promise<void>;
-    unmount: (widget: Widget) => Promise<void>;
+    setState: (newState: WidgetState) => void;
   }
   interface WidgetInternal {
     component: {
-      lifeCycle: Record<string, function>;
+      lifeCycle: Record<string, MerkurWidgetFunction>;
       isMounted: boolean;
       isHydrated: boolean;
-      suspendedTasks: Array<function>;
+      suspendedTasks: Array<() => Promise<void>>;
       resolvedViews: Map<ViewFactory, MapViewArgs[]>;
     };
   }
@@ -91,19 +93,19 @@ export interface ViewFactoryResult {
 
 export interface ViewFactorySlotType {
   name: string;
-  containerSelector?: string, 
+  containerSelector?: string;
   View: ViewType;
 }
 
 export type ViewFactory = (widget: Widget) => Promise<ViewFactoryResult>;
-export type SlotFactory = (widget: Widget) => Promise<SlotDefinition>;
+export type SlotFactory = (widget: WidgetPartial) => Promise<SlotDefinition>;
 
 export declare function createSlotFactory(
-  creator: (widget: Widget) => SlotDefinition | Promise<SlotDefinition>,
+  creator: (widget: WidgetPartial) => SlotDefinition | Promise<SlotDefinition>,
 ): SlotFactory;
 
 export declare function createViewFactory(
-  creator: (widget: Widget) => ViewDefinition | Promise<ViewDefinition>,
+  creator: (widget: WidgetPartial) => ViewDefinition | Promise<ViewDefinition>,
 ): ViewFactory;
 
-export declare function componentPlugin();
+export declare function componentPlugin(): WidgetPlugin;

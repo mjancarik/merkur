@@ -16,31 +16,32 @@ export interface SourceAsset extends BaseWidgetAsset {
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface WidgetDependencies {}
 
-export interface Widget {
-  name: string;
-  version: string;
-  containerSelector?: string;
-  $in: WidgetInternal;
-  $external: WidgetExternal;
-  $dependencies: WidgetDependencies;
-  $plugins: WidgetPlugin[];
-}
-
 export interface WidgetProperties {
   name: string;
   version: string;
 }
 
+// Type for the widget config object passed to `defineWidget()`
 export interface WidgetDefinition {
-  assets: (WidgetAsset | SourceAsset)[];
+  name: string;
+  version: string;
+  containerSelector?: string;
+  assets?: (WidgetAsset | SourceAsset)[];
+  $external?: WidgetExternal;
+  $dependencies?: WidgetDependencies;
   $plugins?: Array<() => WidgetPlugin>;
-  $external: WidgetExternal;
-  $dependencies: WidgetDependencies;
   create?: WidgetFunction;
   setup?: WidgetFunction;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+// Type used during initialization within `createMerkurWidget()`
+// it initializes some properties (= they're not optional anymore)
+
+export interface WidgetPartial extends WidgetDefinition, Required<Pick<WidgetDefinition, '$dependencies' | '$external' | 'create' | 'setup'>> {
+  $in: WidgetInternal;
+  slot: Record<any, any>; // @merkur/core knows (incorrectly?) about slot and initializes it to an empty object.
+}
+
 export interface WidgetParams {}
 // eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface WidgetInternal {}
@@ -53,13 +54,9 @@ export interface WidgetPlugin {
 }
 
 export type WidgetFunction = (
-  widget: Partial<Widget>,
+  widget: WidgetPartial,
   ...rest: unknown[]
-) => Promise<Partial<Widget>> | Partial<Widget>;
-
-export type MerkurCreate = (
-  widgetProperties: WidgetProperties,
-) => Promise<Widget>;
+) => Promise<WidgetPartial> | WidgetPartial;
 
 export type WidgetCreate = (widgetParams: WidgetParams) => Promise<Widget>;
 
@@ -91,7 +88,20 @@ export declare function createMerkurWidget<
   T extends WidgetDefinition & CreateMerkurWidgetArgs,
 >(widgetDefinition: T): Widget;
 
-// eslint-disable-next-line @typescript-eslint/no-empty-object-type
+// `createMerkurWidget()` binds all WidgetFunctions to the widget instance using `bindWidgetToFunctions()`
+// This series of types replicates that for the typing. 
+type TupleTail<T extends any[]> = T extends [any, ...infer Rest] ? Rest : never;
+type FunctionLike = (...args: any[]) => any;
+type BoundWidgetFunction<T extends FunctionLike> = (...args: TupleTail<Parameters<T>>) => ReturnType<T>;
+type BoundWidget<T> = {
+  [K in keyof T]: T[K] extends FunctionLike ? BoundWidgetFunction<T[K]> : T[K];
+}
+export interface Widget extends BoundWidget<WidgetPartial> {}
+
+export type MerkurCreate = (
+  widgetProperties: WidgetProperties,
+) => Promise<Widget>;
+
 export interface DefineWidgetArgs {}
 export declare function defineWidget<
   T extends WidgetDefinition & WidgetProperties & DefineWidgetArgs,

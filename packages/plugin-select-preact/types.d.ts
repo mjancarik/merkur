@@ -55,3 +55,4 @@ export interface SelectProviderProps {
 export declare function SelectProvider(props: SelectProviderProps): any;
 
 export declare const SelectContext: any;
+export declare function selectPlugin(): WidgetPlugin;
