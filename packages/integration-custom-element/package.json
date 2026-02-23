@@ -50,7 +50,7 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.45.0",
+    "@merkur/core": "^0.46.0-rc.0",
     "@merkur/integration": "^0.45.0"
   },
   "peerDependencies": {
