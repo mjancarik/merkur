@@ -47,9 +47,9 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@babel/preset-react": "^7.18.6",
-    "@merkur/core": "^0.46.0-rc.0",
-    "@merkur/plugin-component":  "^0.46.0-rc.0",
-    "@merkur/plugin-event-emitter":  "^0.46.0-rc.0",
+    "@merkur/core": "^0.46.0-rc.1",
+    "@merkur/plugin-component":  "^0.46.0-rc.1",
+    "@merkur/plugin-event-emitter":  "^0.46.0-rc.1",
     "@rollup/plugin-commonjs": "^25.0.0",
     "@rollup/plugin-replace": "^5.0.2",
     "cheerio": "1.0.0-rc.12",
