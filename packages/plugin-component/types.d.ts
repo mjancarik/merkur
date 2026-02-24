@@ -1,4 +1,9 @@
-import { type Widget, type WidgetFunction, type WidgetPartial, type WidgetPlugin } from '@merkur/core';
+import {
+  type Widget,
+  type WidgetFunction,
+  type WidgetPartial,
+  type WidgetPlugin,
+} from '@merkur/core';
 
 export interface ViewType {
   (widget: WidgetPartial): any;
@@ -69,7 +74,6 @@ export declare function createViewFactory(
 
 export declare function componentPlugin(): WidgetPlugin;
 
-
 declare module '@merkur/core' {
   interface DefineWidgetArgs {
     viewFactory: ViewFactory;
@@ -87,6 +91,16 @@ declare module '@merkur/core' {
     shouldHydrate?: (widget: WidgetPartial, viewArgs: MapViewArgs) => boolean;
     update?: (widget: WidgetPartial) => Promise<void>;
     unmount?: (widget: WidgetPartial) => Promise<void>;
+  }
+
+  interface RequiredWidgetKeys {
+    bootstrap: unknown;
+    container: unknown;
+    info: unknown;
+    mount: unknown;
+    shouldHydrate: unknown;
+    update: unknown;
+    unmount: unknown;
   }
 
   interface WidgetPartial {
