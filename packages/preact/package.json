@@ -50,8 +50,8 @@
     "preact-render-to-string": "^6.6.3"
   },
   "peerDependencies": {
-    "@merkur/core": ">=0.34",
-    "@merkur/plugin-component": ">=0.34",
+    "@merkur/core": "^0.46.0-rc.3",
+    "@merkur/plugin-component": "^0.46.0-rc.3",
     "@merkur/tool-webpack": ">=0.28",
     "babel-loader": ">=9"
   }
