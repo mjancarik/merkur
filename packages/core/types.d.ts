@@ -34,9 +34,17 @@ export interface WidgetDefinition {
   setup?: WidgetFunction;
 }
 
+export interface RequiredWidgetKeys {
+  $dependencies: unknown;
+  $external: unknown;
+  create: WidgetFunction;
+  setup: WidgetFunction;
+}
+
 // Type used during initialization within `createMerkurWidget()`
-// it initializes some properties (= they're not optional anymore)
-type WidgetWithRequiredIntermediary = WidgetDefinition & Required<Pick<WidgetDefinition, '$dependencies' | '$external' | 'create' | 'setup'>>;
+// many properties are initialized with defaults, so we can rely on them being present
+type WidgetWithRequiredIntermediary = WidgetDefinition &
+  Required<Pick<WidgetDefinition, keyof RequiredWidgetKeys>>;
 export interface WidgetPartial extends WidgetWithRequiredIntermediary {
   $in: WidgetInternal;
 }
@@ -88,7 +96,7 @@ export declare function createMerkurWidget<
 >(widgetDefinition: T): Widget;
 
 // `createMerkurWidget()` binds all WidgetFunctions to the widget instance using `bindWidgetToFunctions()`
-// This series of types replicates that for the typing. 
+// This series of types replicates that for the typing.
 type TupleTail<T extends any[]> = T extends [any, ...infer Rest] ? Rest : never;
 type FunctionLike = (widget: WidgetPartial, ...args: any[]) => any;
 type BoundWidgetFunction<T extends FunctionLike> = (
