@@ -53,10 +53,12 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.23.12"
+    "@merkur/core": "^0.45.0",
+    "@merkur/plugin-component": "^0.45.0"
   },
   "peerDependencies": {
     "@merkur/core": "*",
+    "@merkur/plugin-component": "*",
     "postcss": "^8.4.23",
     "postcss-loader": "^7.3.0"
   },
