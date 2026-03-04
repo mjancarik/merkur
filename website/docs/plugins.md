@@ -70,3 +70,8 @@ const widget = createMerkurWidget(widgetProperties);
 We created `debugPlugin` which adds `debug` method in the `setup` lifecycle method and adds tracking to all widget methods in the `create` lifecycle method. We used our new plugin in the `$plugins` property of a specific widget.
 
 Merkur has only several predefined plugins [componentPlugin](/docs/component-plugin), [eventEmitterPlugin](/docs/event-emitter-plugin), [httpClientPlugin](/docs/http-client-plugin), [errorPlugin](/docs/error-plugin) and [graphqlClientPlugin](/docs/graphql-client-plugin).
+
+
+## TypeScript
+
+If you intend to write your plugin in TS or type it using type definition files, read [how Merkur is typed](/docs/merkur-and-typescript).

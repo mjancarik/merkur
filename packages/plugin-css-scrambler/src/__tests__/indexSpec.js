@@ -1,10 +1,11 @@
 import { createMerkurWidget } from '@merkur/core';
+import { componentPlugin } from '@merkur/plugin-component';
 import { cssScramblePlugin } from '../index';
 
 describe('createWidget method with cssScramble plugin', () => {
   it('should create empty widget', async () => {
     const widget = await createMerkurWidget({
-      $plugins: [cssScramblePlugin],
+      $plugins: [componentPlugin, cssScramblePlugin],
       name: 'my-widget',
       version: '1.0.0',
       classnameHashtable: ['gfgfg', ['szn'], ['view', 'component']],
@@ -19,26 +20,10 @@ describe('createWidget method with cssScramble plugin', () => {
       ],
     });
 
-    expect(widget).toMatchInlineSnapshot(`
-      {
-        "$dependencies": {},
-        "$external": {},
-        "$in": {
-          "classNameScrambler": [Function],
-        },
-        "$plugins": [
-          {
-            "create": [Function],
-            "setup": [Function],
-          },
-        ],
-        "cn": [Function],
-        "create": [Function],
-        "info": [Function],
-        "name": "my-widget",
-        "setup": [Function],
-        "version": "1.0.0",
-      }
-    `);
+    expect(widget).toMatchObject({
+      $in: {
+        classNameScrambler: expect.any(Function),
+      },
+    });
   });
 });

@@ -1,9 +1,21 @@
-import { Widget, WidgetPlugin } from '@merkur/core';
+import '@merkur/core';
 
-export interface EventEmitterWidget extends Widget {
-  on(eventName: string, callback: (widget: Widget, ...args: any[]) => void): Widget;
-  off(eventName: string, callback: (widget: Widget, ...args: any[]) => void): Widget;
-  emit(eventName: string, ...args: any[]): Widget;
+declare module '@merkur/core' {
+  interface WidgetPartial {
+    on: (
+      widget: WidgetPartial,
+      event: string,
+      callback: (...args: any[]) => any,
+    ) => ReturnType<WidgetFunction>;
+    off: (
+      widget: WidgetPartial,
+      event: string,
+      callback: (...args: any[]) => any,
+    ) => ReturnType<WidgetFunction>;
+    emit: (
+      widget: WidgetPartial,
+      event: string,
+      ...args: any[]
+    ) => ReturnType<WidgetFunction>;
+  }
 }
-
-export function eventEmitterPlugin(): WidgetPlugin;
