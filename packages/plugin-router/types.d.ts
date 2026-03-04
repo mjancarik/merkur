@@ -16,7 +16,14 @@ export interface Route {
 }
 
 declare module '@merkur/core' {
-  interface Widget {}
+  interface Widget {
+    router: {
+      redirect: (url: string, data?: Record<string, any>) => void;
+      link: (routeName: string, data?: Record<string, any>) => string;
+      getCurrentRoute: () => Route;
+      getCurrentContext: () => unknown;
+    };
+  }
 
   interface WidgetPartial {
     router: {
@@ -31,6 +38,7 @@ declare module '@merkur/core' {
         data?: Record<string, any>,
       ) => string;
       getCurrentRoute: (widget: WidgetPartial) => Route;
+      getCurrentContext: (widget: WidgetPartial) => unknown;
     };
   }
 }
