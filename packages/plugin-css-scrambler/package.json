@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-css-scrambler",
-  "version": "0.45.0",
+  "version": "0.46.0",
   "description": "Merkur plugin for scrambling CSS classes.",
   "main": "lib/index",
   "module": "lib/index",
@@ -53,8 +53,8 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@merkur/core": "^0.45.0",
-    "@merkur/plugin-component": "^0.45.0"
+    "@merkur/core": "^0.46.0",
+    "@merkur/plugin-component": "^0.46.0"
   },
   "peerDependencies": {
     "@merkur/core": "*",

@@ -3,6 +3,22 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.46.0](https://github.com/mjancarik/merkur/compare/v0.45.2...v0.46.0) (2026-03-04)
+
+### Bug Fixes
+
+- 🐛 Better type Widget lifecycle changes ([029faf3](https://github.com/mjancarik/merkur/commit/029faf3bf63721e6e00c0bdba41c6ab9b66514dd))
+- 🐛 Invent a way to turn any WidgetDefinition keys required ([d20e95b](https://github.com/mjancarik/merkur/commit/d20e95ba5ebdc0fb7f9177151d059e1fb316853d))
+- 🐛 Update Widget/WidgetPartial types ([a71f6ff](https://github.com/mjancarik/merkur/commit/a71f6ff345ede7d58a498e95ef17f812dbf893a6))
+
+### BREAKING CHANGES
+
+- 🧨 `Widget` and `WidgetDefinition` interfaces drastically changed; new
+  `WidgetPartial` interface added and used in loading methods. Move
+  interface extensions to either `WidgetDescription` or `WidgetPartial`,
+  and then you can remove method overloads for bound widget functions (the
+  typing now does it automatically). See types.d.ts for specifics.
+
 ## [0.45.1](https://github.com/mjancarik/merkur/compare/v0.45.0...v0.45.1) (2026-03-03)
 
 **Note:** Version bump only for package @merkur/core
