@@ -8,8 +8,7 @@
   "scripts": {
     "test": "echo 'Tests pass.'",
     "test:es:version": "echo 'Tests pass.'",
-    "build": "echo 'Build pass.'",
-    "postpublish": "node ../../utils/restoreLatestTag.mjs"
+    "build": "echo 'Build pass.'"
   },
   "keywords": [
     "cli",
