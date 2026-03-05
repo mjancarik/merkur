@@ -16,8 +16,6 @@ export interface Route {
 }
 
 declare module '@merkur/core' {
-  interface Widget {}
-
   interface WidgetPartial {
     router: {
       redirect: (
@@ -30,8 +28,13 @@ declare module '@merkur/core' {
         routeName: string,
         data?: Record<string, any>,
       ) => string;
+      getCurrentContext: (widget: WidgetPartial) => unknown;
       getCurrentRoute: (widget: WidgetPartial) => Route;
     };
+  }
+
+  interface Widget {
+    router: WithBoundWidgetFunctions<WidgetPartial['router']>;
   }
 }
 
