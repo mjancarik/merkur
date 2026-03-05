@@ -3,6 +3,12 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.46.2](https://github.com/mjancarik/merkur/compare/v0.46.1...v0.46.2) (2026-03-05)
+
+### Bug Fixes
+
+- 🐛 Update plugin API method types for Widget ([820112f](https://github.com/mjancarik/merkur/commit/820112f661121349df47b70ce8e46b569c263f40))
+
 # [0.46.0](https://github.com/mjancarik/merkur/compare/v0.45.2...v0.46.0) (2026-03-04)
 
 ### Bug Fixes
