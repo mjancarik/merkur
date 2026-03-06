@@ -24,9 +24,13 @@ function afterDOMLoad() {
       if (document.readyState !== 'loading') {
         resolve();
       } else {
-        window.addEventListener('DOMContentLoaded', () => {
-          resolve();
-        });
+        window.addEventListener(
+          'DOMContentLoaded',
+          () => {
+            resolve();
+          },
+          { once: true },
+        );
       }
     } else {
       resolve();
@@ -43,6 +47,11 @@ function registerCustomElement(options) {
     }
     constructor(...$) {
       const _ = super(...$);
+
+      this._pendingProps = {};
+      this._batchTimeout = null;
+      this._isInitialized = false;
+
       _._init();
       return _;
     }
@@ -69,22 +78,18 @@ function registerCustomElement(options) {
 
               this._setDefaultProps();
 
-              await callbacks?.reconstructor?.(this._widget, {
-                shadow: this._shadow,
-                customElement: this,
-              });
+              await callbacks?.reconstructor?.(
+                this._widget,
+                this._getContext(),
+              );
 
               if (typeof callbacks?.remount === 'function') {
-                await callbacks?.remount?.(this._widget, {
-                  shadow: this._shadow,
-                  customElement: this,
-                });
+                await callbacks?.remount?.(this._widget, this._getContext());
               } else {
                 widget.root = this._shadow;
                 widget.customElement = this;
                 this._shadow.appendChild(widget.container);
               }
-
               return;
             }
           } catch (error) {
@@ -114,15 +119,10 @@ function registerCustomElement(options) {
 
             this._setDefaultProps();
 
-            await callbacks?.constructor?.(this._widget, {
-              shadow: this._shadow,
-              customElement: this,
-            });
+            await callbacks?.constructor?.(this._widget, this._getContext());
 
-            (await callbacks?.mount?.(this._widget, {
-              shadow: this._shadow,
-              customElement: this,
-            })) ?? (await this._widget.mount());
+            (await callbacks?.mount?.(this._widget, this._getContext())) ??
+              (await this._widget.mount());
           } catch (error) {
             console.error(error);
           }
@@ -133,76 +133,77 @@ function registerCustomElement(options) {
     }
 
     async connectedCallback() {
+      this._isInitialized = true;
+
       await this._widgetPromise;
 
-      this._widget?.connectedCallback?.({
-        shadow: this._shadow,
-        customElement: this,
-      });
+      this._widget?.connectedCallback?.(this._getContext());
 
-      callbacks?.connectedCallback?.(this._widget, {
-        shadow: this._shadow,
-        customElement: this,
-      });
+      callbacks?.connectedCallback?.(this._widget, this._getContext());
     }
 
     async disconnectedCallback() {
+      this._isInitialized = false;
+
       await this._widgetPromise;
 
-      this._widget?.disconnectedCallback?.({
-        shadow: this._shadow,
-        customElement: this,
-      });
+      // Clear any pending batch updates
+      if (this._batchTimeout) {
+        clearTimeout(this._batchTimeout);
+        this._batchTimeout = null;
+        this._pendingProps = {};
+      }
 
-      callbacks?.disconnectedCallback?.(this._widget, {
-        shadow: this._shadow,
-        customElement: this,
-      });
+      this._widget?.disconnectedCallback?.(this._getContext());
+
+      callbacks?.disconnectedCallback?.(this._widget, this._getContext());
     }
 
     async adoptedCallback() {
       await this._widgetPromise;
 
-      this._widget?.adoptedCallback?.({
-        shadow: this._shadow,
-        customElement: this,
-      });
+      this._widget?.adoptedCallback?.(this._getContext());
 
-      callbacks?.adoptedCallback?.(this._widget, {
-        shadow: this._shadow,
-        customElement: this,
-      });
+      callbacks?.adoptedCallback?.(this._widget, this._getContext());
     }
 
     async attributeChangedCallback(name, oldValue, newValue) {
-      await this._widgetPromise;
+      if (this._isInitialized) {
+        await this._widgetPromise;
 
-      const camelCaseKey = name.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-      const parser = attributesParser?.[name] ?? ((value) => value);
+        const camelCaseKey = name.replace(/-([a-z])/g, (g) =>
+          g[1].toUpperCase(),
+        );
+        const parser = attributesParser?.[name] ?? ((value) => value);
+        this._pendingProps[camelCaseKey] = parser(newValue);
 
-      this._widget?.setProps?.({ [camelCaseKey]: parser(newValue) });
+        if (this._batchTimeout) {
+          clearTimeout(this._batchTimeout);
+        }
+        this._batchTimeout = setTimeout(async () => {
+          const propsToUpdate = this._pendingProps;
+          this._pendingProps = {};
+          this._batchTimeout = null;
 
-      this._widget?.attributeChangedCallback?.(
-        this._widget,
-        name,
-        oldValue,
-        newValue,
-        {
-          shadow: this._shadow,
-          customElement: this,
-        },
-      );
+          this._widget?.setProps?.(propsToUpdate);
+        }, 0);
 
-      callbacks?.attributeChangedCallback?.(
-        this._widget,
-        name,
-        oldValue,
-        newValue,
-        {
-          shadow: this._shadow,
-          customElement: this,
-        },
-      );
+        this._widget?.attributeChangedCallback?.(
+          this._widget,
+          name,
+          oldValue,
+          newValue,
+          this._getContext(),
+        );
+
+        callbacks?.attributeChangedCallback?.(
+          this._widget,
+          name,
+          oldValue,
+          newValue,
+          this._getContext(),
+        );
+      }
     }
 
     _setDefaultProps() {
@@ -225,6 +226,10 @@ function registerCustomElement(options) {
           }
         });
       }
+    }
+
+    _getContext() {
+      return { shadow: this._shadow, customElement: this };
     }
   }
 

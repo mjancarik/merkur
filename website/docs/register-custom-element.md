@@ -128,7 +128,7 @@ The `registerCustomElement` method accepts a `callbacks` object that allows you 
 - `connectedCallback`: Called when the custom element is added to the DOM.
 - `disconnectedCallback`: Called when the custom element is removed from the DOM.
 - `adoptedCallback`: Called when the custom element is moved to a new document.
-- `attributeChangedCallback`: Called when an observed attribute changes.
+- `attributeChangedCallback`: Called when an observed attribute changes. The `attributeChangedCallback` batches attribute values to props and ensures that `widget.setProps()` is called only once with all accumulated changes (see batching mechanism below).
 - `mount`: Called when the widget is mounted.
 - `remount`: Called when the widget is remounted.
 - `getInstance`: Called to retrieve an existing widget instance.
@@ -191,9 +191,34 @@ When a custom element is registered, its attributes are automatically propagated
 #### How it works
 
 1. The `observedAttributes` property in the `registerCustomElement` options specifies which attributes the custom element observes. These attributes are automatically monitored for changes.
-2. When an observed attribute changes, the `attributeChangedCallback` is triggered. This callback updates the corresponding property in the widget's `props` object.
+2. When an observed attribute changes, the `attributeChangedCallback` is triggered. This callback updates the corresponding property in the widget's `props` object using a **batching mechanism** (see below).
 3. Attribute names are automatically converted to camelCase.
 4. The `attributesParser` function can be used to customize how attributes are processed. For example, you can parse specific attributes like JSON strings.
+
+#### Batching mechanism
+
+To optimize performance, attribute changes are batched when multiple attributes are updated simultaneously. This prevents multiple unnecessary re-renders and ensures that `widget.setProps()` is called only once with all accumulated changes.
+
+**How batching works:**
+
+- When an attribute changes after widget initialization, the change is accumulated in a pending props object.
+- Multiple rapid attribute changes are debounced using `setTimeout(0)`.
+- After all synchronous attribute changes complete, `widget.setProps()` is called once with all batched props.
+- **During initialization:** `setProps()` is NOT called for default attribute values. Instead, props are set directly during widget initialization to avoid unnecessary updates during widget creation.
+
+**Example:**
+
+```javascript
+// Multiple rapid attribute changes
+element.setAttribute('title', 'New Title');
+element.setAttribute('theme', 'dark');
+element.setAttribute('count', '5');
+
+// Result: widget.setProps() is called ONCE with:
+// { title: 'New Title', theme: 'dark', count: '5' }
+```
+
+This batching significantly improves performance when multiple attributes are updated at once, which is common in frameworks like React or when initializing elements with multiple attributes.
 
 #### Example
 
