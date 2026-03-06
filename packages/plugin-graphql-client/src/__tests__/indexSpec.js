@@ -83,7 +83,6 @@ describe('createWidget method with graphql client plugin', () => {
         "unmount": undefined,
         "update": undefined,
       },
-      "loadingPromise": null,
       "resolvedViews": Map {},
       "suspendedTasks": [],
     },

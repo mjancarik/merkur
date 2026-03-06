@@ -87,7 +87,6 @@ describe('createWidget method with http client plugin', () => {
         "unmount": undefined,
         "update": undefined,
       },
-      "loadingPromise": null,
       "resolvedViews": Map {},
       "suspendedTasks": [],
     },

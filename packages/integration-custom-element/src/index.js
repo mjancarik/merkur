@@ -90,9 +90,6 @@ function registerCustomElement(options) {
                 widget.customElement = this;
                 this._shadow.appendChild(widget.container);
               }
-
-              this._isInitialized = true;
-
               return;
             }
           } catch (error) {
@@ -126,8 +123,6 @@ function registerCustomElement(options) {
 
             (await callbacks?.mount?.(this._widget, this._getContext())) ??
               (await this._widget.mount());
-
-            this._isInitialized = true;
           } catch (error) {
             console.error(error);
           }
@@ -138,6 +133,8 @@ function registerCustomElement(options) {
     }
 
     async connectedCallback() {
+      this._isInitialized = true;
+
       await this._widgetPromise;
 
       this._widget?.connectedCallback?.(this._getContext());
@@ -180,6 +177,8 @@ function registerCustomElement(options) {
           clearTimeout(this._batchTimeout);
         }
 
+        await this._widgetPromise;
+
         const camelCaseKey = name.replace(/-([a-z])/g, (g) =>
           g[1].toUpperCase(),
         );
@@ -193,8 +192,6 @@ function registerCustomElement(options) {
 
           this._widget?.setProps?.(propsToUpdate);
         }, 0);
-
-        await this._widgetPromise;
 
         this._widget?.attributeChangedCallback?.(
           this._widget,
