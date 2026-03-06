@@ -204,7 +204,7 @@ To optimize performance, attribute changes are batched when multiple attributes 
 - When an attribute changes after widget initialization, the change is accumulated in a pending props object.
 - Multiple rapid attribute changes are debounced using `setTimeout(0)`.
 - After all synchronous attribute changes complete, `widget.setProps()` is called once with all batched props.
-- **During initialization:** `setProps()` is NOT called for default attribute values. Instead, props are set directly via the internal `_setDefaultProps()` method to avoid unnecessary updates during widget creation.
+- **During initialization:** `setProps()` is NOT called for default attribute values. Instead, props are set directly during widget initialization to avoid unnecessary updates during widget creation.
 
 **Example:**
 
