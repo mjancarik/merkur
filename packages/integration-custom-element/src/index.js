@@ -143,6 +143,8 @@ function registerCustomElement(options) {
     }
 
     async disconnectedCallback() {
+      this._isInitialized = false;
+
       await this._widgetPromise;
 
       // Clear any pending batch updates
@@ -155,8 +157,6 @@ function registerCustomElement(options) {
       this._widget?.disconnectedCallback?.(this._getContext());
 
       callbacks?.disconnectedCallback?.(this._widget, this._getContext());
-
-      await this._widget?.unmount?.();
     }
 
     async adoptedCallback() {

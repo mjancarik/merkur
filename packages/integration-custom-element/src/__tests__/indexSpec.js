@@ -217,8 +217,6 @@ describe('Merkur integration custom element', () => {
       expect(widgetDefinition.setProps).not.toHaveBeenCalled();
       expect(widgetElement._batchTimeout).toBeNull();
       expect(widgetElement._pendingProps).toEqual({});
-      // widgetDefinition.unmount should be called when the element disconnects
-      expect(widgetDefinition.unmount).toHaveBeenCalledTimes(1);
     });
 
     it('should handle kebab-case to camelCase conversion in batched props', async () => {
