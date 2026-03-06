@@ -47,6 +47,11 @@ function registerCustomElement(options) {
     }
     constructor(...$) {
       const _ = super(...$);
+
+      this._pendingProps = {};
+      this._batchTimeout = null;
+      this._isInitialized = false;
+
       _._init();
       return _;
     }
@@ -86,6 +91,8 @@ function registerCustomElement(options) {
                 this._shadow.appendChild(widget.container);
               }
 
+              this._isInitialized = true;
+
               return;
             }
           } catch (error) {
@@ -119,6 +126,8 @@ function registerCustomElement(options) {
 
             (await callbacks?.mount?.(this._widget, this._getContext())) ??
               (await this._widget.mount());
+
+            this._isInitialized = true;
           } catch (error) {
             console.error(error);
           }
@@ -138,6 +147,13 @@ function registerCustomElement(options) {
 
     async disconnectedCallback() {
       await this._widgetPromise;
+
+      // Clear any pending batch updates
+      if (this._batchTimeout) {
+        clearTimeout(this._batchTimeout);
+        this._batchTimeout = null;
+        this._pendingProps = {};
+      }
 
       this._widget?.disconnectedCallback?.(this._getContext());
 
@@ -159,28 +175,43 @@ function registerCustomElement(options) {
     }
 
     async attributeChangedCallback(name, oldValue, newValue) {
-      await this._widgetPromise;
+      if (this._isInitialized) {
+        if (this._batchTimeout) {
+          clearTimeout(this._batchTimeout);
+        }
 
-      const camelCaseKey = name.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-      const parser = attributesParser?.[name] ?? ((value) => value);
+        const camelCaseKey = name.replace(/-([a-z])/g, (g) =>
+          g[1].toUpperCase(),
+        );
+        const parser = attributesParser?.[name] ?? ((value) => value);
+        this._pendingProps[camelCaseKey] = parser(newValue);
 
-      this._widget?.setProps?.({ [camelCaseKey]: parser(newValue) });
+        this._batchTimeout = setTimeout(async () => {
+          const propsToUpdate = this._pendingProps;
+          this._pendingProps = {};
+          this._batchTimeout = null;
 
-      this._widget?.attributeChangedCallback?.(
-        this._widget,
-        name,
-        oldValue,
-        newValue,
-        this._getContext(),
-      );
+          this._widget?.setProps?.(propsToUpdate);
+        }, 0);
 
-      callbacks?.attributeChangedCallback?.(
-        this._widget,
-        name,
-        oldValue,
-        newValue,
-        this._getContext(),
-      );
+        await this._widgetPromise;
+
+        this._widget?.attributeChangedCallback?.(
+          this._widget,
+          name,
+          oldValue,
+          newValue,
+          this._getContext(),
+        );
+
+        callbacks?.attributeChangedCallback?.(
+          this._widget,
+          name,
+          oldValue,
+          newValue,
+          this._getContext(),
+        );
+      }
     }
 
     _setDefaultProps() {
