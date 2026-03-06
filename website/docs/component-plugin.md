@@ -61,6 +61,8 @@ The `bootstrap` method is called only once before the widget loads its state and
 
 The `load` method is **mandatory** and returns current state of the widget. The load method is called before mounting the widget and after changing props.
 
+While `load` is in progress, `$in.component.loadingPromise` holds a reference to the pending Promise. Any `setState` calls made during this time will automatically await the `loadingPromise` before applying, ensuring the state set by `load` is never overwritten by concurrent `setState` calls. Once `load` completes, `loadingPromise` is reset to `null`.
+
 ### mount
 The `mount` method is used for client and server environments. On server it has to return a string. On client it has to mount the widget to HTML and return promise that resolves after mounting the widget to DOM is completed.
 
@@ -78,6 +80,14 @@ console.log(widget.state); // { primitive: 1, object: { key: 'value'} };
 await widget.setState({ object: { key: 'value2'} });
 console.log(widget.state); // { primitive: 1, object: { key: 'value2'} };
 ```
+
+You can also pass a **callback function** that receives the current state and returns the partial state to merge. This is useful when the new state depends on the previous value:
+
+```javascript
+await widget.setState((state) => ({ count: state.count + 1 }));
+```
+
+If `setState` is called while the [`load`](/docs/component-plugin#load) method is still running, the call automatically **waits** for `load` to finish before applying the state change. This guarantees that state updates are never lost and are always applied after the widget state is fully initialized.
 
 ### setProps
 The `setProps` method is for changing widget props. The method makes shallow copy of the props.

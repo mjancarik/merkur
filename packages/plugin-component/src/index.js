@@ -26,6 +26,7 @@ export function componentPlugin() {
         lifeCycle,
         isMounted: false,
         isHydrated: false,
+        loadingPromise: null,
         suspendedTasks: [],
         resolvedViews: new Map(),
       };
@@ -105,7 +106,21 @@ function componentAPI() {
         return;
       }
 
-      widget.state = await callLifeCycleMethod(widget, 'load', args);
+      const loadingPromise = callLifeCycleMethod(widget, 'load', args)
+        .then((state) => {
+          if ($in.component.loadingPromise === loadingPromise) {
+            widget.state = state;
+          }
+        })
+        .finally(() => {
+          if ($in.component.loadingPromise === loadingPromise) {
+            $in.component.loadingPromise = null;
+          }
+        });
+
+      $in.component.loadingPromise = loadingPromise;
+
+      await loadingPromise;
     },
     async update(widget, ...args) {
       if (!widget.$in.component.isMounted) {
@@ -116,6 +131,10 @@ function componentAPI() {
       return callLifeCycleMethod(widget, 'update', args);
     },
     async setState(widget, stateSetter) {
+      while (widget.$in.component.loadingPromise) {
+        await widget.$in.component.loadingPromise;
+      }
+
       widget.state = {
         ...widget.state,
         ...(typeof stateSetter === 'function'

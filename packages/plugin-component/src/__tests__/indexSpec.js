@@ -35,6 +35,7 @@ describe('createWidget method with component plugin', () => {
         "unmount": undefined,
         "update": undefined,
       },
+      "loadingPromise": null,
       "resolvedViews": Map {},
       "suspendedTasks": [],
     },
@@ -199,6 +200,157 @@ describe('component plugin API', () => {
       await widget.load();
 
       expect(widget.$in.component.lifeCycle.load).not.toHaveBeenCalled();
+    });
+
+    it('should set loadingPromise to null after load completes', async () => {
+      await widget.load();
+
+      expect(widget.$in.component.loadingPromise).toBeNull();
+    });
+
+    it('should apply setState calls that were made during load', async () => {
+      let resolveLoad;
+      widget.$in.component.lifeCycle.load = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            resolveLoad = resolve;
+          }),
+      );
+
+      const loadPromise = widget.load();
+
+      expect(widget.$in.component.loadingPromise).not.toBeNull();
+
+      const setStatePromise = widget.setState({ name: 'suspended' });
+
+      resolveLoad({ name: 'fromLoad' });
+      await loadPromise;
+      await setStatePromise;
+
+      expect(widget.state.name).toEqual('suspended');
+      expect(widget.$in.component.loadingPromise).toBeNull();
+    });
+
+    it('should apply setState calls in correct order after load', async () => {
+      let resolveLoad;
+      widget.$in.component.lifeCycle.load = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            resolveLoad = resolve;
+          }),
+      );
+
+      const loadPromise = widget.load();
+
+      const p1 = widget.setState({ name: 'first' });
+      const p2 = widget.setState((state) => ({ name: state.name + '-second' }));
+
+      resolveLoad({ name: 'fromLoad' });
+      await loadPromise;
+      await Promise.all([p1, p2]);
+
+      expect(widget.state.name).toEqual('first-second');
+    });
+
+    it('should not replay setState calls on subsequent load', async () => {
+      let resolveLoad;
+      widget.$in.component.lifeCycle.load = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            resolveLoad = resolve;
+          }),
+      );
+
+      const loadPromise = widget.load();
+      const setStatePromise = widget.setState({ name: 'suspended' });
+
+      resolveLoad({ name: 'fromLoad' });
+      await loadPromise;
+      await setStatePromise;
+
+      expect(widget.$in.component.loadingPromise).toBeNull();
+
+      widget.$in.component.lifeCycle.load = jest.fn(() => ({
+        name: 'fromSecondLoad',
+      }));
+      widget.$in.component.isMounted = true;
+      const updateSpy = jest.fn();
+      widget.$in.component.lifeCycle.update = updateSpy;
+
+      await widget.load();
+
+      // update should not be called from a replayed setState
+      expect(updateSpy).not.toHaveBeenCalled();
+    });
+
+    it('should use the latest load result when load is called twice concurrently', async () => {
+      let resolveLoad1;
+      let resolveLoad2;
+      let callCount = 0;
+
+      widget.$in.component.lifeCycle.load = jest.fn(() => {
+        callCount++;
+        if (callCount === 1) {
+          return new Promise((resolve) => {
+            resolveLoad1 = resolve;
+          });
+        } else {
+          return new Promise((resolve) => {
+            resolveLoad2 = resolve;
+          });
+        }
+      });
+
+      const load1 = widget.load();
+      const load2 = widget.load();
+
+      // resolve second load first with newer state
+      resolveLoad2({ name: 'second' });
+      await load2;
+
+      // resolve first load with older state - should NOT overwrite since load2 is the latest
+      resolveLoad1({ name: 'first' });
+      await load1;
+
+      expect(widget.state.name).toEqual('second');
+      // loadingPromise should be null after both complete
+      expect(widget.$in.component.loadingPromise).toBeNull();
+    });
+
+    it('should await latest loadingPromise when setState is called during two concurrent loads', async () => {
+      let resolveLoad1;
+      let resolveLoad2;
+      let callCount = 0;
+
+      widget.$in.component.lifeCycle.load = jest.fn(() => {
+        callCount++;
+        if (callCount === 1) {
+          return new Promise((resolve) => {
+            resolveLoad1 = resolve;
+          });
+        } else {
+          return new Promise((resolve) => {
+            resolveLoad2 = resolve;
+          });
+        }
+      });
+
+      const load1 = widget.load();
+      const load2 = widget.load();
+
+      // setState during both loads – should wait for loadingPromise (load2)
+      const setStatePromise = widget.setState({ name: 'concurrent' });
+
+      resolveLoad2({ name: 'second' });
+      await load2;
+
+      resolveLoad1({ name: 'first' });
+      await load1;
+
+      await setStatePromise;
+
+      expect(widget.state.name).toEqual('concurrent');
+      expect(widget.$in.component.loadingPromise).toBeNull();
     });
   });
 
