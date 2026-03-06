@@ -40,6 +40,7 @@ describe('createWidget method with error plugin', () => {
         "unmount": undefined,
         "update": undefined,
       },
+      "loadingPromise": null,
       "resolvedViews": Map {},
       "suspendedTasks": [],
     },
