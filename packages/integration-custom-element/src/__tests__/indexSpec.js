@@ -144,13 +144,13 @@ describe('Merkur integration custom element', () => {
       jest.clearAllMocks();
 
       // Simulate multiple rapid attribute changes
-      await widgetElement.attributeChangedCallback('name', 'John', 'Jane');
-      await widgetElement.attributeChangedCallback(
+      widgetElement.attributeChangedCallback('name', 'John', 'Jane');
+      widgetElement.attributeChangedCallback(
         'multi-name',
         'John Doe',
         'Jane Doe',
       );
-      await widgetElement.attributeChangedCallback(
+      widgetElement.attributeChangedCallback(
         'config',
         '{"key": "value"}',
         '{"key": "newValue"}',
@@ -183,7 +183,7 @@ describe('Merkur integration custom element', () => {
       jest.clearAllMocks();
 
       // Change config attribute (which has a JSON parser)
-      await widgetElement.attributeChangedCallback(
+      widgetElement.attributeChangedCallback(
         'config',
         '{"key": "value"}',
         '{"key": "newValue", "another": "field"}',
@@ -205,7 +205,7 @@ describe('Merkur integration custom element', () => {
       jest.clearAllMocks();
 
       // Start attribute change (but don't wait for batch timeout)
-      await widgetElement.attributeChangedCallback('name', 'John', 'Jane');
+      widgetElement.attributeChangedCallback('name', 'John', 'Jane');
 
       // Immediately disconnect
       await widgetElement.disconnectedCallback();
@@ -228,11 +228,7 @@ describe('Merkur integration custom element', () => {
       jest.clearAllMocks();
 
       // Test kebab-case attribute name conversion
-      await widgetElement.attributeChangedCallback(
-        'multi-name',
-        'old',
-        'new value',
-      );
+      widgetElement.attributeChangedCallback('multi-name', 'old', 'new value');
 
       await new Promise((resolve) => setTimeout(resolve, 10));
 
