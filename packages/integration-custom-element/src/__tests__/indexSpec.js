@@ -106,6 +106,45 @@ describe('Merkur integration custom element', () => {
       await widgetElement._widgetPromise;
 
       await widgetElement.attributeChangedCallback('name', 'John', 'Jane');
+
+      // Wait for batch timeout to complete
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(callbacks.attributeChangedCallback).toHaveBeenCalledTimes(1);
+      expect(widgetDefinition.attributeChangedCallback).toHaveBeenCalledTimes(
+        1,
+      );
+      expect(widgetDefinition.setProps).toHaveBeenCalledTimes(1);
+      expect(widgetDefinition.setProps).toHaveBeenCalledWith({
+        name: 'Jane',
+      });
+    });
+
+    it('should NOT call setProps during initialization for default attribute values', async () => {
+      const widgetElement = new WidgetElement();
+
+      // Simulate browser calling attributeChangedCallback during initialization
+      await widgetElement.attributeChangedCallback('name', null, 'John');
+
+      await widgetElement._widgetPromise;
+
+      // setProps should not be called for default values during initialization
+      expect(widgetDefinition.setProps).not.toHaveBeenCalled();
+
+      // But widget props should still be set via _setDefaultProps
+      expect(widgetElement._widget.props.name).toBe('John');
+    });
+
+    it('should batch multiple synchronous attribute changes into single setProps call', async () => {
+      const widgetElement = new WidgetElement();
+      widgetElement.connectedCallback(); // simulate browser
+
+      await widgetElement._widgetPromise;
+
+      jest.clearAllMocks();
+
+      // Simulate multiple rapid attribute changes
+      await widgetElement.attributeChangedCallback('name', 'John', 'Jane');
       await widgetElement.attributeChangedCallback(
         'multi-name',
         'John Doe',
@@ -117,18 +156,88 @@ describe('Merkur integration custom element', () => {
         '{"key": "newValue"}',
       );
 
+      // Wait for batch timeout to complete
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      // All callback methods should be called
       expect(callbacks.attributeChangedCallback).toHaveBeenCalledTimes(3);
       expect(widgetDefinition.attributeChangedCallback).toHaveBeenCalledTimes(
         3,
       );
+
+      // But setProps should be called only ONCE with batched props
+      expect(widgetDefinition.setProps).toHaveBeenCalledTimes(1);
       expect(widgetDefinition.setProps).toHaveBeenCalledWith({
         name: 'Jane',
-      });
-      expect(widgetDefinition.setProps).toHaveBeenCalledWith({
         multiName: 'Jane Doe',
-      });
-      expect(widgetDefinition.setProps).toHaveBeenCalledWith({
         config: { key: 'newValue' },
+      });
+    });
+
+    it('should handle attribute parser in batched setProps calls', async () => {
+      const widgetElement = new WidgetElement();
+      widgetElement.connectedCallback();
+
+      await widgetElement._widgetPromise;
+
+      jest.clearAllMocks();
+
+      // Change config attribute (which has a JSON parser)
+      await widgetElement.attributeChangedCallback(
+        'config',
+        '{"key": "value"}',
+        '{"key": "newValue", "another": "field"}',
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(widgetDefinition.setProps).toHaveBeenCalledWith({
+        config: { key: 'newValue', another: 'field' },
+      });
+    });
+
+    it('should clear pending batched props on disconnectedCallback', async () => {
+      const widgetElement = new WidgetElement();
+      widgetElement.connectedCallback();
+
+      await widgetElement._widgetPromise;
+
+      jest.clearAllMocks();
+
+      // Start attribute change (but don't wait for batch timeout)
+      await widgetElement.attributeChangedCallback('name', 'John', 'Jane');
+
+      // Immediately disconnect
+      await widgetElement.disconnectedCallback();
+
+      // Wait to ensure no setProps was called
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      // setProps should not be called because element was disconnected
+      expect(widgetDefinition.setProps).not.toHaveBeenCalled();
+      expect(widgetElement._batchTimeout).toBeNull();
+      expect(widgetElement._pendingProps).toEqual({});
+    });
+
+    it('should handle kebab-case to camelCase conversion in batched props', async () => {
+      const widgetElement = new WidgetElement();
+      widgetElement.connectedCallback();
+
+      await widgetElement._widgetPromise;
+
+      jest.clearAllMocks();
+
+      // Test kebab-case attribute name conversion
+      await widgetElement.attributeChangedCallback(
+        'multi-name',
+        'old',
+        'new value',
+      );
+
+      await new Promise((resolve) => setTimeout(resolve, 10));
+
+      expect(widgetDefinition.setProps).toHaveBeenCalledWith({
+        multiName: 'new value',
       });
     });
   });
