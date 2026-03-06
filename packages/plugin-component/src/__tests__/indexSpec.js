@@ -352,6 +352,46 @@ describe('component plugin API', () => {
       expect(widget.state.name).toEqual('concurrent');
       expect(widget.$in.component.loadingPromise).toBeNull();
     });
+
+    it('should wait for load that starts after setState already began waiting', async () => {
+      let resolveLoad1;
+      let resolveLoad2;
+      let callCount = 0;
+
+      widget.$in.component.lifeCycle.load = jest.fn(() => {
+        callCount++;
+        if (callCount === 1) {
+          return new Promise((resolve) => {
+            resolveLoad1 = resolve;
+          });
+        } else {
+          return new Promise((resolve) => {
+            resolveLoad2 = resolve;
+          });
+        }
+      });
+
+      // start first load, setState waits for it
+      const load1 = widget.load();
+      const setStatePromise = widget.setState({ name: 'myState' });
+
+      // while setState is waiting for load1, a second load starts
+      const load2 = widget.load();
+
+      // load1 finishes – with `if`, setState would now proceed and write state
+      // but load2 is still running and will overwrite it
+      resolveLoad1({ name: 'fromLoad1' });
+      await load1;
+
+      // load2 finishes after setState already wrote state (if `if` was used)
+      resolveLoad2({ name: 'fromLoad2' });
+      await load2;
+
+      await setStatePromise;
+
+      // setState patch must win over load2 result
+      expect(widget.state.name).toEqual('myState');
+    });
   });
 
   describe('setState method', () => {
