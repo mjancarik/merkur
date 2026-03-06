@@ -24,9 +24,13 @@ function afterDOMLoad() {
       if (document.readyState !== 'loading') {
         resolve();
       } else {
-        window.addEventListener('DOMContentLoaded', () => {
-          resolve();
-        });
+        window.addEventListener(
+          'DOMContentLoaded',
+          () => {
+            resolve();
+          },
+          { once: true },
+        );
       }
     } else {
       resolve();
@@ -69,16 +73,13 @@ function registerCustomElement(options) {
 
               this._setDefaultProps();
 
-              await callbacks?.reconstructor?.(this._widget, {
-                shadow: this._shadow,
-                customElement: this,
-              });
+              await callbacks?.reconstructor?.(
+                this._widget,
+                this._getContext(),
+              );
 
               if (typeof callbacks?.remount === 'function') {
-                await callbacks?.remount?.(this._widget, {
-                  shadow: this._shadow,
-                  customElement: this,
-                });
+                await callbacks?.remount?.(this._widget, this._getContext());
               } else {
                 widget.root = this._shadow;
                 widget.customElement = this;
@@ -114,15 +115,10 @@ function registerCustomElement(options) {
 
             this._setDefaultProps();
 
-            await callbacks?.constructor?.(this._widget, {
-              shadow: this._shadow,
-              customElement: this,
-            });
+            await callbacks?.constructor?.(this._widget, this._getContext());
 
-            (await callbacks?.mount?.(this._widget, {
-              shadow: this._shadow,
-              customElement: this,
-            })) ?? (await this._widget.mount());
+            (await callbacks?.mount?.(this._widget, this._getContext())) ??
+              (await this._widget.mount());
           } catch (error) {
             console.error(error);
           }
@@ -135,43 +131,31 @@ function registerCustomElement(options) {
     async connectedCallback() {
       await this._widgetPromise;
 
-      this._widget?.connectedCallback?.({
-        shadow: this._shadow,
-        customElement: this,
-      });
+      this._widget?.connectedCallback?.(this._getContext());
 
-      callbacks?.connectedCallback?.(this._widget, {
-        shadow: this._shadow,
-        customElement: this,
-      });
+      callbacks?.connectedCallback?.(this._widget, this._getContext());
     }
 
     async disconnectedCallback() {
       await this._widgetPromise;
 
-      this._widget?.disconnectedCallback?.({
-        shadow: this._shadow,
-        customElement: this,
-      });
+      this._widget?.disconnectedCallback?.(this._getContext());
 
-      callbacks?.disconnectedCallback?.(this._widget, {
-        shadow: this._shadow,
-        customElement: this,
-      });
+      callbacks?.disconnectedCallback?.(this._widget, this._getContext());
+
+      await this._widget?.unmount?.();
+
+      this._widget = null;
+      this._shadow = null;
+      this._widgetPromise = null;
     }
 
     async adoptedCallback() {
       await this._widgetPromise;
 
-      this._widget?.adoptedCallback?.({
-        shadow: this._shadow,
-        customElement: this,
-      });
+      this._widget?.adoptedCallback?.(this._getContext());
 
-      callbacks?.adoptedCallback?.(this._widget, {
-        shadow: this._shadow,
-        customElement: this,
-      });
+      callbacks?.adoptedCallback?.(this._widget, this._getContext());
     }
 
     async attributeChangedCallback(name, oldValue, newValue) {
@@ -187,10 +171,7 @@ function registerCustomElement(options) {
         name,
         oldValue,
         newValue,
-        {
-          shadow: this._shadow,
-          customElement: this,
-        },
+        this._getContext(),
       );
 
       callbacks?.attributeChangedCallback?.(
@@ -198,10 +179,7 @@ function registerCustomElement(options) {
         name,
         oldValue,
         newValue,
-        {
-          shadow: this._shadow,
-          customElement: this,
-        },
+        this._getContext(),
       );
     }
 
@@ -225,6 +203,10 @@ function registerCustomElement(options) {
           }
         });
       }
+    }
+
+    _getContext() {
+      return { shadow: this._shadow, customElement: this };
     }
   }
 
