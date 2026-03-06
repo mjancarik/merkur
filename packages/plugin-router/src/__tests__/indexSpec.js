@@ -37,7 +37,6 @@ describe('createWidget method with router plugin', () => {
         "unmount": undefined,
         "update": undefined,
       },
-      "loadingPromise": null,
       "resolvedViews": Map {},
       "suspendedTasks": [],
     },

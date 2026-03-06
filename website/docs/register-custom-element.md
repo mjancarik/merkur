@@ -128,7 +128,7 @@ The `registerCustomElement` method accepts a `callbacks` object that allows you 
 - `connectedCallback`: Called when the custom element is added to the DOM.
 - `disconnectedCallback`: Called when the custom element is removed from the DOM.
 - `adoptedCallback`: Called when the custom element is moved to a new document.
-- `attributeChangedCallback`: Called when an observed attribute changes. Note that this is called for each individual attribute change, but the widget's `setProps()` method is batched (see batching mechanism below).
+- `attributeChangedCallback`: Called when an observed attribute changes. The `attributeChangedCallback` batches attribute values to props and ensures that `widget.setProps()` is called only once with all accumulated changes (see batching mechanism below).
 - `mount`: Called when the widget is mounted.
 - `remount`: Called when the widget is remounted.
 - `getInstance`: Called to retrieve an existing widget instance.
