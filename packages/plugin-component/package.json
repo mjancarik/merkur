@@ -34,11 +34,9 @@
     "./lib/helpers.es9.mjs": "./lib/helpers.es9.mjs"
   },
   "scripts": {
-    "preversion": "npm test",
     "test": "jest --no-watchman -c ./jest.config.js",
     "test:es:version": "es-check es11 ./lib/index.mjs --module && es-check es9 ./lib/index.es9.mjs --module && es-check es9 ./lib/index.es9.cjs --module",
-    "build": "rollup -c rollup.config.mjs",
-    "postpublish": "node ../../utils/restoreLatestTag.mjs"
+    "build": "rollup -c rollup.config.mjs"
   },
   "repository": {
     "type": "git",

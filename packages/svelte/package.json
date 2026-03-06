@@ -6,8 +6,7 @@
     "test": "echo 'Tests pass.'",
     "test:es:version": "echo 'Tests pass.'",
     "build": "rollup -c rollup.config.mjs",
-    "dev": "rollup -c rollup.config.mjs -w",
-    "postpublish": "node ../../utils/restoreLatestTag.mjs"
+    "dev": "rollup -c rollup.config.mjs -w"
   },
   "exports": {
     "./entries/client.js": "./entries/client.js",
