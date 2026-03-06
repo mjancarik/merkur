@@ -157,10 +157,6 @@ function registerCustomElement(options) {
       callbacks?.disconnectedCallback?.(this._widget, this._getContext());
 
       await this._widget?.unmount?.();
-
-      this._widget = null;
-      this._shadow = null;
-      this._widgetPromise = null;
     }
 
     async adoptedCallback() {
