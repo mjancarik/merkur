@@ -169,10 +169,6 @@ function registerCustomElement(options) {
 
     async attributeChangedCallback(name, oldValue, newValue) {
       if (this._isInitialized) {
-        if (this._batchTimeout) {
-          clearTimeout(this._batchTimeout);
-        }
-
         await this._widgetPromise;
 
         const camelCaseKey = name.replace(/-([a-z])/g, (g) =>
@@ -181,6 +177,9 @@ function registerCustomElement(options) {
         const parser = attributesParser?.[name] ?? ((value) => value);
         this._pendingProps[camelCaseKey] = parser(newValue);
 
+        if (this._batchTimeout) {
+          clearTimeout(this._batchTimeout);
+        }
         this._batchTimeout = setTimeout(async () => {
           const propsToUpdate = this._pendingProps;
           this._pendingProps = {};
