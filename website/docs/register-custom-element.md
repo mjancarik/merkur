@@ -215,7 +215,7 @@ element.setAttribute('theme', 'dark');
 element.setAttribute('count', '5');
 
 // Result: widget.setProps() is called ONCE with:
-// { title: 'New Title', theme: 'dark', count: 5 }
+// { title: 'New Title', theme: 'dark', count: '5' }
 ```
 
 This batching significantly improves performance when multiple attributes are updated at once, which is common in frameworks like React or when initializing elements with multiple attributes.
