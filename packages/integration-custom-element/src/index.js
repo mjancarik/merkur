@@ -180,7 +180,7 @@ function registerCustomElement(options) {
         if (this._batchTimeout) {
           clearTimeout(this._batchTimeout);
         }
-        this._batchTimeout = setTimeout(async () => {
+        this._batchTimeout = setTimeout(() => {
           const propsToUpdate = this._pendingProps;
           this._pendingProps = {};
           this._batchTimeout = null;

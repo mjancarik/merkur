@@ -128,7 +128,19 @@ The `registerCustomElement` method accepts a `callbacks` object that allows you 
 - `connectedCallback`: Called when the custom element is added to the DOM.
 - `disconnectedCallback`: Called when the custom element is removed from the DOM.
 - `adoptedCallback`: Called when the custom element is moved to a new document.
-- `attributeChangedCallback`: Called when an observed attribute changes. The `attributeChangedCallback` batches attribute values to props and ensures that `widget.setProps()` is called only once with all accumulated changes (see batching mechanism below).
+- `attributeChangedCallback`: Called when an observed attribute changes. The `attributeChangedCallback` batches attribute values to props and ensures that `widget.setProps()` is called only once with all accumulated changes (see batching mechanism below). Note: This callback is not invoked for default attribute values during element initialization.
+  
+  **Important:** This callback fires synchronously, but `widget.setProps()` is called asynchronously. Therefore, `widget.props` will contain stale values when this callback executes. Use the `newValue` parameter instead of reading from `widget.props`.
+  
+  ```javascript
+  attributeChangedCallback(widget, name, oldValue, newValue) {
+    // ✓ Correct: Use the newValue parameter
+    console.log(newValue);
+    
+    // ✗ Incorrect: widget.props not yet updated
+    console.log(widget.props[name]); // Stale value
+  }
+  ```
 - `mount`: Called when the widget is mounted.
 - `remount`: Called when the widget is remounted.
 - `getInstance`: Called to retrieve an existing widget instance.
@@ -204,7 +216,7 @@ To optimize performance, attribute changes are batched when multiple attributes 
 - When an attribute changes after widget initialization, the change is accumulated in a pending props object.
 - Multiple rapid attribute changes are debounced using `setTimeout(0)`.
 - After all synchronous attribute changes complete, `widget.setProps()` is called once with all batched props.
-- **During initialization:** `setProps()` is NOT called for default attribute values. Instead, props are set directly during widget initialization to avoid unnecessary updates during widget creation.
+- **During initialization:** `setProps()` is NOT called for default attribute values. Instead, props are set directly via the internal `_setDefaultProps()` method to avoid unnecessary updates during widget creation.
 
 **Example:**
 
@@ -215,7 +227,7 @@ element.setAttribute('theme', 'dark');
 element.setAttribute('count', '5');
 
 // Result: widget.setProps() is called ONCE with:
-// { title: 'New Title', theme: 'dark', count: '5' }
+// { title: 'New Title', theme: 'dark', count: 5 }
 ```
 
 This batching significantly improves performance when multiple attributes are updated at once, which is common in frameworks like React or when initializing elements with multiple attributes.
