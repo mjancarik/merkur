@@ -69,12 +69,13 @@ export type WidgetCreate = (widgetParams: WidgetParams) => Promise<Widget>;
 
 export interface Merkur {
   $in: {
-    widgets: []; // TODO
+    widgets: Widget[];
     widgetFactory: Record<string, MerkurCreate>;
   };
   $external: WidgetExternal;
   $dependencies: WidgetDependencies;
   create: MerkurCreate;
+  isRegistered: (name: string) => boolean;
   register: ({
     name,
     version,
