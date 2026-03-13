@@ -111,7 +111,17 @@ function createPreviewConfig({
  *   container in place and re-binds events.
  */
 function createVanillaRenderer(options) {
+  if (!options || typeof options !== 'object') {
+    throw new Error(
+      'createVanillaRenderer: options must be a non-null object.',
+    );
+  }
   const { ViewComponent, bindEvents } = options;
+  if (!ViewComponent) {
+    throw new Error(
+      'createVanillaRenderer: "ViewComponent" option is required.',
+    );
+  }
 
   // Store references for re-rendering
   let currentContainer = null;
