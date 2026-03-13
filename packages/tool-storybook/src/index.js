@@ -31,11 +31,17 @@ function createWidgetLoader({ render, widgetProperties }) {
         : await getMerkur()
             .create({ ...widgetProperties, ...args.args.widget })
             .then(async (widget) => {
-              widget.$in.component.lifeCycle.mount = () => {};
-              widget.$in.component.lifeCycle.update = () => {
+              const lifeCycle = widget?.$in?.component?.lifeCycle;
+              if (!lifeCycle) {
+                throw new Error(
+                  'createWidgetLoader: widget must be created with a component plugin (e.g., "@merkur/plugin-component"). Ensure "componentPlugin" is included in widgetProperties.$plugins for Storybook integration to work.',
+                );
+              }
+              lifeCycle.mount = () => {};
+              lifeCycle.update = () => {
                 render(widget);
               };
-              widget.$in.component.lifeCycle.unmount = () => {};
+              lifeCycle.unmount = () => {};
 
               widget.state = args?.args?.widget?.state ?? {};
               widget.props = args?.args?.widget?.props ?? {};
