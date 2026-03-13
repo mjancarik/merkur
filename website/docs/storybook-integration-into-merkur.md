@@ -103,9 +103,15 @@ export const decorators = [
 
     useEffect(() => {
       if (widget && widget.$in) {
-        // Store the forceUpdate function on the widget so the render callback can trigger it
-        widget.$in._storybookForceUpdate = () => forceUpdate((n) => n + 1);
+        const forceUpdateFn = () => forceUpdate((n) => n + 1);
+        widget.$in._storybookForceUpdate = forceUpdateFn;
+        return () => {
+          if (widget.$in && widget.$in._storybookForceUpdate === forceUpdateFn) {
+            delete widget.$in._storybookForceUpdate;
+          }
+        };
       }
+      return undefined;
     }, [widget]);
 
     return (
@@ -254,7 +260,6 @@ TenCounter.args = {
 The decorator handles:
 - Providing `WidgetContext` to all components
 - Re-rendering when widget state changes (e.g., when clicking buttons)
-- Proper cleanup between story navigation
 
 ### Vanilla JavaScript Widget Stories
 
