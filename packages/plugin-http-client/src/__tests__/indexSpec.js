@@ -321,4 +321,90 @@ describe('createWidget method with http client plugin', () => {
       }
     });
   });
+
+  describe('transformError', () => {
+    let errorTransformerSpy;
+
+    beforeEach(() => {
+      errorTransformerSpy = jest.fn((widget, request, error) => [
+        request,
+        error,
+      ]);
+
+      setDefaultConfig(widget, {
+        transformers: [
+          ...getDefaultTransformers(),
+          {
+            transformError: errorTransformerSpy,
+          },
+        ],
+      });
+
+      widget.$dependencies.fetch = jest.fn(() => Promise.resolve(Response));
+    });
+
+    it('should call transformError on fetch network error', async () => {
+      const networkError = new Error('Network failure');
+      widget.$dependencies.fetch = jest.fn(() => Promise.reject(networkError));
+
+      await expect(widget.http.request({ path: '/path' })).rejects.toThrow(
+        'Network failure',
+      );
+
+      expect(errorTransformerSpy).toHaveBeenCalledWith(
+        widget,
+        expect.objectContaining({ url: 'http://localhost:4444/path' }),
+        networkError,
+      );
+    });
+
+    it('should call transformError with the fully transformed request object', async () => {
+      const networkError = new Error('fail');
+      widget.$dependencies.fetch = jest.fn(() => Promise.reject(networkError));
+
+      await widget.http.request({ path: '/path' }).catch(() => {});
+
+      const [, requestArg] = errorTransformerSpy.mock.calls[0];
+      expect(requestArg.url).toBe('http://localhost:4444/path');
+      expect(requestArg.method).toBe('GET');
+    });
+
+    it('should still throw after transformError runs', async () => {
+      widget.$dependencies.fetch = jest.fn(() =>
+        Promise.reject(new Error('boom')),
+      );
+
+      await expect(widget.http.request({ path: '/path' })).rejects.toThrow(
+        'boom',
+      );
+    });
+
+    it('should not call transformError on successful fetch', async () => {
+      await widget.http.request({ path: '/path' });
+
+      expect(errorTransformerSpy).not.toHaveBeenCalled();
+    });
+
+    it('should not call transformError when response is already set by transformRequest', async () => {
+      setDefaultConfig(widget, {
+        transformers: [
+          {
+            transformRequest(widget, request) {
+              return [request, Response];
+            },
+            transformError: errorTransformerSpy,
+          },
+        ],
+      });
+
+      widget.$dependencies.fetch = jest.fn(() =>
+        Promise.reject(new Error('never')),
+      );
+
+      await widget.http.request({ path: '/path' });
+
+      expect(errorTransformerSpy).not.toHaveBeenCalled();
+      expect(widget.$dependencies.fetch).not.toHaveBeenCalled();
+    });
+  });
 });

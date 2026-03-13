@@ -60,9 +60,20 @@ function httpClientAPI() {
           response,
         );
 
-        response = !response
-          ? await widget.$dependencies.fetch(request.url, request)
-          : response;
+        if (!response) {
+          try {
+            response = await widget.$dependencies.fetch(request.url, request);
+          } catch (error) {
+            await runTransformers(
+              widget,
+              transformers,
+              'transformError',
+              request,
+              error,
+            );
+            throw error;
+          }
+        }
 
         [request, response] = await runTransformers(
           widget,

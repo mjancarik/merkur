@@ -90,3 +90,35 @@ try {
     }
 }
 ```
+
+## Transformers
+
+Transformers are middleware functions that can intercept and modify requests and responses. Each transformer is an object that can implement up to three methods.
+
+### transformRequest
+
+Called before the fetch is made. Receives `(widget, request, response)` and must return `[request, response]`. If `response` is returned non-null, the fetch is skipped entirely.
+
+### transformResponse
+
+Called after a successful fetch. Receives `(widget, request, response)` and must return `[request, response]`.
+
+### transformError
+
+Called when the fetch itself throws (network error, timeout, abort). Receives `(widget, request, error)` and must return `[request, error]`. The error is always re-thrown after all `transformError` handlers run — this hook is intended for side-effects such as cleanup, logging, or notifying other parts of the system. It is **not** called for non-2xx HTTP responses (those go through `transformResponse` and are rejected afterwards).
+
+```javascript
+function transformErrorLogger() {
+  return {
+    async transformError(widget, request, error) {
+      console.error(`Fetch failed for ${request.url}:`, error.message);
+      return [request, error];
+    },
+  };
+}
+
+setDefaultConfig(widget, {
+  transformers: [...getDefaultTransformers(widget), transformErrorLogger()],
+});
+```
+
