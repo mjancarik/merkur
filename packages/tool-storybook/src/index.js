@@ -31,20 +31,29 @@ function createWidgetLoader({ render, widgetProperties }) {
       const nextState = args?.args?.widget?.state ?? {};
       const nextProps = args?.args?.widget?.props ?? {};
       const lifeCycle = widget?.$in?.component?.lifeCycle;
-      if (typeof widget.setState === 'function') {
+      const hasSetState = typeof widget.setState === 'function';
+      const hasSetProps = typeof widget.setProps === 'function';
+      // Reset existing state/props to avoid stale keys when reusing the widget.
+      if (hasSetState) {
+        widget.state = {};
         await widget.setState(nextState);
       } else {
         widget.state = nextState;
       }
-      if (typeof widget.setProps === 'function') {
+      if (hasSetProps) {
+        widget.props = {};
         await widget.setProps(nextProps);
       } else {
         widget.props = nextProps;
       }
-      if (lifeCycle && typeof lifeCycle.update === 'function') {
-        await lifeCycle.update(widget);
-      } else {
-        render(widget);
+      // When setState/setProps are available, they should trigger widget.update()
+      // via @merkur/plugin-component, so avoid forcing an extra lifecycle update.
+      if (!hasSetState && !hasSetProps) {
+        if (lifeCycle && typeof lifeCycle.update === 'function') {
+          await lifeCycle.update(widget);
+        } else {
+          render(widget);
+        }
       }
       return { widget };
     }
