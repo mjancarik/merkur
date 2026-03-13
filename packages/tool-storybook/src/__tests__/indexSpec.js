@@ -58,7 +58,7 @@ describe('Merkur tool storybook', () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
       let { widget } = await loader(storyArgs);
-      widget.setState({});
+      await widget.setState({});
 
       expect(render).toHaveBeenCalledWith(widget);
     });
