@@ -27,9 +27,26 @@ function createWidgetLoader({ render, widgetProperties }) {
 
     // If we're reusing the same story's widget, update its state and props
     if (lastStory.widget && lastStory.name === args.story) {
-      lastStory.widget.state = args?.args?.widget?.state ?? {};
-      lastStory.widget.props = args?.args?.widget?.props ?? {};
-      return { widget: lastStory.widget };
+      const widget = lastStory.widget;
+      const nextState = args?.args?.widget?.state ?? {};
+      const nextProps = args?.args?.widget?.props ?? {};
+      const lifeCycle = widget?.$in?.component?.lifeCycle;
+      if (typeof widget.setState === 'function') {
+        await widget.setState(nextState);
+      } else {
+        widget.state = nextState;
+      }
+      if (typeof widget.setProps === 'function') {
+        await widget.setProps(nextProps);
+      } else {
+        widget.props = nextProps;
+      }
+      if (lifeCycle && typeof lifeCycle.update === 'function') {
+        await lifeCycle.update(widget);
+      } else {
+        render(widget);
+      }
+      return { widget };
     }
 
     // Otherwise, create and mount a new widget instance
