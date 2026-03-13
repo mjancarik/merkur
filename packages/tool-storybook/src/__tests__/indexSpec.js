@@ -1,6 +1,10 @@
-import { createWidgetLoader, createVanillaRenderer } from '../index';
+import {
+  createWidgetLoader,
+  createPreviewConfig,
+  createVanillaRenderer,
+} from '../index';
 
-import { getMerkur, createMerkurWidget } from '@merkur/core';
+import { getMerkur, createMerkurWidget, removeMerkur } from '@merkur/core';
 import { componentPlugin } from '@merkur/plugin-component';
 
 describe('Merkur tool storybook', () => {
@@ -77,6 +81,64 @@ describe('Merkur tool storybook', () => {
       let { widget } = await loader(storyArgs);
 
       expect(typeof widget.customFunction === 'function').toBeTruthy();
+    });
+  });
+
+  describe('createPreviewConfig method', () => {
+    let widgetProperties;
+
+    beforeEach(() => {
+      widgetProperties = {
+        name: 'preview-widget',
+        version: '1.0.0',
+      };
+    });
+
+    afterEach(() => {
+      removeMerkur();
+    });
+
+    it('should return an object with a loaders array containing one loader function', () => {
+      const config = createPreviewConfig({ widgetProperties });
+
+      expect(Array.isArray(config.loaders)).toBe(true);
+      expect(config.loaders).toHaveLength(1);
+      expect(typeof config.loaders[0]).toBe('function');
+    });
+
+    it('should register the widget with Merkur', () => {
+      createPreviewConfig({ widgetProperties });
+
+      expect(getMerkur().isRegistered(widgetProperties.name)).toBe(true);
+    });
+
+    it('should use a custom createWidget factory when provided', () => {
+      const createWidget = jest.fn();
+      createPreviewConfig({ widgetProperties, createWidget });
+
+      expect(getMerkur().isRegistered(widgetProperties.name)).toBe(true);
+    });
+
+    it('should throw when widgetProperties.name is missing', () => {
+      expect(() =>
+        createPreviewConfig({ widgetProperties: { version: '1.0.0' } }),
+      ).toThrow(
+        'createPreviewConfig: widgetProperties must include "name" and "version".',
+      );
+    });
+
+    it('should throw when widgetProperties.version is missing', () => {
+      expect(() =>
+        createPreviewConfig({ widgetProperties: { name: 'preview-widget' } }),
+      ).toThrow(
+        'createPreviewConfig: widgetProperties must include "name" and "version".',
+      );
+    });
+
+    it('should throw when widgetProperties is not provided', () => {
+      expect(() => createPreviewConfig({})).toThrow(
+        'createPreviewConfig: widgetProperties must include "name" and "version".',
+      );
     });
   });
 
