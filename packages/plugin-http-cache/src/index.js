@@ -39,6 +39,7 @@ export function httpCachePlugin() {
       assignMissingKeys(widget, httpCacheAPI());
 
       widget.$in.httpClient.cache = new Map();
+      widget.$in.httpClient.pendingRequests = new Map();
 
       return widget;
     },
@@ -62,6 +63,62 @@ export function httpCachePlugin() {
       }
 
       return widget;
+    },
+  };
+}
+
+export function internalCacheTransformer() {
+  return {
+    async transformRequest(widget, request, response) {
+      if (response || request.revalidateCache) {
+        return [request, response];
+      }
+
+      const { pendingRequests } = widget.$in.httpClient;
+      const key = getCacheKey(request);
+
+      if (pendingRequests.has(key)) {
+        const deferred = pendingRequests.get(key);
+        const resolvedResponse = await deferred.promise;
+        return [request, { ...copyResponse(resolvedResponse), cached: true }];
+      }
+
+      let resolve, reject;
+      const promise = new Promise((res, rej) => {
+        resolve = res;
+        reject = rej;
+      });
+      // Prevent unhandled rejection when no waiter subscribes before rejection
+      promise.catch(() => {});
+      pendingRequests.set(key, { promise, resolve, reject });
+
+      return [{ ...request, _pendingCacheKey: key }, response];
+    },
+    async transformResponse(widget, request, response) {
+      const { _pendingCacheKey } = request;
+      if (_pendingCacheKey) {
+        const { pendingRequests } = widget.$in.httpClient;
+        const deferred = pendingRequests.get(_pendingCacheKey);
+        if (deferred) {
+          pendingRequests.delete(_pendingCacheKey);
+          deferred.resolve(copyResponse(response));
+        }
+      }
+
+      return [request, response];
+    },
+    async transformError(widget, request, error) {
+      const { _pendingCacheKey } = request;
+      if (_pendingCacheKey) {
+        const { pendingRequests } = widget.$in.httpClient;
+        const deferred = pendingRequests.get(_pendingCacheKey);
+        if (deferred) {
+          pendingRequests.delete(_pendingCacheKey);
+          deferred.reject(error);
+        }
+      }
+
+      return [request, error];
     },
   };
 }
