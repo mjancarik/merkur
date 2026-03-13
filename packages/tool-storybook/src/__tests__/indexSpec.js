@@ -56,7 +56,7 @@ describe('Merkur tool storybook', () => {
       let { widget } = await loader(storyArgs);
       widget.setState({});
 
-      expect(render).toHaveBeenCalled();
+      expect(render).toHaveBeenCalledWith(widget);
     });
 
     it('should unmount previous widget if story is changed', async () => {
@@ -167,6 +167,22 @@ describe('Merkur tool storybook', () => {
 
       expect(container.innerHTML).toBe('<div>Component view</div>');
       expect(componentView).toHaveBeenCalledWith(mockWidget);
+    });
+
+    it('should fall back to default view when args.component string key is not in ViewComponent map', () => {
+      const renderer = createVanillaRenderer({
+        ViewComponent: {
+          default: mockViewFunction,
+        },
+      });
+
+      const container = renderer.render(
+        { component: 'nonExistentView' },
+        { loaded: { widget: mockWidget } },
+      );
+
+      expect(container.innerHTML).toBe('<div>Count: 0</div>');
+      expect(mockViewFunction).toHaveBeenCalledWith(mockWidget);
     });
 
     it('should use args.component as function', () => {

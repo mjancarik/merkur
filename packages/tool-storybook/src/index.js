@@ -7,8 +7,10 @@ import { getMerkur, createMerkurWidget } from '@merkur/core';
  *
  * @param {Object} options Configuration options
  * @param {Object} options.widgetProperties The widget properties used to create widget instances
- * @param {Function} options.render Callback function called when widget state updates (receives widget instance)
- * @returns {Function} Async loader function that returns widget instance for stories
+ * @param {Function} options.render Required callback called each time the widget's update lifecycle
+ *   fires (receives the widget instance as the first argument)
+ * @returns {Function} Async loader function compatible with Storybook's `loaders` API;
+ *   when called it resolves to `{ widget: MerkurWidget | null }`
  */
 function createWidgetLoader({ render, widgetProperties }) {
   let lastStory = {};
@@ -52,19 +54,28 @@ function createWidgetLoader({ render, widgetProperties }) {
 
 /**
  * Creates a Storybook preview configuration for Merkur widgets.
- * Handles widget registration and loader setup.
+ * Registers the widget with Merkur and sets up the story loader.
  *
  * @param {Object} options Configuration options
- * @param {Object} options.widgetProperties The widget properties to register
- * @param {Function} [options.render] Optional custom render function for widget updates (receives widget instance)
- * @param {Function} [options.createWidget=createMerkurWidget] Factory function to create widget instances
- * @returns {Object} Storybook preview configuration with loaders
+ * @param {Object} options.widgetProperties The widget properties to register with Merkur
+ * @param {Function} [options.render] Callback called each time the widget's update lifecycle
+ *   fires (receives the widget instance as the first argument). Defaults to a no-op.
+ * @param {Function} [options.createWidget=createMerkurWidget] Factory function used to create
+ *   widget instances — useful for injecting a test double or custom factory
+ * @returns {{ loaders: Function[] }} Partial Storybook preview configuration that can be
+ *   spread into a `preview.mjs` export
  */
 function createPreviewConfig({
   widgetProperties,
   render,
   createWidget = createMerkurWidget,
 }) {
+  if (!widgetProperties?.name || !widgetProperties?.version) {
+    throw new Error(
+      'createPreviewConfig: widgetProperties must include "name" and "version".',
+    );
+  }
+
   // Register the widget with Merkur
   getMerkur().register({
     ...widgetProperties,
@@ -82,13 +93,22 @@ function createPreviewConfig({
 }
 
 /**
- * Creates a render function for vanilla JavaScript widgets with state management.
- * Renders widget using HTML string output and handles re-rendering.
+ * Creates a renderer for vanilla JavaScript widgets that produce HTML strings.
+ * Handles initial rendering, component selection, event binding, and re-rendering
+ * when widget state changes.
  *
  * @param {Object} options Configuration options
- * @param {Function|Object} options.ViewComponent The default view function or component map
- * @param {Function} options.bindEvents Function to bind events to the container
- * @returns {Object} Object with render function and update callback
+ * @param {Function|Object.<string, Function>} options.ViewComponent Either a single view function
+ *   `(widget) => htmlString`, or a named map of such functions where the key `"default"` is used
+ *   as the fallback. A specific entry can be selected at story level via `args.component` or
+ *   `args.viewComponent`.
+ * @param {Function} [options.bindEvents] Optional function called after every render to attach
+ *   event listeners: `(container: HTMLElement, widget) => void`. When omitted the renderer
+ *   falls back to `widget.View.bindEvents` if present.
+ * @returns {{ render: Function, update: Function }} `render` is the Storybook story render
+ *   function `(args, { loaded }) => HTMLElement`; `update` is a no-argument callback suitable
+ *   for passing as the `render` option of `createPreviewConfig` — it re-renders the current
+ *   container in place and re-binds events.
  */
 function createVanillaRenderer(options) {
   const { ViewComponent, bindEvents } = options;
@@ -98,16 +118,23 @@ function createVanillaRenderer(options) {
   let currentWidget = null;
   let currentViewFunction = null;
 
-  function getViewFunction(args, ViewComponent) {
+  function getViewFunction(args) {
     // Check args first to allow overriding
-    if (args.viewComponent && ViewComponent[args.viewComponent]) {
-      return ViewComponent[args.viewComponent];
+    if (args.viewComponent) {
+      const fn = ViewComponent[args.viewComponent];
+      if (!fn) {
+        throw new Error(
+          `createVanillaRenderer: viewComponent key "${args.viewComponent}" not found in ViewComponent map`,
+        );
+      }
+      return fn;
     }
 
     if (args.component) {
-      return typeof args.component === 'function'
-        ? args.component
-        : ViewComponent[args.component];
+      if (typeof args.component === 'function') return args.component;
+      const found = ViewComponent[args.component];
+      if (found) return found;
+      // fall through to default when ViewComponent is a plain function
     }
 
     // Fall back to ViewComponent
@@ -115,7 +142,13 @@ function createVanillaRenderer(options) {
       return ViewComponent;
     }
 
-    return ViewComponent.default || ViewComponent;
+    const fn = ViewComponent.default || ViewComponent;
+    if (typeof fn !== 'function') {
+      throw new Error(
+        'createVanillaRenderer: ViewComponent must be a function or an object with a callable "default" property',
+      );
+    }
+    return fn;
   }
 
   function renderWidget(container, widget, viewFunction) {
@@ -137,7 +170,7 @@ function createVanillaRenderer(options) {
       }
 
       const container = document.createElement('div');
-      const viewFunction = getViewFunction(args, ViewComponent);
+      const viewFunction = getViewFunction(args);
 
       renderWidget(container, widget, viewFunction);
 

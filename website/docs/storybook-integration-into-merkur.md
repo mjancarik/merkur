@@ -52,6 +52,7 @@ const config = {
   // This automatically injects Preact imports so you don't need to import h and Fragment in every file
   async viteFinal(config) {
     config.esbuild = {
+      ...config.esbuild,
       jsxFactory: 'h',
       jsxFragment: 'Fragment',
       jsxInject: `import { h, Fragment } from 'preact'`,
