@@ -25,35 +25,41 @@ function createWidgetLoader({ render, widgetProperties }) {
       return { widget: null };
     }
 
+    // If we're reusing the same story's widget, update its state and props
+    if (lastStory.widget && lastStory.name === args.story) {
+      lastStory.widget.state = args?.args?.widget?.state ?? {};
+      lastStory.widget.props = args?.args?.widget?.props ?? {};
+      return { widget: lastStory.widget };
+    }
+
+    // Otherwise, create and mount a new widget instance
     return {
-      widget: lastStory.widget
-        ? lastStory.widget
-        : await getMerkur()
-            .create({ ...widgetProperties, ...args.args.widget })
-            .then(async (widget) => {
-              const lifeCycle = widget?.$in?.component?.lifeCycle;
-              if (!lifeCycle) {
-                throw new Error(
-                  'createWidgetLoader: widget must be created with a component plugin (e.g., "@merkur/plugin-component"). Ensure "componentPlugin" is included in widgetProperties.$plugins for Storybook integration to work.',
-                );
-              }
-              lifeCycle.mount = () => {};
-              lifeCycle.update = () => {
-                render(widget);
-              };
-              lifeCycle.unmount = () => {};
+      widget: await getMerkur()
+        .create({ ...widgetProperties, ...args.args.widget })
+        .then(async (widget) => {
+          const lifeCycle = widget?.$in?.component?.lifeCycle;
+          if (!lifeCycle) {
+            throw new Error(
+              'createWidgetLoader: widget must be created with a component plugin (e.g., "@merkur/plugin-component"). Ensure "componentPlugin" is included in widgetProperties.$plugins for Storybook integration to work.',
+            );
+          }
+          lifeCycle.mount = () => {};
+          lifeCycle.update = () => {
+            render(widget);
+          };
+          lifeCycle.unmount = () => {};
 
-              widget.state = args?.args?.widget?.state ?? {};
-              widget.props = args?.args?.widget?.props ?? {};
-              await widget.mount();
+          widget.state = args?.args?.widget?.state ?? {};
+          widget.props = args?.args?.widget?.props ?? {};
+          await widget.mount();
 
-              lastStory = {
-                widget,
-                name: args.story,
-              };
+          lastStory = {
+            widget,
+            name: args.story,
+          };
 
-              return widget;
-            }),
+          return widget;
+        }),
     };
   };
 }
