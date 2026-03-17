@@ -387,5 +387,24 @@ describe('internalCacheTransformer', () => {
       expect(fetchMock).toHaveBeenCalledTimes(1); // only the initial populate call
       expect(errorTransformerSpy).not.toHaveBeenCalled();
     });
+
+    it('should enrich thrown error with cause, request and response on network failure', async () => {
+      fetchMock.mockRejectedValueOnce(new Error('Network failure'));
+
+      const thrownError = await widget.http
+        .request({ path: '/api/data' })
+        .catch((e) => e);
+
+      expect(thrownError.cause).toEqual({
+        request: expect.objectContaining({
+          url: 'http://localhost:4444/api/data',
+        }),
+        response: null,
+      });
+      expect(thrownError.request).toEqual(
+        expect.objectContaining({ url: 'http://localhost:4444/api/data' }),
+      );
+      expect(thrownError.response).toBeNull();
+    });
   });
 });

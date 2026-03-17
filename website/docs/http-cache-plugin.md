@@ -82,7 +82,7 @@ Stores the fetch response in the cache after a successful request.
 
 Deduplicates concurrent in-flight requests to the same endpoint. If a second (or subsequent) request arrives for the same key while the first has not yet resolved, the later requests wait for the first and share its response — no extra fetch is made.
 
-When the first request fails with a network error, all waiting requests are rejected with the same error via the `transformError` hook.
+When the first request fails with a network error, all waiting requests are rejected with the same error via the `transformError` hook. The `transformError` signature follows the shared convention: `(widget, error, request)` returning `[error, request]`.
 
 ```javascript
 // Example: two parallel requests – fetch is called only once

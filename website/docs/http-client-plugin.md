@@ -78,16 +78,21 @@ try {
   console.log(response.status); // 200
   console.log(response.body); // { data: 'value' }
 } catch(error) {
-   if (error.response) {
-      // The request was made and the server responded with a status code
-      // that falls out of the range of 2xx
-      console.log(error.request.url); // http://www.example.com/detail/1
-      console.log(error.response.status); // 500
-      console.log(error.response.body); // { data: 'error message' }
-    } else {
-      // Something happened in the request
-      console.log('Error', error.message);
-    }
+  if (error.response) {
+    // The request was made and the server responded with a status code
+    // that falls out of the range of 2xx
+    console.log(error.request.url); // http://www.example.com/detail/1
+    console.log(error.response.status); // 500
+    console.log(error.response.body); // { data: 'error message' }
+  } else {
+    // Network/timeout error – the fetch never received a response.
+    // The error is enriched with the original request for diagnostics:
+    console.log(error.message);          // e.g. "Failed to fetch"
+    console.log(error.request.url);      // http://www.example.com/detail/1
+    console.log(error.response);         // null
+    console.log(error.cause.request);    // same as error.request
+    console.log(error.cause.response);   // null
+  }
 }
 ```
 
@@ -105,14 +110,19 @@ Called after a successful fetch. Receives `(widget, request, response)` and must
 
 ### transformError
 
-Called when the fetch itself throws (network error, timeout, abort). Receives `(widget, request, error)` and must return `[request, error]`. The error is always re-thrown after all `transformError` handlers run — this hook is intended for side-effects such as cleanup, logging, or notifying other parts of the system. It is **not** called for non-2xx HTTP responses (those go through `transformResponse` and are rejected afterwards).
+Called when the fetch itself throws (network error, timeout, abort). Receives `(widget, error, request)` and must return `[error, request]`. The error is always re-thrown after all `transformError` handlers run — this hook is intended for side-effects such as cleanup, logging, or notifying other parts of the system. It is **not** called for non-2xx HTTP responses (those go through `transformResponse` and are rejected afterwards).
+
+After all `transformError` handlers run, the thrown error is enriched with:
+- `error.cause` — `{ request, response: null }` following the standard [Error cause](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error/cause) pattern
+- `error.request` — the fully-transformed request object (backward compatibility)
+- `error.response` — `null` (backward compatibility, mirrors the shape of HTTP-status errors)
 
 ```javascript
 function transformErrorLogger() {
   return {
-    async transformError(widget, request, error) {
+    async transformError(widget, error, request) {
       console.error(`Fetch failed for ${request.url}:`, error.message);
-      return [request, error];
+      return [error, request];
     },
   };
 }
