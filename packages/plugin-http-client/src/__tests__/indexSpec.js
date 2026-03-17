@@ -326,9 +326,9 @@ describe('createWidget method with http client plugin', () => {
     let errorTransformerSpy;
 
     beforeEach(() => {
-      errorTransformerSpy = jest.fn((widget, request, error) => [
-        request,
+      errorTransformerSpy = jest.fn((widget, error, request) => [
         error,
+        request,
       ]);
 
       setDefaultConfig(widget, {
@@ -353,8 +353,8 @@ describe('createWidget method with http client plugin', () => {
 
       expect(errorTransformerSpy).toHaveBeenCalledWith(
         widget,
-        expect.objectContaining({ url: 'http://localhost:4444/path' }),
         networkError,
+        expect.objectContaining({ url: 'http://localhost:4444/path' }),
       );
     });
 
@@ -364,7 +364,7 @@ describe('createWidget method with http client plugin', () => {
 
       await widget.http.request({ path: '/path' }).catch(() => {});
 
-      const [, requestArg] = errorTransformerSpy.mock.calls[0];
+      const [, , requestArg] = errorTransformerSpy.mock.calls[0];
       expect(requestArg.url).toBe('http://localhost:4444/path');
       expect(requestArg.method).toBe('GET');
     });
@@ -377,6 +377,24 @@ describe('createWidget method with http client plugin', () => {
       await expect(widget.http.request({ path: '/path' })).rejects.toThrow(
         'boom',
       );
+    });
+
+    it('should enrich thrown error with cause, request and response', async () => {
+      const networkError = new Error('Network failure');
+      widget.$dependencies.fetch = jest.fn(() => Promise.reject(networkError));
+
+      const thrownError = await widget.http
+        .request({ path: '/path' })
+        .catch((e) => e);
+
+      expect(thrownError.cause).toEqual({
+        request: expect.objectContaining({ url: 'http://localhost:4444/path' }),
+        response: null,
+      });
+      expect(thrownError.request).toEqual(
+        expect.objectContaining({ url: 'http://localhost:4444/path' }),
+      );
+      expect(thrownError.response).toBeNull();
     });
 
     it('should not call transformError on successful fetch', async () => {
