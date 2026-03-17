@@ -71,7 +71,13 @@ function httpClientAPI() {
               error,
               request,
             );
-            transformedError.cause = { request: transformedRequest };
+            transformedError.cause = {
+              request: transformedRequest,
+              response: null,
+            };
+            // keep compatibility
+            transformedError.request = transformedRequest;
+            transformedError.response = null;
 
             throw transformedError;
           }
