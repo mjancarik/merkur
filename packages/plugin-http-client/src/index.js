@@ -64,14 +64,16 @@ function httpClientAPI() {
           try {
             response = await widget.$dependencies.fetch(request.url, request);
           } catch (error) {
-            await runTransformers(
+            let [transformedError, transformedRequest] = await runTransformers(
               widget,
               transformers,
               'transformError',
-              request,
               error,
+              request,
             );
-            throw error;
+            transformedError.cause = { request: transformedRequest };
+
+            throw transformedError;
           }
         }
 
@@ -90,7 +92,7 @@ function httpClientAPI() {
               cause: { request, response },
             },
           );
-          // keep compatablity
+          // keep compatibility
           error.request = request;
           error.response = response;
 

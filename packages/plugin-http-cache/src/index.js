@@ -107,7 +107,7 @@ export function internalCacheTransformer() {
 
       return [request, response];
     },
-    async transformError(widget, request, error) {
+    async transformError(widget, error, request) {
       const { _pendingCacheKey } = request;
       if (_pendingCacheKey) {
         const { pendingRequests } = widget.$in.httpClient;
@@ -118,7 +118,7 @@ export function internalCacheTransformer() {
         }
       }
 
-      return [request, error];
+      return [error, request];
     },
   };
 }
