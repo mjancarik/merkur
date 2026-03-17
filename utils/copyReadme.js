@@ -7,6 +7,7 @@ const README = path.resolve(process.cwd(), 'README.md');
 const PACKAGES = fs.readdirSync(PACKAGES_DIR);
 const IGNORED_PACKAGES = [
   'plugin-component',
+  `plugin-validation`,
   'plugin-event-emitter',
   'plugin-http-client',
   'plugin-error',
