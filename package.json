@@ -6,8 +6,7 @@
     "@babel/eslint-parser": "^7.28.5",
     "@babel/plugin-transform-modules-commonjs": "^7.27.1",
     "@babel/preset-env": "^7.28.5",
-    "@commitlint/cli": "^20.1.0",
-    "@commitlint/config-conventional": "^20.0.0",
+    "@changesets/cli": "^2.26.2",
     "@rollup/plugin-babel": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.3",
     "@rollup/plugin-run": "^3.1.0",
@@ -17,7 +16,6 @@
     "@types/node": "^24.9.1",
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
-    "commitizen": "^4.3.1",
     "coveralls": "^3.1.1",
     "es-check": "^9.4.4",
     "eslint": "8.57.0",
@@ -27,12 +25,11 @@
     "eslint-plugin-jest": "^28.9.0",
     "eslint-plugin-prettier": "^5.5.4",
     "eslint-plugin-react": "^7.37.5",
-    "git-cz": "^4.9.0",
     "husky": "^9.1.7",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
-    "lerna": "^9.0.0",
     "lint-staged": "^16.2.6",
+    "turbo": "^2.4.4",
     "prettier": "^3.6.2",
     "rollup": "^4.52.5",
     "to-mock": "^1.6.2",
@@ -40,19 +37,25 @@
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "test": "lerna run test",
-    "test:es:version": "lerna run test:es:version",
+    "changeset": "changeset add",
+    "postinstall": "npm run build",
+    "build": "turbo build",
+    "test": "turbo run test",
+    "test:es:version": "turbo run test:es:version",
     "test:release": "utils/CIRelease.sh",
-    "build": "lerna run build",
-    "release": "lerna version --force-publish @merkur/create-widget",
-    "release:publish": "lerna publish from-git --yes",
     "lint:cmd": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore  --no-eslintrc",
     "lint": "npm run lint:cmd -- './**/*.{mjs,cjs,js,jsx}'",
     "lint:fix": "npm run lint -- --fix",
-    "stylelint:fix": "npm run stylelint -- --fix",
-    "commit": "git-cz",
-    "version": "node utils/bumpVersion.js && node utils/copyReadme.js && git add packages/create-widget/template/package.json && git add packages/**/README.md",
-    "prepare": "husky && npm run build"
+    "commit": "echo 'This command has been replaced with \"npm run changeset\"' && npm run changeset",
+    "precommit": "lint-staged",
+    "release": "npm run release:prepare && npm run release:push",
+    "release:prepare": "npm run check:uncommited:changes && changeset version && npm i --package-lock-only --ignore-scripts",
+    "release:push": "git add .changeset package-lock.json packages/*/CHANGELOG.md packages/*/package.json && git commit -m 'release: publish' && changeset tag && git push --follow-tags",
+    "release:graduate": "npm run check:uncommited:changes && changeset pre exit && changeset version",
+    "release:next:init": "changeset pre enter rc",
+    "release:publish": "changeset publish --no-git-tag",
+    "check:uncommited:changes": "test \"`git status . --porcelain`\" && echo 'There are uncommitted changes. Aborting release.' && exit 1 || exit 0",
+    "prepare": "husky"
   },
   "author": "Miroslav Jancarik <miroslav.jancarik@firma.seznam.cz>",
   "license": "MIT",
@@ -66,17 +69,8 @@
   "lint-staged": {
     "**/*.{js,jsx}": "npm run lint:cmd"
   },
-  "commitlint": {
-    "extends": [
-      "@commitlint/config-conventional"
-    ]
-  },
-  "config": {
-    "commitizen": {
-      "path": "git-cz"
-    }
-  },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "packageManager": "npm@11.10.0"
 }
