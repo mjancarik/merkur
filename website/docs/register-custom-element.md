@@ -211,66 +211,6 @@ When a custom element is registered, its attributes are automatically propagated
 
 The recommended approach for parsing and validating attributes is to use `@merkur/plugin-validation` with `@esmj/schema`. This provides automatic type coercion, validation, and better error handling.
 
-First, install the required packages:
-
-```bash
-npm install @merkur/plugin-validation @esmj/schema
-```
-
-Then define a schema with coercion for your props:
-
-```javascript
-import { registerCustomElement } from '@merkur/integration-custom-element';
-import { componentPlugin } from '@merkur/plugin-component';
-import { validationPlugin } from '@merkur/plugin-validation';
-import { s } from '@esmj/schema';
-
-// Schema with coercion - automatically converts string attributes to correct types
-const propsSchema = s.object({
-  title: s.string(),
-  theme: s.string(),
-  count: s.cast.number(),    // Casts "42" → 42
-  enabled: s.cast.boolean(), // Casts "true" → true
-  config: s.cast.json(s.object({ apiUr: s.string() })),            // Parses JSON strings automatically
-});
-
-const widgetDefinition = {
-  name: 'my-widget',
-  version: '1.0.0',
-  $plugins: [
-    componentPlugin,
-    validationPlugin({ props: propsSchema }),
-  ],
-  // ... widget implementation
-};
-
-registerCustomElement({
-  widgetDefinition,
-  observedAttributes: ['title', 'theme', 'count', 'enabled', 'config'],
-});
-```
-
-```html
-<my-widget 
-  title="Hello World"
-  theme="dark"
-  count="42"
-  enabled="true"
-  config='{"apiUrl": "https://api.example.com"}'
-></my-widget>
-```
-
-**Benefits of using validation plugin:**
-
-| Feature | `attributesParser` | `validationPlugin` + schema |
-|---------|-------------------|------------------------------|
-| Type coercion | Manual per attribute | Automatic via schema |
-| Validation | None built-in | Full validation with errors |
-| Type safety | No | Yes (with TypeScript) |
-| Reusability | Limited | Schema can be reused |
-| Error handling | Manual | Configurable via `onError` |
-| Default values | Not supported | Via schema defaults |
-
 For more details, see the [Validation Plugin documentation](/docs/validation-plugin).
 
 #### Batching mechanism
