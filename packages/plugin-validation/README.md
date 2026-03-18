@@ -192,8 +192,10 @@ registerCustomElement({
 Full TypeScript support is included:
 
 ```typescript
-import { validationPlugin, type ValidationPluginOptions } from '@merkur/plugin-validation';
 import { s, type Infer } from '@esmj/schema';
+ import { defineWidget } from '@merkur/core';
+ import { componentPlugin } from '@merkur/plugin-component';
+ import { validationPlugin, type ValidationPluginOptions } from '@merkur/plugin-validation';
 
 const propsSchema = s.object({
   userId: s.string(),
@@ -212,47 +214,4 @@ export default defineWidget({
     validationPlugin(options),
   ],
 });
-```
-
-## Custom Element Integration
-
-When using with `@merkur/integration-custom-element`, the validation plugin provides a cleaner approach for parsing HTML attributes to widget props. Instead of defining individual `attributesParser` functions, you can define a schema with coercion that handles both validation and type conversion:
-
-```javascript
-import { registerCustomElement } from '@merkur/integration-custom-element';
-import { componentPlugin } from '@merkur/plugin-component';
-import { validationPlugin } from '@merkur/plugin-validation';
-import { s } from '@esmj/schema';
-
-// Schema with coercion - automatically converts string attributes to correct types
-const propsSchema = s.object({
-  userId: s.string(),
-  count: s.cast.number(),    // Casts "42" → 42
-  enabled: s.cast.boolean(), // Casts "true" → true
-  config: s.cast.json(s.object({ apiUrl: s.string() })), // Parses JSON strings automatically
-});
-
-const widgetDefinition = {
-  name: 'my-widget',
-  version: '1.0.0',
-  $plugins: [
-    componentPlugin,
-    validationPlugin({ props: propsSchema }),
-  ],
-  // ...
-};
-
-registerCustomElement({
-  widgetDefinition,
-  observedAttributes: ['user-id', 'count', 'enabled', 'config'],
-});
-```
-
-```html
-<my-widget 
-  user-id="abc123"
-  count="42"
-  enabled="true"
-  config='{"apiUrl": "https://api.example.com"}'
-></my-widget>
 ```
