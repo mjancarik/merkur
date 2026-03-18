@@ -23,10 +23,7 @@ describe('validationPlugin', () => {
       });
 
       const widget = await createMerkurWidget({
-        $plugins: [
-          componentPlugin,
-          () => validationPlugin({ props: propsSchema }),
-        ],
+        $plugins: [componentPlugin, validationPlugin({ props: propsSchema })],
         name: 'test-widget',
         version: '1.0.0',
         props: { name: 'test' },
@@ -43,10 +40,7 @@ describe('validationPlugin', () => {
       });
 
       const widget = await createMerkurWidget({
-        $plugins: [
-          componentPlugin,
-          () => validationPlugin({ props: propsSchema }),
-        ],
+        $plugins: [componentPlugin, validationPlugin({ props: propsSchema })],
         name: 'test-widget',
         version: '1.0.0',
         props: {},
@@ -111,7 +105,7 @@ describe('validationPlugin', () => {
       const throwWidget = await createMerkurWidget({
         $plugins: [
           componentPlugin,
-          () => validationPlugin({ props: propsSchema, onError: null }),
+          validationPlugin({ props: propsSchema, onError: null }),
         ],
         name: 'throw-widget',
         version: '1.0.0',
@@ -138,8 +132,7 @@ describe('validationPlugin', () => {
       const customWidget = await createMerkurWidget({
         $plugins: [
           componentPlugin,
-          () =>
-            validationPlugin({ props: propsSchema, onError: customHandler }),
+          validationPlugin({ props: propsSchema, onError: customHandler }),
         ],
         name: 'custom-widget',
         version: '1.0.0',
@@ -179,7 +172,7 @@ describe('validationPlugin', () => {
       const widget = await createMerkurWidget({
         $plugins: [
           componentPlugin,
-          () => validationPlugin({ props: propsSchema, onError: null }),
+          validationPlugin({ props: propsSchema, onError: null }),
         ],
         name: 'test-widget',
         version: '1.0.0',
@@ -196,7 +189,7 @@ describe('validationPlugin', () => {
       const widget = await createMerkurWidget({
         $plugins: [
           componentPlugin,
-          () => validationPlugin({ props: propsSchema, onError: null }),
+          validationPlugin({ props: propsSchema, onError: null }),
         ],
         name: 'test-widget',
         version: '1.0.0',
@@ -213,7 +206,7 @@ describe('validationPlugin', () => {
       const widget = await createMerkurWidget({
         $plugins: [
           componentPlugin,
-          () => validationPlugin({ props: propsSchema, onError: null }),
+          validationPlugin({ props: propsSchema, onError: null }),
         ],
         name: 'test-widget',
         version: '1.0.0',
@@ -223,7 +216,7 @@ describe('validationPlugin', () => {
         },
       });
 
-      await expect(widget.mount()).resolves.not.toThrow();
+      await expect(widget.mount()).rejects.toThrow();
     });
   });
 
@@ -235,10 +228,7 @@ describe('validationPlugin', () => {
       });
 
       const widget = await createMerkurWidget({
-        $plugins: [
-          componentPlugin,
-          () => validationPlugin({ props: propsSchema }),
-        ],
+        $plugins: [componentPlugin, validationPlugin({ props: propsSchema })],
         name: 'test-widget',
         version: '1.0.0',
         props: { name: 'test', count: 42 },
@@ -270,7 +260,7 @@ describe('validationPlugin', () => {
       const widget = await createMerkurWidget({
         $plugins: [
           componentPlugin,
-          () => validationPlugin({ props: propsSchema, onError: null }),
+          validationPlugin({ props: propsSchema, onError: null }),
         ],
         name: 'test-widget',
         version: '1.0.0',
@@ -305,7 +295,7 @@ describe('validationPlugin', () => {
       const widget = await createMerkurWidget({
         $plugins: [
           componentPlugin,
-          () => validationPlugin({ props: propsSchema, onError: null }),
+          validationPlugin({ props: propsSchema, onError: null }),
         ],
         name: 'test-widget',
         version: '1.0.0',

@@ -55,7 +55,7 @@ export function validationPlugin(options = {}) {
     );
   }
 
-  return {
+  return () => ({
     async setup(widget) {
       widget.$in.validation = {
         props,
@@ -81,7 +81,7 @@ export function validationPlugin(options = {}) {
 
       return widget;
     },
-  };
+  });
 }
 
 /**
@@ -156,6 +156,8 @@ async function setPropsHook(widget, originalSetProps, propsSetter) {
   if (!result.success) {
     handleValidationError(widget, result);
   } else {
+    widget.props = result.data; // Update widget.props with validated/transformed data
+
     // Call original setProps with result.data which is the validated and potentially transformed props
     return originalSetProps(result.data);
   }
@@ -170,14 +172,13 @@ async function setPropsHook(widget, originalSetProps, propsSetter) {
  */
 async function mountHook(widget, originalMount, ...rest) {
   // Validate initial props
-  if (widget.props && Object.keys(widget.props).length > 0) {
-    const result = validateProps(widget, widget.props);
+  const propsToValidate = widget.props ?? {};
+  const result = validateProps(widget, propsToValidate);
 
-    if (!result.success) {
-      handleValidationError(widget, result);
-    } else {
-      widget.props = result.data;
-    }
+  if (!result.success) {
+    handleValidationError(widget, result);
+  } else {
+    widget.props = result.data;
   }
 
   return originalMount(...rest);

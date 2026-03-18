@@ -198,6 +198,8 @@ registerCustomElement({
 Full TypeScript support is included:
 
 ```typescript
+ import { defineWidget } from '@merkur/core';
+ import { componentPlugin } from '@merkur/plugin-component';
 import { validationPlugin, type ValidationPluginOptions } from '@merkur/plugin-validation';
 import { s, type Infer } from '@esmj/schema';
 
