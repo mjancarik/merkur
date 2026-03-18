@@ -49,9 +49,9 @@ export function validationPlugin(options = {}) {
     throw new Error('@merkur/plugin-validation: props option is required');
   }
 
-  if (!hasParseMethod(props)) {
+  if (!hasSafeParseMethod(props)) {
     throw new Error(
-      '@merkur/plugin-validation: props must have a parse() or safeParse() method',
+      '@merkur/plugin-validation: props must have a safeParse() method',
     );
   }
 
@@ -89,7 +89,7 @@ export function validationPlugin(options = {}) {
  * @param {Object} schema - Schema object to check
  * @returns {boolean} True if schema has safeParse method
  */
-function hasParseMethod(schema) {
+function hasSafeParseMethod(schema) {
   return typeof schema.safeParse === 'function';
 }
 
@@ -155,10 +155,10 @@ async function setPropsHook(widget, originalSetProps, propsSetter) {
 
   if (!result.success) {
     handleValidationError(widget, result);
+  } else {
+    // Call original setProps with result.data which is the validated and potentially transformed props
+    originalSetProps(result.data);
   }
-
-  // Call original setProps with result.data which is the validated and potentially transformed props
-  return originalSetProps(result.data);
 }
 
 /**

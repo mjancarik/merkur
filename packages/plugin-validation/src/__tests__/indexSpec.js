@@ -13,7 +13,7 @@ describe('validationPlugin', () => {
 
     it('should throw error if props schema has no safeParse method', () => {
       expect(() => validationPlugin({ props: {} })).toThrow(
-        '@merkur/plugin-validation: props must have a parse() or safeParse() method',
+        '@merkur/plugin-validation: props must have a safeParse() method',
       );
     });
 
