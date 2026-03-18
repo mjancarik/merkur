@@ -17,13 +17,13 @@ const ENV =
  * @returns {Object} Merkur plugin
  *
  * @example
- * // With zod
- * import { z } from 'zod';
+ * // With @esmj/schema
+ * import { s } from '@esmj/schema';
  * import { validationPlugin } from '@merkur/plugin-validation';
  *
- * const propsSchema = z.object({
- *   userId: z.string(),
- *   count: z.number().optional(),
+ * const propsSchema = s.object({
+ *   userId: s.string(),
+ *   count: s.number().optional(),
  * });
  *
  * defineWidget({
@@ -157,7 +157,7 @@ async function setPropsHook(widget, originalSetProps, propsSetter) {
     handleValidationError(widget, result);
   } else {
     // Call original setProps with result.data which is the validated and potentially transformed props
-    originalSetProps(result.data);
+    return originalSetProps(result.data);
   }
 }
 
