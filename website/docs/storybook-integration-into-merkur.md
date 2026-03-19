@@ -8,7 +8,7 @@ description: Learn how to integrate Storybook with your Merkur widget
 
 [Storybook](https://storybook.js.org/) is an open source tool for developing UI components in isolation for React, Vue, Angular, and more. It makes building stunning UIs organized and efficient.
 
-This guide requires Storybook version 9 or higher. Lower versions need a different setup, which is covered in previous versions of the documentation.
+This guide requires Storybook version 10 or higher. Lower versions need a different setup, which is covered in previous versions of the documentation.
 
 ## Installation
 
@@ -48,15 +48,14 @@ const config = {
   framework: {
     name: '@storybook/preact-vite',
   },
-  // Configure Vite to transform JSX to Preact's `h` function instead of React's `React.createElement`
-  // This automatically injects Preact imports so you don't need to import h and Fragment in every file
-  async viteFinal(config) {
-    config.esbuild = {
-      jsxFactory: 'h',
-      jsxFragment: 'Fragment',
-      jsxInject: `import { h, Fragment } from 'preact'`,
+  // Use Preact's automatic JSX runtime so you don't need to import h/Fragment in every file
+  async viteFinal(viteConfig) {
+    viteConfig.esbuild = {
+      ...viteConfig.esbuild,
+      jsx: 'automatic',
+      jsxImportSource: 'preact',
     };
-    return config;
+    return viteConfig;
   },
 };
 
@@ -104,15 +103,22 @@ export const decorators = [
       if (widget && widget.$in) {
         // Store the forceUpdate function on the widget so the render callback can trigger it
         widget.$in._storybookForceUpdate = () => forceUpdate((n) => n + 1);
+        return () => {
+          widget.$in._storybookForceUpdate = null;
+        };
       }
     }, [widget]);
 
-    return h(WidgetContext.Provider, { value: widget }, h(Story));
+    return (
+      <WidgetContext.Provider value={widget}>
+        <Story />
+      </WidgetContext.Provider>
+    );
   },
 ];
 ```
 
-Note: The `h` and `Fragment` functions are automatically injected by the Vite configuration in `main.mjs`, so you don't need to import them in `.jsx` files.
+Note: With `jsxImportSource: 'preact'` set in `main.mjs`, the automatic JSX runtime handles imports for you — you don't need to import `h` or `Fragment` in `.jsx` files.
 
 ### Vanilla JavaScript Widget
 
@@ -144,27 +150,28 @@ import Counter from './Counter';
 
 export default {
   title: 'Components/Counter',
+  // Shared render function for all stories in this file
+  render: (args, { loaded: { widget } }) => (
+    <Counter counter={widget.state.counter} />
+  ),
   args: {
-    // Every Merkur story must have defined props property
+    // Merkur stories may define a props property; if omitted, it defaults to {}
     widget: {
       props: {},
     },
   },
 };
 
-const Template = (args, { loaded: { widget } }) => {
-  return <Counter counter={widget.state.counter} />;
-};
+export const DefaultCounter = {};
 
-export const DefaultCounter = Template.bind({});
-
-export const TenCounter = Template.bind({});
-TenCounter.args = {
-  widget: {
-    props: {},
-    // change default widget state from 0 to 10
-    state: {
-      counter: 10,
+export const TenCounter = {
+  args: {
+    widget: {
+      props: {},
+      // change default widget state from 0 to 10
+      state: {
+        counter: 10,
+      },
     },
   },
 };
@@ -173,7 +180,6 @@ TenCounter.args = {
 The decorator handles:
 - Providing `WidgetContext` to all components
 - Re-rendering when widget state changes (e.g., when clicking buttons)
-- Proper cleanup between story navigation
 
 ### Vanilla JavaScript Widget Stories
 
@@ -200,13 +206,13 @@ export default function Counter(widget) {
 **Note:** Vanilla components return HTML strings, so use `class` for CSS classes, not `className` (which is JSX-specific). For example: `<div class="my-class">` not `<div className="my-class">`.
 
 ```javascript
-// /src/components/__tests__/Counter.stories.js
-import Counter from '../Counter';
+// /src/components/Counter.stories.js
+import Counter from './Counter';
 
 export default {
   title: 'Components/Counter',
   args: {
-    // Every Merkur story must have defined props property
+    // widget.props is optional; if omitted, it defaults to {}
     widget: {
       props: {},
     },
@@ -222,7 +228,6 @@ export const DefaultCounter = {};
 export const TenCounter = {
   args: {
     widget: {
-      props: {},
       // change default widget state from 0 to 10
       state: {
         counter: 10,
@@ -232,16 +237,52 @@ export const TenCounter = {
 };
 ```
 
-The `createVanillaRenderer` in `preview.mjs` handles all the DOM creation and rendering automatically. You just need to:
-1. Import your component
-2. Add it to the `ViewComponent` map in `preview.mjs`
-3. Specify `component: YourComponent` in story args
+The `createVanillaRenderer` in `preview.mjs` handles all the DOM creation and rendering automatically. You can provide the component in two ways, but stories still need a `widget` object in `args` so the Merkur loader creates a widget instance:
+
+1. Pass the component function directly in story args (no map needed), for example:
+   ```js
+   export default {
+     args: {
+       widget: {
+         props: {},
+       },
+       component: Counter,
+     },
+   };
+   ```
+2. Or register the component in the `ViewComponent` map in `preview.mjs` and reference it by key in story args, for example:
+   ```js
+   // in preview.mjs
+   const ViewComponent = {};
+   createVanillaRenderer({
+     // other options...
+     ViewComponent,
+   });
+   ViewComponent.Counter = Counter;
+   // or equivalently:
+   // ViewComponent['Counter'] = Counter;
+   // in your story
+   export default {
+     args: {
+       widget: {
+         props: {},
+       },
+       component: 'Counter',
+     },
+   };
+   ```
 
 #### Custom Render Functions
 
 For stories that need custom logic (e.g., overriding specific widget properties), you can provide a custom render function:
 
 ```javascript
+ const WidgetDescription = (widget) => `
+   <div>
+     <strong>${widget.name}</strong> – v${widget.version}
+   </div>
+ `;
+
 export const CustomWidget = {
   render: (args, { loaded: { widget } }) => {
     const container = document.createElement('div');
@@ -300,7 +341,7 @@ The `bindEvents` function is crucial for vanilla widgets as it reconnects event 
 - **Preact widgets**: 
   - Use `.jsx` extension and JSX syntax
   - Decorators provide context and handle re-rendering
-  - Stories use CSF3 format with `Template.bind({})`
+  - Stories use CSF3 object format with a shared `render` function in the default export
   - Components receive individual props
   
 - **Vanilla widgets**:
