@@ -3,6 +3,13 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.47.0](https://github.com/mjancarik/merkur/compare/v0.46.2...v0.47.0) (2026-03-19)
+
+### Features
+
+- 🎸 Add transformError transfomer ([b503c15](https://github.com/mjancarik/merkur/commit/b503c151a49c0e92837af48662346ef95b83d7eb))
+- 🎸 Add transformError transfomer ([39f73c6](https://github.com/mjancarik/merkur/commit/39f73c679718cb5198394224020a2b2bf726669e))
+
 # [0.46.0](https://github.com/mjancarik/merkur/compare/v0.45.2...v0.46.0) (2026-03-04)
 
 **Note:** Version bump only for package @merkur/plugin-http-client

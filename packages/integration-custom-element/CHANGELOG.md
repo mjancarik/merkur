@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.47.0](https://github.com/mjancarik/merkur/compare/v0.46.2...v0.47.0) (2026-03-19)
+
+### Bug Fixes
+
+- 🐛 batch mechanism ([3db4ac8](https://github.com/mjancarik/merkur/commit/3db4ac832a94351dee2f53c28fbdb04788d224bb))
+
+### Features
+
+- 🎸 add batch for props from attributeChangedCallbacks ([2b05e71](https://github.com/mjancarik/merkur/commit/2b05e71e6565608637f81882a7867aa0c079f45d))
+- 🎸 disconnectedCallback method unmount widget ([5c45c30](https://github.com/mjancarik/merkur/commit/5c45c30b63136f3a352b254e31d2957d65469514))
+
+### BREAKING CHANGES
+
+- 🧨 The attributeChangedCallback batches attribute values to props and
+  ensures that widget.setProps() is called only once with all accumulated
+  changes. This callback is not invoked for default attribute values
+  during element initialization.
+- 🧨 The disconnectedCallback method call widget.unmount method. Remove code
+  with widget.unmount() from your disconnectedCallback method.
+
 # [0.46.0](https://github.com/mjancarik/merkur/compare/v0.45.2...v0.46.0) (2026-03-04)
 
 **Note:** Version bump only for package @merkur/integration-custom-element

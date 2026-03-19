@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-validation",
-  "version": "0.46.0",
+  "version": "0.47.0",
   "description": "Merkur plugin for schema validation (props and for future more). Library-agnostic - works with @esmj/schema, zod, and other schema libraries.",
   "main": "lib/index",
   "module": "lib/index",
@@ -55,8 +55,8 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@esmj/schema": "^0.7.2",
-    "@merkur/core": "^0.46.0",
-    "@merkur/plugin-component": "^0.46.0"
+    "@merkur/core": "^0.47.0",
+    "@merkur/plugin-component": "^0.47.0"
   },
   "peerDependencies": {
     "@merkur/core": "*",

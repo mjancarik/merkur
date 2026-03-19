@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.47.0](https://github.com/mjancarik/merkur/compare/v0.46.2...v0.47.0) (2026-03-19)
+
+### Bug Fixes
+
+- 🐛 batch mechanism ([3db4ac8](https://github.com/mjancarik/merkur/commit/3db4ac832a94351dee2f53c28fbdb04788d224bb))
+- 🐛 CR comments ([ffbd85f](https://github.com/mjancarik/merkur/commit/ffbd85f1a8f8820d3c35fe2c47e5aa8fddb148f4))
+- 🐛 CR comments ([b0b2bca](https://github.com/mjancarik/merkur/commit/b0b2bca0a28980296ebe85bf76e43fca9eb42f62))
+
+### Features
+
+- 🎸 add batch for props from attributeChangedCallbacks ([2b05e71](https://github.com/mjancarik/merkur/commit/2b05e71e6565608637f81882a7867aa0c079f45d))
+- 🎸 Add internalCacheTransformer ([b829ec0](https://github.com/mjancarik/merkur/commit/b829ec09992c3befabd7014f636244067b7ead8b))
+- 🎸 Add transformError transfomer ([b503c15](https://github.com/mjancarik/merkur/commit/b503c151a49c0e92837af48662346ef95b83d7eb))
+- 🎸 Add transformError transfomer ([39f73c6](https://github.com/mjancarik/merkur/commit/39f73c679718cb5198394224020a2b2bf726669e))
+- 🎸 add validation plugin for props schema validation ([095dd2d](https://github.com/mjancarik/merkur/commit/095dd2d79fe59d8925f960c832ec482be466aa6b))
+- 🎸 disconnectedCallback method unmount widget ([5c45c30](https://github.com/mjancarik/merkur/commit/5c45c30b63136f3a352b254e31d2957d65469514))
+- 🎸 Race condition between load and setState ([03b62ff](https://github.com/mjancarik/merkur/commit/03b62ff3da78db35d7102a052511f44b3620ff46))
+
+### BREAKING CHANGES
+
+- 🧨 The attributeChangedCallback batches attribute values to props and
+  ensures that widget.setProps() is called only once with all accumulated
+  changes. This callback is not invoked for default attribute values
+  during element initialization.
+- 🧨 The disconnectedCallback method call widget.unmount method. Remove code
+  with widget.unmount() from your disconnectedCallback method.
+
 ## [0.46.2](https://github.com/mjancarik/merkur/compare/v0.46.1...v0.46.2) (2026-03-05)
 
 ### Bug Fixes
