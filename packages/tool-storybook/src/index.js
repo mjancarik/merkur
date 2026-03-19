@@ -32,6 +32,12 @@ function createWidgetLoader({ render, widgetProperties }) {
               lastStory = {
                 widget,
                 name: args.story,
+                lastProps: Object.prototype.hasOwnProperty.call(
+                  args.args.widget,
+                  'props',
+                )
+                  ? widget.props
+                  : undefined,
               };
 
               return widget;

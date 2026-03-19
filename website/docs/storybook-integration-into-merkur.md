@@ -73,7 +73,7 @@ That's all. Now we can write our stories.
 You can use every [format](https://storybook.js.org/docs/react/writing-stories/introduction) which Storybook offers. For example we pick up `named exports` format and our counter component from demo page for `Preact` preview.
 
 ```javascript
-// /src/component/Counter.jsx
+// /src/components/Counter.jsx
 import { useContext } from 'preact/hooks';
 import WidgetContext from './WidgetContext';
 
@@ -90,7 +90,7 @@ export default function Counter({ counter }) {
   );
 }
 
-// /src/component/Counter.stories.jsx
+// /src/components/Counter.stories.jsx
 import Counter from './Counter';
 
 export default {

@@ -78,5 +78,38 @@ describe('Merkur tool storybook', () => {
 
       expect(typeof widget.customFunction === 'function').toBeTruthy();
     });
+
+    it('should store lastProps snapshot when props key is present in story args', async () => {
+      let loader = createWidgetLoader({ widgetProperties, render });
+
+      storyArgs.args.widget.props = { counter: 0 };
+      let { widget } = await loader(storyArgs);
+
+      // Calling the loader again for the same story should return the same widget instance
+      let { widget: sameWidget } = await loader(storyArgs);
+
+      expect(sameWidget).toBe(widget);
+    });
+
+    it('should not store lastProps when props key is absent in story args', async () => {
+      let loader = createWidgetLoader({ widgetProperties, render });
+
+      // Remove props so widget is not created (guard condition)
+      delete storyArgs.args.widget.props;
+      let { widget } = await loader(storyArgs);
+
+      expect(widget).toEqual(null);
+    });
+
+    it('should initialize lastProps so reuse on first repeated call does not trigger extra setProps', async () => {
+      let loader = createWidgetLoader({ widgetProperties, render });
+
+      storyArgs.args.widget.props = { counter: 0 };
+      let { widget: first } = await loader(storyArgs);
+      let { widget: second } = await loader(storyArgs);
+
+      // Same widget instance is reused — no remount happened
+      expect(second).toBe(first);
+    });
   });
 });
