@@ -38,7 +38,9 @@ To check out [live demo](https://merkur.js.org/demo) and [docs](https://merkur.j
 
 Contribute to this project via [Pull-Requests](https://github.com/mjancarik/merkur/pulls).
 
-We are following [Conventional Commits Specification](https://www.conventionalcommits.org/en/v1.0.0/#summary). To simplify the commit process, you can use `npm run commit` command. It opens an interactive interface, which should help you with commit message composition.
+We are using [Changesets](https://github.com/changesets/changesets) for versioning and releasing. To add a changeset describing your changes, run `npm run changeset`.
+
+> **Note:** The release process is documented **only** in this root README. Any per-package README sections that still describe a Lerna/Conventional Commits–based release flow are outdated and should be ignored in favour of the instructions below.
 
 
 ### Release
@@ -48,32 +50,43 @@ To release a version you must have the right permissions, please contact one of 
 
 #### Regular version release
 
-To do a regular release, in the root of the monorepo run:
+To do a regular release, from the `master` branch with no uncommitted changes, run:
 
 ```
 npm run release
 ```
 
-#### RC (preversion) release
+This runs `release:prepare` (applies pending changesets, bumps versions, updates `package-lock.json`) followed by `release:push` (commits, tags, and pushes to the repository).
 
-1. From the specific package directory, use this `lerna version` command to bump package versions:
-  ```
-  npx lerna version <preminor | prepatch | prerelease> --no-git-tag-version --no-push
-  // prerelease increments the pre* version's last number, e.g. v0.44.0-rc.0 => v0.44.0-rc.1
-  ```
-  - alternatively, manually change the version in the package's `package.json` and in `lerna.json`, and run `npm install` from the root of the monorepo.
-2. Restore all files not related to the package you intend to release. These files should remain:
-  - the package's own `package.json`
-  - `lerna.json` (otherwise lerna will stop incrementing the pre-version's number, for some reason)
-  - `package-lock.json`
-3. Commit the changes (must still be a conventional commit. Suggested: `chore(release): publish`). 
-4. Tag the commit with the version (e.g. `v0.44.0-rc.0`). 
-5. Push the commit to the repo.
-6. Push the tag to the repo: `git push origin tag <tagname>` (e.g. `git push origin tag v0.44.0-rc.0`).
+Packages are published from a GitHub Action triggered when a new version tag is pushed.
 
-The packages are released from a GitHub Action that is triggered when a new version tag is pushed to the repository.
+#### RC (pre-release) release
 
-Before the actual release, it's safer to return all version numbers to the last stable version. Another option is to release from a separate branch, so your feature branch stays clean.
+1. Enter pre-release mode (only needs to be done once per RC cycle):
+   ```
+   npm run release:next:init
+   ```
+   This sets pre-release mode to `rc`, so subsequent version bumps produce `rc` versions (e.g. `v0.44.0-rc.0`).
+
+2. Add a changeset describing your changes:
+   ```
+   npm run changeset
+   ```
+
+3. Bump versions and push the RC release:
+   ```
+   npm run release
+   ```
+   Repeat steps 2–3 for each subsequent RC iteration (e.g. `rc.0 → rc.1`).
+
+4. When ready to graduate to a stable release, exit pre-release mode and prepare the final version:
+   ```
+   npm run release:graduate
+   ```
+   Then push with:
+   ```
+   npm run release:push
+   ```
 
 ---
 

@@ -8,8 +8,7 @@
   "scripts": {
     "test": "echo 'Tests pass.'",
     "test:es:version": "echo 'Tests pass.'",
-    "build": "echo 'Build pass.'",
-    "postpublish": "node ../../utils/restoreLatestTag.mjs"
+    "build": "echo 'Build pass.'"
   },
   "keywords": [
     "cli",
@@ -44,5 +43,12 @@
     "fs-extra": "^11.1.1",
     "inquirer": "9.2.2",
     "yargs": "^17.7.2"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": []
+      }
+    }
   }
 }

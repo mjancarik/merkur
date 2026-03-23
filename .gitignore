@@ -9,4 +9,5 @@ es/
 lib/
 coverage/
 current-changelog.txt
+.nx
 !packages/create-widget/template/src/lib

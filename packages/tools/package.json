@@ -9,8 +9,7 @@
   "scripts": {
     "test": "echo 'Tests pass.'",
     "test:es:version": "echo 'Tests pass.'",
-    "build": "echo 'Build pass.'",
-    "postpublish": "node ../../utils/restoreLatestTag.mjs"
+    "build": "echo 'Build pass.'"
   },
   "repository": {
     "type": "git",
@@ -56,5 +55,12 @@
   },
   "peerDependencies": {
     "express": "*"
+  },
+  "nx": {
+    "targets": {
+      "build": {
+        "outputs": []
+      }
+    }
   }
 }
