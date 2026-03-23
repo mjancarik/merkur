@@ -1,4 +1,8 @@
-import { createWidgetLoader } from '../index';
+import {
+  createWidgetLoader,
+  createPreviewConfig,
+  createVanillaRenderer,
+} from '../index';
 
 import { getMerkur, createMerkurWidget, removeMerkur } from '@merkur/core';
 import { componentPlugin } from '@merkur/plugin-component';
@@ -244,6 +248,261 @@ describe('Merkur tool storybook', () => {
 
       // Same widget instance is reused — no remount happened
       expect(second).toBe(first);
+    });
+  });
+
+  describe('createPreviewConfig method', () => {
+    let widgetProperties;
+
+    beforeEach(() => {
+      widgetProperties = {
+        name: 'widget',
+        version: '0.0.1',
+        $plugins: [componentPlugin],
+      };
+    });
+
+    it('should register the widget and return a loaders array', () => {
+      const config = createPreviewConfig({
+        widgetProperties,
+        createWidget: createMerkurWidget,
+      });
+
+      expect(Array.isArray(config.loaders)).toBe(true);
+      expect(typeof config.loaders[0]).toBe('function');
+      expect(getMerkur().$in.widgetFactory).toBeDefined();
+    });
+
+    it('should emit console.warn when registering the same widget twice', () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      createPreviewConfig({
+        widgetProperties,
+        createWidget: createMerkurWidget,
+      });
+      createPreviewConfig({
+        widgetProperties,
+        createWidget: createMerkurWidget,
+      });
+
+      expect(warnSpy).toHaveBeenCalledTimes(1);
+      expect(warnSpy.mock.calls[0][0]).toMatch(/already registered/);
+      warnSpy.mockRestore();
+    });
+
+    it('should throw when options is null', () => {
+      expect(() => createPreviewConfig(null)).toThrow(
+        'createPreviewConfig: "options" argument must be a non-null object.',
+      );
+    });
+
+    it('should throw when widgetProperties is missing', () => {
+      expect(() => createPreviewConfig({})).toThrow(
+        'createPreviewConfig: widgetProperties must include "name" and "version"',
+      );
+    });
+
+    it('should throw when widgetProperties.name is missing', () => {
+      expect(() =>
+        createPreviewConfig({ widgetProperties: { version: '0.0.1' } }),
+      ).toThrow(
+        'createPreviewConfig: widgetProperties must include "name" and "version"',
+      );
+    });
+
+    it('should throw when widgetProperties.version is missing', () => {
+      expect(() =>
+        createPreviewConfig({ widgetProperties: { name: 'widget' } }),
+      ).toThrow(
+        'createPreviewConfig: widgetProperties must include "name" and "version"',
+      );
+    });
+
+    it('should throw when createWidget is not a function', () => {
+      expect(() =>
+        createPreviewConfig({ widgetProperties, createWidget: 'invalid' }),
+      ).toThrow(
+        'createPreviewConfig: "createWidget" option must be a function when provided.',
+      );
+    });
+
+    it('loaders[0] should create a functioning widget', async () => {
+      const config = createPreviewConfig({
+        widgetProperties,
+        createWidget: createMerkurWidget,
+      });
+
+      const loader = config.loaders[0];
+      const { widget } = await loader({
+        story: 'TestStory',
+        args: { widget: { props: {} } },
+      });
+
+      expect(widget.name).toEqual(widgetProperties.name);
+      expect(widget.version).toEqual(widgetProperties.version);
+      await widget.unmount();
+    });
+  });
+
+  describe('createVanillaRenderer method', () => {
+    let mockWidget;
+    let viewFn;
+
+    beforeEach(() => {
+      mockWidget = { state: { count: 0 }, props: {} };
+      viewFn = jest.fn((w) => `<span>${w.state.count}</span>`);
+    });
+
+    it('should throw when options is missing', () => {
+      expect(() => createVanillaRenderer()).toThrow(
+        'createVanillaRenderer: options must be a non-null object.',
+      );
+    });
+
+    it('should throw when ViewComponent is missing', () => {
+      expect(() => createVanillaRenderer({})).toThrow(
+        'createVanillaRenderer: "ViewComponent" option is required.',
+      );
+    });
+
+    it('should throw when bindEvents is not a function', () => {
+      expect(() =>
+        createVanillaRenderer({ ViewComponent: viewFn, bindEvents: 'invalid' }),
+      ).toThrow(
+        'createVanillaRenderer: "bindEvents" option must be a function when provided.',
+      );
+    });
+
+    describe('render()', () => {
+      it('should return a container with widget HTML when widget is loaded', () => {
+        const { render } = createVanillaRenderer({ ViewComponent: viewFn });
+        const container = render({}, { loaded: { widget: mockWidget } });
+
+        expect(container.innerHTML).toBe('<span>0</span>');
+      });
+
+      it('should return a placeholder when widget is not loaded', () => {
+        const { render } = createVanillaRenderer({ ViewComponent: viewFn });
+        const container = render({}, { loaded: {} });
+
+        expect(container.textContent).toBe('Loading widget...');
+      });
+
+      it('should call bindEvents after rendering when provided', () => {
+        const bindEvents = jest.fn();
+        const { render } = createVanillaRenderer({
+          ViewComponent: viewFn,
+          bindEvents,
+        });
+        render({}, { loaded: { widget: mockWidget } });
+
+        expect(bindEvents).toHaveBeenCalledWith(
+          expect.any(HTMLElement),
+          mockWidget,
+        );
+      });
+
+      it('should fall back to widget.View.bindEvents when no bindEvents option', () => {
+        const bindEventsSpy = jest.fn();
+        mockWidget.View = { bindEvents: bindEventsSpy };
+        const { render } = createVanillaRenderer({ ViewComponent: viewFn });
+        render({}, { loaded: { widget: mockWidget } });
+
+        expect(bindEventsSpy).toHaveBeenCalledWith(
+          expect.any(HTMLElement),
+          mockWidget,
+        );
+      });
+
+      it('should use the default key from a ViewComponent map', () => {
+        const defaultFn = jest.fn(() => '<p>default</p>');
+        const { render } = createVanillaRenderer({
+          ViewComponent: { default: defaultFn },
+        });
+        render({}, { loaded: { widget: mockWidget } });
+
+        expect(defaultFn).toHaveBeenCalledWith(mockWidget);
+      });
+
+      it('should use args.component function when ViewComponent is a function', () => {
+        const overrideFn = jest.fn(() => '<p>override</p>');
+        const { render } = createVanillaRenderer({ ViewComponent: viewFn });
+        render({ component: overrideFn }, { loaded: { widget: mockWidget } });
+
+        expect(overrideFn).toHaveBeenCalledWith(mockWidget);
+        expect(viewFn).not.toHaveBeenCalled();
+      });
+
+      it('should use args.viewComponent key from ViewComponent map', () => {
+        const altFn = jest.fn(() => '<p>alt</p>');
+        const { render } = createVanillaRenderer({
+          ViewComponent: { default: viewFn, alt: altFn },
+        });
+        render({ viewComponent: 'alt' }, { loaded: { widget: mockWidget } });
+
+        expect(altFn).toHaveBeenCalledWith(mockWidget);
+        expect(viewFn).not.toHaveBeenCalled();
+      });
+
+      it('should throw when args.viewComponent key is not in ViewComponent map', () => {
+        const { render } = createVanillaRenderer({
+          ViewComponent: { default: viewFn },
+        });
+        expect(() =>
+          render(
+            { viewComponent: 'missing' },
+            { loaded: { widget: mockWidget } },
+          ),
+        ).toThrow('not found in ViewComponent map');
+      });
+
+      it('should throw a distinct error when viewComponent key exists but is not a function', () => {
+        const { render } = createVanillaRenderer({
+          ViewComponent: { default: viewFn, bad: 'not-a-fn' },
+        });
+        expect(() =>
+          render({ viewComponent: 'bad' }, { loaded: { widget: mockWidget } }),
+        ).toThrow('is not a function');
+      });
+
+      it('should throw when ViewComponent returns a non-string', () => {
+        const { render } = createVanillaRenderer({ ViewComponent: () => 42 });
+        expect(() => render({}, { loaded: { widget: mockWidget } })).toThrow(
+          'viewFunction must return an HTML string',
+        );
+      });
+    });
+
+    describe('update()', () => {
+      it('should re-render widget in the same container without creating a new one', () => {
+        const { render, update } = createVanillaRenderer({
+          ViewComponent: viewFn,
+        });
+        const container = render({}, { loaded: { widget: mockWidget } });
+
+        mockWidget.state.count = 5;
+        update(mockWidget);
+
+        expect(container.innerHTML).toBe('<span>5</span>');
+        expect(viewFn).toHaveBeenCalledTimes(2);
+      });
+
+      it('should re-bind events on update', () => {
+        const bindEvents = jest.fn();
+        const { render, update } = createVanillaRenderer({
+          ViewComponent: viewFn,
+          bindEvents,
+        });
+        render({}, { loaded: { widget: mockWidget } });
+        update(mockWidget);
+
+        expect(bindEvents).toHaveBeenCalledTimes(2);
+      });
+
+      it('should do nothing when called with an unknown widget', () => {
+        const { update } = createVanillaRenderer({ ViewComponent: viewFn });
+        expect(() => update({ state: {} })).not.toThrow();
+      });
     });
   });
 });
