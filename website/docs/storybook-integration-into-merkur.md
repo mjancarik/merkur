@@ -127,59 +127,56 @@ For vanilla JavaScript widgets that render HTML strings, configure Storybook to 
 #### `.storybook/main.mjs`
 
 ```javascript
-// /src/components/Counter.jsx
-import { useContext } from 'preact/hooks';
-import WidgetContext from './WidgetContext';
-
-export default function Counter({ counter }) {
-  const widget = useContext(WidgetContext);
-
-  return (
-    <div>
-      <h3>Counter widget:</h3>
-      <p>Count: {counter}</p>
-      <button onClick={widget.onClick}>increase counter</button>
-      <button onClick={widget.onReset}>reset counter</button>
-    </div>
-  );
-}
-```
-
-// /src/components/Counter.stories.jsx
-import Counter from './Counter';
-
-export default {
-  title: 'Components/Counter',
-  // Shared render function for all stories in this file
-  render: (args, { loaded: { widget } }) => (
-    <Counter counter={widget.state.counter} />
-  ),
-  args: {
-    // Merkur stories may define a props property; if omitted, it defaults to {}
-    widget: {
-      props: {},
-    },
+const config = {
+  stories: ['../src/**/*.stories.@(js|jsx|ts|tsx)'],
+  framework: {
+    name: '@storybook/html-vite',
   },
 };
 
-export const DefaultCounter = {};
-
-export const TenCounter = {
-  args: {
-    widget: {
-      props: {},
-      // change default widget state from 0 to 10
-      state: {
-        counter: 10,
-      },
-    },
-  },
-};
+export default config;
 ```
 
-The decorator handles:
-- Providing `WidgetContext` to all components
-- Re-rendering when widget state changes (e.g., when clicking buttons)
+#### `.storybook/preview.mjs`
+
+```javascript
+import { createPreviewConfig, createVanillaRenderer } from '@merkur/tool-storybook';
+import widgetProperties from '../src/widget.js';
+
+const renderer = createVanillaRenderer({
+  // ViewComponent can be a single function or a named map with a 'default' key.
+  // Use args.component (function) or args.viewComponent (map key) in stories to override.
+  ViewComponent: {
+    default: (widget) => `
+      <div>
+        <h3>Counter widget:</h3>
+        <p>Count: <span data-merkur="counter">${widget.state.counter}</span></p>
+        <button data-merkur="on-increase">increase counter</button>
+        <button data-merkur="on-reset">reset counter</button>
+      </div>
+    `,
+  },
+  // Re-attach event listeners after every render
+  bindEvents(container, widget) {
+    container
+      .querySelector('[data-merkur="on-increase"]')
+      ?.addEventListener('click', widget.onClick);
+    container
+      .querySelector('[data-merkur="on-reset"]')
+      ?.addEventListener('click', widget.onReset);
+  },
+});
+
+const preview = {
+  ...createPreviewConfig({
+    widgetProperties,
+    render: renderer.update, // called by the widget's update lifecycle on state/props change
+  }),
+  render: renderer.render, // Storybook story render function (args, { loaded }) => HTMLElement
+};
+
+export default preview;
+```
 
 ### Vanilla JavaScript Widget Stories
 
