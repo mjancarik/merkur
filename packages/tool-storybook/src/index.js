@@ -3,6 +3,10 @@ import { getMerkur, createMerkurWidget } from '@merkur/core';
 // Keys from the Merkur widget definition that story args must not override.
 // Allowing overrides would let a story redirect the factory lookup (name/version),
 // replace plugin configuration ($plugins), or swap lifecycle callbacks (setup/create).
+//
+// NOTE: Object.keys() skips __proto__ on normal objects, but when a plain object's
+// prototype is mutated via bracket assignment (obj['__proto__'] = ...) those keys
+// enumerate as own keys and must be explicitly blocked to prevent prototype-pollution.
 const RESERVED_WIDGET_KEYS = new Set([
   'name',
   'version',
@@ -10,7 +14,6 @@ const RESERVED_WIDGET_KEYS = new Set([
   'setup',
   'create',
   'createWidget',
-  // Prototype-pollution guards
   '__proto__',
   'constructor',
   'prototype',
@@ -34,6 +37,182 @@ function sanitizeWidgetArgs(widgetArg) {
 }
 
 /**
+ * Runs the component lifecycle update or falls back to the render callback.
+ *
+ * @param {Object} widget - The Merkur widget instance passed to the update/render call.
+ * @param {Object|undefined} lifeCycle - The widget's component lifecycle object, if present.
+ * @param {Function} renderFn - Fallback render callback when no lifecycle update is available.
+ * @returns {Promise<void>}
+ */
+async function triggerUpdate(widget, lifeCycle, renderFn) {
+  if (typeof lifeCycle?.update === 'function') {
+    await lifeCycle.update(widget);
+  } else {
+    await renderFn(widget);
+  }
+}
+
+/**
+ * Updates an already-mounted widget instance with new state/props from story args.
+ * Dispatches across four cases depending on which setter methods the widget exposes.
+ *
+ * @param {Object} options
+ * @param {Object} options.widget - The mounted Merkur widget instance to update.
+ * @param {Object} options.widgetArgs - The raw `args.args.widget` object from the story.
+ * @param {Object} options.lastStory - Internal lastStory tracking object; `lastProps` is mutated in place.
+ * @param {Function} options.renderFn - Fallback render callback when no lifecycle update is available.
+ * @returns {Promise<{ widget: Object }>}
+ */
+async function updateExistingWidget({
+  widget,
+  widgetArgs,
+  lastStory,
+  renderFn,
+}) {
+  const hasNextState = Object.hasOwn(widgetArgs, 'state');
+  const hasNextProps = Object.hasOwn(widgetArgs, 'props');
+  const safeNextState = widgetArgs.state ?? {};
+  const safeNextProps = widgetArgs.props ?? {};
+  const lifeCycle = widget?.$in?.component?.lifeCycle;
+  const hasSetState = typeof widget.setState === 'function';
+  const hasSetProps = typeof widget.setProps === 'function';
+
+  if (hasSetState && !hasSetProps) {
+    if (hasNextProps) {
+      widget.props = safeNextProps;
+    }
+    if (hasNextState) {
+      // Clear state before calling setState to prevent previously accumulated keys
+      // from leaking into the new state.
+      widget.state = {};
+      await widget.setState(safeNextState);
+    } else if (hasNextProps) {
+      // Props changed but no setState — manually trigger a re-render.
+      await triggerUpdate(widget, lifeCycle, renderFn);
+    }
+    return { widget };
+  }
+
+  if (hasSetProps && !hasSetState) {
+    if (hasNextProps) {
+      // Reset props to an empty object before calling setProps so that the
+      // setter sees only the story-provided props and cannot merge with any
+      // leftover values from a previous story invocation.
+      widget.props = {};
+      await widget.setProps(safeNextProps);
+      // Guard: setProps→load() may set widget.state to undefined when no load
+      // lifecycle is defined.
+      widget.state ??= {};
+    }
+    if (hasNextState) {
+      widget.state = safeNextState;
+      await triggerUpdate(widget, lifeCycle, renderFn);
+    }
+    return { widget };
+  }
+
+  // When both setters are available, prefer setProps so that prop-driven load
+  // logic can run, then apply Storybook state via setState so it remains
+  // authoritative.
+  if (hasSetProps && hasSetState) {
+    if (hasNextProps) {
+      const prev = lastStory.lastProps;
+      const next = safeNextProps;
+      const prevKeys = prev ? Object.keys(prev) : [];
+      const nextKeys = Object.keys(next);
+      // NOTE: comparison is shallow (===). Props that are objects will always be
+      // referentially unequal across Storybook re-renders, so propsUnchanged will
+      // be false for object-valued props — this is intentional: prefer re-calling
+      // setProps over silently skipping a potential load() side-effect.
+      const propsUnchanged =
+        prev !== undefined &&
+        prevKeys.length === nextKeys.length &&
+        nextKeys.every((k) => Object.hasOwn(prev, k) && prev[k] === next[k]);
+      if (!propsUnchanged) {
+        lastStory.lastProps = safeNextProps;
+        // Reset props to an empty object before calling setProps so that the
+        // setter sees only the story-provided props and cannot merge with any
+        // leftover values from a previous story invocation.
+        widget.props = {};
+        await widget.setProps(safeNextProps);
+      }
+      // Guard: setProps→load() may set widget.state to undefined when no load
+      // lifecycle is defined.
+      widget.state ??= {};
+    }
+    if (hasNextState) {
+      // Clear state so that Storybook-provided state replaces any previous or
+      // load()-generated keys instead of merging with them.
+      widget.state = {};
+      await widget.setState(safeNextState);
+    }
+    return { widget };
+  }
+
+  // When neither setter is available, replace state/props directly and perform
+  // a single lifecycle update to avoid duplicate work. Only trigger a render
+  // when at least one of state or props actually changed.
+  if (hasNextState) {
+    widget.state = safeNextState;
+  }
+  if (hasNextProps) {
+    widget.props = safeNextProps;
+  }
+  if (hasNextState || hasNextProps) {
+    await triggerUpdate(widget, lifeCycle, renderFn);
+  }
+  return { widget };
+}
+
+/**
+ * Creates and mounts a new widget instance, hooking the update lifecycle so that
+ * subsequent setState/setProps calls automatically trigger the render callback.
+ *
+ * @param {Object} options
+ * @param {Object} options.widgetProperties - Base widget properties (name, version, $plugins, …).
+ * @param {Object} options.args - Full Storybook loader args object; `args.args.widget` provides state/props overrides.
+ * @param {Function} options.renderFn - Render callback invoked on each lifecycle update.
+ * @returns {Promise<Object>} The mounted Merkur widget instance.
+ * @throws {Error} If no Merkur widget factory is registered for the given name and version.
+ */
+async function mountNewWidget({ widgetProperties, args, renderFn }) {
+  const safeWidgetArg = sanitizeWidgetArgs(args.args.widget);
+  const widget = await getMerkur().create({
+    ...widgetProperties,
+    ...safeWidgetArg,
+  });
+
+  const widgetArgs = args?.args?.widget ?? {};
+  if (Object.hasOwn(widgetArgs, 'state')) {
+    widget.state = widgetArgs.state ?? {};
+  }
+  if (Object.hasOwn(widgetArgs, 'props')) {
+    widget.props = widgetArgs.props ?? {};
+  }
+  await widget.mount();
+
+  // load() may set widget.state/props to undefined when no load lifecycle is defined;
+  // ensure the default empty values from componentPlugin are preserved.
+  widget.state ??= {};
+  widget.props ??= {};
+
+  // Hook the component-plugin update lifecycle so that any subsequent
+  // setState / setProps call automatically triggers the Storybook render callback.
+  const lifeCycle = widget?.$in?.component?.lifeCycle;
+  if (lifeCycle) {
+    const originalUpdate = lifeCycle.update;
+    lifeCycle.update = async (w) => {
+      if (typeof originalUpdate === 'function') {
+        await originalUpdate(w);
+      }
+      renderFn(w);
+    };
+  }
+
+  return widget;
+}
+
+/**
  * Creates a loader function for Storybook that manages Merkur widget lifecycle.
  * The loader creates and mounts widgets for stories, reusing instances when possible
  * and unmounting previous widgets when switching stories. It relies on a Merkur widget
@@ -46,10 +225,11 @@ function sanitizeWidgetArgs(widgetArg) {
  * @param {Function} [options.render] Optional callback called each time the widget's update lifecycle
  *   fires (receives the widget instance as the first argument). Defaults to a no-op.
  * @returns {Function} Async loader function compatible with Storybook's `loaders` API;
- *   when called it resolves to `{ widget: MerkurWidget | null }`
- * @throws {Error} If no Merkur widget factory is registered for the provided
- *   `widgetProperties.name` and `widgetProperties.version` when the loader attempts to
- *   create a widget instance.
+ *   when called it resolves to `{ widget: Object | null }`.
+ * @throws {TypeError} If `options`, `options.render`, `options.widgetProperties`,
+ *   `options.widgetProperties.name`, or `options.widgetProperties.version` fail validation.
+ *   Note: the **returned loader** throws `Error` if no Merkur widget factory is registered
+ *   for the given `name`/`version` when it attempts to create a widget instance.
  */
 function createWidgetLoader(options = {}) {
   if (options == null || typeof options !== 'object') {
@@ -58,12 +238,12 @@ function createWidgetLoader(options = {}) {
     );
   }
   const { render, widgetProperties } = options;
-  const renderFn = typeof render === 'function' ? render : () => {};
   if (render != null && typeof render !== 'function') {
     throw new TypeError(
       'createWidgetLoader: "render" option must be a function when provided.',
     );
   }
+  const renderFn = typeof render === 'function' ? render : () => {};
   if (!widgetProperties || typeof widgetProperties !== 'object') {
     throw new TypeError(
       'createWidgetLoader: "widgetProperties" option is required and must be an object.',
@@ -121,172 +301,20 @@ function createWidgetLoader(options = {}) {
       return { widget: null };
     }
 
-    // If we're reusing the same story's widget, update its state and props
     if (lastStory.widget && lastStory.name === args.story) {
-      const widgetArgs = args?.args?.widget ?? {};
-      const hasNextState = Object.prototype.hasOwnProperty.call(
-        widgetArgs,
-        'state',
-      );
-      const hasNextProps = Object.prototype.hasOwnProperty.call(
-        widgetArgs,
-        'props',
-      );
-      const safeNextState = widgetArgs.state == null ? {} : widgetArgs.state;
-      const safeNextProps = widgetArgs.props == null ? {} : widgetArgs.props;
-      const widget = lastStory.widget;
-      const lifeCycle = widget?.$in?.component?.lifeCycle;
-      const hasSetState = typeof widget.setState === 'function';
-      const hasSetProps = typeof widget.setProps === 'function';
-      if (hasSetState && !hasSetProps) {
-        if (hasNextProps) {
-          widget.props = safeNextProps;
-        }
-        if (hasNextState) {
-          // Clear state before calling setState for the same reason as the
-          // hasSetProps && hasSetState branch: prevent load()-generated or
-          // previously accumulated keys from leaking into the new state.
-          widget.state = {};
-          await widget.setState(safeNextState);
-        } else if (hasNextProps) {
-          // When only props change, manually trigger a lifecycle update/render so
-          // that Storybook controls that modify props still cause a re-render.
-          if (lifeCycle && typeof lifeCycle.update === 'function') {
-            await lifeCycle.update(widget);
-          } else {
-            await renderFn(widget);
-          }
-        }
-        return { widget };
-      }
-      if (hasSetProps && !hasSetState) {
-        // Use setProps to run prop-driven load logic, then apply Storybook state
-        // afterwards so that it is not overwritten by load().
-        if (hasNextProps) {
-          // Reset props to an empty object before calling setProps so that the
-          // setter sees only the story-provided props and cannot merge with any
-          // leftover values from a previous story invocation.
-          widget.props = {};
-          await widget.setProps(safeNextProps);
-          // Guard: when the widget has no load() lifecycle, setProps→load() sets
-          // widget.state to undefined. Ensure state is never left undefined so
-          // that a caller returning { widget } without a subsequent setState call
-          // does not expose undefined state to render callbacks.
-          if (widget.state == null) {
-            widget.state = {};
-          }
-        }
-        if (hasNextState) {
-          widget.state = safeNextState;
-          if (lifeCycle && typeof lifeCycle.update === 'function') {
-            await lifeCycle.update(widget);
-          } else {
-            await renderFn(widget);
-          }
-        }
-        return { widget };
-      }
-      // When both setters are available, prefer setProps so that prop-driven load
-      // logic can run, then apply Storybook state via setState so it remains
-      // authoritative.
-      if (hasSetProps && hasSetState) {
-        if (hasNextProps) {
-          const prev = lastStory.lastProps;
-          const next = safeNextProps;
-          const prevKeys = prev ? Object.keys(prev) : [];
-          const nextKeys = Object.keys(next);
-          const propsUnchanged =
-            prev !== undefined &&
-            prevKeys.length === nextKeys.length &&
-            nextKeys.every(
-              (k) =>
-                Object.prototype.hasOwnProperty.call(prev, k) &&
-                prev[k] === next[k],
-            );
-          if (!propsUnchanged) {
-            lastStory.lastProps = safeNextProps;
-            // Reset props to an empty object before calling setProps so that the
-            // setter sees only the story-provided props and cannot merge with any
-            // leftover values from a previous story invocation.
-            widget.props = {};
-            await widget.setProps(safeNextProps);
-          }
-          // Guard: when the widget has no load() lifecycle, setProps→load() sets
-          // widget.state to undefined. Clearing it here ensures the subsequent
-          // setState merge does not produce unexpected results.
-          if (widget.state == null) {
-            widget.state = {};
-          }
-        }
-        if (hasNextState) {
-          // Clear state so that Storybook-provided state replaces any previous or
-          // load()-generated keys instead of merging with them.
-          widget.state = {};
-          await widget.setState(safeNextState);
-        }
-        return { widget };
-      }
-      // When neither setter is available, replace state/props directly and perform
-      // a single lifecycle update to avoid duplicate work. Only trigger a render
-      // when at least one of state or props actually changed.
-      if (hasNextState) {
-        widget.state = safeNextState;
-      }
-      if (hasNextProps) {
-        widget.props = safeNextProps;
-      }
-      if (hasNextState || hasNextProps) {
-        if (lifeCycle && typeof lifeCycle.update === 'function') {
-          await lifeCycle.update(widget);
-        } else {
-          await renderFn(widget);
-        }
-      }
-      return { widget };
+      return updateExistingWidget({
+        widget: lastStory.widget,
+        widgetArgs: args?.args?.widget ?? {},
+        lastStory,
+        renderFn,
+      });
     }
 
-    // Otherwise, create and mount a new widget instance
-    const safeWidgetArg = sanitizeWidgetArgs(args.args.widget);
-    const widget = await getMerkur().create({
-      ...widgetProperties,
-      ...safeWidgetArg,
-    });
-
-    const widgetArgs = args?.args?.widget ?? {};
-    if (Object.prototype.hasOwnProperty.call(widgetArgs, 'state')) {
-      widget.state = widgetArgs.state == null ? {} : widgetArgs.state;
-    }
-    if (Object.prototype.hasOwnProperty.call(widgetArgs, 'props')) {
-      widget.props = widgetArgs.props ?? {};
-    }
-    await widget.mount();
-
-    // load() may set widget.state/props to undefined when no load lifecycle is defined;
-    // ensure the default empty values from componentPlugin are preserved.
-    if (widget.state == null) {
-      widget.state = {};
-    }
-    if (widget.props == null) {
-      widget.props = {};
-    }
-
-    // Hook the component-plugin update lifecycle so that any subsequent
-    // setState / setProps call automatically triggers the Storybook render callback.
-    const compLifeCycle = widget?.$in?.component?.lifeCycle;
-    if (compLifeCycle) {
-      const originalUpdate = compLifeCycle.update;
-      compLifeCycle.update = async (w) => {
-        if (typeof originalUpdate === 'function') {
-          await originalUpdate(w);
-        }
-        renderFn(w);
-      };
-    }
-
+    const widget = await mountNewWidget({ widgetProperties, args, renderFn });
     lastStory = {
       widget,
       name: args.story,
-      lastProps: Object.prototype.hasOwnProperty.call(args.args.widget, 'props')
+      lastProps: Object.hasOwn(args.args.widget, 'props')
         ? widget.props
         : undefined,
     };
@@ -313,6 +341,8 @@ function createWidgetLoader(options = {}) {
  *   widget instances — useful for injecting a test double or custom factory
  * @returns {{ loaders: Function[] }} Partial Storybook preview configuration that can be
  *   spread into a `preview.mjs` export
+ * @throws {TypeError} If `options` is not an object, or `options.createWidget` is not a function.
+ * @throws {Error} If `widgetProperties.name` or `widgetProperties.version` are missing or empty strings.
  */
 function createPreviewConfig(options = {}) {
   if (options == null || typeof options !== 'object') {
@@ -341,16 +371,13 @@ function createPreviewConfig(options = {}) {
     );
   }
 
+  // Merkur stores widget factories under `name + version` (no separator) — see
+  // packages/core/src/merkur.js. We use the same format to detect re-registration.
   const registrationKey = widgetProperties.name + widgetProperties.version;
   const merkur = getMerkur();
   const isAlreadyRegistered =
-    merkur &&
-    merkur.$in &&
-    merkur.$in.widgetFactory &&
-    Object.prototype.hasOwnProperty.call(
-      merkur.$in.widgetFactory,
-      registrationKey,
-    );
+    merkur?.$in?.widgetFactory != null &&
+    Object.hasOwn(merkur.$in.widgetFactory, registrationKey);
 
   // Warn when the same widget is already registered (e.g., HMR re-execution of
   // preview.mjs). The previous loader's mounted widget cannot be unmounted
@@ -393,9 +420,13 @@ function createPreviewConfig(options = {}) {
  * @param {Function} [options.bindEvents] Optional function called after every render to attach
  *   event listeners: `(container: HTMLElement, widget) => void`. When omitted the renderer
  *   falls back to `widget.View.bindEvents` if present.
- * @returns {{ render: Function, update: Function }} `render` is the Storybook story render
- *   function `(args, { loaded }) => HTMLElement`; `update(widget)` accepts the widget instance
- *   that changed and re-renders only its associated container in place, re-binding events.
+ * @returns {{ render: Function, update: Function }}
+ *   - `render(args, { loaded }): HTMLElement` — returns a rendered container `<div>`, or a
+ *     `<div>Loading widget...</div>` placeholder when `loaded.widget` is absent.
+ *   - `update(widget): void` — re-renders the widget's container in place and re-binds events;
+ *     no-op when `widget` has not been rendered yet.
+ * @throws {Error} If `options` is missing/not an object, or `options.ViewComponent` is absent.
+ * @throws {TypeError} If `options.bindEvents` is provided but is not a function.
  *
  * Security warning: `ViewComponent` functions set `container.innerHTML` directly. Ensure that any
  * widget state or props interpolated into the returned HTML strings is sanitized to prevent XSS
@@ -431,17 +462,15 @@ function createVanillaRenderer(options) {
           'createVanillaRenderer: "viewComponent" key cannot be used when ViewComponent is a function; pass a component function directly via args.component instead.',
         );
       }
-      if (
-        !Object.prototype.hasOwnProperty.call(ViewComponent, args.viewComponent)
-      ) {
+      if (!Object.hasOwn(ViewComponent, args.viewComponent)) {
         throw new Error(
-          `createVanillaRenderer: viewComponent key "${args.viewComponent}" not found in ViewComponent map or is not callable`,
+          `createVanillaRenderer: viewComponent key "${args.viewComponent}" not found in ViewComponent map`,
         );
       }
       const fn = ViewComponent[args.viewComponent];
       if (typeof fn !== 'function') {
         throw new Error(
-          `createVanillaRenderer: viewComponent key "${args.viewComponent}" not found in ViewComponent map or is not callable`,
+          `createVanillaRenderer: ViewComponent["${args.viewComponent}"] is not a function`,
         );
       }
       return fn;
@@ -452,9 +481,7 @@ function createVanillaRenderer(options) {
         return args.component;
       }
       if (!isViewComponentFunction) {
-        if (
-          !Object.prototype.hasOwnProperty.call(ViewComponent, args.component)
-        ) {
+        if (!Object.hasOwn(ViewComponent, args.component)) {
           throw new Error(
             `createVanillaRenderer: component key "${args.component}" not found in ViewComponent map`,
           );
@@ -478,7 +505,7 @@ function createVanillaRenderer(options) {
       return ViewComponent;
     }
 
-    const fn = ViewComponent.default || ViewComponent;
+    const fn = ViewComponent.default ?? ViewComponent;
     if (typeof fn !== 'function') {
       throw new Error(
         'createVanillaRenderer: ViewComponent must be a function or an object with a callable "default" property',
