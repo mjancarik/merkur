@@ -102,7 +102,9 @@ async function updateExistingWidget({
       await widget.setProps(safeNextProps);
       // Guard: setProps→load() may set widget.state to undefined when no load
       // lifecycle is defined.
-      widget.state ??= {};
+      if (widget.state == null) {
+        widget.state = {};
+      }
     }
     if (hasNextState) {
       widget.state = safeNextState;
@@ -138,7 +140,9 @@ async function updateExistingWidget({
       }
       // Guard: setProps→load() may set widget.state to undefined when no load
       // lifecycle is defined.
-      widget.state ??= {};
+      if (widget.state == null) {
+        widget.state = {};
+      }
     }
     if (hasNextState) {
       // Clear state so that Storybook-provided state replaces any previous or
@@ -193,8 +197,12 @@ async function mountNewWidget({ widgetProperties, args, renderFn }) {
 
   // load() may set widget.state/props to undefined when no load lifecycle is defined;
   // ensure the default empty values from componentPlugin are preserved.
-  widget.state ??= {};
-  widget.props ??= {};
+  if (widget.state == null) {
+    widget.state = {};
+  }
+  if (widget.props == null) {
+    widget.props = {};
+  }
 
   // Hook the component-plugin update lifecycle so that any subsequent
   // setState / setProps call automatically triggers the Storybook render callback.
