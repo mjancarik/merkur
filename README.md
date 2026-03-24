@@ -42,6 +42,38 @@ We are using [Changesets](https://github.com/changesets/changesets) for versioni
 
 > **Note:** The release process is documented **only** in this root README. Any per-package README sections that still describe a Lerna/Conventional Commits–based release flow are outdated and should be ignored in favour of the instructions below.
 
+### Changeset format
+
+Each changeset file (`.changeset/*.md`) must follow this structure:
+
+**Frontmatter** — standard Changesets YAML listing affected package names and bump types (`patch`, `minor`, `major`).
+
+**First line after frontmatter** — a single brief sentence summarising the change. No heading, no bold, no trailing bullet — just a plain declarative sentence. This section is not required but helps to quickly understand the change when browsing the changesets.
+
+**Body** — three bullet points in this exact order, with no blank lines between them:
+
+- **What** One or more sentences describing what changed: which APIs, files, or behaviours were added, removed, or fixed. Make sublists if needed to break down complex changes, but keep each bullet point as a single paragraph.
+- **Why** One or more sentences explaining the motivation: why the change was necessary or beneficial.
+- **How** Migration steps for consumers or contributors. If no action is required, write exactly: `Nothing.`
+
+Additional rules:
+- Each bullet is a single paragraph — no nested lists, no code blocks inside a bullet.
+- Do not use headings (`##`, `###`) inside the body.
+- Code symbols (function names, paths, package names) use backtick inline code.
+
+Example:
+
+```markdown
+---
+"@merkur/example": minor
+---
+
+Add `createFoo` helper for simplified widget initialisation.
+
+- **What** New `createFoo(options)` export in `@merkur/example` wraps the low-level `initFoo` call and applies sensible defaults for `name` and `version`.
+- **Why** Every project was duplicating the same boilerplate to call `initFoo`; centralising it reduces setup friction and ensures consistent defaults.
+- **How** Replace direct `initFoo` calls with `createFoo({ name, version })`. The returned object is API-compatible, so no further changes are needed.
+```
 
 ### Release
 

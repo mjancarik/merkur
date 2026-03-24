@@ -40,7 +40,7 @@ Contribute to this project via [Pull-Requests](https://github.com/mjancarik/merk
 
 We are using [Changesets](https://github.com/changesets/changesets) for versioning and releasing. To add a changeset describing your changes, run `npm run changeset` from the root of the monorepo.
 
-> **Note:** The release process is documented in the [root README](https://github.com/mjancarik/merkur#release), which is the source of truth for all contribution and release guidelines.
+> **Note:** The release process and [changeset format](https://github.com/mjancarik/merkur#changeset-format) are documented in the [root README](https://github.com/mjancarik/merkur#contribution), which is the source of truth for all contribution and release guidelines.
 
 ---
 
