@@ -136,7 +136,7 @@ export declare function setDefaultValueForUndefined<T extends object>(
 ): T;
 
 export declare function bindWidgetToFunctions(
-  widget: Widget,
+  widget: WidgetPartial,
   target?: any,
 ): void;
 
