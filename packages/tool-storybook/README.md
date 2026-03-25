@@ -36,7 +36,7 @@ Creates a `render` / `update` pair for vanilla JavaScript widgets that produce H
 
 | Option | Type | Required | Description |
 |--------|------|----------|-------------|
-| `ViewComponent` | `Function \| Object<string, Function>` | ✅ | A single view function `(widget) => htmlString`, or a named map with a `"default"` key. |
+| `ViewComponent` | `Function \| Object<string, Function>` | ✅ | A single view function `(widget) => htmlString`, or a named map where `"default"` is the fallback. Use `args.component` (function or string key) in story args to select a specific view. |
 | `bindEvents` | `Function` | — | Called after every render: `(container, widget) => void`. Falls back to `widget.View.bindEvents` if present. |
 
 ```javascript
@@ -59,6 +59,8 @@ export default {
 ### `createWidgetLoader(options)`
 
 Low-level factory that returns a single Storybook loader function. `createPreviewConfig` uses this internally. Use it directly when you need more control over widget registration.
+
+When the loader is called for the same story again (e.g. because a Storybook Controls panel value changed), it reuses the existing widget instance and applies any `state` or `props` present in the updated args, so the story template immediately reflects the new values.
 
 | Option | Type | Required | Description |
 |--------|------|----------|-------------|

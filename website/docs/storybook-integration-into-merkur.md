@@ -145,7 +145,7 @@ import widgetProperties from '../src/widget.js';
 
 const renderer = createVanillaRenderer({
   // ViewComponent can be a single function or a named map with a 'default' key.
-  // Use args.component (function) or args.viewComponent (map key) in stories to override.
+  // Use args.component (function or string key) in stories to select a specific view.
   ViewComponent: {
     default: (widget) => `
       <div>
@@ -308,6 +308,12 @@ npm run storybook
 You will see your Counter component with different configurations in the Storybook UI. When you click buttons that modify the widget state, the component will automatically re-render thanks to the decorator's state management.
 
 ## How Widget State Updates Work
+
+### Storybook Controls Panel
+
+When you change a `state` or `props` value in the Storybook Controls panel, Storybook re-invokes the loader with the updated args. The loader applies the new values directly to the widget instance, so the story template immediately receives the updated widget without remounting.
+
+This means stories can expose initial counter values, labels, or any other state as Controls args and users will see the component update live as they adjust those values.
 
 ### Preact Widgets
 
