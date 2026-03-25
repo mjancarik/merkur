@@ -16,7 +16,7 @@ process.on('unhandledRejection', (error) => {
   console.error(error);
 });
 
-if (!widgetServer.clusters || !cluster.isMaster) {
+if (!widgetServer.clusters || !cluster.isPrimary) {
   const server = app.listen({ port: widgetServer.port });
 
   const handleExit = () => {
