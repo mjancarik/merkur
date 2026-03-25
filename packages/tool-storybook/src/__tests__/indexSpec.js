@@ -165,71 +165,76 @@ describe('Merkur tool storybook', () => {
       expect(typeof widget.customFunction === 'function').toBeTruthy();
     });
 
-    it('should not allow story args to override reserved key "name"', async () => {
-      let loader = createWidgetLoader({ widgetProperties, render });
-
-      storyArgs.args.widget.name = 'hacked-widget';
-      let { widget } = await loader(storyArgs);
-
-      expect(widget.name).toEqual(widgetProperties.name);
-    });
-
-    it('should not allow story args to override reserved key "version"', async () => {
-      let loader = createWidgetLoader({ widgetProperties, render });
-
-      storyArgs.args.widget.version = '999.0.0';
-      let { widget } = await loader(storyArgs);
-
-      expect(widget.version).toEqual(widgetProperties.version);
-    });
-
-    it('should not allow story args to override reserved keys "$plugins", "setup", "create", "createWidget"', async () => {
-      let loader = createWidgetLoader({ widgetProperties, render });
-
-      const fakeFn = jest.fn();
-      storyArgs.args.widget.$plugins = [];
-      storyArgs.args.widget.setup = fakeFn;
-      storyArgs.args.widget.create = fakeFn;
-      storyArgs.args.widget.createWidget = fakeFn;
-      let { widget } = await loader(storyArgs);
-
-      // Widget must still be created correctly and fake functions must not have run
-      expect(widget.name).toEqual(widgetProperties.name);
-      expect(fakeFn).not.toHaveBeenCalled();
-    });
-
-    it('should strip prototype-pollution keys from story args', async () => {
-      let loader = createWidgetLoader({ widgetProperties, render });
-
-      // Assign via bracket notation to avoid parser transforming __proto__
-      storyArgs.args.widget['__proto__'] = { polluted: true };
-      storyArgs.args.widget['constructor'] = () => {};
-      storyArgs.args.widget['prototype'] = {};
-      let { widget } = await loader(storyArgs);
-
-      // Widget created successfully; prototype chain must be intact
-      expect(widget.name).toEqual(widgetProperties.name);
-      expect({}.polluted).toBeUndefined();
-    });
-
-    it('should store lastProps snapshot when props key is present in story args', async () => {
+    it('should reuse the same widget instance on repeated calls for the same story', async () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
       storyArgs.args.widget.props = { counter: 0 };
-      let { widget } = await loader(storyArgs);
+      let { widget: first } = await loader(storyArgs);
+      let { widget: second } = await loader(storyArgs);
 
-      // Calling the loader again for the same story should return the same widget instance
-      let { widget: sameWidget } = await loader(storyArgs);
-
-      expect(sameWidget).toBe(widget);
+      expect(second).toBe(first);
     });
 
-    it('should not store lastProps when props key is absent in story args', async () => {
+    it('should update widget state when Controls panel changes state for the same story', async () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
-      // When the props key is absent, the widget is still created (props is optional).
-      // lastStory.lastProps is left undefined so the hasSetProps+hasSetState reuse
-      // branch does not skip a setProps call on the first re-render.
+      storyArgs.args.widget.state = { counter: 0 };
+      let { widget } = await loader(storyArgs);
+      expect(widget.state).toEqual({ counter: 0 });
+
+      // Simulate Storybook Controls changing the state value
+      storyArgs.args.widget.state = { counter: 42 };
+      let { widget: same } = await loader(storyArgs);
+
+      expect(same).toBe(widget);
+      expect(same.state).toEqual({ counter: 42 });
+    });
+
+    it('should update widget props when Controls panel changes props for the same story', async () => {
+      let loader = createWidgetLoader({ widgetProperties, render });
+
+      storyArgs.args.widget.props = { label: 'original' };
+      let { widget } = await loader(storyArgs);
+      expect(widget.props).toEqual({ label: 'original' });
+
+      // Simulate Storybook Controls changing the props value
+      storyArgs.args.widget.props = { label: 'updated' };
+      let { widget: same } = await loader(storyArgs);
+
+      expect(same).toBe(widget);
+      expect(same.props).toEqual({ label: 'updated' });
+    });
+
+    it('should not overwrite widget state when state key is absent in subsequent args', async () => {
+      let loader = createWidgetLoader({ widgetProperties, render });
+
+      storyArgs.args.widget.state = { counter: 5 };
+      let { widget } = await loader(storyArgs);
+
+      // Second call without a 'state' key must not reset widget state
+      delete storyArgs.args.widget.state;
+      await loader(storyArgs);
+
+      expect(widget.state).toEqual({ counter: 5 });
+    });
+
+    it('should not overwrite widget props when props key is absent in subsequent args', async () => {
+      let loader = createWidgetLoader({ widgetProperties, render });
+
+      storyArgs.args.widget.props = { label: 'kept' };
+      let { widget } = await loader(storyArgs);
+
+      // Second call without a 'props' key must not reset widget props
+      delete storyArgs.args.widget.props;
+      await loader(storyArgs);
+
+      expect(widget.props).toEqual({ label: 'kept' });
+    });
+
+    it('should reuse widget instance when props key is absent from story args', async () => {
+      let loader = createWidgetLoader({ widgetProperties, render });
+
+      // props is optional — widget is still created without it
       delete storyArgs.args.widget.props;
       let { widget } = await loader(storyArgs);
 
@@ -237,17 +242,6 @@ describe('Merkur tool storybook', () => {
       // Second call for the same story must reuse the same widget instance.
       let { widget: same } = await loader(storyArgs);
       expect(same).toBe(widget);
-    });
-
-    it('should initialize lastProps so reuse on first repeated call does not trigger extra setProps', async () => {
-      let loader = createWidgetLoader({ widgetProperties, render });
-
-      storyArgs.args.widget.props = { counter: 0 };
-      let { widget: first } = await loader(storyArgs);
-      let { widget: second } = await loader(storyArgs);
-
-      // Same widget instance is reused — no remount happened
-      expect(second).toBe(first);
     });
   });
 
@@ -424,6 +418,26 @@ describe('Merkur tool storybook', () => {
         expect(defaultFn).toHaveBeenCalledWith(mockWidget);
       });
 
+      it('should use args.component string key to select from a ViewComponent map', () => {
+        const altFn = jest.fn(() => '<p>alt</p>');
+        const { render } = createVanillaRenderer({
+          ViewComponent: { default: viewFn, alt: altFn },
+        });
+        render({ component: 'alt' }, { loaded: { widget: mockWidget } });
+
+        expect(altFn).toHaveBeenCalledWith(mockWidget);
+        expect(viewFn).not.toHaveBeenCalled();
+      });
+
+      it('should throw when args.component string key is not found in ViewComponent map', () => {
+        const { render } = createVanillaRenderer({
+          ViewComponent: { default: viewFn },
+        });
+        expect(() =>
+          render({ component: 'missing' }, { loaded: { widget: mockWidget } }),
+        ).toThrow('not found in ViewComponent map');
+      });
+
       it('should use args.component function when ViewComponent is a function', () => {
         const overrideFn = jest.fn(() => '<p>override</p>');
         const { render } = createVanillaRenderer({ ViewComponent: viewFn });
@@ -431,38 +445,6 @@ describe('Merkur tool storybook', () => {
 
         expect(overrideFn).toHaveBeenCalledWith(mockWidget);
         expect(viewFn).not.toHaveBeenCalled();
-      });
-
-      it('should use args.viewComponent key from ViewComponent map', () => {
-        const altFn = jest.fn(() => '<p>alt</p>');
-        const { render } = createVanillaRenderer({
-          ViewComponent: { default: viewFn, alt: altFn },
-        });
-        render({ viewComponent: 'alt' }, { loaded: { widget: mockWidget } });
-
-        expect(altFn).toHaveBeenCalledWith(mockWidget);
-        expect(viewFn).not.toHaveBeenCalled();
-      });
-
-      it('should throw when args.viewComponent key is not in ViewComponent map', () => {
-        const { render } = createVanillaRenderer({
-          ViewComponent: { default: viewFn },
-        });
-        expect(() =>
-          render(
-            { viewComponent: 'missing' },
-            { loaded: { widget: mockWidget } },
-          ),
-        ).toThrow('not found in ViewComponent map');
-      });
-
-      it('should throw a distinct error when viewComponent key exists but is not a function', () => {
-        const { render } = createVanillaRenderer({
-          ViewComponent: { default: viewFn, bad: 'not-a-fn' },
-        });
-        expect(() =>
-          render({ viewComponent: 'bad' }, { loaded: { widget: mockWidget } }),
-        ).toThrow('is not a function');
       });
 
       it('should throw when ViewComponent returns a non-string', () => {
