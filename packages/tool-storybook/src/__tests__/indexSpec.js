@@ -165,17 +165,17 @@ describe('Merkur tool storybook', () => {
       expect(typeof widget.customFunction === 'function').toBeTruthy();
     });
 
-    it('should reuse the same widget instance on repeated calls for the same story', async () => {
+    it('should create a new widget instance on repeated calls for the same story', async () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
       storyArgs.args.widget.props = { counter: 0 };
       let { widget: first } = await loader(storyArgs);
       let { widget: second } = await loader(storyArgs);
 
-      expect(second).toBe(first);
+      expect(second).not.toBe(first);
     });
 
-    it('should update widget state when Controls panel changes state for the same story', async () => {
+    it('should mount a new widget with the updated state on repeated calls for the same story', async () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
       storyArgs.args.widget.state = { counter: 0 };
@@ -184,13 +184,13 @@ describe('Merkur tool storybook', () => {
 
       // Simulate Storybook Controls changing the state value
       storyArgs.args.widget.state = { counter: 42 };
-      let { widget: same } = await loader(storyArgs);
+      let { widget: next } = await loader(storyArgs);
 
-      expect(same).toBe(widget);
-      expect(same.state).toEqual({ counter: 42 });
+      expect(next).not.toBe(widget);
+      expect(next.state).toEqual({ counter: 42 });
     });
 
-    it('should update widget props when Controls panel changes props for the same story', async () => {
+    it('should mount a new widget with the updated props on repeated calls for the same story', async () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
       storyArgs.args.widget.props = { label: 'original' };
@@ -199,39 +199,39 @@ describe('Merkur tool storybook', () => {
 
       // Simulate Storybook Controls changing the props value
       storyArgs.args.widget.props = { label: 'updated' };
-      let { widget: same } = await loader(storyArgs);
+      let { widget: next } = await loader(storyArgs);
 
-      expect(same).toBe(widget);
-      expect(same.props).toEqual({ label: 'updated' });
+      expect(next).not.toBe(widget);
+      expect(next.props).toEqual({ label: 'updated' });
     });
 
-    it('should not overwrite widget state when state key is absent in subsequent args', async () => {
+    it('should mount a new widget with default state when state key is absent in subsequent args', async () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
       storyArgs.args.widget.state = { counter: 5 };
-      let { widget } = await loader(storyArgs);
-
-      // Second call without a 'state' key must not reset widget state
-      delete storyArgs.args.widget.state;
       await loader(storyArgs);
 
-      expect(widget.state).toEqual({ counter: 5 });
+      // Second call without a 'state' key mounts a new widget with default state
+      delete storyArgs.args.widget.state;
+      let { widget: next } = await loader(storyArgs);
+
+      expect(next.state).toEqual({});
     });
 
-    it('should not overwrite widget props when props key is absent in subsequent args', async () => {
+    it('should mount a new widget with default props when props key is absent in subsequent args', async () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
       storyArgs.args.widget.props = { label: 'kept' };
-      let { widget } = await loader(storyArgs);
-
-      // Second call without a 'props' key must not reset widget props
-      delete storyArgs.args.widget.props;
       await loader(storyArgs);
 
-      expect(widget.props).toEqual({ label: 'kept' });
+      // Second call without a 'props' key mounts a new widget with default props
+      delete storyArgs.args.widget.props;
+      let { widget: next } = await loader(storyArgs);
+
+      expect(next.props).toEqual({});
     });
 
-    it('should reuse widget instance when props key is absent from story args', async () => {
+    it('should create a new widget instance when props key is absent from story args', async () => {
       let loader = createWidgetLoader({ widgetProperties, render });
 
       // props is optional — widget is still created without it
@@ -239,9 +239,9 @@ describe('Merkur tool storybook', () => {
       let { widget } = await loader(storyArgs);
 
       expect(widget.name).toEqual(widgetProperties.name);
-      // Second call for the same story must reuse the same widget instance.
-      let { widget: same } = await loader(storyArgs);
-      expect(same).toBe(widget);
+      // Second call for the same story creates a new widget instance.
+      let { widget: next } = await loader(storyArgs);
+      expect(next).not.toBe(widget);
     });
   });
 
