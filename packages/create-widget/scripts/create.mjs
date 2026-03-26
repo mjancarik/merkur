@@ -20,7 +20,7 @@ let viewResolver = argv.view
   ? Promise.resolve({ view: argv.view })
   : inquirer.prompt([
       {
-        type: 'list',
+        type: 'select',
         name: 'view',
         message: 'Choose a view configuration:',
         choices: [
