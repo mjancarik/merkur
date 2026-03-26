@@ -54,7 +54,7 @@ async function mountNewWidget({ widgetProperties, args, renderFn }) {
 
 /**
  * Creates a Storybook loader that manages the Merkur widget lifecycle.
- * Reuses the widget instance when the story is unchanged, unmounts on story change.
+ * Mounts a new widget on each call, unmounts on story change.
  *
  * @param {Object} options
  * @param {Object} options.widgetProperties - Widget properties including `name` and `version`.
@@ -126,17 +126,6 @@ function createWidgetLoader(options = {}) {
         }
       }
       return { widget: null };
-    }
-
-    if (lastStory.widget && lastStory.name === args.story) {
-      const widgetArgs = args?.args?.widget ?? {};
-      if (Object.hasOwn(widgetArgs, 'state')) {
-        lastStory.widget.state = widgetArgs.state ?? {};
-      }
-      if (Object.hasOwn(widgetArgs, 'props')) {
-        lastStory.widget.props = widgetArgs.props ?? {};
-      }
-      return { widget: lastStory.widget };
     }
 
     const widget = await mountNewWidget({ widgetProperties, args, renderFn });

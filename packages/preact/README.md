@@ -33,40 +33,9 @@ npm install @merkur/core @merkur/plugin-component
 
 Full documentation and setup guide at [merkur.js.org](https://merkur.js.org/docs/getting-started).
 
-## Breaking Changes
+## Storybook
 
-### v0.47.0
-
-The `@merkur/preact/webpack` export (`applyBabelLoader`, `applyPreactConfig`) has been **removed**, along with the `@babel/preset-react`, `@merkur/tool-webpack`, and `babel-loader` peer dependencies.
-
-If your webpack config used these helpers, configure the Preact Babel preset manually:
-
-```javascript
-// webpack.config.js
-module.exports = {
-  module: {
-    rules: [
-      {
-        test: /\.(js|ts|tsx|jsx|mjs)$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              [
-                '@babel/preset-react',
-                { runtime: 'automatic', importSource: 'preact' },
-              ],
-            ],
-          },
-        },
-      },
-    ],
-  },
-};
-```
-
-Alternatively, migrate to the Vite-based Storybook setup described in the [Storybook integration guide](https://merkur.js.org/docs/storybook-integration-into-merkur), which no longer requires webpack or Babel configuration.
+For Storybook integration, use the Vite-based setup described in the [Storybook integration guide](https://merkur.js.org/docs/storybook-integration-into-merkur). No webpack or Babel configuration is required.
 
 ## Contribution
 
