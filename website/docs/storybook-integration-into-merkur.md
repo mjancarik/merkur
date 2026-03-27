@@ -74,8 +74,10 @@ const preview = {
   ...createPreviewConfig({
     widgetProperties,
     render(widget) {
-      // This is called by the widget's update lifecycle
-      // Trigger the forceUpdate stored on the widget by the decorator
+      // This callback runs inside the widget's update lifecycle, so calling
+      // widget.update() here would cause infinite recursion. Instead, we
+      // notify Preact to re-render by calling the useState dispatcher stored
+      // by the decorator — this is not the same as widget.update().
       if (widget?.$in?._storybookForceUpdate) {
         widget.$in._storybookForceUpdate();
       }
