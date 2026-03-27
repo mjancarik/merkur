@@ -1,4 +1,41 @@
 import { getMerkur, createMerkurWidget } from '@merkur/core';
+import { s } from '@esmj/schema';
+
+const widgetPropertiesSchema = s.object({
+  name: s.string().refine((v) => v.trim() !== '', {
+    message: '"widgetProperties.name" must be a non-empty string.',
+  }),
+  version: s.string().refine((v) => v.trim() !== '', {
+    message: '"widgetProperties.version" must be a non-empty string.',
+  }),
+});
+
+const createWidgetLoaderOptionsSchema = s.object({
+  widgetProperties: widgetPropertiesSchema,
+  render: s
+    .any()
+    .refine((v) => typeof v === 'function', {
+      message: (v) => `"render" must be a function, received "${typeof v}".`,
+    })
+    .optional(),
+});
+
+const createPreviewConfigOptionsSchema = s.object({
+  widgetProperties: widgetPropertiesSchema,
+  render: s
+    .any()
+    .refine((v) => typeof v === 'function', {
+      message: (v) => `"render" must be a function, received "${typeof v}".`,
+    })
+    .optional(),
+  createWidget: s
+    .any()
+    .refine((v) => typeof v === 'function', {
+      message: (v) =>
+        `"createWidget" must be a function, received "${typeof v}".`,
+    })
+    .optional(),
+});
 
 /**
  * Creates and mounts a new Merkur widget instance for the given story args.
@@ -58,39 +95,12 @@ async function mountNewWidget({ widgetProperties, args, renderFn }) {
  * @returns {Function} Async Storybook loader resolving to `{ widget }`.
  */
 function createWidgetLoader(options = {}) {
-  if (options == null || typeof options !== 'object') {
-    throw new TypeError(
-      'createWidgetLoader: "options" argument must be a non-null object.',
-    );
+  const result = createWidgetLoaderOptionsSchema.safeParse(options);
+  if (!result.success) {
+    throw new TypeError(`createWidgetLoader: ${result.error.message}`);
   }
   const { render, widgetProperties } = options;
-  if (render != null && typeof render !== 'function') {
-    throw new TypeError(
-      'createWidgetLoader: "render" option must be a function when provided.',
-    );
-  }
   const renderFn = typeof render === 'function' ? render : () => {};
-  if (!widgetProperties || typeof widgetProperties !== 'object') {
-    throw new TypeError(
-      'createWidgetLoader: "widgetProperties" option is required and must be an object.',
-    );
-  }
-  if (
-    typeof widgetProperties.name !== 'string' ||
-    widgetProperties.name.trim() === ''
-  ) {
-    throw new TypeError(
-      'createWidgetLoader: "widgetProperties.name" option is required and must be a non-empty string.',
-    );
-  }
-  if (
-    typeof widgetProperties.version !== 'string' ||
-    widgetProperties.version.trim() === ''
-  ) {
-    throw new TypeError(
-      'createWidgetLoader: "widgetProperties.version" option is required and must be a non-empty string.',
-    );
-  }
 
   let lastStory = {};
 
@@ -148,31 +158,15 @@ function createWidgetLoader(options = {}) {
  * @returns {{ loaders: Function[] }}
  */
 function createPreviewConfig(options = {}) {
-  if (options == null || typeof options !== 'object') {
-    throw new TypeError(
-      'createPreviewConfig: "options" argument must be a non-null object.',
-    );
+  const result = createPreviewConfigOptionsSchema.safeParse(options);
+  if (!result.success) {
+    throw new TypeError(`createPreviewConfig: ${result.error.message}`);
   }
   const {
     widgetProperties,
     render,
     createWidget = createMerkurWidget,
   } = options;
-  if (
-    typeof widgetProperties?.name !== 'string' ||
-    widgetProperties.name.trim() === '' ||
-    typeof widgetProperties?.version !== 'string' ||
-    widgetProperties.version.trim() === ''
-  ) {
-    throw new Error(
-      'createPreviewConfig: widgetProperties must include "name" and "version" as non-empty strings.',
-    );
-  }
-  if (createWidget != null && typeof createWidget !== 'function') {
-    throw new TypeError(
-      'createPreviewConfig: "createWidget" option must be a function when provided.',
-    );
-  }
 
   // Merkur stores widget factories under `name + version` (no separator) — see
   // packages/core/src/merkur.js. We use the same format to detect re-registration.
