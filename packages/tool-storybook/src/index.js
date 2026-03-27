@@ -13,8 +13,7 @@ const widgetPropertiesSchema = s.object({
 const createWidgetLoaderOptionsSchema = s.object({
   widgetProperties: widgetPropertiesSchema,
   render: s
-    .any()
-    .refine((v) => typeof v === 'function', {
+    .function({
       message: (v) => `"render" must be a function, received "${typeof v}".`,
     })
     .optional(),
@@ -23,14 +22,12 @@ const createWidgetLoaderOptionsSchema = s.object({
 const createPreviewConfigOptionsSchema = s.object({
   widgetProperties: widgetPropertiesSchema,
   render: s
-    .any()
-    .refine((v) => typeof v === 'function', {
+    .function({
       message: (v) => `"render" must be a function, received "${typeof v}".`,
     })
     .optional(),
   createWidget: s
-    .any()
-    .refine((v) => typeof v === 'function', {
+    .function({
       message: (v) =>
         `"createWidget" must be a function, received "${typeof v}".`,
     })
