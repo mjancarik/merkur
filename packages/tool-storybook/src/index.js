@@ -226,6 +226,7 @@ function createVanillaRenderer(options) {
   }
 
   const widgetRenderMap = new WeakMap();
+  const widgetContainerMap = new WeakMap();
 
   function getViewFunction(args) {
     const isViewComponentFunction = typeof ViewComponent === 'function';
@@ -293,19 +294,20 @@ function createVanillaRenderer(options) {
         return empty;
       }
 
-      widget.container = document.createElement('div');
+      const container = document.createElement('div');
       const viewFunction = getViewFunction(args);
 
-      renderWidget(widget.container, widget, viewFunction);
+      renderWidget(container, widget, viewFunction);
 
       widgetRenderMap.set(widget, viewFunction);
+      widgetContainerMap.set(widget, container);
 
-      return widget.container;
+      return container;
     },
     update: (widget) => {
       const viewFunction = widget && widgetRenderMap.get(widget);
       if (viewFunction) {
-        renderWidget(widget.container, widget, viewFunction);
+        renderWidget(widgetContainerMap.get(widget), widget, viewFunction);
       }
     },
   };
