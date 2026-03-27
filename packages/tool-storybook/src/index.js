@@ -1,4 +1,4 @@
-import { getMerkur, createMerkurWidget } from '@merkur/core';
+import { getMerkur, createMerkurWidget, isRegistered } from '@merkur/core';
 import { s } from '@esmj/schema';
 
 const widgetPropertiesSchema = s.object({
@@ -168,13 +168,7 @@ function createPreviewConfig(options = {}) {
     createWidget = createMerkurWidget,
   } = options;
 
-  // Merkur stores widget factories under `name + version` (no separator) — see
-  // packages/core/src/merkur.js. We use the same format to detect re-registration.
-  const registrationKey = widgetProperties.name + widgetProperties.version;
-  const merkur = getMerkur();
-  const isAlreadyRegistered =
-    merkur?.$in?.widgetFactory != null &&
-    Object.hasOwn(merkur.$in.widgetFactory, registrationKey);
+  const isAlreadyRegistered = isRegistered(widgetProperties.name);
 
   // Warn when the same widget is already registered (e.g., HMR re-execution of
   // preview.mjs). The previous loader's mounted widget cannot be unmounted
@@ -231,7 +225,6 @@ function createVanillaRenderer(options) {
     );
   }
 
-  // Store per-widget render state so updates target the correct container
   const widgetRenderMap = new WeakMap();
 
   function getViewFunction(args) {
@@ -300,20 +293,19 @@ function createVanillaRenderer(options) {
         return empty;
       }
 
-      const container = document.createElement('div');
+      widget.container = document.createElement('div');
       const viewFunction = getViewFunction(args);
 
-      renderWidget(container, widget, viewFunction);
+      renderWidget(widget.container, widget, viewFunction);
 
-      // Store per-widget render state for later updates
-      widgetRenderMap.set(widget, { container, viewFunction });
+      widgetRenderMap.set(widget, viewFunction);
 
-      return container;
+      return widget.container;
     },
     update: (widget) => {
-      const entry = widget && widgetRenderMap.get(widget);
-      if (entry) {
-        renderWidget(entry.container, widget, entry.viewFunction);
+      const viewFunction = widget && widgetRenderMap.get(widget);
+      if (viewFunction) {
+        renderWidget(widget.container, widget, viewFunction);
       }
     },
   };

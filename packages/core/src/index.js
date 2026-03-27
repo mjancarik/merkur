@@ -1,5 +1,5 @@
 import { createMerkurWidget, defineWidget } from './createMerkurWidget';
-import { createMerkur, removeMerkur, getMerkur } from './merkur';
+import { createMerkur, removeMerkur, getMerkur, isRegistered } from './merkur';
 import {
   assignMissingKeys,
   setDefaultValueForUndefined,
@@ -16,6 +16,7 @@ export {
   getMerkur,
   hookMethod,
   isFunction,
+  isRegistered,
   removeMerkur,
   setDefaultValueForUndefined,
   defineWidget,
