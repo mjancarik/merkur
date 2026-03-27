@@ -285,39 +285,29 @@ describe('Merkur tool storybook', () => {
     });
 
     it('should throw when options is null', () => {
-      expect(() => createPreviewConfig(null)).toThrow(
-        'createPreviewConfig: "options" argument must be a non-null object.',
-      );
+      expect(() => createPreviewConfig(null)).toThrow('must be type of object');
     });
 
     it('should throw when widgetProperties is missing', () => {
-      expect(() => createPreviewConfig({})).toThrow(
-        'createPreviewConfig: widgetProperties must include "name" and "version"',
-      );
+      expect(() => createPreviewConfig({})).toThrow('"widgetProperties"');
     });
 
     it('should throw when widgetProperties.name is missing', () => {
       expect(() =>
         createPreviewConfig({ widgetProperties: { version: '0.0.1' } }),
-      ).toThrow(
-        'createPreviewConfig: widgetProperties must include "name" and "version"',
-      );
+      ).toThrow('widgetProperties.name');
     });
 
     it('should throw when widgetProperties.version is missing', () => {
       expect(() =>
         createPreviewConfig({ widgetProperties: { name: 'widget' } }),
-      ).toThrow(
-        'createPreviewConfig: widgetProperties must include "name" and "version"',
-      );
+      ).toThrow('widgetProperties.version');
     });
 
     it('should throw when createWidget is not a function', () => {
       expect(() =>
         createPreviewConfig({ widgetProperties, createWidget: 'invalid' }),
-      ).toThrow(
-        'createPreviewConfig: "createWidget" option must be a function when provided.',
-      );
+      ).toThrow('"createWidget" must be a function');
     });
 
     it('loaders[0] should create a functioning widget', async () => {
