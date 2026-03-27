@@ -60,7 +60,7 @@ export function getMerkur() {
   return globalContext.__merkur__;
 }
 
-function isRegistered(name) {
+export function isRegistered(name) {
   const merkur = getMerkur();
 
   return Boolean(
