@@ -1,6 +1,6 @@
 ---
-"@merkur/plugin-event-emitter": minor
-"@merkur/plugin-http-client": minor
+"@merkur/plugin-event-emitter": major
+"@merkur/plugin-http-client": major
 "@merkur/plugin-component": minor
 ---
 
