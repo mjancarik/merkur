@@ -78,8 +78,8 @@ const preview = {
       // widget.update() here would cause infinite recursion. Instead, we
       // notify Preact to re-render by calling the useState dispatcher stored
       // by the decorator — this is not the same as widget.update().
-      if (widget?.$in?._storybookForceUpdate) {
-        widget.$in._storybookForceUpdate();
+      if (widget?.storybook?.forceUpdate) {
+        widget.storybook.forceUpdate();
       }
     },
   }),
@@ -102,11 +102,10 @@ export const decorators = [
     const [, forceUpdate] = useState(0);
 
     useEffect(() => {
-      if (widget && widget.$in) {
-        // Store the forceUpdate function on the widget so the render callback can trigger it
-        widget.$in._storybookForceUpdate = () => forceUpdate((n) => n + 1);
+      if (widget) {
+        widget.storybook = { forceUpdate: () => forceUpdate((n) => n + 1) };
         return () => {
-          widget.$in._storybookForceUpdate = null;
+          widget.storybook = null;
         };
       }
     }, [widget]);
