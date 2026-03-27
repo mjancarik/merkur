@@ -36,18 +36,14 @@ async function mountNewWidget({ widgetProperties, args, renderFn }) {
     widget.props = {};
   }
 
-  // Hook the component-plugin update lifecycle so that any subsequent
-  // setState / setProps call automatically triggers the Storybook render callback.
-  const lifeCycle = widget?.$in?.component?.lifeCycle;
-  if (lifeCycle) {
-    const originalUpdate = lifeCycle.update;
-    lifeCycle.update = async (w) => {
-      if (typeof originalUpdate === 'function') {
-        await originalUpdate(w);
-      }
-      renderFn(w);
-    };
-  }
+  // Wrap widget.update so that any subsequent setState / setProps call
+  // automatically triggers the Storybook render callback.
+  const originalUpdate = widget.update;
+  widget.update = async (...args) => {
+    const result = await originalUpdate(...args);
+    renderFn(widget);
+    return result;
+  };
 
   return widget;
 }
