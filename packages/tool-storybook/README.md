@@ -72,54 +72,17 @@ const config = {
 export default config;
 ```
 
-### `.storybook/decorators.jsx`
-
-The decorator makes a Preact re-render happen whenever the widget's update lifecycle fires. It also passes the widget instance down the tree via a Preact context so component stories can access it without prop-drilling.
-
-```jsx
-import { useState, useEffect } from 'preact/hooks';
-import WidgetContext from '../src/components/WidgetContext';
-
-export const decorators = [
-  (Story, { loaded: { widget } }) => {
-    const [, forceUpdate] = useState(0);
-
-    useEffect(() => {
-      if (widget && widget.$in) {
-        // Store the forceUpdate function on the widget so the render callback can trigger it
-        widget.$in._storybookForceUpdate = () => forceUpdate((n) => n + 1);
-      }
-    }, [widget]);
-
-    return (
-      <WidgetContext.Provider value={widget}>
-        <Story />
-      </WidgetContext.Provider>
-    );
-  },
-];
-```
-
 ### `.storybook/preview.mjs`
 
 ```javascript
 import { createPreviewConfig } from '@merkur/tool-storybook';
 import widgetProperties from '../src/widget.js';
-import { decorators } from './decorators.jsx';
 import '../src/style.css';
 
 const preview = {
   ...createPreviewConfig({
     widgetProperties,
-    render(widget) {
-      // Called by the widget's update lifecycle (e.g. after setState/setProps).
-      // Trigger the Preact forceUpdate stored on the widget by the decorator.
-      if (widget?.$in?._storybookForceUpdate) {
-        widget.$in._storybookForceUpdate();
-      }
-    },
   }),
-  decorators,
 };
 
 export default preview;
@@ -171,23 +134,6 @@ const config = {
 export default config;
 ```
 
-### `.storybook/decorators.mjs`
-
-The vanilla decorator stores a `_storybookSync` object on the widget so that the `render` callback in `preview.mjs` can call `updateArgs` to keep the Controls panel in sync after widget-internal interactions.
-
-```javascript
-export const decorators = [
-  (StoryFn, { loaded: { widget }, args, updateArgs }) => {
-    if (widget && widget.$in) {
-      // Provide updateArgs and a live getter for the current args so the
-      // render callback can sync widget state/props back to the Controls panel.
-      widget.$in._storybookSync = { updateArgs, getArgs: () => args };
-    }
-    return StoryFn();
-  },
-];
-```
-
 ### `.storybook/preview.mjs`
 
 `createVanillaRenderer` maps widget instances to their DOM containers so `renderer.update(widget)` always targets the right element. Pass multiple view functions as a named map to support per-story view selection via `args.component`.
@@ -198,9 +144,10 @@ import widgetProperties from '../src/widget.js';
 import View from '../src/views/View.js';
 import HeadlineSlot from '../src/slots/HeadlineSlot.js';
 import Counter from '../src/components/Counter.js';
-import { decorators } from './decorators.mjs';
 import '../src/style.css';
 
+// Example bindEvents implementation for vanilla JS widgets. The function receives the widget's root container and the widget instance, and can add event listeners to trigger widget methods used in the view functions.
+// This is necessary for interactivity since vanilla JS views are just HTML strings and cannot use logic from client.js defined in entries.
 function bindEvents(container, widget) {
   container
     .querySelector('[data-merkur="on-increase"]')
@@ -225,23 +172,9 @@ const preview = {
     widgetProperties,
     render(widget) {
       renderer.update(widget);
-      // Sync widget state/props back to the Controls panel after interactions.
-      const sync = widget?.$in?._storybookSync;
-      if (sync) {
-        const { updateArgs, getArgs } = sync;
-        const currentArgs = getArgs();
-        updateArgs({
-          widget: {
-            ...currentArgs.widget,
-            state: widget.state,
-            props: widget.props,
-          },
-        });
-      }
     },
   }),
   render: renderer.render,
-  decorators,
 };
 
 export default preview;
