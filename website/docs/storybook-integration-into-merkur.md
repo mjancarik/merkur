@@ -77,10 +77,8 @@ const preview = {
       // This callback runs inside the widget's update lifecycle, so calling
       // widget.update() here would cause infinite recursion. Instead, we
       // notify Preact to re-render by calling the useState dispatcher stored
-      // on widget.$in by the decorator — this is not the same as widget.update().
-      if (widget?.$in?._storybookForceUpdate) {
-        widget.$in._storybookForceUpdate();
-      }
+      // on widget.$in.storybook by the decorator — this is not the same as widget.update().
+      widget.$in?.storybook?.forceUpdate();
     },
   }),
   decorators,
@@ -103,10 +101,10 @@ export const decorators = [
 
     useEffect(() => {
       if (widget && widget.$in) {
-        // Store the forceUpdate function on widget.$in so the render callback
-        // in preview.mjs can trigger a re-render without touching the sealed
-        // widget object directly.
-        widget.$in._storybookForceUpdate = () => forceUpdate((n) => n + 1);
+        // Group all Storybook integration state under widget.$in.storybook so
+        // the render callback in preview.mjs can trigger a re-render without
+        // touching the sealed widget object directly.
+        widget.$in.storybook = { forceUpdate: () => forceUpdate((n) => n + 1) };
       }
     }, [widget]);
 
@@ -178,9 +176,9 @@ const preview = {
       renderer.update(widget);
       // Sync widget state/props back to the Storybook Controls panel so it
       // stays up to date after widget-internal interactions (e.g. button clicks).
-      const sync = widget?.$in?._storybookSync;
-      if (sync) {
-        const { updateArgs, getArgs } = sync;
+      const storybook = widget?.$in?.storybook;
+      if (storybook) {
+        const { updateArgs, getArgs } = storybook;
         const currentArgs = getArgs();
         updateArgs({
           widget: {
@@ -201,13 +199,13 @@ export default preview;
 
 #### `.storybook/decorators.mjs`
 
-The decorator stores Storybook's `updateArgs` helper on `widget.$in` so the `render` callback above can push updated `state`/`props` back to the Controls panel after every widget-internal interaction. Storing on `widget.$in` (an existing unrestricted object inside the sealed widget) avoids the `Object.seal` restriction.
+The decorator stores Storybook's `updateArgs` helper on `widget.$in.storybook` so the `render` callback above can push updated `state`/`props` back to the Controls panel after every widget-internal interaction. Storing on `widget.$in` (an existing unrestricted object inside the sealed widget) avoids the `Object.seal` restriction.
 
 ```javascript
 export const decorators = [
   (StoryFn, { loaded: { widget }, args, updateArgs }) => {
     if (widget && widget.$in) {
-      widget.$in._storybookSync = { updateArgs, getArgs: () => args };
+      widget.$in.storybook = { updateArgs, getArgs: () => args };
     }
     return StoryFn();
   },
@@ -347,7 +345,7 @@ You will see your Counter component with different configurations in the Storybo
 
 ### Storybook Controls Panel
 
-When you change a `state` or `props` value in the Storybook Controls panel, Storybook re-invokes the loader with the updated args. The loader applies the new values directly to the widget instance, so the story template immediately receives the updated widget without remounting.
+When you change a `state` or `props` value in the Storybook Controls panel, Storybook re-invokes the loader with the updated args. The loader **always creates a new widget instance** — it unmounts any widget from a previous story, then mounts a fresh one with the new `state`/`props` values. The story template receives the new widget instance and re-renders.
 
 This means stories can expose initial counter values, labels, or any other state as Controls args and users will see the component update live as they adjust those values.
 
@@ -358,10 +356,10 @@ The setup ensures that when widget state changes (e.g., clicking a button):
 1. The widget's event handler (like `onClick`) updates the widget state
 2. The widget's `update` lifecycle method is triggered
 3. The `render()` callback in `preview.mjs` is called
-4. This calls `widget.$in._storybookForceUpdate()`, which was stored by the decorator's `useEffect`
+4. This calls `widget.$in.storybook.forceUpdate()`, which was stored by the decorator's `useEffect`
 5. Preact re-renders the story with the updated widget state
 
-The `forceUpdate` dispatcher is stored on `widget.$in` (not directly on the sealed `widget` object) because `createMerkurWidget` calls `Object.seal(widget)` — adding new top-level properties after construction is not allowed. `widget.$in` is an existing unrestricted object, so it accepts new keys freely.
+The `forceUpdate` dispatcher is stored on `widget.$in.storybook` (not directly on the sealed `widget` object) because `createMerkurWidget` calls `Object.seal(widget)` — adding new top-level properties after construction is not allowed. `widget.$in` is an existing unrestricted object, so it accepts new keys freely.
 
 ### Vanilla Widgets
 
@@ -372,9 +370,9 @@ For vanilla widgets with interactive elements:
 3. The `render` callback passed to `createPreviewConfig` is called
 4. `renderer.update(widget)` re-renders the container with updated HTML (the container is tracked in a `WeakMap` inside `createVanillaRenderer`, not on the sealed widget)
 5. The `bindEvents` function re-attaches all event listeners
-6. Optionally, `widget.$in._storybookSync.updateArgs(...)` pushes the new `state`/`props` back to the Storybook Controls panel
+6. Optionally, `widget.$in.storybook.updateArgs(...)` pushes the new `state`/`props` back to the Storybook Controls panel
 
-The `bindEvents` function is crucial for vanilla widgets as it reconnects event listeners after each re-render. The `_storybookSync` mechanism (set up by the decorator) keeps the Controls panel values in sync when the widget state changes through internal interactions such as button clicks.
+The `bindEvents` function is crucial for vanilla widgets as it reconnects event listeners after each re-render. The `widget.$in.storybook` mechanism (set up by the decorator) keeps the Controls panel values in sync when the widget state changes through internal interactions such as button clicks.
 
 ## Key Differences
 
@@ -390,7 +388,7 @@ The `bindEvents` function is crucial for vanilla widgets as it reconnects event 
   - Stories use simple CSF3 format with `component` in args
   - Components receive full widget object
   - Require `bindEvents` function for interactive elements
-  - Use `widget.$in._storybookSync` (set by the decorator) to keep Controls panel in sync
+  - Use `widget.$in.storybook` (set by the decorator) to keep Controls panel in sync
   - Must use `class` not `className` in HTML strings
   
 - **Framework config**: Preact uses `@storybook/preact-vite`, vanilla uses `@storybook/html-vite`

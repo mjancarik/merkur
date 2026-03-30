@@ -52,6 +52,7 @@
   },
   "peerDependencies": {
     "@merkur/core": "*",
-    "@merkur/plugin-component": "*"
+    "@merkur/plugin-component": "*",
+    "storybook": ">=10"
   }
 }

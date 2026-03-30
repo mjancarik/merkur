@@ -1,5 +1,12 @@
-import { getMerkur, createMerkurWidget, isRegistered } from '@merkur/core';
+import {
+  getMerkur,
+  createMerkurWidget,
+  isRegistered,
+  hookMethod,
+} from '@merkur/core';
 import { s } from '@esmj/schema';
+import { addons } from 'storybook/preview-api';
+import { FORCE_RE_RENDER } from 'storybook/internal/core-events';
 
 const widgetPropertiesSchema = s.object({
   name: s.string().refine((v) => v.trim() !== '', {
@@ -70,14 +77,12 @@ async function mountNewWidget({ widgetProperties, args, renderFn }) {
     widget.props = {};
   }
 
-  // Wrap widget.update so that any subsequent setState / setProps call
-  // automatically triggers the Storybook render callback.
-  const originalUpdate = widget.update;
-  widget.update = async (...args) => {
-    const result = await originalUpdate(...args);
+  hookMethod(widget, 'update', async (widget, originalUpdate, ...rest) => {
+    const result = await originalUpdate(...rest);
     renderFn(widget);
+    addons.getChannel().emit(FORCE_RE_RENDER);
     return result;
-  };
+  });
 
   return widget;
 }
@@ -196,74 +201,11 @@ function createPreviewConfig(options = {}) {
 /**
  * Creates a renderer for vanilla JS widgets that produce HTML strings.
  *
- * @param {Object} options
- * @param {Function|Object.<string, Function>} options.ViewComponent - A single view function
- *   `(widget) => htmlString`, or a named map where `"default"` is the fallback.
- *   Use `args.component` (string key or function) to select a view at story level.
- * @param {Function} [options.bindEvents] - Called after each render: `(container, widget) => void`.
- *   Falls back to `widget.View.bindEvents` when omitted.
  * @returns {{ render: Function, update: Function }}
  */
-function createVanillaRenderer(options) {
-  if (!options || typeof options !== 'object') {
-    throw new Error(
-      'createVanillaRenderer: options must be a non-null object.',
-    );
-  }
-  const { ViewComponent, bindEvents } = options;
-  if (bindEvents != null && typeof bindEvents !== 'function') {
-    throw new TypeError(
-      'createVanillaRenderer: "bindEvents" option must be a function when provided.',
-    );
-  }
-  if (!ViewComponent) {
-    throw new Error(
-      'createVanillaRenderer: "ViewComponent" option is required.',
-    );
-  }
-
+function createVanillaRenderer() {
   const widgetRenderMap = new WeakMap();
   const widgetContainerMap = new WeakMap();
-
-  function getViewFunction(args) {
-    const isViewComponentFunction = typeof ViewComponent === 'function';
-    if (args.component) {
-      if (typeof args.component === 'function') {
-        return args.component;
-      }
-      if (!isViewComponentFunction) {
-        if (!Object.hasOwn(ViewComponent, args.component)) {
-          throw new Error(
-            `createVanillaRenderer: component key "${args.component}" not found in ViewComponent map`,
-          );
-        }
-        const found = ViewComponent[args.component];
-        if (typeof found !== 'function') {
-          throw new Error(
-            `createVanillaRenderer: component key "${args.component}" in ViewComponent map is not callable`,
-          );
-        }
-        return found;
-      }
-      // When ViewComponent is a function, args.component must be a function override
-      throw new Error(
-        'createVanillaRenderer: "component" key must be a function when ViewComponent is a function; pass a component function directly via args.component.',
-      );
-    }
-
-    // Fall back to ViewComponent
-    if (isViewComponentFunction) {
-      return ViewComponent;
-    }
-
-    const fn = ViewComponent.default ?? ViewComponent;
-    if (typeof fn !== 'function') {
-      throw new Error(
-        'createVanillaRenderer: ViewComponent must be a function or an object with a callable "default" property',
-      );
-    }
-    return fn;
-  }
 
   function renderWidget(container, widget, viewFunction) {
     const viewOutput = viewFunction(widget);
@@ -275,11 +217,7 @@ function createVanillaRenderer(options) {
     }
     container.innerHTML = viewOutput;
 
-    if (bindEvents) {
-      bindEvents(container, widget);
-    } else if (typeof widget.View?.bindEvents === 'function') {
-      widget.View.bindEvents(container, widget);
-    }
+    widget.View?.bindEventListeners?.(widget, container);
   }
 
   return {
@@ -291,9 +229,14 @@ function createVanillaRenderer(options) {
         return empty;
       }
 
-      const container = document.createElement('div');
-      const viewFunction = getViewFunction(args);
+      const viewFunction = args.component;
+      if (typeof viewFunction !== 'function') {
+        throw new TypeError(
+          'createVanillaRenderer: args.component must be a function.',
+        );
+      }
 
+      const container = document.createElement('div');
       renderWidget(container, widget, viewFunction);
 
       widgetRenderMap.set(widget, viewFunction);
