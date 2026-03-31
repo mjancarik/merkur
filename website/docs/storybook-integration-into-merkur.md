@@ -77,8 +77,8 @@ const preview = {
       // This callback runs inside the widget's update lifecycle, so calling
       // widget.update() here would cause infinite recursion. Instead, we
       // notify Preact to re-render by calling the useState dispatcher stored
-      // on widget.$in.storybook by the decorator — this is not the same as widget.update().
-      widget.$in?.storybook?.forceUpdate();
+      // on widget.$external.storybook by the decorator — this is not the same as widget.update().
+      widget.$external?.storybook?.forceUpdate();
     },
   }),
   decorators,
@@ -100,11 +100,13 @@ export const decorators = [
     const [, forceUpdate] = useState(0);
 
     useEffect(() => {
-      if (widget && widget.$in) {
-        // Group all Storybook integration state under widget.$in.storybook so
+      if (widget && widget.$external) {
+        // Group all Storybook integration state under widget.$external.storybook so
         // the render callback in preview.mjs can trigger a re-render without
         // touching the sealed widget object directly.
-        widget.$in.storybook = { forceUpdate: () => forceUpdate((n) => n + 1) };
+        widget.$external.storybook = {
+          forceUpdate: () => forceUpdate((n) => n + 1),
+        };
       }
     }, [widget]);
 
@@ -143,40 +145,19 @@ export default config;
 ```javascript
 import { createPreviewConfig, createVanillaRenderer } from '@merkur/tool-storybook';
 import widgetProperties from '../src/widget.js';
-import View from '../src/views/View.js';
-import HeadlineSlot from '../src/slots/HeadlineSlot.js';
-import Counter from '../src/components/Counter.js';
 import { decorators } from './decorators.mjs';
 import '../src/style.css';
 
-function bindEvents(container, widget) {
-  container
-    .querySelector('[data-merkur="on-increase"]')
-    ?.addEventListener('click', () => widget.onClick(widget));
-  container
-    .querySelector('[data-merkur="on-reset"]')
-    ?.addEventListener('click', () => widget.onReset(widget));
-}
-
-const renderer = createVanillaRenderer({
-  // ViewComponent can be a single function or a named map with a 'default' key.
-  // Use args.component (function or string key) in stories to select a specific view.
-  ViewComponent: {
-    default: View,
-    headline: HeadlineSlot,
-    Counter,
-  },
-  bindEvents,
-});
+const { render, update } = createVanillaRenderer();
 
 const preview = {
   ...createPreviewConfig({
     widgetProperties,
     render(widget) {
-      renderer.update(widget);
+      update(widget);
       // Sync widget state/props back to the Storybook Controls panel so it
       // stays up to date after widget-internal interactions (e.g. button clicks).
-      const storybook = widget?.$in?.storybook;
+      const storybook = widget?.$external?.storybook;
       if (storybook) {
         const { updateArgs, getArgs } = storybook;
         const currentArgs = getArgs();
@@ -190,7 +171,7 @@ const preview = {
       }
     },
   }),
-  render: renderer.render, // Storybook story render function (args, { loaded }) => HTMLElement
+  render, // Storybook story render function (args, { loaded }) => HTMLElement
   decorators,
 };
 
@@ -199,13 +180,24 @@ export default preview;
 
 #### `.storybook/decorators.mjs`
 
-The decorator stores Storybook's `updateArgs` helper on `widget.$in.storybook` so the `render` callback above can push updated `state`/`props` back to the Controls panel after every widget-internal interaction. Storing on `widget.$in` (an existing unrestricted object inside the sealed widget) avoids the `Object.seal` restriction.
+The decorator does two things:
+1. Stores Storybook's `updateArgs` helper on `widget.$external.storybook` so the `render` callback can push updated `state`/`props` back to the Controls panel after every widget-internal interaction. `widget.$external` is Merkur's intended place for user-defined runtime state and is never sealed.
+2. Auto-injects `bindEventListeners` onto any `args.component` function that doesn't already carry it — so component-level stories (e.g. `Counter`) get event binding without having to import it themselves.
 
 ```javascript
+import { useArgs } from 'storybook/preview-api';
+import { bindEventListeners } from '../src/views/View.js';
+
 export const decorators = [
-  (StoryFn, { loaded: { widget }, args, updateArgs }) => {
-    if (widget && widget.$in) {
-      widget.$in.storybook = { updateArgs, getArgs: () => args };
+  (StoryFn, { loaded: { widget }, args }) => {
+    const [, updateArgs] = useArgs();
+
+    if (args.component && !args.component.bindEventListeners) {
+      args.component.bindEventListeners = bindEventListeners;
+    }
+
+    if (widget && widget.$external) {
+      widget.$external.storybook = { updateArgs, getArgs: () => args };
     }
     return StoryFn();
   },
@@ -268,9 +260,9 @@ export const TenCounter = {
 };
 ```
 
-The `createVanillaRenderer` in `preview.mjs` handles all the DOM creation and rendering automatically. You can provide the component in two ways, but stories still need a `widget` object in `args` so the Merkur loader creates a widget instance:
+The `createVanillaRenderer` in `preview.mjs` handles all the DOM creation and rendering automatically. Stories still need a `widget` object in `args` so the Merkur loader creates a widget instance, and they must provide `component` as a function:
 
-1. Pass the component function directly in story args (no map needed), for example:
+1. Pass the component function directly in story args, for example:
    ```js
    export default {
      args: {
@@ -281,27 +273,17 @@ The `createVanillaRenderer` in `preview.mjs` handles all the DOM creation and re
      },
    };
    ```
-2. Or register the component in the `ViewComponent` map in `preview.mjs` and reference it by key in story args, for example:
+2. For full-view stories, attach `bindEventListeners` directly on the `View` function in `View.js` and export it by name so the decorator can import it:
    ```js
-   // in preview.mjs
-   const ViewComponent = {};
-   createVanillaRenderer({
-     // other options...
-     ViewComponent,
-   });
-   ViewComponent.Counter = Counter;
-   // or equivalently:
-   // ViewComponent['Counter'] = Counter;
-   // in your story
-   export default {
-     args: {
-       widget: {
-         props: {},
-       },
-       component: 'Counter',
-     },
-   };
+   // src/views/View.js
+   function bindEventListeners(widget, container) { /* … */ }
+
+   View.bindEventListeners = bindEventListeners;
+
+   export { bindEventListeners };
+   export default View;
    ```
+   Any story that passes `component: View` then carries event binding automatically. The named export is used by the decorator to inject it into component-level stories (e.g. `Counter`) that don't carry it themselves (see `decorators.mjs` above).
 
 #### Custom Render Functions
 
@@ -356,10 +338,10 @@ The setup ensures that when widget state changes (e.g., clicking a button):
 1. The widget's event handler (like `onClick`) updates the widget state
 2. The widget's `update` lifecycle method is triggered
 3. The `render()` callback in `preview.mjs` is called
-4. This calls `widget.$in.storybook.forceUpdate()`, which was stored by the decorator's `useEffect`
+4. This calls `widget.$external.storybook.forceUpdate()`, which was stored by the decorator's `useEffect`
 5. Preact re-renders the story with the updated widget state
 
-The `forceUpdate` dispatcher is stored on `widget.$in.storybook` (not directly on the sealed `widget` object) because `createMerkurWidget` calls `Object.seal(widget)` — adding new top-level properties after construction is not allowed. `widget.$in` is an existing unrestricted object, so it accepts new keys freely.
+The `forceUpdate` dispatcher is stored on `widget.$external.storybook` (not directly on the sealed `widget` object) because `createMerkurWidget` calls `Object.seal(widget)` — adding new top-level properties after construction is not allowed. `widget.$external` is the intended place for user-defined runtime variables, so it is a better fit than `$in`.
 
 ### Vanilla Widgets
 
@@ -368,11 +350,11 @@ For vanilla widgets with interactive elements:
 1. The widget's event handler updates the widget state
 2. The widget's `update` lifecycle method is triggered
 3. The `render` callback passed to `createPreviewConfig` is called
-4. `renderer.update(widget)` re-renders the container with updated HTML (the container is tracked in a `WeakMap` inside `createVanillaRenderer`, not on the sealed widget)
-5. The `bindEvents` function re-attaches all event listeners
-6. Optionally, `widget.$in.storybook.updateArgs(...)` pushes the new `state`/`props` back to the Storybook Controls panel
+4. `update(widget)` re-renders the container with updated HTML (the container is tracked in a `WeakMap` inside `createVanillaRenderer`, not on the sealed widget)
+5. `viewFunction.bindEventListeners` re-attaches all event listeners
+6. Optionally, `widget.$external.storybook.updateArgs(...)` pushes the new `state`/`props` back to the Storybook Controls panel
 
-The `bindEvents` function is crucial for vanilla widgets as it reconnects event listeners after each re-render. The `widget.$in.storybook` mechanism (set up by the decorator) keeps the Controls panel values in sync when the widget state changes through internal interactions such as button clicks.
+`bindEventListeners` is crucial for vanilla widgets as it reconnects event listeners after each re-render. The `widget.$external.storybook` mechanism (set up by the decorator) keeps the Controls panel values in sync when the widget state changes through internal interactions such as button clicks.
 
 ## Key Differences
 
@@ -387,8 +369,8 @@ The `bindEvents` function is crucial for vanilla widgets as it reconnects event 
   - `createVanillaRenderer` handles rendering and re-rendering (container stored in a `WeakMap`)
   - Stories use simple CSF3 format with `component` in args
   - Components receive full widget object
-  - Require `bindEvents` function for interactive elements
-  - Use `widget.$in.storybook` (set by the decorator) to keep Controls panel in sync
+  - Require `bindEventListeners` on `args.component` for interactive elements (attach in `View.js` or let the decorator inject it)
+  - Use `widget.$external.storybook` (set by the decorator) to keep Controls panel in sync
   - Must use `class` not `className` in HTML strings
   
 - **Framework config**: Preact uses `@storybook/preact-vite`, vanilla uses `@storybook/html-vite`

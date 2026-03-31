@@ -41,6 +41,51 @@ const createPreviewConfigOptionsSchema = s.object({
     .optional(),
 });
 
+function snapshotStoryArgValue(value) {
+  return JSON.parse(JSON.stringify(value));
+}
+
+function areStoryArgValuesEqual(previous, next) {
+  if (Object.is(previous, next)) {
+    return true;
+  }
+
+  if (typeof previous !== typeof next) {
+    return false;
+  }
+
+  if (Array.isArray(previous) || Array.isArray(next)) {
+    if (!Array.isArray(previous) || !Array.isArray(next)) {
+      return false;
+    }
+
+    if (previous.length !== next.length) {
+      return false;
+    }
+
+    return previous.every((value, index) =>
+      areStoryArgValuesEqual(value, next[index]),
+    );
+  }
+
+  if (previous && next && typeof previous === 'object') {
+    const previousKeys = Object.keys(previous);
+    const nextKeys = Object.keys(next);
+
+    if (previousKeys.length !== nextKeys.length) {
+      return false;
+    }
+
+    return previousKeys.every(
+      (key) =>
+        Object.hasOwn(next, key) &&
+        areStoryArgValuesEqual(previous[key], next[key]),
+    );
+  }
+
+  return false;
+}
+
 /**
  * Creates and mounts a new Merkur widget instance for the given story args.
  * Applies story-provided `state` and `props`, then hooks the component-plugin
@@ -59,25 +104,24 @@ async function mountNewWidget({ widgetProperties, args, renderFn }) {
     ...widgetProperties,
   });
 
+  await widget.mount();
+
+  // Apply story-provided state/props after mount so the load() lifecycle (if present)
+  // cannot silently discard them. If a key is absent, preserve the widget's own
+  // default (falling back to {} only when the plugin leaves the value null/undefined).
   const widgetArgs = args?.args?.widget ?? {};
   if (Object.hasOwn(widgetArgs, 'state')) {
     widget.state = widgetArgs.state ?? {};
+  } else if (widget.state == null) {
+    widget.state = {};
   }
   if (Object.hasOwn(widgetArgs, 'props')) {
     widget.props = widgetArgs.props ?? {};
-  }
-  await widget.mount();
-
-  // load() may set widget.state/props to undefined when no load lifecycle is defined;
-  // ensure the default empty values from componentPlugin are preserved.
-  if (widget.state == null) {
-    widget.state = {};
-  }
-  if (widget.props == null) {
+  } else if (widget.props == null) {
     widget.props = {};
   }
 
-  hookMethod(widget, 'update', async (widget, originalUpdate, ...rest) => {
+  hookMethod(widget, 'update', async (_firstArg, originalUpdate, ...rest) => {
     const result = await originalUpdate(...rest);
     renderFn(widget);
     addons.getChannel().emit(FORCE_RE_RENDER);
@@ -89,7 +133,8 @@ async function mountNewWidget({ widgetProperties, args, renderFn }) {
 
 /**
  * Creates a Storybook loader that manages the Merkur widget lifecycle.
- * Mounts a new widget on each call, unmounts on story change.
+ * Mounts a new widget when the story changes or when story args differ from
+ * the previous call; reuses the existing instance when args are unchanged.
  *
  * @param {Object} options
  * @param {Object} options.widgetProperties - Widget properties including `name` and `version`.
@@ -97,24 +142,25 @@ async function mountNewWidget({ widgetProperties, args, renderFn }) {
  * @returns {Function} Async Storybook loader resolving to `{ widget }`.
  */
 function createWidgetLoader(options = {}) {
-  const result = createWidgetLoaderOptionsSchema.safeParse(options);
-  if (!result.success) {
-    throw new TypeError(`createWidgetLoader: ${result.error.message}`);
-  }
+  createWidgetLoaderOptionsSchema.parse(options);
   const { render, widgetProperties } = options;
   const renderFn = typeof render === 'function' ? render : () => {};
 
   let lastStory = {};
 
+  // Always resets lastStory so a failing unmount never leaves a zombie widget
+  // that blocks subsequent loader invocations.
+  async function unmountLast() {
+    try {
+      await lastStory.widget.unmount();
+    } finally {
+      lastStory = {};
+    }
+  }
+
   return async (args) => {
     if (lastStory.widget && lastStory.name !== args.story) {
-      try {
-        await lastStory.widget.unmount();
-      } finally {
-        // Always reset so a failing unmount never leaves a zombie widget that
-        // blocks every subsequent loader invocation.
-        lastStory = {};
-      }
+      await unmountLast();
     }
 
     const widgetArg = args?.args?.widget;
@@ -127,19 +173,28 @@ function createWidgetLoader(options = {}) {
     }
     if (!widgetArg) {
       if (lastStory.widget && lastStory.name === args.story) {
-        try {
-          await lastStory.widget.unmount();
-        } finally {
-          lastStory = {};
-        }
+        await unmountLast();
       }
       return { widget: null };
+    }
+
+    if (
+      lastStory.widget &&
+      lastStory.name === args.story &&
+      areStoryArgValuesEqual(lastStory.widgetArgs, widgetArg)
+    ) {
+      return { widget: lastStory.widget };
+    }
+
+    if (lastStory.widget && lastStory.name === args.story) {
+      await unmountLast();
     }
 
     const widget = await mountNewWidget({ widgetProperties, args, renderFn });
     lastStory = {
       widget,
       name: args.story,
+      widgetArgs: snapshotStoryArgValue(widgetArg),
     };
 
     return { widget };
@@ -160,22 +215,17 @@ function createWidgetLoader(options = {}) {
  * @returns {{ loaders: Function[] }}
  */
 function createPreviewConfig(options = {}) {
-  const result = createPreviewConfigOptionsSchema.safeParse(options);
-  if (!result.success) {
-    throw new TypeError(`createPreviewConfig: ${result.error.message}`);
-  }
+  createPreviewConfigOptionsSchema.parse(options);
   const {
     widgetProperties,
     render,
     createWidget = createMerkurWidget,
   } = options;
 
-  const isAlreadyRegistered = isRegistered(widgetProperties.name);
-
   // Warn when the same widget is already registered (e.g., HMR re-execution of
   // preview.mjs). The previous loader's mounted widget cannot be unmounted
   // automatically — the caller must call widget.unmount() first if needed.
-  if (isAlreadyRegistered) {
+  if (isRegistered(widgetProperties.name)) {
     console.warn(
       `createPreviewConfig: widget "${widgetProperties.name}" is already registered. ` +
         'Call widget.unmount() before re-invoking if a clean teardown is required.',
@@ -201,6 +251,18 @@ function createPreviewConfig(options = {}) {
 /**
  * Creates a renderer for vanilla JS widgets that produce HTML strings.
  *
+ * Stories must provide `args.component` as a function returning an HTML string.
+ * Event binding: attach a `bindEventListeners(widget, container)` function to
+ * `args.component`. The idiomatic place is the view module itself —
+ * `View.bindEventListeners = bindEventListeners` — so any story passing
+ * `component: View` carries it automatically. A decorator can inject it for
+ * component stories that don't have it (see the vanilla widget example).
+ *
+ * **Security note:** `args.component` is responsible for HTML-escaping any
+ * dynamic values before returning the HTML string. Raw interpolation of
+ * user-controlled or server-controlled strings (e.g. product names, error
+ * messages) into the template will be injected via `innerHTML` as-is.
+ *
  * @returns {{ render: Function, update: Function }}
  */
 function createVanillaRenderer() {
@@ -217,7 +279,7 @@ function createVanillaRenderer() {
     }
     container.innerHTML = viewOutput;
 
-    widget.View?.bindEventListeners?.(widget, container);
+    viewFunction.bindEventListeners?.(widget, container);
   }
 
   return {
@@ -229,17 +291,16 @@ function createVanillaRenderer() {
         return empty;
       }
 
-      const viewFunction = args.component;
-      if (typeof viewFunction !== 'function') {
+      if (typeof args.component !== 'function') {
         throw new TypeError(
           'createVanillaRenderer: args.component must be a function.',
         );
       }
 
       const container = document.createElement('div');
-      renderWidget(container, widget, viewFunction);
+      renderWidget(container, widget, args.component);
 
-      widgetRenderMap.set(widget, viewFunction);
+      widgetRenderMap.set(widget, args.component);
       widgetContainerMap.set(widget, container);
 
       return container;

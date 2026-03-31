@@ -9,10 +9,12 @@ import { getBabelOutputPlugin, babel } from '@rollup/plugin-babel';
 const { name, dependencies, peerDependencies } = JSON.parse(
   fs.readFileSync(process.cwd() + '/package.json'),
 );
-const external = [
+const externalList = [
   ...Object.keys(dependencies || {}),
   ...Object.keys(peerDependencies || {}),
 ];
+const external = (id) =>
+  externalList.some((dep) => id === dep || id.startsWith(dep + '/'));
 
 const babelES5BaseConfig = {
   babelrc: false,

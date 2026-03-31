@@ -20,7 +20,7 @@ npm install --save-dev @merkur/tool-storybook
 | Export | Description |
 |--------|-------------|
 | `createPreviewConfig(options)` | Registers a widget with Merkur and returns a partial Storybook `preview.mjs` config (`{ loaders }`). Spread into your preview export. |
-| `createVanillaRenderer(options)` | Creates a `render`/`update` pair for vanilla JS widgets that produce HTML strings. |
+| `createVanillaRenderer()` | Creates a `render`/`update` pair for vanilla JS widgets that produce HTML strings. |
 | `createWidgetLoader(options)` | Low-level loader factory used internally by `createPreviewConfig`. Use directly when you need full control over widget registration. |
 
 ### `createPreviewConfig` options
@@ -31,12 +31,17 @@ npm install --save-dev @merkur/tool-storybook
 | `render` | `Function` | — | Called each time `widget.update()` fires, receives the widget instance. Defaults to a no-op. |
 | `createWidget` | `Function` | — | Widget factory. Defaults to `createMerkurWidget` from `@merkur/core`. |
 
-### `createVanillaRenderer` options
+### `createVanillaRenderer`
 
-| Option | Type | Required | Description |
-|--------|------|----------|-------------|
-| `ViewComponent` | `Function \| Object<string, Function>` | ✅ | A single view function `(widget) => htmlString`, or a named map where `"default"` is the fallback. Use `args.component` (function or string key) in story args to select a view. |
-| `bindEvents` | `Function` | — | Called after every render: `(container, widget) => void`. Falls back to `widget.View.bindEvents` when omitted. |
+`createVanillaRenderer()` takes no arguments.
+
+- Stories must provide `args.component` as a function `(widget) => htmlString`.
+- Event binding: attach a `bindEventListeners(widget, container)` function to `args.component`. The idiomatic place is `View.js` itself — `View.bindEventListeners = bindEventListeners` — so any story that passes `component: View` gets it automatically. A decorator can inject it for component stories that don't carry it already.
+- **Security:** `args.component` is responsible for HTML-escaping any dynamic values before returning the HTML string. Raw interpolation of user-controlled strings is injected via `innerHTML` as-is.
+
+### Peer dependencies
+
+This package requires **Storybook ≥ 10** (`storybook/preview-api` and `storybook/internal/core-events` are imported at runtime). Installing it alongside Storybook < 10 will cause a module-not-found error.
 
 ## About Merkur
 
