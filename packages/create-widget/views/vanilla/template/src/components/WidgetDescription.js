@@ -1,3 +1,5 @@
+import { escHtml } from '../utils';
+
 export default function ViewDescription(widget) {
-  return `<p>The widget's name is <strong>${widget.name}@${widget.version}</strong>.</p>`;
+  return `<p>The widget's name is <strong>${escHtml(widget.name)}@${escHtml(widget.version)}</strong>.</p>`;
 }
