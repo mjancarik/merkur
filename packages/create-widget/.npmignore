@@ -16,6 +16,6 @@ jest.config.js
 setupJest.js
 !/template/*
 !/template/**/*
-!/templates/.gitignore
+!/template/.gitignore
 !/views/*
 !/views/**/*

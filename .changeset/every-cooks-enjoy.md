@@ -1,9 +1,9 @@
 ---
-"@merkur/create-widget": minor
+"@merkur/create-widget": major
 ---
 
-Add `--skip-install` flag to skip `npm install` after creating a new widget
+Drop support for Node.js <22 and fix `.npmignore` template path typo
 
-- **What** Added a `--skip-install` CLI flag to the `create-widget` script. When provided, the `npm install` step is skipped and a reminder message is printed instead.
-- **Why** Allows users to create a new widget without immediately running `npm install`, which is useful in CI environments or when the user wants to inspect or modify the generated files before installing dependencies.
-- **How** Nothing.
+- **What** Bumped the minimum Node.js engine requirement from `>=20` to `>=22` in `package.json`. Fixed a typo in `.npmignore` where `!/templates/.gitignore` was corrected to `!/template/.gitignore`.
+- **Why** Node.js 20 reached end-of-life in April 2026. The `.npmignore` typo caused the template `.gitignore` file to be incorrectly excluded from the published package.
+- **How** Upgrade to Node.js 22 or higher before updating to this version.
