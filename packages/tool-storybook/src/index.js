@@ -1,6 +1,6 @@
 import {
-  getMerkur,
   createMerkurWidget,
+  getMerkur,
   isRegistered,
   hookMethod,
 } from '@merkur/core';
@@ -204,9 +204,7 @@ function createWidgetLoader(options = {}) {
 /**
  * Creates a partial Storybook preview config for a Merkur widget.
  * Registers the widget factory with Merkur and returns a `loaders` array.
- *
- * Calling this again for the same widget (e.g. during HMR) emits a `console.warn`
- * because the previously mounted widget cannot be unmounted automatically.
+ * If the widget is already registered (e.g. during HMR), registration is skipped.
  *
  * @param {Object} options
  * @param {Object} options.widgetProperties - Widget properties including `name` and `version`.
@@ -222,21 +220,12 @@ function createPreviewConfig(options = {}) {
     createWidget = createMerkurWidget,
   } = options;
 
-  // Warn when the same widget is already registered (e.g., HMR re-execution of
-  // preview.mjs). The previous loader's mounted widget cannot be unmounted
-  // automatically — the caller must call widget.unmount() first if needed.
-  if (isRegistered(widgetProperties.name)) {
-    console.warn(
-      `createPreviewConfig: widget "${widgetProperties.name}" is already registered. ` +
-        'Call widget.unmount() before re-invoking if a clean teardown is required.',
-    );
+  if (!isRegistered(widgetProperties.name)) {
+    getMerkur().register({
+      ...widgetProperties,
+      createWidget,
+    });
   }
-
-  // Register the widget with Merkur
-  getMerkur().register({
-    ...widgetProperties,
-    createWidget,
-  });
 
   return {
     loaders: [
@@ -252,11 +241,8 @@ function createPreviewConfig(options = {}) {
  * Creates a renderer for vanilla JS widgets that produce HTML strings.
  *
  * Stories must provide `args.component` as a function returning an HTML string.
- * Event binding: attach a `bindEventListeners(widget, container)` function to
- * `args.component`. The idiomatic place is the view module itself —
- * `View.bindEventListeners = bindEventListeners` — so any story passing
- * `component: View` carries it automatically. A decorator can inject it for
- * component stories that don't have it (see the vanilla widget example).
+ * Event binding is handled automatically by calling `widget.bindEventListeners(container)`
+ * after each render, when the method is present on the widget instance.
  *
  * **Security note:** `args.component` is responsible for HTML-escaping any
  * dynamic values before returning the HTML string. Raw interpolation of
@@ -278,8 +264,7 @@ function createVanillaRenderer() {
       );
     }
     container.innerHTML = viewOutput;
-
-    viewFunction.bindEventListeners?.(widget, container);
+    widget.bindEventListeners?.(container);
   }
 
   return {
