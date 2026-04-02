@@ -63,8 +63,9 @@ function createMerkurApp(dirName, view) {
     )} directory for ${view}...`,
   );
 
-  const projName = dirName.split(path.sep).pop();
   const appRoot = path.resolve(dirName.toString());
+  const projName =
+    dirName === '.' ? path.basename(appRoot) : dirName.split(path.sep).pop();
   const tplRoot = path.join(__dirname, '../template');
   const viewRoot = path.resolve(__dirname, `../views/${view}`);
 
@@ -73,7 +74,7 @@ function createMerkurApp(dirName, view) {
     process.exit(1);
   }
 
-  if (!fs.existsSync(dirName)) {
+  if (!fs.existsSync(dirName) || dirName === '.') {
     try {
       info(`Creating basic directory structure...`);
       fsx.copySync(tplRoot, appRoot);
