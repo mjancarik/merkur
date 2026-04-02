@@ -2,8 +2,8 @@
 "@merkur/tool-storybook": patch
 ---
 
-Wrap `widget.update` directly instead of hooking into internal lifecycle
+Use `hookMethod` to intercept `widget.update` instead of patching internal lifecycle.
 
-- **What** Changed `mountNewWidget` in `packages/tool-storybook/src/index.js` to wrap `widget.update` directly rather than patching `widget.$in.component.lifeCycle.update`.
-- **Why** The previous approach reached into internal implementation details (`$in.component.lifeCycle`) which was fragile and could break silently if the internal structure changed. Wrapping the public `widget.update` method is more robust and correctly returns the result of the original call.
+- **What** `mountNewWidget` in `packages/tool-storybook/src/index.js` now uses `hookMethod(widget, 'update', ...)` from `@merkur/core` to intercept `widget.update`, replacing the previous approach of directly mutating `widget.$in.component.lifeCycle.update`.
+- **Why** The previous approach reached into internal implementation details (`$in.component.lifeCycle`) which was fragile and could break silently if the internal structure changed. Using the public `hookMethod` API is more robust, correctly preserves and returns the original call's result, and follows the established pattern for extending widget behaviour.
 - **How** Nothing.

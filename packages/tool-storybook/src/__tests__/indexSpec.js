@@ -286,7 +286,7 @@ describe('Merkur tool storybook', () => {
       expect(getMerkur().$in.widgetFactory).toBeDefined();
     });
 
-    it('should emit console.warn when registering the same widget twice', () => {
+    it('should silently skip registration when widget is already registered', () => {
       const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
       createPreviewConfig({
@@ -298,8 +298,7 @@ describe('Merkur tool storybook', () => {
         createWidget: createMerkurWidget,
       });
 
-      expect(warnSpy).toHaveBeenCalledTimes(1);
-      expect(warnSpy.mock.calls[0][0]).toMatch(/already registered/);
+      expect(warnSpy).not.toHaveBeenCalled();
       warnSpy.mockRestore();
     });
 
@@ -392,29 +391,26 @@ describe('Merkur tool storybook', () => {
         );
       });
 
-      it('should fall back to widget.View.bindEvents when no bindEvents option', () => {
+      it('should call widget.bindEventListeners with the container on render', () => {
         const bindEventsSpy = jest.fn();
-        mockWidget.View = { bindEvents: bindEventsSpy };
+        mockWidget.bindEventListeners = bindEventsSpy;
         const { render } = createVanillaRenderer();
-        render({ component: viewFn }, { loaded: { widget: mockWidget } });
-
-        expect(bindEventsSpy).toHaveBeenCalledWith(
-          expect.any(HTMLElement),
-          mockWidget,
+        const container = render(
+          { component: viewFn },
+          { loaded: { widget: mockWidget } },
         );
+
+        expect(bindEventsSpy).toHaveBeenCalledWith(container);
       });
 
-      it('should use viewFunction.bindEventListeners when provided', () => {
-        const bindEventListeners = jest.fn();
-        viewFn.bindEventListeners = bindEventListeners;
+      it('should not invoke bindEventListeners defined on viewFunction', () => {
+        const viewFnBindSpy = jest.fn();
+        viewFn.bindEventListeners = viewFnBindSpy;
         const { render } = createVanillaRenderer();
 
         render({ component: viewFn }, { loaded: { widget: mockWidget } });
 
-        expect(bindEventListeners).toHaveBeenCalledWith(
-          expect.any(HTMLElement),
-          mockWidget,
-        );
+        expect(viewFnBindSpy).not.toHaveBeenCalled();
       });
 
       it('should throw when component returns a non-string', () => {
@@ -441,41 +437,37 @@ describe('Merkur tool storybook', () => {
       });
 
       it('should re-bind events on update', () => {
-        const bindEvents = jest.fn();
-        const { render, update } = createVanillaRenderer();
-        viewFn.bindEvents = bindEvents;
-        render({ component: viewFn }, { loaded: { widget: mockWidget } });
-        update(mockWidget);
-
-        expect(bindEvents).toHaveBeenCalledTimes(2);
-      });
-
-      it('should re-bind via bindEventListeners on update', () => {
         const bindEventListeners = jest.fn();
-        viewFn.bindEventListeners = bindEventListeners;
+        mockWidget.bindEventListeners = bindEventListeners;
         const { render, update } = createVanillaRenderer();
         render({ component: viewFn }, { loaded: { widget: mockWidget } });
         update(mockWidget);
 
         expect(bindEventListeners).toHaveBeenCalledTimes(2);
-        expect(bindEventListeners).toHaveBeenLastCalledWith(
-          expect.any(HTMLElement),
-          mockWidget,
-        );
       });
 
-      it('should resolve bindEvents via widget.View fallback on update when not cached', () => {
+      it('should call widget.bindEventListeners with the container on update', () => {
+        const bindEventListeners = jest.fn();
+        mockWidget.bindEventListeners = bindEventListeners;
+        const { render, update } = createVanillaRenderer();
+        const container = render(
+          { component: viewFn },
+          { loaded: { widget: mockWidget } },
+        );
+        update(mockWidget);
+
+        expect(bindEventListeners).toHaveBeenCalledTimes(2);
+        expect(bindEventListeners).toHaveBeenLastCalledWith(container);
+      });
+
+      it('should not invoke widget.View.bindEvents — binding is via widget.bindEventListeners', () => {
         const bindEventsSpy = jest.fn();
-        // Attach bindEvents only via widget.View so that widgetBindEventsMap
-        // has no entry and update() must call resolveBindEvents as fallback.
         mockWidget.View = { bindEvents: bindEventsSpy };
         const { render, update } = createVanillaRenderer();
         render({ component: viewFn }, { loaded: { widget: mockWidget } });
-        // Reset the stored bindEventsFn to force the fallback branch.
         update(mockWidget);
 
-        // render() + update() = 2 calls total
-        expect(bindEventsSpy).toHaveBeenCalledTimes(2);
+        expect(bindEventsSpy).not.toHaveBeenCalled();
       });
 
       it('should do nothing when called with an unknown widget', () => {

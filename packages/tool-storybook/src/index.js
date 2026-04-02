@@ -263,6 +263,7 @@ function createVanillaRenderer() {
         `createVanillaRenderer: viewFunction must return an HTML string, but returned ${actualType}.`,
       );
     }
+    widget.unbindEventListeners?.(container);
     container.innerHTML = viewOutput;
     widget.bindEventListeners?.(container);
   }

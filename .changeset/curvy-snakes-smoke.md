@@ -4,6 +4,8 @@
 "@merkur/plugin-component": minor
 ---
 
-- **What?** Improved TypeScript type definitions across `plugin-component`, `plugin-event-emitter`, and `plugin-http-client`.
-- **Why?** The previous types were inaccurate or incomplete — `setState`/`setProps` didn't allow updater functions and were missing the `Promise<void>` return; event callbacks were missing the `widget` argument; `plugin-http-client` lacked proper interfaces for `HttpRequest`, `HttpTransformer`, and `HttpResult`, and used a now-removed `HttpClientWidget` class instead of module augmentation.
-- **How?** nothing
+Improve TypeScript type definitions in `plugin-component`, `plugin-event-emitter`, and `plugin-http-client`.
+
+- **What** `setState` and `setProps` in `plugin-component` now accept updater functions and return `Promise<void>`; event callbacks in `plugin-event-emitter` now include the `widget` argument; `plugin-http-client` adds proper `HttpRequest`, `HttpTransformer`, and `HttpResult` interfaces and switches from the removed `HttpClientWidget` class to module augmentation.
+- **Why** The previous types were inaccurate or incomplete, causing TypeScript errors when passing updater functions to `setState`/`setProps`, missing the `widget` parameter in event callbacks, and lacking proper interfaces for HTTP client operations.
+- **How** Nothing.
