@@ -11,7 +11,7 @@ description: Get started with Merkur - creating and setting up your first widget
 We recommend creating a new Merkur widget using `@merkur/create-widget`, which sets up everything automatically for you. You can use one of four predefined template libraries: [Preact](https://preactjs.com/), [µhtml](https://github.com/WebReflection/uhtml#readme), [Svelte](https://svelte.dev/) or [vanilla JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals) (or you can easily add your own).
 
 ```shell
-npx @merkur/create-widget <n>
+npx @merkur/create-widget <name>
 
 cd name
 
@@ -19,6 +19,20 @@ npm run dev // Point your browser at http://localhost:4445/
 ```
 
 This will scaffold a new project in the `name` directory and start a devServer on [localhost:4445](http://localhost:4445/) and production widget server on [localhost:4444](http://localhost:4444/). Try editing a few files to get a feel for how everything works.
+
+You can also scaffold the widget into the **current directory** by passing `.` as the name:
+
+```shell
+// create new directory and cd into it
+mkdir my-widget && cd my-widget
+
+// or clone the repo and cd into it
+git clone <repo-url> <repo-dirname> && cd <repo-dirname>
+
+npx @merkur/create-widget .
+
+npm run dev // Point your browser at http://localhost:4445/
+```
 
 ![Merkur - hello widget](/img/hello-widget.png)
 

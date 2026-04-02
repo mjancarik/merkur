@@ -29,6 +29,20 @@ cd name
 
 npm run dev // Point your browser at http://localhost:4444/
 ```
+
+You can also scaffold the widget into the current directory by passing `.` as the name:
+
+```bash
+// create new directory and cd into it
+mkdir my-widget && cd my-widget
+
+// or clone the repo and cd into it
+git clone <repo-url> <repo-dirname> && cd <repo-dirname>
+
+npx @merkur/create-widget .
+
+npm run dev // Point your browser at http://localhost:4444/
+```
 ![alt text](https://raw.githubusercontent.com/mjancarik/merkur/master/images/hello-widget.png "Merkur example, hello widget")
 ## Documentation
 

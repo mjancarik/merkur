@@ -116,8 +116,18 @@ declare module '@merkur/core' {
     >;
     state: WidgetState;
     props: WidgetProps;
-    setState: (widget: WidgetPartial, newState: WidgetState) => void;
-    setProps: (widget: WidgetPartial, newProps: WidgetProps) => void;
+    setState: (
+      widget: WidgetPartial,
+      newState:
+        | Partial<WidgetState>
+        | ((state: WidgetState) => Partial<WidgetState>),
+    ) => Promise<void>;
+    setProps: (
+      widget: WidgetPartial,
+      newProps:
+        | Partial<WidgetProps>
+        | ((props: WidgetProps) => Partial<WidgetProps>),
+    ) => Promise<void>;
   }
   interface WidgetInternal {
     component: {

@@ -20,7 +20,7 @@ let viewResolver = argv.view
   ? Promise.resolve({ view: argv.view })
   : inquirer.prompt([
       {
-        type: 'list',
+        type: 'select',
         name: 'view',
         message: 'Choose a view configuration:',
         choices: [
@@ -63,8 +63,9 @@ function createMerkurApp(dirName, view) {
     )} directory for ${view}...`,
   );
 
-  const projName = dirName.split(path.sep).pop();
   const appRoot = path.resolve(dirName.toString());
+  const projName =
+    dirName === '.' ? path.basename(appRoot) : dirName.split(path.sep).pop();
   const tplRoot = path.join(__dirname, '../template');
   const viewRoot = path.resolve(__dirname, `../views/${view}`);
 
@@ -73,7 +74,7 @@ function createMerkurApp(dirName, view) {
     process.exit(1);
   }
 
-  if (!fs.existsSync(dirName)) {
+  if (!fs.existsSync(dirName) || dirName === '.') {
     try {
       info(`Creating basic directory structure...`);
       fsx.copySync(tplRoot, appRoot);
@@ -113,19 +114,27 @@ function createMerkurApp(dirName, view) {
   fsx.copySync(path.join(viewRoot, 'template'), appRoot);
 
   // Run npm install
-  info(
-    `Running ${chalk.cyan(
-      'npm install',
-    )} inside widget directory, this might take a while...`,
-  );
-  // eslint-disable-next-line no-console
-  console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
+  if (!argv['skip-install']) {
+    info(
+      `Running ${chalk.cyan(
+        'npm install',
+      )} inside widget directory, this might take a while...`,
+    );
+    // eslint-disable-next-line no-console
+    console.log(chalk.dim('      Press CTRL+C to cancel.\n'));
 
-  const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
-  execaSync(npm, ['install'], {
-    stdio: 'inherit',
-    cwd: appRoot,
-  });
+    const npm = process.platform === 'win32' ? 'npm.cmd' : 'npm';
+    execaSync(npm, ['install'], {
+      stdio: 'inherit',
+      cwd: appRoot,
+    });
+  } else {
+    info(
+      `Skipping ${chalk.cyan(
+        'npm install',
+      )}, make sure to run it before starting development!`,
+    );
+  }
 
   // Show final info
   info(`${chalk.bold('Success!')} Created ${chalk.cyan(

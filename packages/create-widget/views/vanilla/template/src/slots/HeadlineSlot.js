@@ -1,3 +1,4 @@
+import { escHtml } from '../utils';
 import Welcome from '../components/Welcome';
 import WidgetDescription from '../components/WidgetDescription';
 import ErrorView from '../views/ErrorView';
@@ -19,9 +20,7 @@ function HeadlineSlot(widget) {
         <div class='merkur__headline'>
           <div class='merkur__view'>
             ${Welcome(widget)}
-            <h3>Current count: <span data-merkur="counter">${
-              widget.state.counter
-            }</span></h3>
+            <h3>Current count: <span data-merkur="counter">${escHtml(widget.state.counter)}</span></h3>
             ${WidgetDescription(widget)}
           </div>
         </div>

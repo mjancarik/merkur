@@ -1,13 +1,41 @@
-import { Widget, WidgetPlugin } from '@merkur/core';
+import { Widget, WidgetPartial, WidgetPlugin } from '@merkur/core';
+
+export interface HttpTransformer {
+  transformRequest?: (
+    widget: Widget,
+    request: HttpRequest,
+    response: HttpResponse | null,
+  ) => Promise<[HttpRequest, HttpResponse | null]>;
+  transformResponse?: (
+    widget: Widget,
+    request: HttpRequest,
+    response: HttpResponse,
+  ) => Promise<[HttpRequest, HttpResponse]>;
+  transformError?: (
+    widget: Widget,
+    error: Error,
+    request: HttpRequest,
+  ) => Promise<[Error, HttpRequest]>;
+}
 
 export interface HttpClientConfig {
   method?: string;
+  url?: string;
+  baseUrl?: string;
+  path?: string;
   headers?: Record<string, string>;
   query?: Record<string, any>;
   body?: any;
   timeout?: number;
-  transformers?: Array<(request: any) => any>;
+  transformers?: Array<HttpTransformer>;
   [key: string]: any;
+}
+
+/** Internal request object — evolves as it passes through the transformer pipeline. */
+export interface HttpRequest extends HttpClientConfig {
+  url: string;
+  signal?: AbortSignal;
+  timeoutTimer?: ReturnType<typeof setTimeout>;
 }
 
 export interface HttpResponse<T = any> {
@@ -15,54 +43,38 @@ export interface HttpResponse<T = any> {
   status: number;
   headers: Headers;
   ok: boolean;
+  redirected?: boolean;
+  statusText?: string;
+  type?: string;
+  url?: string;
 }
 
-export interface HttpClientWidget extends Widget {
-  http: {
-    request<T = any>(config: HttpClientConfig): Promise<HttpResponse<T>>;
-    get<T = any>(
-      url: string,
-      config?: HttpClientConfig,
-    ): Promise<HttpResponse<T>>;
-    post<T = any>(
-      url: string,
-      data?: any,
-      config?: HttpClientConfig,
-    ): Promise<HttpResponse<T>>;
-    patch<T = any>(
-      url: string,
-      data?: any,
-      config?: HttpClientConfig,
-    ): Promise<HttpResponse<T>>;
-    put<T = any>(
-      url: string,
-      data?: any,
-      config?: HttpClientConfig,
-    ): Promise<HttpResponse<T>>;
-    delete<T = any>(
-      url: string,
-      config?: HttpClientConfig,
-    ): Promise<HttpResponse<T>>;
-  };
+export interface HttpResult<T = any> {
+  request: HttpRequest;
+  response: HttpResponse<T>;
 }
 
 export function httpClientPlugin(): WidgetPlugin;
 
 export function setDefaultConfig(
-  widget: Widget,
+  widget: WidgetPartial,
   newDefaultConfig: Partial<HttpClientConfig>,
 ): void;
 
-export function getDefaultTransformers(
-  widget: Widget,
-): Array<(request: any) => any>;
+export function getDefaultTransformers(widget?: Widget): Array<HttpTransformer>;
 
-export function transformQuery(): (request: any) => any;
+export function transformQuery(): HttpTransformer;
 
-export function transformBody(): (request: any) => any;
+export function transformBody(): HttpTransformer;
 
-export function transformTimeout(): (request: any) => any;
+export function transformTimeout(): HttpTransformer;
 
-export function copyResponse<T = any>(
-  response: Response,
-): Promise<HttpResponse<T>>;
+export function copyResponse<T = any>(response: Response): HttpResponse<T>;
+
+declare module '@merkur/core' {
+  interface WidgetPartial {
+    http: {
+      request<T = any>(config: HttpClientConfig): Promise<HttpResult<T>>;
+    };
+  }
+}
