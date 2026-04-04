@@ -43,12 +43,17 @@
     "access": "public"
   },
   "homepage": "https://merkur.js.org/",
+  "dependencies": {
+    "@esmj/schema": "^0.7.3"
+  },
   "devDependencies": {
     "@merkur/core": "^0.47.2",
-    "@merkur/plugin-component": "^0.47.2"
+    "@merkur/plugin-component": "^0.47.2",
+    "storybook": ">=10"
   },
   "peerDependencies": {
     "@merkur/core": "*",
-    "@merkur/plugin-component": "*"
+    "@merkur/plugin-component": "*",
+    "storybook": ">=10"
   }
 }
