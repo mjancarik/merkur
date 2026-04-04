@@ -36,7 +36,7 @@ npm install --save-dev @merkur/tool-storybook
 `createVanillaRenderer()` takes no arguments.
 
 - Stories must provide `args.component` as a function `(widget) => htmlString`.
-- Event binding: attach a `bindEventListeners(widget, container)` function to `args.component`. The idiomatic place is `View.js` itself — `View.bindEventListeners = bindEventListeners` — so any story that passes `component: View` gets it automatically. A decorator can inject it for component stories that don't carry it already.
+- Event binding: define `bindEventListeners(widget, container)` (and optionally `unbindEventListeners(widget, container)`) directly on the widget inside its `createWidget` factory. The renderer calls `widget.bindEventListeners(container)` after each render and `widget.unbindEventListeners(container)` before each re-render. `widget` is auto-injected as the first argument by Merkur's `bindWidgetToFunctions`, so the signature in the definition must include `widget` as the first parameter.
 - **Security:** `args.component` is responsible for HTML-escaping any dynamic values before returning the HTML string. Raw interpolation of user-controlled strings is injected via `innerHTML` as-is.
 
 ### Peer dependencies

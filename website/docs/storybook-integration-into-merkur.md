@@ -180,21 +180,14 @@ export default preview;
 
 #### `.storybook/decorators.mjs`
 
-The decorator does two things:
-1. Stores Storybook's `updateArgs` helper on `widget.$external.storybook` so the `render` callback can push updated `state`/`props` back to the Controls panel after every widget-internal interaction. `widget.$external` is Merkur's intended place for user-defined runtime state and is never sealed.
-2. Auto-injects `bindEventListeners` onto any `args.component` function that doesn't already carry it — so component-level stories (e.g. `Counter`) get event binding without having to import it themselves.
+The decorator stores Storybook's `updateArgs` helper on `widget.$external.storybook` so the `render` callback can push updated `state`/`props` back to the Controls panel after every widget-internal interaction. `widget.$external` is Merkur's intended place for user-defined runtime state and is never sealed.
 
 ```javascript
 import { useArgs } from 'storybook/preview-api';
-import { bindEventListeners } from '../src/views/View.js';
 
 export const decorators = [
   (StoryFn, { loaded: { widget }, args }) => {
     const [, updateArgs] = useArgs();
-
-    if (args.component && !args.component.bindEventListeners) {
-      args.component.bindEventListeners = bindEventListeners;
-    }
 
     if (widget && widget.$external) {
       widget.$external.storybook = { updateArgs, getArgs: () => args };
@@ -262,7 +255,7 @@ export const TenCounter = {
 
 The `createVanillaRenderer` in `preview.mjs` handles all the DOM creation and rendering automatically. Stories still need a `widget` object in `args` so the Merkur loader creates a widget instance, and they must provide `component` as a function:
 
-1. Pass the component function directly in story args, for example:
+Pass the component function directly in story args, for example:
    ```js
    export default {
      args: {
@@ -273,17 +266,8 @@ The `createVanillaRenderer` in `preview.mjs` handles all the DOM creation and re
      },
    };
    ```
-2. For full-view stories, attach `bindEventListeners` directly on the `View` function in `View.js` and export it by name so the decorator can import it:
-   ```js
-   // src/views/View.js
-   function bindEventListeners(widget, container) { /* … */ }
 
-   View.bindEventListeners = bindEventListeners;
-
-   export { bindEventListeners };
-   export default View;
-   ```
-   Any story that passes `component: View` then carries event binding automatically. The named export is used by the decorator to inject it into component-level stories (e.g. `Counter`) that don't carry it themselves (see `decorators.mjs` above).
+Event binding and cleanup are handled automatically by the renderer via `widget.bindEventListeners(container)` and `widget.unbindEventListeners(container)`, which are defined on the widget inside its `createWidget` factory. No attachment to the component function is needed.
 
 #### Custom Render Functions
 
@@ -351,10 +335,10 @@ For vanilla widgets with interactive elements:
 2. The widget's `update` lifecycle method is triggered
 3. The `render` callback passed to `createPreviewConfig` is called
 4. `update(widget)` re-renders the container with updated HTML (the container is tracked in a `WeakMap` inside `createVanillaRenderer`, not on the sealed widget)
-5. `viewFunction.bindEventListeners` re-attaches all event listeners
+5. `widget.bindEventListeners(container)` re-attaches all event listeners (called automatically by the renderer; `widget` is auto-injected by Merkur's `bindWidgetToFunctions`)
 6. Optionally, `widget.$external.storybook.updateArgs(...)` pushes the new `state`/`props` back to the Storybook Controls panel
 
-`bindEventListeners` is crucial for vanilla widgets as it reconnects event listeners after each re-render. The `widget.$external.storybook` mechanism (set up by the decorator) keeps the Controls panel values in sync when the widget state changes through internal interactions such as button clicks.
+`widget.bindEventListeners` is crucial for vanilla widgets as it reconnects event listeners after each re-render. It is defined on the widget inside `createWidget` and called automatically by the renderer with the container as the argument (`widget` is auto-injected by Merkur's `bindWidgetToFunctions`). The `widget.$external.storybook` mechanism (set up by the decorator) keeps the Controls panel values in sync when the widget state changes through internal interactions such as button clicks.
 
 ## Key Differences
 
@@ -369,7 +353,7 @@ For vanilla widgets with interactive elements:
   - `createVanillaRenderer` handles rendering and re-rendering (container stored in a `WeakMap`)
   - Stories use simple CSF3 format with `component` in args
   - Components receive full widget object
-  - Require `bindEventListeners` on `args.component` for interactive elements (attach in `View.js` or let the decorator inject it)
+  - Require `bindEventListeners(widget, container)` defined on the widget inside `createWidget` for interactive elements; the renderer calls `widget.bindEventListeners(container)` automatically
   - Use `widget.$external.storybook` (set by the decorator) to keep Controls panel in sync
   - Must use `class` not `className` in HTML strings
   
