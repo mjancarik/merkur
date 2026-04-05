@@ -247,7 +247,13 @@ function createRollupTypescriptConfig(options = {}) {
     },
   ];
 
-  config.external = [...config.external, ...(options?.external ?? [])];
+  const baseExternal = config.external;
+  const additionalExternal = options?.external ?? [];
+  if (additionalExternal.length > 0) {
+    config.external = (id) =>
+      baseExternal(id) ||
+      additionalExternal.some((dep) => id === dep || id.startsWith(dep + '/'));
+  }
 
   config.plugins.push(
     typescript({
