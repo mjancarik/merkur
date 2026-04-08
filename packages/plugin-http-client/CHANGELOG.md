@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.1
+
+### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
 ## 1.0.0
 
 ### Major Changes

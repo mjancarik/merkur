@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-error",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Merkur plugin for error handling.",
   "main": "lib/index",
   "module": "lib/index",

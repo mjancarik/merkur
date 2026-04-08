@@ -1,6 +1,193 @@
 ## Release (2026-04-08)
 
 ### cli
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### core
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### create-widget
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### integration
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### integration-custom-element
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### integration-react
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-component
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-css-scrambler
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-error
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-event-emitter
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-graphql-client
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-http-cache
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-http-client
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-router
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-select-preact
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-session-storage
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### plugin-validation
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### preact
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### svelte
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### tool-storybook
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### tool-webpack
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### tools
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+### uhtml
+#### 1.0.1
+
+##### Patch Changes
+
+- 60c8489: Re-release after infrastructure fix
+
+
+
+## Release (2026-04-08)
+
+### cli
 #### 1.0.0
 
 ##### Patch Changes

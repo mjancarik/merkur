@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-http-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Merkur event emitter plugin.",
   "main": "lib/index",
   "module": "lib/index",

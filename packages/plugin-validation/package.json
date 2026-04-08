@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-validation",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Merkur plugin for schema validation (props and for future more). Library-agnostic - works with @esmj/schema, zod, and other schema libraries.",
   "main": "lib/index",
   "module": "lib/index",
