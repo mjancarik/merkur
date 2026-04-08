@@ -2,8 +2,8 @@
 "@merkur/core": patch
 ---
 
-Type change
+Fix the `widget` parameter type in `bindWidgetToFunctions` from `Widget` to `WidgetPartial`.
 
-- **What?** Change type for attribute `widget` of function `bindWidgetToFunctions()`. 
-- **Why?** Since this function takes current widget and binds that to functions (by default on the widget itself, optionally on any supplied object), *it has to be type `WidgetPartial`. The type `Widget` is the result of this operation. As currently typed, it doesn't work in plugin `setup()` and `create()` methods, because those get `WidgetPartial` as input attrs.
-- **How?** Nothing.
+- **What** The `widget` parameter of `bindWidgetToFunctions()` in `@merkur/core` is now typed as `WidgetPartial` instead of `Widget`.
+- **Why** `bindWidgetToFunctions` is called during plugin `setup()` and `create()` methods, which receive a `WidgetPartial` — the fully resolved `Widget` type is the result of the binding operation, not the input. The previous typing caused TypeScript errors when calling the function from those contexts.
+- **How** Nothing.
