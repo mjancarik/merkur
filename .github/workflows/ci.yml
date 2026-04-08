@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ $default-branch, master ]
+    branches: [ master ]
     tags:
       - '*'
   pull_request:
@@ -83,6 +83,9 @@ jobs:
     name: Test release
     needs: test
     runs-on: ubuntu-latest
+    # This prevents the "Test release" from running on tag pushes, 
+    # saving minutes of CI time since you already tested before pushing the tag.
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/'))
     strategy:
       matrix:
         preview: ['preact', 'vanilla', 'uhtml', 'svelte']
@@ -113,18 +116,11 @@ jobs:
       - name: Test release ${{ matrix.preview }}
         run: npm run test:release -- ${{ matrix.preview }}
 
-      - name: Archive npm failure logs
-        uses: actions/upload-artifact@v4
-        if: failure()
-        with:
-          name: npm-logs
-          path: ~/.npm/_logs
-          retention-days: 1
-
   publish:
-    if: github.event_name == 'push' && contains(github.ref, '/tags/v')
+    # This triggers ONLY when you push the tags via `npm run release`
+    if: startsWith(github.ref, 'refs/tags/@merkur/')
     name: Publish to npm
-    needs: release
+    # Note: Removed "needs: release" so that publishing starts immediately on tag push
     runs-on: ubuntu-latest
     env:
       NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -155,12 +151,16 @@ jobs:
 
       - name: Create npmrc file
         run: echo "//registry.npmjs.org/:_authToken=\${NODE_AUTH_TOKEN}" >> $HOME/.npmrc 2> /dev/null
-      - run: npm run release:publish
+      
+      - name: Publish to NPM
+        run: npm run release:publish
 
-      - name: Extract tmp current changelog
-        run: node utils/extractChangelog.js
+      - name: Extract Latest Root Changelog
+        run: |
+          # Grabs everything from the first ## to the next ## (the latest release block)
+          sed -n '/^## /,/## /p' CHANGELOG.md | sed '$d' > current-changelog.txt
 
-      - name: Create release
+      - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
           body_path: current-changelog.txt
@@ -169,7 +169,7 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
-    needs: release
+    needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     permissions:
@@ -184,7 +184,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-
       - name: Load node_modules from cache
         uses: actions/cache@v4
         with:
@@ -192,24 +191,19 @@ jobs:
             node_modules
             */*/node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('package.json') }}
-
       - name: Restore workspaces
         run: npm ci
-
       - name: Build website
         run: |
           cd website
           npm ci
           npm run build
-
       - name: Setup Pages
         uses: actions/configure-pages@v4
-
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: website/build
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
