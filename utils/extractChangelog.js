@@ -1,14 +1,16 @@
 const fs = require('fs');
 const path = require('path');
 
-const VERSION_RE = /#+ \[\d+\.\d+\.\d+\].+/gi;
+const RELEASE_HEADER_RE = /^## Release \(\d{4}-\d{2}-\d{2}\)/m;
 const CHANGELOG = path.resolve(process.cwd(), 'CHANGELOG.md');
 
 const changelogContents = fs.readFileSync(CHANGELOG, 'utf-8');
-const versionChangelogs = changelogContents.split(VERSION_RE);
-versionChangelogs.shift();
+
+// Split into blocks by "## Release (date)" headers, keep the latest one
+const parts = changelogContents.split(/(?=^## Release \(\d{4}-\d{2}-\d{2}\))/m);
+const latestBlock = parts.find((p) => RELEASE_HEADER_RE.test(p)) ?? '';
 
 fs.writeFileSync(
   path.resolve(process.cwd(), 'current-changelog.txt'),
-  versionChangelogs?.[0].trim() ?? '',
+  latestBlock.trim(),
 );
