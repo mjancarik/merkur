@@ -9,6 +9,14 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+# Prevents multiple runs from clashing, but allows tags to finish
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   setup:
     name: Setup environment
@@ -41,6 +49,8 @@ jobs:
   test:
     name: Test
     needs: setup
+    # Only run tests on PRs or Master pushes (not on tags to save time)
+    if: github.event_name == 'pull_request' || (github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -83,19 +93,14 @@ jobs:
     name: Test release
     needs: test
     runs-on: ubuntu-latest
-    # This prevents the "Test release" from running on tag pushes, 
-    # saving minutes of CI time since you already tested before pushing the tag.
-    if: github.event_name == 'pull_request' || (github.event_name == 'push' && !startsWith(github.ref, 'refs/tags/'))
     strategy:
       matrix:
         preview: ['preact', 'vanilla', 'uhtml', 'svelte']
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version-file: .nvmrc
-
       - name: Load node_modules from cache
         uses: actions/cache@v4
         with:
@@ -103,24 +108,21 @@ jobs:
             node_modules
             */*/node_modules
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/package.json') }}-${{ hashFiles('package.json') }}
-
       - name: Load libs from cache
         uses: actions/cache@v4
         with:
           path: packages/*/lib
           key: ${{ runner.os }}-lib-${{ github.sha }}
-
       - name: Restore workspaces
         run: npm ci
-
       - name: Test release ${{ matrix.preview }}
         run: npm run test:release -- ${{ matrix.preview }}
 
   publish:
-    # This triggers ONLY when you push the tags via `npm run release`
-    if: startsWith(github.ref, 'refs/tags/@merkur/')
     name: Publish to npm
-    # Note: Removed "needs: release" so that publishing starts immediately on tag push
+    # Use 'contains' for better ref matching on tag pushes
+    if: github.event_name == 'push' && contains(github.ref, 'refs/tags/@merkur/')
+    needs: setup 
     runs-on: ubuntu-latest
     env:
       NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
@@ -157,8 +159,8 @@ jobs:
 
       - name: Extract Latest Root Changelog
         run: |
-          # Grabs everything from the first ## to the next ## (the latest release block)
-          sed -n '/^## /,/## /p' CHANGELOG.md | sed '$d' > current-changelog.txt
+          # Robust extraction of the first version block from root CHANGELOG
+          sed -n '/^## /,/^## /p' CHANGELOG.md | sed '$d' > current-changelog.txt
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
@@ -169,7 +171,8 @@ jobs:
 
   deploy:
     name: Deploy to GitHub Pages
-    needs: test
+    # Depends on setup and test (implicitly via build results)
+    needs: [setup, test]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master' && github.event_name == 'push'
     permissions:
