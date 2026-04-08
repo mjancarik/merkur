@@ -1,5 +1,21 @@
 # Change Log
 
+## 1.0.0
+
+### Major Changes
+
+- 54606aa: Improve TypeScript type definitions in `plugin-component`, `plugin-event-emitter`, and `plugin-http-client`.
+  - **What** `setState` and `setProps` in `plugin-component` now accept updater functions and return `Promise<void>`; event callbacks in `plugin-event-emitter` now include the `widget` argument; `plugin-http-client` adds proper `HttpRequest`, `HttpTransformer`, and `HttpResult` interfaces and switches from the removed `HttpClientWidget` class to module augmentation.
+  - **Why** The previous types were inaccurate or incomplete, causing TypeScript errors when passing updater functions to `setState`/`setProps`, missing the `widget` parameter in event callbacks, and lacking proper interfaces for HTTP client operations.
+  - **How** Nothing.
+
+### Patch Changes
+
+- 97aec26: Migrate monorepo build and publish tooling from Lerna to NX and Changesets.
+  - **What** The internal monorepo toolchain for versioning and publishing all `@merkur/*` packages has been replaced. Lerna is removed; NX is used for task orchestration and Changesets is used for versioning and changelog generation.
+  - **Why** Lerna's versioning model was difficult to maintain for independent package releases and offered limited caching. NX provides better incremental build support and task pipelines, while Changesets gives contributors a structured, PR-friendly workflow for describing and grouping version bumps.
+  - **How** No changes required for consumers of `@merkur/*` packages — the published API is unaffected. Internal contributors should use `npm run changeset` to record changes and `npm run release` to publish new versions. See the CONTRIBUTING.md for detailed instructions on the new workflow.
+
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 

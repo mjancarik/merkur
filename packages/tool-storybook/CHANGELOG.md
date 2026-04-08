@@ -1,5 +1,36 @@
 # Change Log
 
+## 1.0.0
+
+### Minor Changes
+
+- 19c2bf2: Add vanilla JS widget support and preview configuration helpers to Storybook tooling.
+  - **What** New `createPreviewConfig(options)` helper provides a simplified Storybook `preview.mjs` setup with automatic widget name/version validation via `@esmj/schema` and HMR-safe registration (skips `getMerkur().register` if the widget is already registered). New `createVanillaRenderer()` (no arguments) creates a `render`/`update` pair for vanilla JavaScript widgets; stories supply the view via `args.component` as a function returning an HTML string; before each re-render the renderer calls `widget.unbindEventListeners?.(container)`, sets `container.innerHTML`, and then calls `widget.bindEventListeners?.(container)` to rebind events. A per-widget `WeakMap` stores the container and view function, keeping state isolated across concurrent stories without touching the sealed widget object. `createWidgetLoader` reuses the existing widget instance when the story args are deeply equal (snapshot comparison), and unmounts and remounts only when args differ or the story changes. `state` and `props` are applied after `widget.mount()` so the `load()` lifecycle cannot silently discard story-provided values. All exported functions are documented with JSDoc.
+  - **Why** Previously only Preact-based widgets had first-class Storybook support. Vanilla JS widgets had no renderer, forcing teams to wire up lifecycle management by hand. The missing `createPreviewConfig` abstraction caused boilerplate duplication across projects, and the lifecycle bugs in `createWidgetLoader` led to stale widget instances between story navigations.
+  - **How** Import the helpers from `@merkur/tool-storybook`. Call `createVanillaRenderer()` in `.storybook/preview.mjs` and spread `createPreviewConfig({ widgetProperties, createWidget, render })` into your preview object; pass `component: MyViewFn` in story `args`, where `MyViewFn` is a function that receives the widget and returns an HTML string. Define `bindEventListeners(widget, container)` (and optionally `unbindEventListeners(widget, container)`) directly on the widget inside its `createWidget` factory for automatic event binding and cleanup between renders — `widget` is auto-injected as the first argument by Merkur's `bindWidgetToFunctions`, so the renderer calls `widget.bindEventListeners(container)` and the underlying function receives `(widget, container)`. Requires Storybook >= 10: this package imports `storybook/preview-api` and `storybook/internal/core-events` at runtime; using it with Storybook < 10 will cause a module-not-found error at load time.
+
+### Patch Changes
+
+- 97aec26: Migrate monorepo build and publish tooling from Lerna to NX and Changesets.
+  - **What** The internal monorepo toolchain for versioning and publishing all `@merkur/*` packages has been replaced. Lerna is removed; NX is used for task orchestration and Changesets is used for versioning and changelog generation.
+  - **Why** Lerna's versioning model was difficult to maintain for independent package releases and offered limited caching. NX provides better incremental build support and task pipelines, while Changesets gives contributors a structured, PR-friendly workflow for describing and grouping version bumps.
+  - **How** No changes required for consumers of `@merkur/*` packages — the published API is unaffected. Internal contributors should use `npm run changeset` to record changes and `npm run release` to publish new versions. See the CONTRIBUTING.md for detailed instructions on the new workflow.
+
+- 7c52a11: Use `@esmj/schema` for input validation in `createWidgetLoader` and `createPreviewConfig`
+  - **What** Replaced manual `if`/`throw` validation guards in `createWidgetLoader` and `createPreviewConfig` (in `packages/tool-storybook/src/index.js`) with declarative `@esmj/schema` schemas. Added `@esmj/schema` as a runtime dependency in `packages/tool-storybook/package.json`. Updated affected test expectations in `indexSpec.js` to match the new schema-generated error messages. Exported the existing `isRegistered` function from `packages/core/src/merkur.js` via `packages/core/src/index.js` so `tool-storybook` can use it directly instead of duplicating the registration-key logic.
+  - **Why** Manual type checks were verbose and inconsistent. Using `@esmj/schema` centralises validation in named schemas (`createWidgetLoaderOptionsSchema`, `createPreviewConfigOptionsSchema`, `widgetPropertiesSchema`), making the rules easier to read, extend, and keep consistent across both functions.
+  - **How** Nothing.
+
+- efb49df: Fix `createVanillaRenderer` to store the DOM container in a `WeakMap` instead of on the widget.
+  - **What** In `createVanillaRenderer` (`packages/tool-storybook/src/index.js`), the renderer-created DOM container is now stored in a dedicated `widgetContainerMap` WeakMap instead of being assigned directly as `widget.container`. The `update` function retrieves the container from this map rather than from `widget.container`.
+  - **Why** `createMerkurWidget` calls `Object.seal(widget)` after construction, which prevents adding new properties to the widget object. Attempting to assign `widget.container` after sealing threw `TypeError: Cannot add property container, object is not extensible`, causing vanilla widget stories to fail to render in Storybook.
+  - **How** Nothing.
+
+- d657698: Use `hookMethod` to intercept `widget.update` instead of patching internal lifecycle.
+  - **What** `mountNewWidget` in `packages/tool-storybook/src/index.js` now uses `hookMethod(widget, 'update', ...)` from `@merkur/core` to intercept `widget.update`, replacing the previous approach of directly mutating `widget.$in.component.lifeCycle.update`.
+  - **Why** The previous approach reached into internal implementation details (`$in.component.lifeCycle`) which was fragile and could break silently if the internal structure changed. Using the public `hookMethod` API is more robust, correctly preserves and returns the original call's result, and follows the established pattern for extending widget behaviour.
+  - **How** Nothing.
+
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 

@@ -1,5 +1,21 @@
 # Change Log
 
+## 1.0.0
+
+### Major Changes
+
+- 19c2bf2: Remove the `@merkur/preact/webpack` export and its associated peer dependencies.
+  - **What** The `@merkur/preact/webpack` subpath export and its two helpers, `applyBabelLoader` and `applyPreactConfig`, have been deleted. The peer dependencies `@merkur/tool-webpack`, `babel-loader`, and `@babel/preset-react` are no longer declared or required by this package.
+  - **Why** Webpack-based tooling was superseded by the Vite/esbuild pipeline. Maintaining a parallel Webpack integration added complexity and prevented simplifying the package's dependency surface. Removing it reduces install size and eliminates the need to keep Babel peer deps in sync.
+  - **How** Remove any import of `applyBabelLoader` or `applyPreactConfig` from `@merkur/preact/webpack`. If you still need webpack, configure the Preact Babel preset manually in your `webpack.config.js` using `babel-loader` with `@babel/preset-react` set to `runtime: 'automatic'` and `importSource: 'preact'`. Alternatively, migrate to the Vite-based Storybook setup provided by `@merkur/tool-storybook`, which requires no webpack or Babel configuration. Remove `@merkur/tool-webpack`, `babel-loader`, and `@babel/preset-react` from your project's dependencies if they were pulled in solely for this integration.
+
+### Patch Changes
+
+- 97aec26: Migrate monorepo build and publish tooling from Lerna to NX and Changesets.
+  - **What** The internal monorepo toolchain for versioning and publishing all `@merkur/*` packages has been replaced. Lerna is removed; NX is used for task orchestration and Changesets is used for versioning and changelog generation.
+  - **Why** Lerna's versioning model was difficult to maintain for independent package releases and offered limited caching. NX provides better incremental build support and task pipelines, while Changesets gives contributors a structured, PR-friendly workflow for describing and grouping version bumps.
+  - **How** No changes required for consumers of `@merkur/*` packages — the published API is unaffected. Internal contributors should use `npm run changeset` to record changes and `npm run release` to publish new versions. See the CONTRIBUTING.md for detailed instructions on the new workflow.
+
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 

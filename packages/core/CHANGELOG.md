@@ -1,5 +1,24 @@
 # Change Log
 
+## 1.0.0
+
+### Patch Changes
+
+- 97aec26: Migrate monorepo build and publish tooling from Lerna to NX and Changesets.
+  - **What** The internal monorepo toolchain for versioning and publishing all `@merkur/*` packages has been replaced. Lerna is removed; NX is used for task orchestration and Changesets is used for versioning and changelog generation.
+  - **Why** Lerna's versioning model was difficult to maintain for independent package releases and offered limited caching. NX provides better incremental build support and task pipelines, while Changesets gives contributors a structured, PR-friendly workflow for describing and grouping version bumps.
+  - **How** No changes required for consumers of `@merkur/*` packages — the published API is unaffected. Internal contributors should use `npm run changeset` to record changes and `npm run release` to publish new versions. See the CONTRIBUTING.md for detailed instructions on the new workflow.
+
+- b71808a: Fix the `widget` parameter type in `bindWidgetToFunctions` from `Widget` to `WidgetPartial`.
+  - **What** The `widget` parameter of `bindWidgetToFunctions()` in `@merkur/core` is now typed as `WidgetPartial` instead of `Widget`.
+  - **Why** `bindWidgetToFunctions` is called during plugin `setup()` and `create()` methods, which receive a `WidgetPartial` — the fully resolved `Widget` type is the result of the binding operation, not the input. The previous typing caused TypeScript errors when calling the function from those contexts.
+  - **How** Nothing.
+
+- 7c52a11: Use `@esmj/schema` for input validation in `createWidgetLoader` and `createPreviewConfig`
+  - **What** Replaced manual `if`/`throw` validation guards in `createWidgetLoader` and `createPreviewConfig` (in `packages/tool-storybook/src/index.js`) with declarative `@esmj/schema` schemas. Added `@esmj/schema` as a runtime dependency in `packages/tool-storybook/package.json`. Updated affected test expectations in `indexSpec.js` to match the new schema-generated error messages. Exported the existing `isRegistered` function from `packages/core/src/merkur.js` via `packages/core/src/index.js` so `tool-storybook` can use it directly instead of duplicating the registration-key logic.
+  - **Why** Manual type checks were verbose and inconsistent. Using `@esmj/schema` centralises validation in named schemas (`createWidgetLoaderOptionsSchema`, `createPreviewConfigOptionsSchema`, `widgetPropertiesSchema`), making the rules easier to read, extend, and keep consistent across both functions.
+  - **How** Nothing.
+
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
