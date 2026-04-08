@@ -1,6 +1,193 @@
 ## Release (2026-04-08)
 
 ### cli
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### core
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### create-widget
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### integration
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### integration-custom-element
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### integration-react
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-component
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-css-scrambler
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-error
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-event-emitter
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-graphql-client
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-http-cache
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-http-client
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-router
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-select-preact
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-session-storage
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### plugin-validation
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### preact
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### svelte
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### tool-storybook
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### tool-webpack
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### tools
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+### uhtml
+#### 1.0.2
+
+##### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
+
+
+## Release (2026-04-08)
+
+### cli
 #### 1.0.1
 
 ##### Patch Changes

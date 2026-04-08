@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.2
+
+### Patch Changes
+
+- f87e120: Re-release: fix of release jobs
+
 ## 1.0.1
 
 ### Patch Changes
