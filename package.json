@@ -48,7 +48,7 @@
     "commit": "echo 'This command has been replaced with \"npm run changeset\"' && npm run changeset",
     "release": "npm run release:prepare && npm run release:push",
     "release:prepare": "npm run check:uncommitted:changes && changeset version && node utils/bumpVersion.js && node utils/copyReadme.js && node utils/syncRootChangelog.js && npm i --package-lock-only --ignore-scripts",
-    "release:push": "git add . && git commit -m 'release: publish' && changeset tag && node utils/createRootTag.js && git push --follow-tags",
+    "release:push": "git add . && git commit -m 'release: publish' && node utils/createRootTag.js && git push --follow-tags",
     "release:graduate": "npm run check:uncommitted:changes && changeset pre exit && changeset version && node utils/bumpVersion.js && node utils/copyReadme.js && node utils/syncRootChangelog.js && npm i --package-lock-only --ignore-scripts",
     "release:next:init": "changeset pre enter rc",
     "release:publish": "changeset publish --no-git-tag",
