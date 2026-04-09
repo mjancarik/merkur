@@ -9,11 +9,6 @@ on:
     branches: [ master ]
   workflow_dispatch:
 
-# Prevents multiple runs from clashing, but allows tags to finish
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: false
-
 jobs:
   setup:
     name: Setup environment
