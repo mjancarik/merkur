@@ -18,4 +18,6 @@ if (!latestHeadingMatch) {
 
 const version = latestHeadingMatch[1];
 
-execSync(`git tag -a "v${version}" -m "Release v${version}"`, { stdio: 'inherit' });
+execSync(`git tag -a "v${version}" -m "Release v${version}"`, {
+  stdio: 'inherit',
+});

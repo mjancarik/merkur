@@ -7,11 +7,12 @@ const PACKAGES_DIR = path.join(__dirname, '../packages');
 
 function getRepoUrl() {
   try {
-    const remote = execSync('git remote get-url origin', { cwd: path.join(__dirname, '..'), encoding: 'utf-8' }).trim();
+    const remote = execSync('git remote get-url origin', {
+      cwd: path.join(__dirname, '..'),
+      encoding: 'utf-8',
+    }).trim();
     // Convert SSH (git@github.com:owner/repo.git) to HTTPS
-    return remote
-      .replace(/^git@([^:]+):/, 'https://$1/')
-      .replace(/\.git$/, '');
+    return remote.replace(/^git@([^:]+):/, 'https://$1/').replace(/\.git$/, '');
   } catch {
     return null;
   }
@@ -68,7 +69,9 @@ function syncChangelog() {
   }
 
   // Determine the version that was just released (highest semver across all packages)
-  const latestVersion = packageData.map((p) => p.version).sort(compareVersions)[0];
+  const latestVersion = packageData
+    .map((p) => p.version)
+    .sort(compareVersions)[0];
 
   // Second pass: collect sections only from packages released at the latest version
   packageData
@@ -98,13 +101,16 @@ function syncChangelog() {
   const prevVersion = getPreviousVersion(existingContent);
   const date = new Date().toISOString().split('T')[0];
 
-  const releaseHeading = (repoUrl && prevVersion)
-    ? `## [${latestVersion}](${repoUrl}/compare/v${prevVersion}...v${latestVersion}) (${date})`
-    : `## ${latestVersion} (${date})`;
+  const releaseHeading =
+    repoUrl && prevVersion
+      ? `## [${latestVersion}](${repoUrl}/compare/v${prevVersion}...v${latestVersion}) (${date})`
+      : `## ${latestVersion} (${date})`;
 
   const orderedKeys = [
     ...SECTION_ORDER.filter((k) => sections[k] && sections[k].size > 0),
-    ...Object.keys(sections).filter((k) => !SECTION_ORDER.includes(k) && sections[k].size > 0),
+    ...Object.keys(sections).filter(
+      (k) => !SECTION_ORDER.includes(k) && sections[k].size > 0,
+    ),
   ];
 
   let aggregatedUpdates = `${releaseHeading}\n\n`;
@@ -115,12 +121,12 @@ function syncChangelog() {
 
   // Prevent duplicate entries if the script is run twice
   if (existingContent.includes(aggregatedUpdates.trim())) {
-    console.info('Root changelog already up to date.');
+    console.info('Root changelog already up to date.'); //eslint-disable-line no-console
     return;
   }
 
   fs.writeFileSync(ROOT_CHANGELOG, aggregatedUpdates + '\n' + existingContent);
-  console.info('Root CHANGELOG.md updated.');
+  console.info('Root CHANGELOG.md updated.'); //eslint-disable-line no-console
 }
 
 syncChangelog();
