@@ -39,6 +39,7 @@
   "scripts": {
     "changeset": "changeset add",
     "build": "nx run-many -t build",
+    "postinstall": "npm run build",
     "test": "nx run-many -t test",
     "test:es:version": "nx run-many -t test:es:version",
     "test:release": "utils/CIRelease.sh",
