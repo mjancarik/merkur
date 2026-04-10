@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@merkur/preact": "1.0.2"
+    "@merkur/preact": "1.0.3"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "^6.5.0",

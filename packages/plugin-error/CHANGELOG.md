@@ -1,5 +1,11 @@
 # Change Log
 
+## 1.0.3
+
+### Patch Changes
+
+- c49d82e: Re-release after process fixes
+
 ## 1.0.2
 
 ### Patch Changes

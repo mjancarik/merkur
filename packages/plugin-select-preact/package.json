@@ -1,6 +1,6 @@
 {
   "name": "@merkur/plugin-select-preact",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Merkur select preact plugin.",
   "main": "lib/index",
   "module": "lib/index",

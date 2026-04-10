@@ -1,8 +1,10 @@
+import { escHtml } from '../utils';
+
 export default function Counter(widget) {
   return `
     <div>
       <h3>Counter widget:</h3>
-      <p>Count: <span data-merkur="counter">${widget.state.counter}</span></p>
+      <p>Count: <span data-merkur="counter">${escHtml(widget.state.counter)}</span></p>
       <button data-merkur="on-increase">
         increase counter
       </button>
