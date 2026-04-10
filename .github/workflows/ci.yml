@@ -116,7 +116,7 @@ jobs:
     name: Deploy to GitHub Pages
     needs: release
     runs-on: ubuntu-latest
-    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     permissions:
       contents: read
       pages: write
