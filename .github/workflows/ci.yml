@@ -45,6 +45,8 @@ jobs:
         run: npm run build
       - name: Script version check
         run: npm run test:es:version
+      - name: Utils tests
+        run: npm run test:utils
       - name: Build Docusaurus website
         run: |
           cd website

@@ -15,7 +15,7 @@ npx @merkur/create-widget <name>
 
 cd name
 
-npm run dev // Point your browser at http://localhost:4445/
+npm run dev # Point your browser at http://localhost:4445/
 ```
 
 This will scaffold a new project in the `name` directory and start a devServer on [localhost:4445](http://localhost:4445/) and production widget server on [localhost:4444](http://localhost:4444/). Try editing a few files to get a feel for how everything works.
@@ -23,15 +23,15 @@ This will scaffold a new project in the `name` directory and start a devServer o
 You can also scaffold the widget into the **current directory** by passing `.` as the name:
 
 ```shell
-// create new directory and cd into it
+# create new directory and cd into it
 mkdir my-widget && cd my-widget
 
-// or clone the repo and cd into it
+# or clone the repo and cd into it
 git clone <repo-url> <repo-dirname> && cd <repo-dirname>
 
 npx @merkur/create-widget .
 
-npm run dev // Point your browser at http://localhost:4445/
+npm run dev # Point your browser at http://localhost:4445/
 ```
 
 ![Merkur - hello widget](/img/hello-widget.png)

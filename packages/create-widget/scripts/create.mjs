@@ -74,7 +74,7 @@ function createMerkurApp(dirName, view) {
     process.exit(1);
   }
 
-  if (!fs.existsSync(dirName) || dirName === '.') {
+  if (dirName === '.' || !fs.existsSync(dirName)) {
     try {
       info(`Creating basic directory structure...`);
       fsx.copySync(tplRoot, appRoot);

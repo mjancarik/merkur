@@ -1,9 +1,9 @@
 ---
-"@merkur/create-widget": major
+"@merkur/create-widget": patch
 ---
 
-Drop support for Node.js <22 and fix `.npmignore` template path typo
+Add missing `.npmignore` rule so template `.gitignore` is included in the published package
 
-- **What** Bumped the minimum Node.js engine requirement from `>=20` to `>=22` in `package.json`. Fixed a typo in `.npmignore` where `!/templates/.gitignore` was corrected to `!/template/.gitignore`.
-- **Why** Node.js 20 reached end-of-life in April 2026. The `.npmignore` typo caused the template `.gitignore` file to be incorrectly excluded from the published package.
-- **How** Upgrade to Node.js 22 or higher before updating to this version.
+- **What** Added `!/template/.gitignore` to `.npmignore`. Without this entry npm was stripping the template `.gitignore` file from the published package, so newly scaffolded projects had no `.gitignore`.
+- **Why** The npm default ignore rules exclude dot-files; an explicit negation rule is required to keep them.
+- **How** Nothing — the fix is internal to the published package.

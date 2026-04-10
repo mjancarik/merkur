@@ -41,6 +41,7 @@
     "build": "nx run-many -t build",
     "postinstall": "npm run build",
     "test": "nx run-many -t test",
+    "test:utils": "jest --testPathPattern='utils/__tests__'",
     "test:es:version": "nx run-many -t test:es:version",
     "test:release": "utils/CIRelease.sh",
     "lint:cmd": "eslint -c ./.eslintrc.js --ignore-path ./.prettierignore  --no-eslintrc",
