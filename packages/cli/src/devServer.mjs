@@ -39,6 +39,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
     templateFolders,
     path: playgroundPath,
     widgetHandler,
+    relativeUrlDefault,
   } = merkurConfig.playground;
   const { cliFolder, command, writeToDisk } = cliConfig;
 
@@ -172,9 +173,13 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           );
 
           const { html, assets, ...restProperties } = widgetProperties;
+          const isStaticPlaygroundWithServer =
+            command === COMMAND_NAME.BUILD_PLAYGROUND &&
+            cliConfig.hasRunWidgetServer;
 
           res.status(200).send(
             playgroundTemplate({
+              isStaticPlaygroundWithServer,
               widgetProperties: restProperties,
               assets,
               merkurConfig,
@@ -227,8 +232,10 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
       server = app;
     }
 
+    const devServerUrl = new URL(relativeUrlDefault, `${protocol}//${host}`);
+
     const httpServer = server.listen({ port }, () => {
-      logger.info(`Playground: ${chalk.green(`${protocol}//${host}`)}`);
+      logger.info(`Playground: ${chalk.green(`${devServerUrl}`)}`);
       resolve(app);
     });
 

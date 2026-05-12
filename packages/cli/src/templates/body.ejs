@@ -1,6 +1,14 @@
-<% if(widgetProperties?.slot?.headline?.html){ %>
-  <div class="<%= (widgetProperties?.slot?.headline?.containerSelector ?? 'merkur-headline').replace('.', '') %>">
+<% if (widgetProperties?.slot?.headline?.html) { %>
+  <div
+    class="<%= (widgetProperties?.slot?.headline?.containerSelector ?? 'merkur-headline').replace('.', '') %>"
+    data-merkur-slot="headline"
+  >
     <%- widgetProperties?.slot?.headline?.html %>
   </div>
 <% } %>
-<div class="<%= (widgetProperties?.containerSelector ?? 'merkur-main').replace('.', '') %>"><%- html %></div>
+<div
+  class="<%= (widgetProperties?.containerSelector ?? 'merkur-main').replace('.', '') %>"
+  data-merkur-container="main"
+>
+  <%- html %>
+</div>

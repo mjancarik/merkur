@@ -1,11 +1,89 @@
+<% if (isStaticPlaygroundWithServer) { %>
+  <script src="./static/merkur-integration.js"></script>
+<% } %>
+
 <script>
-  window.addEventListener('load', function () {
+  window.addEventListener('load', async function () {
     if (!window.__merkur__) {
       console.error('Merkur is not available in the global scope. Make sure you have included Merkur in your project.');
       return;
     }
 
-    window.__merkur__.create(<%- escapeToJSON(widgetProperties) %>)
+    function getContainerClassName(selector, fallbackSelector) {
+      return (selector ?? fallbackSelector).replace('.', '');
+    }
+
+    function syncStaticPlaygroundMarkup(widgetData, widgetHtml) {
+      const mainContainer = document.querySelector('[data-merkur-container="main"]');
+      const headlineContainer = document.querySelector('[data-merkur-slot="headline"]');
+      const newMainContainerClass = getContainerClassName(
+        widgetData?.containerSelector,
+        '.merkur-main',
+      );
+      const newHeadlineContainerClass = getContainerClassName(
+        widgetData?.slot?.headline?.containerSelector,
+        '.merkur-headline',
+      );
+      const newHeadlineHtml = widgetData?.slot?.headline?.html ?? '';
+
+      if (mainContainer) {
+        mainContainer.className = newMainContainerClass;
+
+        if (typeof widgetHtml === 'string') {
+          mainContainer.innerHTML = widgetHtml;
+        }
+      }
+
+      if (headlineContainer) {
+        headlineContainer.className = newHeadlineContainerClass;
+        headlineContainer.innerHTML = newHeadlineHtml;
+        headlineContainer.hidden = !newHeadlineHtml;
+      }
+    }
+
+    const isStaticPlaygroundWithServer = <%- isStaticPlaygroundWithServer %>;
+    let widgetCreateData = <%- escapeToJSON(widgetProperties) %>;
+
+    if (isStaticPlaygroundWithServer) {
+      try {
+        const widgetParamsDefault = <%- merkurConfig.playground.widgetParamsDefault.toString() %>;
+        const deployedWidgetUrl = <%- escapeToJSON(merkurConfig.widgetServer.deployedWidgetUrl) %> || '';
+        const apiRoute = <%- escapeToJSON(merkurConfig.widgetServer.apiRoute) %> || '';
+        const widgetParams = widgetParamsDefault(window.location);
+        const url = new URL(apiRoute, deployedWidgetUrl);
+
+        url.search = widgetParams;
+
+        const response = await fetch(url.href);
+
+        if (!response.ok) {
+          throw new Error(
+            `Failed to fetch widget data (${response.status} ${response.statusText}).`,
+          );
+        }
+
+        const body = await response.json();
+
+        if (!body || typeof body !== 'object' || !Array.isArray(body.assets)) {
+          throw new Error('Widget server returned invalid payload.');
+        }
+
+        if (!Merkur.Integration?.loadAssets) {
+          throw new Error('Merkur.Integration.loadAssets is not available in global scope.');
+        }
+
+        await Merkur.Integration.loadAssets(body.assets);
+
+        const { assets, html, ...newWidgetCreateData } = body;
+
+        syncStaticPlaygroundMarkup(newWidgetCreateData, html);
+        widgetCreateData = newWidgetCreateData;
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    window.__merkur__.create(widgetCreateData)
       .then(function (widget) {
         widget.containerSelector = widget.containerSelector ?? '.merkur-main';
 

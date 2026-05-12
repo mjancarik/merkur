@@ -83,8 +83,12 @@ export async function buildPlayground({ args, command }) {
   const {
     devServer: { origin: devServerOrigin },
     playground,
-    widgetServer: { origin: widgetServerOrigin },
+    widgetServer: {
+      origin: widgetServerOrigin,
+      apiRoute: widgetServerApiRoute,
+    },
   } = merkurConfig;
+  const { widgetParamsDefault } = playground;
 
   logger.info(`Starting servers`);
 
@@ -95,7 +99,8 @@ export async function buildPlayground({ args, command }) {
       context,
     });
 
-    const widgetServerUrl = path.join(widgetServerOrigin, '/widget');
+    const widgetServerUrl = new URL(widgetServerApiRoute, widgetServerOrigin);
+    widgetServerUrl.search = widgetParamsDefault();
 
     try {
       await waitForServerReady(widgetServerUrl);
@@ -116,15 +121,6 @@ export async function buildPlayground({ args, command }) {
     }),
   ]);
 
-  try {
-    await waitForServerReady(devServerOrigin);
-  } catch (err) {
-    logger.error(chalk.red.bold('x Dev server failed to start:'));
-    logger.error(chalk.red(err));
-    killProcesses({ context });
-    process.exit(1);
-  }
-
   let playgroundPath;
 
   if (typeof playground?.path === 'string') {
@@ -139,7 +135,16 @@ export async function buildPlayground({ args, command }) {
     playgroundPath = '/';
   }
 
-  const playgroundUrl = path.join(devServerOrigin, playgroundPath);
+  const playgroundUrl = new URL(playgroundPath, devServerOrigin);
+
+  try {
+    await waitForServerReady(playgroundUrl);
+  } catch (err) {
+    logger.error(chalk.red.bold('x Dev server failed to start:'));
+    logger.error(chalk.red(err));
+    killProcesses({ context });
+    process.exit(1);
+  }
 
   logger.info(`Building playground`);
 
@@ -161,6 +166,15 @@ export async function buildPlayground({ args, command }) {
 
     const absStaticFolderPath = path.resolve(process.cwd(), staticFolder);
     const playgroundFolderPath = path.resolve(process.cwd(), staticPlayground);
+    const merkurIntegrationSourcePath = path.resolve(
+      process.cwd(),
+      'node_modules/@merkur/integration/lib/index.umd.js',
+    );
+    const merkurIntegrationTargetPath = path.join(
+      playgroundFolderPath,
+      'static',
+      'merkur-integration.js',
+    );
 
     await fs.mkdir(playgroundFolderPath, { recursive: true });
     await Promise.all([
@@ -172,6 +186,22 @@ export async function buildPlayground({ args, command }) {
         recursive: true,
       }),
     ]);
+
+    try {
+      await fs.access(merkurIntegrationSourcePath);
+      await fs.copyFile(
+        merkurIntegrationSourcePath,
+        merkurIntegrationTargetPath,
+      );
+    } catch (err) {
+      if (err?.code !== 'ENOENT') {
+        throw err;
+      }
+
+      logger.info(
+        `File not found: ${chalk.yellow(merkurIntegrationSourcePath)}`,
+      );
+    }
 
     logger.log(
       chalk.green.bold('Playground built successfully in: ') +

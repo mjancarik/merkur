@@ -8,7 +8,9 @@ import { createLogger } from './logger.mjs';
 export async function runWidgetServer({ merkurConfig, cliConfig, context }) {
   const logger = createLogger('widgetServer', cliConfig);
   const { watch, inspect } = cliConfig;
-  const { protocol, host } = merkurConfig.widgetServer;
+  const { playground, widgetServer } = merkurConfig;
+  const { protocol, host, apiRoute } = widgetServer;
+  const { widgetParamsDefault } = playground;
 
   const args = [`./server/server.js`];
 
@@ -35,10 +37,11 @@ export async function runWidgetServer({ merkurConfig, cliConfig, context }) {
     stdio: cliConfig.silent || cliConfig.quiet ? 'pipe' : 'inherit',
   });
 
+  const widgetServerUrl = new URL(apiRoute, `${protocol}//${host}`);
+  widgetServerUrl.search = widgetParamsDefault();
+
   server.on('spawn', () => {
-    logger.info(
-      `Widget API endpoint: ${chalk.green(`${protocol}//${host}/widget`)}`,
-    );
+    logger.info(`Widget API endpoint: ${chalk.green(`${widgetServerUrl}`)}`);
   });
 
   context.process.widgetServer = server;
