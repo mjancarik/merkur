@@ -232,6 +232,7 @@ emitter.on(
 
         return widgetProperties;
       },
+      relativeUrlDefault: '',
       widgetParams: (req) => {
         return new URLSearchParams(req.query);
       },
