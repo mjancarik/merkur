@@ -27,11 +27,17 @@
         const response = await fetch(url.href);
 
         if (!response.ok) {
-          const mainContainer = document.querySelector('[data-merkur-container="main"]');
+          const heading = document.createElement('h2');
+          heading.textContent = String(response.status);
+          heading.style.cssText = `
+            text-align: center;
+            margin: 0 0 30px;
+            padding: 10px 0;
+            font-size: 24px;
+            background-color: #fd5959;
+          `;
 
-          if (mainContainer) {
-            mainContainer.innerHTML = `<h2 style="text-align: center;">${response.status}</h2>`;
-          }
+          document.body.prepend(heading);
 
           throw new Error(
             `Failed to fetch widget data (${response.status} ${response.statusText}).`,

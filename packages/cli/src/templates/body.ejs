@@ -3,9 +3,6 @@
     <%- widgetProperties?.slot?.headline?.html %>
   </div>
 <% } %>
-<div
-  class="<%= (widgetProperties?.containerSelector ?? 'merkur-main').replace('.', '') %>"
-  data-merkur-container="main"
->
+<div class="<%= (widgetProperties?.containerSelector ?? 'merkur-main').replace('.', '') %>">
   <%- html %>
 </div>
