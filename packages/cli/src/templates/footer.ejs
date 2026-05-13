@@ -4,46 +4,16 @@
 
 <script>
   window.addEventListener('load', async function () {
-    if (!window.__merkur__) {
+    const isStaticPlaygroundWithServer = <%- isStaticPlaygroundWithServer %>;
+
+    if (!isStaticPlaygroundWithServer && !window.__merkur__) {
       console.error('Merkur is not available in the global scope. Make sure you have included Merkur in your project.');
       return;
     }
 
-    function getContainerClassName(selector, fallbackSelector) {
-      return (selector ?? fallbackSelector).replace('.', '');
-    }
-
-    function syncStaticPlaygroundMarkup(widgetData, widgetHtml) {
-      const mainContainer = document.querySelector('[data-merkur-container="main"]');
-      const headlineContainer = document.querySelector('[data-merkur-slot="headline"]');
-      const newMainContainerClass = getContainerClassName(
-        widgetData?.containerSelector,
-        '.merkur-main',
-      );
-      const newHeadlineContainerClass = getContainerClassName(
-        widgetData?.slot?.headline?.containerSelector,
-        '.merkur-headline',
-      );
-      const newHeadlineHtml = widgetData?.slot?.headline?.html ?? '';
-
-      if (mainContainer) {
-        mainContainer.className = newMainContainerClass;
-
-        if (typeof widgetHtml === 'string') {
-          mainContainer.innerHTML = widgetHtml;
-        }
-      }
-
-      if (headlineContainer) {
-        headlineContainer.className = newHeadlineContainerClass;
-        headlineContainer.innerHTML = newHeadlineHtml;
-        headlineContainer.hidden = !newHeadlineHtml;
-      }
-    }
-
-    const isStaticPlaygroundWithServer = <%- isStaticPlaygroundWithServer %>;
     let widgetCreateData = <%- escapeToJSON(widgetProperties) %>;
 
+    // integrate merkur widget on client side for static playground with server
     if (isStaticPlaygroundWithServer) {
       try {
         const widgetParamsDefault = <%- merkurConfig.playground.widgetParamsDefault.toString() %>;
@@ -57,6 +27,12 @@
         const response = await fetch(url.href);
 
         if (!response.ok) {
+          const mainContainer = document.querySelector('[data-merkur-container="main"]');
+
+          if (mainContainer) {
+            mainContainer.innerHTML = `<h2 style="text-align: center;">${response.status}</h2>`;
+          }
+
           throw new Error(
             `Failed to fetch widget data (${response.status} ${response.statusText}).`,
           );
@@ -68,7 +44,7 @@
           throw new Error('Widget server returned invalid payload.');
         }
 
-        if (!Merkur.Integration?.loadAssets) {
+        if (!Merkur?.Integration?.loadAssets) {
           throw new Error('Merkur.Integration.loadAssets is not available in global scope.');
         }
 
@@ -76,33 +52,34 @@
 
         const { assets, html, ...newWidgetCreateData } = body;
 
-        syncStaticPlaygroundMarkup(newWidgetCreateData, html);
         widgetCreateData = newWidgetCreateData;
       } catch (error) {
         console.error(error);
       }
     }
 
-    window.__merkur__.create(widgetCreateData)
-      .then(function (widget) {
-        widget.containerSelector = widget.containerSelector ?? '.merkur-main';
+    if (Object.keys(widgetCreateData).length) {
+      window.__merkur__.create(widgetCreateData)
+        .then(function (widget) {
+          widget.containerSelector = widget.containerSelector ?? '.merkur-main';
 
-        if (widget.slot && Object.keys(widget.slot).length > 0) {
-          Object.keys(widget.slot).forEach(function (slotName) {
-            widget.slot[slotName].containerSelector = widget.slot[slotName].containerSelector ?? '.merkur-' + slotName;
-          });
-        }
+          if (widget.slot && Object.keys(widget.slot).length > 0) {
+            Object.keys(widget.slot).forEach(function (slotName) {
+              widget.slot[slotName].containerSelector = widget.slot[slotName].containerSelector ?? '.merkur-' + slotName;
+            });
+          }
 
-        // support for router plugin
-        if (widget.router) {
-          widget.on('@merkur/plugin-router.redirect', function (_, url) {
+          // support for router plugin
+          if (widget.router) {
+            widget.on('@merkur/plugin-router.redirect', function (_, url) {
             var parsedUrl = new URL(url.url);
             window.location = parsedUrl.href;
-          });
-        }
+            });
+          }
 
-        // mount widget to DOM
-        widget.mount();
-      });
+          // mount widget to DOM
+            widget.mount();
+          });
+    }
   });
 </script>

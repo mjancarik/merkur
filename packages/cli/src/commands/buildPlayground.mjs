@@ -2,7 +2,6 @@ import { createCommandConfig } from '../commandConfig.mjs';
 import { runDevServer } from '../devServer.mjs';
 import { runTask } from '../runTask.mjs';
 import { runSocketServer } from '../websocket.mjs';
-import { runWidgetServer } from '../widgetServer.mjs';
 import { handleExit, killProcesses } from '../handleExit.mjs';
 import { clearFolder, clearBuildFolder } from '../clearBuildFolder.mjs';
 import { time } from '../utils.mjs';
@@ -83,34 +82,10 @@ export async function buildPlayground({ args, command }) {
   const {
     devServer: { origin: devServerOrigin },
     playground,
-    widgetServer: {
-      origin: widgetServerOrigin,
-      apiRoute: widgetServerApiRoute,
-    },
+    widgetServer: { origin: widgetServerOrigin },
   } = merkurConfig;
-  const { widgetParamsDefault } = playground;
 
   logger.info(`Starting servers`);
-
-  if (cliConfig.hasRunWidgetServer) {
-    await runWidgetServer({
-      merkurConfig,
-      cliConfig: childProcessCliConfig,
-      context,
-    });
-
-    const widgetServerUrl = new URL(widgetServerApiRoute, widgetServerOrigin);
-    widgetServerUrl.search = widgetParamsDefault();
-
-    try {
-      await waitForServerReady(widgetServerUrl);
-    } catch (err) {
-      logger.error(chalk.red.bold(`x Widget server failed to start:`));
-      logger.error(chalk.red(err));
-      killProcesses({ context });
-      process.exit(1);
-    }
-  }
 
   await Promise.all([
     runDevServer({ merkurConfig, cliConfig: childProcessCliConfig, context }),

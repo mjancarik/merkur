@@ -1,8 +1,5 @@
 <% if (widgetProperties?.slot?.headline?.html) { %>
-  <div
-    class="<%= (widgetProperties?.slot?.headline?.containerSelector ?? 'merkur-headline').replace('.', '') %>"
-    data-merkur-slot="headline"
-  >
+  <div class="<%= (widgetProperties?.slot?.headline?.containerSelector ?? 'merkur-headline').replace('.', '') %>">
     <%- widgetProperties?.slot?.headline?.html %>
   </div>
 <% } %>
