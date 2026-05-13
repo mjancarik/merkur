@@ -1,30 +1,88 @@
+<% if (isStaticPlaygroundWithServer) { %>
+  <script src="./static/merkur-integration.js"></script>
+<% } %>
+
 <script>
-  window.addEventListener('load', function () {
+  window.addEventListener('load', async function () {
+    let widgetCreateData = <%- escapeToJSON(widgetProperties) %>;
+
+    // integrate merkur widget on client side for static playground with server
+    <% if (isStaticPlaygroundWithServer) { %>
+      try {
+        const widgetParamsDefault = <%- merkurConfig.playground.widgetParamsDefault.toString() %>;
+        const deployedWidgetUrl = <%- escapeToJSON(merkurConfig.widgetServer.deployedWidgetUrl) %> || '';
+        const apiRoute = <%- escapeToJSON(merkurConfig.widgetServer.apiRoute) %> || '';
+        const widgetParams = widgetParamsDefault(window.location);
+        const url = new URL(apiRoute, deployedWidgetUrl);
+
+        url.search = widgetParams;
+
+        const response = await fetch(url.href);
+
+        if (!response.ok) {
+          const heading = document.createElement('h2');
+          heading.textContent = `Error ${response.status}`;
+          heading.style.cssText = `
+            text-align: center;
+            padding: 10px 0;
+            font-size: 24px;
+            background-color: #fd5959;
+          `;
+
+          document.body.prepend(heading);
+
+          throw new Error(
+            `Failed to fetch widget data (${response.status} ${response.statusText}).`,
+          );
+        }
+
+        const body = await response.json();
+
+        if (!body || typeof body !== 'object' || !Array.isArray(body.assets)) {
+          throw new Error('Widget server returned invalid payload.');
+        }
+
+        if (!Merkur?.Integration?.loadAssets) {
+          throw new Error('Merkur.Integration.loadAssets is not available in global scope.');
+        }
+
+        await Merkur.Integration.loadAssets(body.assets);
+
+        const { assets, html, ...newWidgetCreateData } = body;
+
+        widgetCreateData = newWidgetCreateData;
+      } catch (error) {
+        console.error(error);
+      }
+    <% } %>
+
     if (!window.__merkur__) {
       console.error('Merkur is not available in the global scope. Make sure you have included Merkur in your project.');
       return;
     }
 
-    window.__merkur__.create(<%- escapeToJSON(widgetProperties) %>)
-      .then(function (widget) {
-        widget.containerSelector = widget.containerSelector ?? '.merkur-main';
+    if (Object.keys(widgetCreateData).length) {
+      window.__merkur__.create(widgetCreateData)
+        .then(function (widget) {
+          widget.containerSelector = widget.containerSelector ?? '.merkur-main';
 
-        if (widget.slot && Object.keys(widget.slot).length > 0) {
-          Object.keys(widget.slot).forEach(function (slotName) {
-            widget.slot[slotName].containerSelector = widget.slot[slotName].containerSelector ?? '.merkur-' + slotName;
-          });
-        }
+          if (widget.slot && Object.keys(widget.slot).length > 0) {
+            Object.keys(widget.slot).forEach(function (slotName) {
+              widget.slot[slotName].containerSelector = widget.slot[slotName].containerSelector ?? '.merkur-' + slotName;
+            });
+          }
 
-        // support for router plugin
-        if (widget.router) {
-          widget.on('@merkur/plugin-router.redirect', function (_, url) {
+          // support for router plugin
+          if (widget.router) {
+            widget.on('@merkur/plugin-router.redirect', function (_, url) {
             var parsedUrl = new URL(url.url);
             window.location = parsedUrl.href;
-          });
-        }
+            });
+          }
 
-        // mount widget to DOM
-        widget.mount();
-      });
+          // mount widget to DOM
+            widget.mount();
+          });
+    }
   });
 </script>

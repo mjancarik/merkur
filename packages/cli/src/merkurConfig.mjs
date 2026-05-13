@@ -214,13 +214,13 @@ emitter.on(
       ],
       path: '/',
       widgetHandler: async (req, res, { merkurConfig }) => {
-        const { protocol, host } = merkurConfig.widgetServer;
+        const { protocol, host, apiRoute } = merkurConfig.widgetServer;
         let widgetProperties = null;
         const params = merkurConfig.playground.widgetParams(req);
+        const widgetServerUrl = new URL(apiRoute, `${protocol}//${host}`);
+        widgetServerUrl.search = params.size ? params : '';
 
-        const response = await fetch(
-          `${protocol}//${host}/widget${params?.size > 0 ? `?${params}` : ``}`,
-        );
+        const response = await fetch(widgetServerUrl);
 
         widgetProperties = await response.json();
         if (!response.ok) {
@@ -232,8 +232,12 @@ emitter.on(
 
         return widgetProperties;
       },
+      relativeUrlDefault: '',
       widgetParams: (req) => {
         return new URLSearchParams(req.query);
+      },
+      widgetParamsDefault: (location) => {
+        return new URLSearchParams(location?.search);
       },
       ...merkurConfig.playground,
     };
@@ -280,6 +284,7 @@ emitter.on(
       ),
       buildFolder: path.resolve(cliConfig.projectFolder, cliConfig.buildFolder),
       clusters: cliConfig.command === COMMAND_NAME.DEV ? 0 : 3,
+      apiRoute: '/widget',
       ...merkurConfig.widgetServer,
       cors: {
         options: {

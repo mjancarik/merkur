@@ -39,6 +39,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
     templateFolders,
     path: playgroundPath,
     widgetHandler,
+    relativeUrlDefault,
   } = merkurConfig.playground;
   const { cliFolder, command, writeToDisk } = cliConfig;
 
@@ -81,12 +82,18 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
         playgroundPath,
         asyncMiddleware(async (req, res) => {
           const isDevCommand = command === COMMAND_NAME.DEV;
+          const isStaticPlaygroundWithServer =
+            command === COMMAND_NAME.BUILD_PLAYGROUND &&
+            cliConfig.hasRunWidgetServer;
 
-          const widgetProperties = await widgetHandler(req, res, {
-            context,
-            merkurConfig,
-            cliConfig,
-          });
+          // for static playground with server, we don't fetch widget properties here on server, but on client side
+          const widgetProperties = isStaticPlaygroundWithServer
+            ? { assets: [], html: '' }
+            : await widgetHandler(req, res, {
+                context,
+                merkurConfig,
+                cliConfig,
+              });
 
           // TODO refactor
           if (isDevCommand) {
@@ -175,6 +182,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
 
           res.status(200).send(
             playgroundTemplate({
+              isStaticPlaygroundWithServer,
               widgetProperties: restProperties,
               assets,
               merkurConfig,
@@ -227,8 +235,10 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
       server = app;
     }
 
+    const devServerUrl = new URL(relativeUrlDefault, `${protocol}//${host}`);
+
     const httpServer = server.listen({ port }, () => {
-      logger.info(`Playground: ${chalk.green(`${protocol}//${host}`)}`);
+      logger.info(`Playground: ${chalk.green(`${devServerUrl}`)}`);
       resolve(app);
     });
 

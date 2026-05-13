@@ -2,7 +2,6 @@ import { createCommandConfig } from '../commandConfig.mjs';
 import { runDevServer } from '../devServer.mjs';
 import { runTask } from '../runTask.mjs';
 import { runSocketServer } from '../websocket.mjs';
-import { runWidgetServer } from '../widgetServer.mjs';
 import { handleExit, killProcesses } from '../handleExit.mjs';
 import { clearFolder, clearBuildFolder } from '../clearBuildFolder.mjs';
 import { time } from '../utils.mjs';
@@ -88,25 +87,6 @@ export async function buildPlayground({ args, command }) {
 
   logger.info(`Starting servers`);
 
-  if (cliConfig.hasRunWidgetServer) {
-    await runWidgetServer({
-      merkurConfig,
-      cliConfig: childProcessCliConfig,
-      context,
-    });
-
-    const widgetServerUrl = path.join(widgetServerOrigin, '/widget');
-
-    try {
-      await waitForServerReady(widgetServerUrl);
-    } catch (err) {
-      logger.error(chalk.red.bold(`x Widget server failed to start:`));
-      logger.error(chalk.red(err));
-      killProcesses({ context });
-      process.exit(1);
-    }
-  }
-
   await Promise.all([
     runDevServer({ merkurConfig, cliConfig: childProcessCliConfig, context }),
     runSocketServer({
@@ -115,15 +95,6 @@ export async function buildPlayground({ args, command }) {
       context,
     }),
   ]);
-
-  try {
-    await waitForServerReady(devServerOrigin);
-  } catch (err) {
-    logger.error(chalk.red.bold('x Dev server failed to start:'));
-    logger.error(chalk.red(err));
-    killProcesses({ context });
-    process.exit(1);
-  }
 
   let playgroundPath;
 
@@ -139,7 +110,16 @@ export async function buildPlayground({ args, command }) {
     playgroundPath = '/';
   }
 
-  const playgroundUrl = path.join(devServerOrigin, playgroundPath);
+  const playgroundUrl = new URL(playgroundPath, devServerOrigin);
+
+  try {
+    await waitForServerReady(playgroundUrl);
+  } catch (err) {
+    logger.error(chalk.red.bold('x Dev server failed to start:'));
+    logger.error(chalk.red(err));
+    killProcesses({ context });
+    process.exit(1);
+  }
 
   logger.info(`Building playground`);
 
@@ -161,6 +141,15 @@ export async function buildPlayground({ args, command }) {
 
     const absStaticFolderPath = path.resolve(process.cwd(), staticFolder);
     const playgroundFolderPath = path.resolve(process.cwd(), staticPlayground);
+    const merkurIntegrationSourcePath = path.resolve(
+      process.cwd(),
+      'node_modules/@merkur/integration/lib/index.umd.js',
+    );
+    const merkurIntegrationTargetPath = path.join(
+      playgroundFolderPath,
+      'static',
+      'merkur-integration.js',
+    );
 
     await fs.mkdir(playgroundFolderPath, { recursive: true });
     await Promise.all([
@@ -172,6 +161,22 @@ export async function buildPlayground({ args, command }) {
         recursive: true,
       }),
     ]);
+
+    try {
+      await fs.access(merkurIntegrationSourcePath);
+      await fs.copyFile(
+        merkurIntegrationSourcePath,
+        merkurIntegrationTargetPath,
+      );
+    } catch (err) {
+      if (err?.code !== 'ENOENT') {
+        throw err;
+      }
+
+      logger.info(
+        `File not found: ${chalk.yellow(merkurIntegrationSourcePath)}`,
+      );
+    }
 
     logger.log(
       chalk.green.bold('Playground built successfully in: ') +
