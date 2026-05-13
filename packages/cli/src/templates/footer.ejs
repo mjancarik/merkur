@@ -28,10 +28,9 @@
 
         if (!response.ok) {
           const heading = document.createElement('h2');
-          heading.textContent = String(response.status);
+          heading.textContent = `Error ${response.status}`;
           heading.style.cssText = `
             text-align: center;
-            margin: 0 0 30px;
             padding: 10px 0;
             font-size: 24px;
             background-color: #fd5959;
