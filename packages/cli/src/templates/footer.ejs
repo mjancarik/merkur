@@ -4,17 +4,10 @@
 
 <script>
   window.addEventListener('load', async function () {
-    const isStaticPlaygroundWithServer = <%- isStaticPlaygroundWithServer %>;
-
-    if (!isStaticPlaygroundWithServer && !window.__merkur__) {
-      console.error('Merkur is not available in the global scope. Make sure you have included Merkur in your project.');
-      return;
-    }
-
     let widgetCreateData = <%- escapeToJSON(widgetProperties) %>;
 
     // integrate merkur widget on client side for static playground with server
-    if (isStaticPlaygroundWithServer) {
+    <% if (isStaticPlaygroundWithServer) { %>
       try {
         const widgetParamsDefault = <%- merkurConfig.playground.widgetParamsDefault.toString() %>;
         const deployedWidgetUrl = <%- escapeToJSON(merkurConfig.widgetServer.deployedWidgetUrl) %> || '';
@@ -61,6 +54,11 @@
       } catch (error) {
         console.error(error);
       }
+    <% } %>
+
+    if (!window.__merkur__) {
+      console.error('Merkur is not available in the global scope. Make sure you have included Merkur in your project.');
+      return;
     }
 
     if (Object.keys(widgetCreateData).length) {
