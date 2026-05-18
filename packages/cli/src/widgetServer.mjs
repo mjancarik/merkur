@@ -40,15 +40,9 @@ export async function runWidgetServer({ merkurConfig, cliConfig, context }) {
   const widgetServerUrl = new URL(apiRoute, `${protocol}//${host}`);
 
   if (relativeUrlDefault) {
-    const [pathname, search = ''] = relativeUrlDefault.split('?');
+    const mockLocation = new URL(relativeUrlDefault, widgetServerUrl.origin);
+    const params = widgetParamsClient(mockLocation);
 
-    const params = widgetParamsClient({
-      origin: widgetServerUrl.origin,
-      pathname,
-      search: search ? `?${search}` : '',
-    });
-
-    params.set('pathname', pathname);
     widgetServerUrl.search = params.toString();
   }
 
