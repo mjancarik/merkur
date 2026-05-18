@@ -9,10 +9,10 @@
     // integrate merkur widget on client side for static playground with server
     <% if (isStaticPlaygroundWithServer) { %>
       try {
-        const widgetParamsDefault = <%- merkurConfig.playground.widgetParamsDefault.toString() %>;
+        const widgetParamsClient = <%- merkurConfig.playground.widgetParamsClient.toString() %>;
         const deployedWidgetUrl = <%- escapeToJSON(merkurConfig.widgetServer.deployedWidgetUrl) %> || '';
         const apiRoute = <%- escapeToJSON(merkurConfig.widgetServer.apiRoute) %> || '';
-        const widgetParams = widgetParamsDefault(window.location);
+        const widgetParams = widgetParamsClient(window.location);
         const url = new URL(apiRoute, deployedWidgetUrl);
 
         url.search = widgetParams;
@@ -50,6 +50,8 @@
 
         const { assets, html, ...newWidgetCreateData } = body;
 
+        window.__merkur_dev__.widgetProperties = newWidgetCreateData;
+
         widgetCreateData = newWidgetCreateData;
       } catch (error) {
         console.error(error);
@@ -74,9 +76,12 @@
 
           // support for router plugin
           if (widget.router) {
-            widget.on('@merkur/plugin-router.redirect', function (_, url) {
-            var parsedUrl = new URL(url.url);
-            window.location = parsedUrl.href;
+            widget.on('@merkur/plugin-router.redirect', function (_, { url }) {
+              const isStaticPlaygroundWithServer = <%- isStaticPlaygroundWithServer %>;
+              const redirectUrl = isStaticPlaygroundWithServer ?  window.location.origin + url : url;
+              const parsedUrl = new URL(redirectUrl);
+
+              window.location = parsedUrl.href;
             });
           }
 
