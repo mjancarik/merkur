@@ -57,7 +57,7 @@
   "peerDependencies": {
     "@merkur/core": "*",
     "@merkur/plugin-component": "*",
-    "postcss": "^8.4.23",
+    "postcss": "^8.5.15",
     "postcss-loader": "^7.3.0"
   },
   "dependencies": {
