@@ -1,4 +1,8 @@
-import { type WidgetFunction, type WidgetPlugin } from '@merkur/core';
+import {
+  type Widget,
+  type WidgetFunction,
+  type WidgetPlugin,
+} from '@merkur/core';
 
 export declare function eventEmitterPlugin(): WidgetPlugin;
 
@@ -16,12 +20,12 @@ declare module '@merkur/core' {
     on: (
       widget: WidgetPartial,
       eventName: string,
-      callback: (widget: WidgetPartial, ...args: any[]) => any,
+      callback: (widget: Widget, ...args: any[]) => any,
     ) => ReturnType<WidgetFunction>;
     off: (
       widget: WidgetPartial,
       eventName: string,
-      callback: (widget: WidgetPartial, ...args: any[]) => any,
+      callback: (widget: Widget, ...args: any[]) => any,
     ) => ReturnType<WidgetFunction>;
     emit: (
       widget: WidgetPartial,
