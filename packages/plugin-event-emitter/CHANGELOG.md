@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.0.4
+
+### Patch Changes
+
+- 1989c60: Correct widget interface
+  - **What?** Change the type of the `widget` param of the event callback function from `WidgetInternal` to `Widget`.
+  - **Why?** `Widget` is what's passed in - its methods are already bound, i.e. don't expect `widget` as the first prop.
+  - **How?** Nothing.
+
 ## 1.0.3
 
 ### Patch Changes

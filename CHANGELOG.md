@@ -1,3 +1,13 @@
+## [1.0.4](https://github.com/mjancarik/merkur/compare/v1.0.3...v1.0.4) (2026-06-03)
+
+### Patch Changes
+
+- 1989c60: Correct widget interface
+  - **What?** Change the type of the `widget` param of the event callback function from `WidgetInternal` to `Widget`.
+  - **Why?** `Widget` is what's passed in - its methods are already bound, i.e. don't expect `widget` as the first prop.
+  - **How?** Nothing.
+
+
 ## [1.0.3](https://github.com/crysadrak/merkur/compare/v1.0.2...v1.0.3) (2026-04-10)
 
 ### Patch Changes
