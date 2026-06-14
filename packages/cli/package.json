@@ -52,7 +52,7 @@
     "commander": "^14.0.2",
     "compression": "^1.8.1",
     "ejs": "^3.1.10",
-    "esbuild": "^0.25.11",
+    "esbuild": "^0.28.1",
     "esbuild-plugin-manifest": "^1.0.5",
     "express": "^5.1.0",
     "npm-run-path": "^6.0.0",
