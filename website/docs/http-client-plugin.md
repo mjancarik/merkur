@@ -96,6 +96,49 @@ try {
 }
 ```
 
+#### POST request with JSON body, custom headers, and cookies
+
+Cookies are sent automatically for same-origin requests. For cross-origin requests set `credentials` to `'include'`. Custom headers such as `Authorization` or `X-Request-ID` can be passed via the `headers` option:
+
+```javascript
+const { response } = await widget.http.request({
+  method: 'POST',
+  path: '/items',
+  headers: {
+    'Content-Type': 'application/json',
+    Authorization: 'Bearer my-access-token',
+    'X-Request-ID': 'abc-123',
+  },
+  body: { name: 'New item', value: 42 },
+  credentials: 'include', // forward cookies cross-origin
+});
+
+console.log(response.status); // 201
+console.log(response.body);   // { id: 123, name: 'New item', value: 42 }
+```
+
+#### Sending query parameters
+
+```javascript
+const { response } = await widget.http.request({
+  path: '/items',
+  query: { page: 2, limit: 10, sort: 'name' },
+});
+
+console.log(request.url); // http://www.example.com/items?page=2&limit=10&sort=name
+```
+
+#### Overriding the base URL for a single request
+
+```javascript
+const { response } = await widget.http.request({
+  baseUrl: 'https://api.other-service.com',
+  path: '/data',
+});
+
+console.log(request.url); // https://api.other-service.com/data
+```
+
 ## Transformers
 
 Transformers are middleware functions that can intercept and modify requests and responses. Each transformer is an object that can implement up to three methods.
