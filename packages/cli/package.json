@@ -56,7 +56,7 @@
     "esbuild-plugin-manifest": "^1.0.5",
     "express": "^5.1.0",
     "npm-run-path": "^6.0.0",
-    "ws": "^8.18.3"
+    "ws": "^8.21.0"
   },
   "devDependencies": {
     "@merkur/core": "^1.0.0",
