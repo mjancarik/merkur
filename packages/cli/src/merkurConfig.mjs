@@ -233,11 +233,9 @@ emitter.on(
         return widgetProperties;
       },
       relativeUrlDefault: '',
+      widgetParamsDefault: '',
       widgetParams: (req) => {
         return new URLSearchParams(req.query);
-      },
-      widgetParamsClient: (location) => {
-        return new URLSearchParams(location?.search);
       },
       ...merkurConfig.playground,
     };
@@ -277,10 +275,6 @@ emitter.on(
           port: 4444,
         },
       ),
-      ...(cliConfig.command === COMMAND_NAME.BUILD_PLAYGROUND &&
-        cliConfig.hasRunWidgetServer && {
-          deployedWidgetUrl: 'http://localhost:4444',
-        }),
       staticPath: cliConfig.staticPath,
       staticFolder: path.resolve(
         cliConfig.projectFolder,

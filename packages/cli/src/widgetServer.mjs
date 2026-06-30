@@ -10,7 +10,7 @@ export async function runWidgetServer({ merkurConfig, cliConfig, context }) {
   const { watch, inspect } = cliConfig;
   const { playground, widgetServer } = merkurConfig;
   const { protocol, host, apiRoute } = widgetServer;
-  const { relativeUrlDefault, widgetParamsClient } = playground;
+  const { widgetParamsDefault } = playground;
 
   const args = [`./server/server.js`];
 
@@ -38,13 +38,7 @@ export async function runWidgetServer({ merkurConfig, cliConfig, context }) {
   });
 
   const widgetServerUrl = new URL(apiRoute, `${protocol}//${host}`);
-
-  if (relativeUrlDefault) {
-    const mockLocation = new URL(relativeUrlDefault, widgetServerUrl.origin);
-    const params = widgetParamsClient(mockLocation);
-
-    widgetServerUrl.search = params.toString();
-  }
+  widgetServerUrl.search = new URLSearchParams(widgetParamsDefault).toString();
 
   server.on('spawn', () => {
     logger.info(`Widget API endpoint: ${chalk.green(`${widgetServerUrl}`)}`);

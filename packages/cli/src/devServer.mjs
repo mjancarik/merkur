@@ -78,6 +78,20 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           res.status(404).send('MerkurDevClient not found.');
         }
       })
+      .get(`${staticPath}/merkur-integration.js`, (req, res) => {
+        const merkurIntegrationPath = path.resolve(
+          process.cwd(),
+          'node_modules/@merkur/integration/lib/index.umd.js',
+        );
+
+        if (!fs.existsSync(merkurIntegrationPath)) {
+          res.status(404).send('Merkur integration not found.');
+          return;
+        }
+
+        res.set('Content-Type', 'application/javascript');
+        res.status(200).send(fs.readFileSync(merkurIntegrationPath, 'utf8'));
+      })
       .get(
         playgroundPath,
         asyncMiddleware(async (req, res) => {
@@ -87,13 +101,11 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
             cliConfig.hasRunWidgetServer;
 
           // for static playground with server, we don't fetch widget properties here on server, but on client side
-          const widgetProperties = isStaticPlaygroundWithServer
-            ? { assets: [], html: '' }
-            : await widgetHandler(req, res, {
-                context,
-                merkurConfig,
-                cliConfig,
-              });
+          const widgetProperties = await widgetHandler(req, res, {
+            context,
+            merkurConfig,
+            cliConfig,
+          });
 
           // TODO refactor
           if (isDevCommand) {
