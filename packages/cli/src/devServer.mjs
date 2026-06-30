@@ -100,7 +100,6 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
             command === COMMAND_NAME.BUILD_PLAYGROUND &&
             cliConfig.hasRunWidgetServer;
 
-          // for static playground with server, we don't fetch widget properties here on server, but on client side
           const widgetProperties = await widgetHandler(req, res, {
             context,
             merkurConfig,
