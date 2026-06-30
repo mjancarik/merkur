@@ -39,6 +39,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
     templateFolders,
     path: playgroundPath,
     widgetHandler,
+    relativeUrlDefault,
   } = merkurConfig.playground;
   const { cliFolder, command, writeToDisk } = cliConfig;
 
@@ -77,10 +78,27 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           res.status(404).send('MerkurDevClient not found.');
         }
       })
+      .get(`${staticPath}/merkur-integration.js`, (req, res) => {
+        const merkurIntegrationPath = path.resolve(
+          process.cwd(),
+          'node_modules/@merkur/integration/lib/index.umd.js',
+        );
+
+        if (!fs.existsSync(merkurIntegrationPath)) {
+          res.status(404).send('Merkur integration not found.');
+          return;
+        }
+
+        res.set('Content-Type', 'application/javascript');
+        res.status(200).send(fs.readFileSync(merkurIntegrationPath, 'utf8'));
+      })
       .get(
         playgroundPath,
         asyncMiddleware(async (req, res) => {
           const isDevCommand = command === COMMAND_NAME.DEV;
+          const isStaticPlaygroundWithServer =
+            command === COMMAND_NAME.BUILD_PLAYGROUND &&
+            cliConfig.hasRunWidgetServer;
 
           const widgetProperties = await widgetHandler(req, res, {
             context,
@@ -175,6 +193,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
 
           res.status(200).send(
             playgroundTemplate({
+              isStaticPlaygroundWithServer,
               widgetProperties: restProperties,
               assets,
               merkurConfig,
@@ -227,8 +246,10 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
       server = app;
     }
 
+    const devServerUrl = new URL(relativeUrlDefault, `${protocol}//${host}`);
+
     const httpServer = server.listen({ port }, () => {
-      logger.info(`Playground: ${chalk.green(`${protocol}//${host}`)}`);
+      logger.info(`Playground: ${chalk.green(`${devServerUrl}`)}`);
       resolve(app);
     });
 

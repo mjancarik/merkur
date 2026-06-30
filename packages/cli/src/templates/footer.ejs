@@ -1,3 +1,4 @@
+
 <script>
   window.addEventListener('load', function () {
     if (!window.__merkur__) {
@@ -24,7 +25,11 @@
         }
 
         // mount widget to DOM
-        widget.mount();
-      });
+          return widget.mount().then(function () {
+              if (window.__onWidgetMounted) {
+                  window.__onWidgetMounted(widget);
+              }
+          });
+        });
   });
 </script>
