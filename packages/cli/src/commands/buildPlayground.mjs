@@ -170,15 +170,6 @@ export async function buildPlayground({ args, command }) {
 
     const absStaticFolderPath = path.resolve(process.cwd(), staticFolder);
     const playgroundFolderPath = path.resolve(process.cwd(), staticPlayground);
-    const merkurIntegrationSourcePath = path.resolve(
-      process.cwd(),
-      'node_modules/@merkur/integration/lib/index.umd.js',
-    );
-    const merkurIntegrationTargetPath = path.join(
-      playgroundFolderPath,
-      'static',
-      'merkur-integration.js',
-    );
 
     await fs.mkdir(playgroundFolderPath, { recursive: true });
     await Promise.all([
@@ -190,22 +181,6 @@ export async function buildPlayground({ args, command }) {
         recursive: true,
       }),
     ]);
-
-    try {
-      await fs.access(merkurIntegrationSourcePath);
-      await fs.copyFile(
-        merkurIntegrationSourcePath,
-        merkurIntegrationTargetPath,
-      );
-    } catch (err) {
-      if (err?.code !== 'ENOENT') {
-        throw err;
-      }
-
-      logger.info(
-        `File not found: ${chalk.yellow(merkurIntegrationSourcePath)}`,
-      );
-    }
 
     logger.log(
       chalk.green.bold('Playground built successfully in: ') +

@@ -78,20 +78,6 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
           res.status(404).send('MerkurDevClient not found.');
         }
       })
-      .get(`${staticPath}/merkur-integration.js`, (req, res) => {
-        const merkurIntegrationPath = path.resolve(
-          process.cwd(),
-          'node_modules/@merkur/integration/lib/index.umd.js',
-        );
-
-        if (!fs.existsSync(merkurIntegrationPath)) {
-          res.status(404).send('Merkur integration not found.');
-          return;
-        }
-
-        res.set('Content-Type', 'application/javascript');
-        res.status(200).send(fs.readFileSync(merkurIntegrationPath, 'utf8'));
-      })
       .get(
         playgroundPath,
         asyncMiddleware(async (req, res) => {
@@ -175,6 +161,14 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
               )
             : '';
 
+          const merkurIntegrationPath = path.resolve(
+            process.cwd(),
+            'node_modules/@merkur/integration/lib/index.umd.js',
+          );
+          const merkurIntegration = fs.existsSync(merkurIntegrationPath)
+            ? fs.readFileSync(merkurIntegrationPath, 'utf8')
+            : '';
+
           const playgroundTemplate = ejs.compile(
             fs.readFileSync(template, 'utf8'),
             {
@@ -198,6 +192,7 @@ export async function runDevServer({ context, merkurConfig, cliConfig }) {
               assets,
               merkurConfig,
               devClient,
+              merkurIntegration,
               html,
               escapeToJSON,
             }),
