@@ -10,6 +10,7 @@ export function componentPlugin() {
         mount,
         unmount,
         update,
+        teardown,
         ...widgetProperties
       } = widgetDefinition;
 
@@ -20,6 +21,7 @@ export function componentPlugin() {
         mount,
         unmount,
         update,
+        teardown,
       };
 
       widget.$in.component = {
@@ -88,7 +90,12 @@ function componentAPI() {
       widget.$in.component.isMounted = false;
       widget.$in.component.isHydrated = false;
 
-      return callLifeCycleMethod(widget, 'unmount', args);
+      const result = await callLifeCycleMethod(widget, 'unmount', args);
+      await callLifeCycleMethod(widget, 'teardown', args);
+      return result;
+    },
+    async teardown(widget, ...args) {
+      return callLifeCycleMethod(widget, 'teardown', args);
     },
     async bootstrap(widget, ...args) {
       return callLifeCycleMethod(widget, 'bootstrap', args);
