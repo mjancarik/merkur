@@ -32,6 +32,7 @@ describe('createWidget method with component plugin', () => {
         "info": undefined,
         "load": undefined,
         "mount": undefined,
+        "teardown": undefined,
         "unmount": undefined,
         "update": undefined,
       },
@@ -67,6 +68,7 @@ describe('createWidget method with component plugin', () => {
   "setup": [Function],
   "slot": {},
   "state": {},
+  "teardown": [Function],
   "unmount": [Function],
   "update": [Function],
   "version": "1.0.0",
@@ -120,6 +122,7 @@ describe('component plugin API', () => {
   beforeEach(async () => {
     mocks = {
       bootstrap: jest.fn(),
+      teardown: jest.fn(),
       unmount: jest.fn(),
       update: jest.fn(),
     };
@@ -466,6 +469,48 @@ describe('component plugin API', () => {
       await widget.unmount();
 
       expect(mocks.unmount).toHaveBeenCalledWith(widget);
+    });
+
+    it('should call teardown after unmount', async () => {
+      const callOrder = [];
+      mocks.unmount.mockImplementation(() => callOrder.push('unmount'));
+      mocks.teardown.mockImplementation(() => callOrder.push('teardown'));
+
+      await widget.unmount();
+
+      expect(callOrder).toEqual(['unmount', 'teardown']);
+    });
+  });
+
+  describe('teardown method', () => {
+    it('should call plugin teardown method after unmount', async () => {
+      await widget.unmount();
+
+      expect(mocks.teardown).toHaveBeenCalledWith(widget);
+    });
+
+    it('should call teardown with widget as argument', async () => {
+      await widget.teardown();
+
+      expect(mocks.teardown).toHaveBeenCalledWith(widget);
+    });
+
+    it('should not fail if teardown is not defined', async () => {
+      widget.$in.component.lifeCycle.teardown = undefined;
+
+      await expect(widget.unmount()).resolves.not.toThrow();
+    });
+
+    it('should call teardown after isMounted is set to false', async () => {
+      let isMountedDuringTeardown;
+      mocks.teardown.mockImplementation(() => {
+        isMountedDuringTeardown = widget.$in.component.isMounted;
+      });
+
+      await widget.mount();
+      await widget.unmount();
+
+      expect(isMountedDuringTeardown).toBe(false);
     });
   });
 
