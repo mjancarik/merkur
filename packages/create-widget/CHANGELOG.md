@@ -1,5 +1,14 @@
 # Change Log
 
+## 1.1.0
+
+### Patch Changes
+
+- e01dffd: Use new property `apiRoute` from `merkurConfig.widgetServer`.
+  - **What** Use new property `apiRoute` from `merkurConfig.widgetServer` in widgetAPI.
+  - **Why** Use new property which is centralized for the widget api endpoint name.
+  - **How** Nothing.
+
 ## 1.0.3
 
 ### Patch Changes
