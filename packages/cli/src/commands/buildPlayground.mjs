@@ -83,8 +83,12 @@ export async function buildPlayground({ args, command }) {
   const {
     devServer: { origin: devServerOrigin },
     playground,
-    widgetServer: { origin: widgetServerOrigin },
+    widgetServer: {
+      origin: widgetServerOrigin,
+      apiRoute: widgetServerApiRoute,
+    },
   } = merkurConfig;
+  const { relativeUrlDefault, widgetParamsDefault } = playground;
 
   logger.info(`Starting servers`);
 
@@ -95,7 +99,10 @@ export async function buildPlayground({ args, command }) {
       context,
     });
 
-    const widgetServerUrl = path.join(widgetServerOrigin, '/widget');
+    const widgetServerUrl = new URL(widgetServerApiRoute, widgetServerOrigin);
+    widgetServerUrl.search = new URLSearchParams(
+      widgetParamsDefault,
+    ).toString();
 
     try {
       await waitForServerReady(widgetServerUrl);
@@ -116,19 +123,12 @@ export async function buildPlayground({ args, command }) {
     }),
   ]);
 
-  try {
-    await waitForServerReady(devServerOrigin);
-  } catch (err) {
-    logger.error(chalk.red.bold('x Dev server failed to start:'));
-    logger.error(chalk.red(err));
-    killProcesses({ context });
-    process.exit(1);
-  }
-
   let playgroundPath;
 
   if (typeof playground?.path === 'string') {
     playgroundPath = playground.path;
+  } else if (relativeUrlDefault) {
+    playgroundPath = relativeUrlDefault;
   } else if (cliConfig.playgroundPath) {
     playgroundPath = cliConfig.playgroundPath;
   } else {
@@ -139,7 +139,16 @@ export async function buildPlayground({ args, command }) {
     playgroundPath = '/';
   }
 
-  const playgroundUrl = path.join(devServerOrigin, playgroundPath);
+  const playgroundUrl = new URL(playgroundPath, devServerOrigin);
+
+  try {
+    await waitForServerReady(playgroundUrl);
+  } catch (err) {
+    logger.error(chalk.red.bold('x Dev server failed to start:'));
+    logger.error(chalk.red(err));
+    killProcesses({ context });
+    process.exit(1);
+  }
 
   logger.info(`Building playground`);
 

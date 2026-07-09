@@ -11,14 +11,14 @@ const {
 const memoCreateAssets = memo(createAssets);
 
 const { merkurConfig, cliConfig } = resolveConfig();
-const { staticFolder, buildFolder, protocol, host, staticPath } =
+const { staticFolder, buildFolder, protocol, host, staticPath, apiRoute } =
   merkurConfig.widgetServer;
 
 const widgetEnvironment = config.get('widget');
 
 const router = express.Router();
 router.get(
-  '/widget',
+  apiRoute,
   asyncMiddleware(async (req, res) => {
     const merkurModule = requireUncached(`${buildFolder}/widget.cjs`);
     const widget = await merkurModule.createWidget({
