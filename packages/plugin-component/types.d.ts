@@ -84,7 +84,8 @@ declare module '@merkur/core' {
   interface WidgetPlugin {}
 
   interface WidgetDefinition {
-    bootstrap?: (widget: WidgetPartial) => void;
+    bootstrap?: (widget: WidgetPartial) => void | Promise<void>;
+    teardown?: (widget: WidgetPartial) => void | Promise<void>;
     container?: Element;
     info?: (widget: WidgetPartial) => Promise<void>;
     mount?: (widget: WidgetPartial) => Promise<void | SSRMountResult>;
@@ -95,6 +96,7 @@ declare module '@merkur/core' {
 
   interface RequiredWidgetKeys {
     bootstrap: unknown;
+    teardown: unknown;
     container: unknown;
     info: unknown;
     mount: unknown;

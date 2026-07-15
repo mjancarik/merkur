@@ -1,39 +1,24 @@
+<script><%- merkurIntegration %></script>
+
 <script>
   window.__merkur_dev__ = window.__merkur_dev__ || {};
   window.__merkur_dev__.merkurConfig = <%- escapeToJSON(merkurConfig) %>;
-   window.__merkur_dev__.assets = <%- escapeToJSON(assets) %>;
+  window.__merkur_dev__.assets = <%- escapeToJSON(assets) %>;
   window.__merkur_dev__.widgetProperties = <%- escapeToJSON(widgetProperties) %>;
   <%- devClient %>
 </script>
-<% assets.forEach((asset)=> { %>
-  <%if (asset.type==='stylesheet' ) { %>
-    <link rel='stylesheet' href='<%= asset.source %>' data-merkur-asset-name="<%= asset.name %>" />
-  <% } %>
-  <%if (asset.type==='inlineStyle' ) { %>
-    <style data-merkur-asset-name="<%= asset.name %>">
-      <%- asset.source %>
-    </style>
-  <% } %>
 
-  <%if (asset.type==='script' ) { %>
-    <%if (typeof asset.source==='string' ) { %>
-      <script src='<%= asset.source %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-merkur-asset-name="<%= asset.name %>"></script>
-    <% } %>
-    <%if (typeof asset.source==='object' ) { %>
-      <script src='<%= asset.source.es15 %>' <%- asset.module ? 'type="module"' : 'defer="true"' %> data-merkur-asset-name="<%= asset.name %>"></script>
-    <% } %>
-  <% } %>
+<script>
+  (function () {
+    var merkurIntegration = window.Merkur && window.Merkur.Integration;
 
-  <%if (asset.type==='inlineScript' ) { %>
-    <%if (typeof asset.source==='string' ) { %>
-      <script data-merkur-asset-name="<%= asset.name %>">
-        <%- asset.source %>
-      </script>
-    <% } %>
-    <%if (typeof asset.source==='object' ) { %>
-      <script data-merkur-asset-name="<%= asset.name %>">
-        <%- asset.source %>
-      </script>
-    <% } %>
-  <% } %>
-<% }); %>
+    if (!merkurIntegration || typeof merkurIntegration.loadAssets !== 'function') {
+      console.error(
+        'Merkur integration is not available in the global scope. Make sure @merkur/integration package is installed.',
+      );
+      return;
+    }
+
+    merkurIntegration.loadAssets(window.__merkur_dev__.assets);
+  })();
+</script>

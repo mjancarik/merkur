@@ -1,3 +1,25 @@
+## [1.1.0](https://github.com/mjancarik/merkur/compare/v1.0.4...v1.1.0) (2026-07-09)
+
+### Minor Changes
+
+- c76f38f: Added the ability to statically deploy a playground for a Merkur widget with a server
+  - **What** Added `apiRoute` into `merkurConfig.widgetServer` to centralize the widget API endpoint name. Added `relativeUrlDefault` and `widgetParamsDefault` into `merkurConfig.playground`. `relativeUrlDefault` is used as a fallback playground path and shown in the dev server log, `widgetParamsDefault` is used to build the widget server URL for static playground and shown in the widget server log. The `@merkur/integration` UMD build is now inlined directly into the `head.ejs` template. Refactored `head.ejs` template to use `Merkur.Integration.loadAssets()` for loading widget assets instead of manually rendering asset. In `footer.ejs`, added `onWidgetMounted` callback support after widget mount.
+  - **Why** To simplify and unify asset loading in the playground, allow flexible widget API endpoint configuration, and make the static playground setup for Merkur widget.
+  - **How** Nothing.
+- 2ee2945: Add support for ES15 asset variant in integration.
+  - **What** Added ES15 support when selecting the appropriate asset source variant at runtime.
+  - **Why** Browsers supporting ES2024 features (`Promise.withResolvers`, `Object.groupBy`) can now receive the ES15 build.
+  - **How** Nothing.
+
+### Patch Changes
+
+- e01dffd: Use new property `apiRoute` from `merkurConfig.widgetServer`.
+  - **What** Use new property `apiRoute` from `merkurConfig.widgetServer` in widgetAPI.
+  - **Why** Use new property which is centralized for the widget api endpoint name.
+  - **How** Nothing.
+- a1e7618: Add more examples to documentation.
+
+
 ## [1.0.4](https://github.com/mjancarik/merkur/compare/v1.0.3...v1.0.4) (2026-06-03)
 
 ### Patch Changes
