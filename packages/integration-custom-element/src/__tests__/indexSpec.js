@@ -237,4 +237,92 @@ describe('Merkur integration custom element', () => {
       });
     });
   });
+
+  describe('registerCustomElement methods option', () => {
+    const uploadVideo = jest.fn();
+    const ssuUploadVideo = jest.fn();
+
+    const widgetDefinition = {
+      name: 'merkur-methods-test',
+      version: '1.0.0',
+      assets: [],
+      props: {},
+      createWidget: () => widgetDefinition,
+
+      uploadVideo,
+      mount: jest.fn(),
+      unmount: jest.fn(),
+      update: jest.fn(),
+      setProps: jest.fn(),
+    };
+
+    const MethodsElement = registerCustomElement({
+      widgetDefinition,
+      methods: { ssuUploadVideo },
+    });
+
+    beforeEach(() => {
+      jest.clearAllMocks();
+      ssuUploadVideo.mockImplementation((widget, file) =>
+        widget.uploadVideo(file),
+      );
+      uploadVideo.mockReturnValue('uploaded');
+    });
+
+    it('should define the delegating method on the element before the widget is ready', () => {
+      const widgetElement = new MethodsElement();
+
+      expect(typeof widgetElement.ssuUploadVideo).toBe('function');
+    });
+
+    it('should wait for the widget and delegate the call to the widget', async () => {
+      const widgetElement = new MethodsElement();
+      widgetElement.connectedCallback(); // simulate browser
+
+      const result = await widgetElement.ssuUploadVideo('clip.mp4');
+
+      expect(ssuUploadVideo).toHaveBeenCalledTimes(1);
+      expect(ssuUploadVideo).toHaveBeenCalledWith(
+        widgetElement._widget,
+        'clip.mp4',
+      );
+      expect(uploadVideo).toHaveBeenCalledWith('clip.mp4');
+      expect(result).toBe('uploaded');
+    });
+
+    it('should not invoke the handler synchronously before the widget promise resolves', async () => {
+      const widgetElement = new MethodsElement();
+
+      const call = widgetElement.ssuUploadVideo('early.mp4');
+
+      // The handler must wait for the widget instead of running immediately.
+      expect(ssuUploadVideo).not.toHaveBeenCalled();
+
+      await call;
+
+      expect(ssuUploadVideo).toHaveBeenCalledTimes(1);
+      expect(widgetElement._widget).toBeDefined();
+    });
+
+    it('should skip methods that collide with an existing element member', () => {
+      const errorSpy = jest
+        .spyOn(console, 'error')
+        .mockImplementation(() => {});
+
+      registerCustomElement({
+        widgetDefinition: {
+          name: 'merkur-methods-reserved-test',
+          version: '1.0.0',
+          createWidget: () => ({}),
+        },
+        methods: { connectedCallback: jest.fn() },
+      });
+
+      expect(errorSpy).toHaveBeenCalledWith(
+        expect.stringContaining("cannot expose method 'connectedCallback'"),
+      );
+
+      errorSpy.mockRestore();
+    });
+  });
 });

@@ -39,8 +39,13 @@ function afterDOMLoad() {
 }
 
 function registerCustomElement(options) {
-  const { widgetDefinition, callbacks, observedAttributes, attributesParser } =
-    deepMerge({}, options);
+  const {
+    widgetDefinition,
+    callbacks,
+    observedAttributes,
+    attributesParser,
+    methods,
+  } = deepMerge({}, options);
   class HTMLCustomElement extends HTMLElement {
     static get observedAttributes() {
       return observedAttributes ?? [];
@@ -231,6 +236,30 @@ function registerCustomElement(options) {
     _getContext() {
       return { shadow: this._shadow, customElement: this };
     }
+  }
+
+  if (methods && typeof methods === 'object') {
+    Object.keys(methods).forEach((methodName) => {
+      const handler = methods[methodName];
+
+      if (typeof handler !== 'function') {
+        return;
+      }
+
+      if (methodName in WidgetElement.prototype) {
+        console.error(
+          `registerCustomElement: cannot expose method '${methodName}' because it collides with an existing custom element member.`,
+        );
+
+        return;
+      }
+
+      WidgetElement.prototype[methodName] = async function (...args) {
+        await this._widgetPromise;
+
+        return handler(this._widget, ...args);
+      };
+    });
   }
 
   if (customElements.get(widgetDefinition.name) === undefined) {
