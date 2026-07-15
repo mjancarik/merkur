@@ -25,25 +25,30 @@ packages/
 ├── preact/                      # Preact templating adapter
 ├── svelte/                      # Svelte templating adapter
 ├── uhtml/                       # µhtml templating adapter
-├── plugin-component/            # optional runtime plugins
-├── plugin-css-scrambler/
-├── plugin-error/
-├── plugin-event-emitter/
-├── plugin-graphql-client/
-├── plugin-http-cache/
-├── plugin-http-client/
-├── plugin-router/
-├── plugin-select-preact/
-├── plugin-session-storage/
-├── plugin-validation/
+├── plugin-component/            # reusable component loading and rendering
+├── plugin-css-scrambler/        # scopes/scrambles CSS class names
+├── plugin-error/                # error handling and reporting
+├── plugin-event-emitter/        # event emitter for widget communication
+├── plugin-graphql-client/       # GraphQL client integration
+├── plugin-http-cache/           # caches HTTP responses (SSR hydration)
+├── plugin-http-client/          # HTTP client for API requests
+├── plugin-router/               # client/server routing
+├── plugin-select-preact/        # Preact state selector/binding
+├── plugin-session-storage/      # session storage access
+├── plugin-validation/           # data validation
 ├── tool-webpack/                # build/dev tooling
-├── tool-storybook/
-└── tools/
+├── tool-storybook/              # Storybook integration
+└── tools/                       # shared Merkur CLI tools (merkur-tools)
 website/                         # Docusaurus documentation site (merkur.js.org)
 utils/                           # Release and maintenance scripts
+package.json                     # workspaces list + all top-level scripts
+nx.json                          # Nx task pipeline
+jest.config.js                   # Jest config
+.eslintrc.js                     # ESLint config
+tsconfig.json                    # shared TypeScript config
+createRollupConfig.mjs           # shared Rollup config
+.changeset/                      # Changesets release management
 ```
-
-### Package structure
 
 Each package under `packages/*` follows the same layout:
 
@@ -52,15 +57,6 @@ src/                # source code
 lib/                # build output (Rollup) — generated, do not edit
 package.json        # per-package manifest + build/test scripts
 ```
-
-Root config of note:
-- `package.json` — workspaces list + all top-level scripts
-- `nx.json` — Nx task pipeline
-- `jest.config.js` — Jest config
-- `.eslintrc.js` — ESLint config
-- `tsconfig.json` — shared TypeScript config
-- `createRollupConfig.mjs` — shared Rollup config
-- `.changeset/` — Changesets release management
 
 ## Setup
 
