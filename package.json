@@ -2,7 +2,7 @@
   "name": "merkur-monorepo",
   "description": "Merkur is library for creating micro frontend with server side rendering. ",
   "devDependencies": {
-    "@babel/core": "^7.28.5",
+    "@babel/core": "^7.29.6",
     "@babel/eslint-parser": "^7.28.5",
     "@babel/plugin-transform-modules-commonjs": "^7.27.1",
     "@babel/preset-env": "^7.28.5",
