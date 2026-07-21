@@ -14,11 +14,14 @@ export type ValidationResult<T = unknown> =
 export interface Schema<T = unknown> {
   /**
    * Safe parse method that returns a result object instead of throwing.
-   * Supports both zod-style { success, data, error } and @esmj/schema { ok, value, issues }
+   * Declared as a method (bivariant parameters) and with trailing args so
+   * real schema libraries (zod, @esmj/schema, valibot, ...) whose safeParse
+   * uses a narrower value type and an extra options argument still satisfy it.
    */
-  safeParse: (
+  safeParse(
     value: unknown,
-  ) => ValidationResult<T> | { ok: boolean; value?: T; issues?: unknown };
+    ...rest: unknown[]
+  ): ValidationResult<T> | { ok: boolean; value?: T; issues?: unknown };
 }
 
 /**
@@ -99,7 +102,7 @@ export interface ValidationInternal<T = unknown> {
  */
 export function validationPlugin<T = unknown>(
   options: ValidationPluginOptions<T>,
-): WidgetPlugin;
+): () => WidgetPlugin;
 
 // Module augmentation for @merkur/core
 declare module '@merkur/core' {
