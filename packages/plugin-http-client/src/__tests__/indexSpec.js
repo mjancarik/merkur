@@ -4,6 +4,9 @@ import {
   setDefaultConfig,
   getDefaultTransformers,
   transformHeaders,
+  transformBody,
+  transformQuery,
+  transformTimeout,
 } from '../index';
 
 describe('createWidget method with http client plugin', () => {
@@ -325,6 +328,83 @@ describe('createWidget method with http client plugin', () => {
       expect(request.headers.get('Authorization')).toBe('Bearer token');
       expect(request.headers.get('X-Request-ID')).toBe('42');
       expect(request.headers.get('Content-Type')).toBe('application/json');
+    });
+
+    it('should not set default Content-Type for FormData body', async () => {
+      const formData = new FormData();
+      formData.append('file', 'data');
+
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: formData,
+        headers: {},
+      });
+
+      expect(request.headers.get('Content-Type')).toBeNull();
+      expect(request.body).toBe(formData);
+    });
+
+    it('should not set default Content-Type for string body', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: 'plain text',
+        headers: {},
+      });
+
+      expect(request.headers.get('Content-Type')).toBeNull();
+      expect(request.body).toBe('plain text');
+    });
+
+    it('should not JSON-stringify a string body even if Content-Type is application/json', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: '{"already":"serialized"}',
+        headers: { 'Content-Type': 'application/json' },
+      });
+
+      expect(request.body).toBe('{"already":"serialized"}');
+    });
+
+    it('should set default Content-Type for plain object body', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: { a: 1 },
+        headers: {},
+      });
+
+      expect(request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.body).toBe('{"a":1}');
+    });
+
+    it('should set default Content-Type for array body', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: [1, 2, 3],
+        headers: {},
+      });
+
+      expect(request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.body).toBe('[1,2,3]');
+    });
+
+    it('should not throw when headers is null and transformHeaders is omitted', async () => {
+      setDefaultConfig(widget, {
+        transformers: [transformBody(), transformQuery(), transformTimeout()],
+      });
+
+      await expect(
+        widget.http.request({
+          method: 'POST',
+          path: '/path',
+          body: { a: 1 },
+          headers: null,
+        }),
+      ).resolves.toBeDefined();
     });
 
     it('should timeout request which exceed predefined timeout limit', async () => {

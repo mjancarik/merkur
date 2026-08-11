@@ -46,17 +46,29 @@ setDefaultConfig(widget, {
 
 ### Default `Content-Type: application/json` for body requests
 
-`transformBody` now automatically sets `Content-Type: application/json` on requests that carry a `body` and use a method other than `GET` or `HEAD`, when no `Content-Type` header is already present. Previously, the header had to be set explicitly.
+`transformBody` now automatically sets `Content-Type: application/json` and calls `JSON.stringify` on requests where:
+- the body is a **plain object or array** (instances of `FormData`, `Blob`, `string`, `ArrayBuffer`, etc. are **not** affected), and
+- the method is not `GET` or `HEAD`, and
+- no `Content-Type` header is already present.
 
-**Migration:** If you were sending a body with a non-JSON content type and relying on the absence of a default `Content-Type`, you must now explicitly set your desired `Content-Type` header:
+Previously, the header had to be set explicitly, and `JSON.stringify` was called for any body type whenever `Content-Type: application/json` was present (which caused double-serialization of pre-serialized strings).
+
+**Migration:** `FormData`, `Blob`, `string`, and other non-plain-object bodies no longer need an explicit `Content-Type` override — they are passed through untouched. If you were relying on the old behaviour of explicitly setting `Content-Type: application/json` for a non-object body and having it serialized, you must now serialize the body yourself before passing it to `request`.
 
 ```js
-// Explicitly set a non-JSON content type to override the default
+// FormData — no Content-Type needed; fetch sets it with the correct boundary automatically
 await widget.http.request({
   method: 'POST',
   path: '/upload',
-  headers: { 'Content-Type': 'multipart/form-data' },
-  body: formData,
+  body: formData, // passed through as-is
+});
+
+// Pre-serialized string — not double-stringified even with explicit Content-Type
+await widget.http.request({
+  method: 'POST',
+  path: '/raw',
+  headers: { 'Content-Type': 'application/json' },
+  body: '{"already":"serialized"}', // passed through as-is
 });
 ```
 

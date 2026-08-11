@@ -3,6 +3,12 @@ import { assignMissingKeys, bindWidgetToFunctions } from '@merkur/core';
 const CONTENT_TYPE_HEADER = 'Content-Type';
 const CONTENT_TYPE_JSON = 'application/json';
 
+function isJsonSerializable(body) {
+  if (body === null || typeof body !== 'object') return false;
+  const proto = Object.getPrototypeOf(body);
+  return proto === Object.prototype || proto === null || Array.isArray(body);
+}
+
 export function setDefaultConfig(widget, newDefaultConfig) {
   widget.$in.httpClient.defaultConfig = {
     ...widget.$in.httpClient.defaultConfig,
@@ -201,15 +207,18 @@ export function transformBody() {
     },
     async transformRequest(widget, request, response) {
       const { body, method } = request;
-      const newHeaders = new Headers(request.headers);
+      const newHeaders = new Headers(request.headers ?? {});
       const isBodyMethod = !['GET', 'HEAD'].includes(method);
 
       if (body && isBodyMethod) {
-        if (!newHeaders.has(CONTENT_TYPE_HEADER)) {
+        if (isJsonSerializable(body) && !newHeaders.has(CONTENT_TYPE_HEADER)) {
           newHeaders.set(CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON);
         }
 
-        if (newHeaders.get(CONTENT_TYPE_HEADER) === CONTENT_TYPE_JSON) {
+        if (
+          isJsonSerializable(body) &&
+          newHeaders.get(CONTENT_TYPE_HEADER) === CONTENT_TYPE_JSON
+        ) {
           return [
             { ...request, headers: newHeaders, body: JSON.stringify(body) },
             response,

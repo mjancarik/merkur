@@ -98,12 +98,14 @@ try {
 
 #### POST request with JSON body, custom headers, and cookies
 
-When a request has a `body` and uses a method that supports a body (anything other than `GET` or `HEAD`), `Content-Type: application/json` is set automatically. You can override it by providing your own `Content-Type` header.
+When a request has a `body` that is a **plain object or array** and uses a method that supports a body (anything other than `GET` or `HEAD`), `Content-Type: application/json` is set automatically and the body is serialized with `JSON.stringify`. You can override the default by providing your own `Content-Type` header.
+
+`FormData`, `Blob`, `string`, `ArrayBuffer`, and other non-plain-object bodies are passed through untouched — no `Content-Type` is injected and no serialization is performed.
 
 Cookies are sent automatically for same-origin requests. For cross-origin requests set `credentials` to `'include'`. Custom headers such as `Authorization` or `X-Request-ID` can be passed via the `headers` option:
 
 ```javascript
-// Content-Type: application/json is added automatically
+// Plain object — Content-Type: application/json is added automatically
 const { response } = await widget.http.request({
   method: 'POST',
   path: '/items',
@@ -118,11 +120,12 @@ const { response } = await widget.http.request({
 console.log(response.status); // 201
 console.log(response.body);   // { id: 123, name: 'New item', value: 42 }
 
-// Override the default Content-Type when sending a different body format:
+// FormData — no Content-Type injected; fetch sets it with the correct boundary
+const formData = new FormData();
+formData.append('file', fileBlob);
 const { response: uploadResponse } = await widget.http.request({
   method: 'POST',
   path: '/upload',
-  headers: { 'Content-Type': 'multipart/form-data' },
   body: formData,
 });
 ```
@@ -307,8 +310,9 @@ function transformAuth(getToken) {
 Handles serialization of the request body and deserialization of the response body.
 
 **`transformRequest`** — When `body` is set and the method is not `GET` or `HEAD`:
-- If no `Content-Type` header is present, `Content-Type: application/json` is added automatically.
-- If the effective `Content-Type` is `application/json`, the body is serialized with `JSON.stringify`.
+- If the body is a **plain object or array** and no `Content-Type` header is present, `Content-Type: application/json` is added automatically and the body is serialized with `JSON.stringify`.
+- `FormData`, `Blob`, `string`, `ArrayBuffer`, and other non-plain-object bodies are passed through untouched — no `Content-Type` is injected and `JSON.stringify` is never called on them.
+- If an explicit `Content-Type: application/json` is present but the body is not a plain object or array (e.g. an already-serialized string), the body is passed through as-is.
 
 The default `Content-Type` can be overridden by explicitly setting a different value in the request `headers`.
 
@@ -318,7 +322,7 @@ The default `Content-Type` can be overridden by explicitly setting a different v
 - HTTP 204 No Content → response is passed through unchanged (no body reading)
 
 ```javascript
-// Content-Type: application/json is set automatically — body is serialized:
+// Plain object — serialized automatically:
 const { response } = await widget.http.request({
   method: 'POST',
   path: '/items',
@@ -326,12 +330,21 @@ const { response } = await widget.http.request({
 });
 console.log(response.body); // { id: 7, name: 'widget', count: 3 } — automatically parsed
 
-// Override to send a different content type:
+// FormData — body and headers are untouched; fetch sets Content-Type with boundary:
+const formData = new FormData();
+formData.append('name', 'widget');
 const { response: r } = await widget.http.request({
-  method: 'PUT',
-  path: '/blob',
-  headers: { 'Content-Type': 'application/octet-stream' },
-  body: buffer,
+  method: 'POST',
+  path: '/upload',
+  body: formData,
+});
+
+// Pre-serialized string with explicit Content-Type — not double-stringified:
+const { response: r2 } = await widget.http.request({
+  method: 'POST',
+  path: '/raw',
+  headers: { 'Content-Type': 'application/json' },
+  body: '{"already":"serialized"}',
 });
 ```
 
