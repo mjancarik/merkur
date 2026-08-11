@@ -105,6 +105,9 @@ describe('createWidget method with graphql client plugin', () => {
         "transformers": [
           {
             "transformRequest": [Function],
+          },
+          {
+            "transformRequest": [Function],
             "transformResponse": [Function],
           },
           {

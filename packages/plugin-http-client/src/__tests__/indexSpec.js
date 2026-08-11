@@ -3,6 +3,7 @@ import {
   httpClientPlugin,
   setDefaultConfig,
   getDefaultTransformers,
+  transformHeaders,
 } from '../index';
 
 describe('createWidget method with http client plugin', () => {
@@ -95,6 +96,9 @@ describe('createWidget method with http client plugin', () => {
         "transformers": [
           {
             "transformResponse": [Function],
+          },
+          {
+            "transformRequest": [Function],
           },
           {
             "transformRequest": [Function],
@@ -232,6 +236,95 @@ describe('createWidget method with http client plugin', () => {
       });
 
       expect(request.body).toMatchInlineSnapshot(`"{"a":"b"}"`);
+    });
+
+    it('should set default Content-Type application/json for POST with body', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: { a: 'b' },
+        headers: {},
+      });
+
+      expect(request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.body).toMatchInlineSnapshot(`"{"a":"b"}"`);
+    });
+
+    it('should not override explicit Content-Type when body is present', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: 'raw text',
+        headers: {
+          'Content-Type': 'text/plain',
+        },
+      });
+
+      expect(request.headers.get('Content-Type')).toBe('text/plain');
+      expect(request.body).toBe('raw text');
+    });
+
+    it('should not set default Content-Type for GET with body', async () => {
+      const { request } = await widget.http.request({
+        method: 'GET',
+        path: '/path',
+        body: { a: 'b' },
+        headers: {},
+      });
+
+      expect(request.headers.get('Content-Type')).toBeNull();
+    });
+
+    it('should set default Content-Type when headers is a Headers instance', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: { a: 'b' },
+        headers: new Headers(),
+      });
+
+      expect(request.headers.get('Content-Type')).toBe('application/json');
+      expect(request.body).toMatchInlineSnapshot(`"{"a":"b"}"`);
+    });
+
+    it('should serialize body when headers is a Headers instance with Content-Type', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: { a: 'b' },
+        headers: new Headers({ 'Content-Type': 'application/json' }),
+      });
+
+      expect(request.headers.get('content-type')).toBe('application/json');
+      expect(request.body).toMatchInlineSnapshot(`"{"a":"b"}"`);
+    });
+
+    it('should not override Content-Type when headers is a Headers instance with custom type', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: 'raw',
+        headers: new Headers({ 'Content-Type': 'text/plain' }),
+      });
+
+      expect(request.headers.get('content-type')).toBe('text/plain');
+      expect(request.body).toBe('raw');
+    });
+
+    it('should preserve existing entries when headers is a Headers instance', async () => {
+      const { request } = await widget.http.request({
+        method: 'POST',
+        path: '/path',
+        body: { a: 'b' },
+        headers: new Headers({
+          Authorization: 'Bearer token',
+          'X-Request-ID': '42',
+        }),
+      });
+
+      expect(request.headers.get('Authorization')).toBe('Bearer token');
+      expect(request.headers.get('X-Request-ID')).toBe('42');
+      expect(request.headers.get('Content-Type')).toBe('application/json');
     });
 
     it('should timeout request which exceed predefined timeout limit', async () => {
@@ -424,5 +517,54 @@ describe('createWidget method with http client plugin', () => {
       expect(errorTransformerSpy).not.toHaveBeenCalled();
       expect(widget.$dependencies.fetch).not.toHaveBeenCalled();
     });
+  });
+});
+
+describe('transformHeaders', () => {
+  const transformer = transformHeaders();
+
+  it('should normalize a plain object to a Headers instance', async () => {
+    const [result] = await transformer.transformRequest(
+      null,
+      { headers: { Authorization: 'Bearer token' } },
+      null,
+    );
+
+    expect(result.headers).toBeInstanceOf(Headers);
+    expect(result.headers.get('Authorization')).toBe('Bearer token');
+  });
+
+  it('should normalize a Headers instance to a new Headers instance', async () => {
+    const input = new Headers({ 'X-Custom': 'value' });
+    const [result] = await transformer.transformRequest(
+      null,
+      { headers: input },
+      null,
+    );
+
+    expect(result.headers).toBeInstanceOf(Headers);
+    expect(result.headers.get('X-Custom')).toBe('value');
+  });
+
+  it('should normalize null headers to an empty Headers instance', async () => {
+    const [result] = await transformer.transformRequest(
+      null,
+      { headers: null },
+      null,
+    );
+
+    expect(result.headers).toBeInstanceOf(Headers);
+    expect([...result.headers.entries()]).toHaveLength(0);
+  });
+
+  it('should preserve the response unchanged', async () => {
+    const response = { ok: true };
+    const [, resultResponse] = await transformer.transformRequest(
+      null,
+      { headers: {} },
+      response,
+    );
+
+    expect(resultResponse).toBe(response);
   });
 });

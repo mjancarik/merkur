@@ -98,14 +98,16 @@ try {
 
 #### POST request with JSON body, custom headers, and cookies
 
+When a request has a `body` and uses a method that supports a body (anything other than `GET` or `HEAD`), `Content-Type: application/json` is set automatically. You can override it by providing your own `Content-Type` header.
+
 Cookies are sent automatically for same-origin requests. For cross-origin requests set `credentials` to `'include'`. Custom headers such as `Authorization` or `X-Request-ID` can be passed via the `headers` option:
 
 ```javascript
+// Content-Type: application/json is added automatically
 const { response } = await widget.http.request({
   method: 'POST',
   path: '/items',
   headers: {
-    'Content-Type': 'application/json',
     Authorization: 'Bearer my-access-token',
     'X-Request-ID': 'abc-123',
   },
@@ -115,6 +117,14 @@ const { response } = await widget.http.request({
 
 console.log(response.status); // 201
 console.log(response.body);   // { id: 123, name: 'New item', value: 42 }
+
+// Override the default Content-Type when sending a different body format:
+const { response: uploadResponse } = await widget.http.request({
+  method: 'POST',
+  path: '/upload',
+  headers: { 'Content-Type': 'multipart/form-data' },
+  body: formData,
+});
 ```
 
 #### Sending query parameters
@@ -153,9 +163,9 @@ Merges `newDefaultConfig` shallowly into the widget's existing default request c
 | `baseUrl` | `string` | `''` | Base URL prepended to `path` |
 | `path` | `string` | `'/'` | Path appended to `baseUrl` |
 | `url` | `string` | — | Full URL; if set, `baseUrl` and `path` are ignored |
-| `headers` | `object` | `{}` | Request headers |
+| `headers` | `object \| `[Headers](https://developer.mozilla.org/en-US/docs/Web/API/Headers)`` | `{}` | Request headers — plain objects and `Headers` instances are both accepted |
 | `query` | `object` | `{}` | Key/value pairs encoded as query string |
-| `body` | `any` | — | Request body; serialized to JSON when `Content-Type: application/json` |
+| `body` | `any` | — | Request body; serialized to JSON when `Content-Type` is `application/json` (set automatically for body-bearing methods — overridable) |
 | `timeout` | `number` | `15000` | Abort timeout in milliseconds |
 | `transformers` | `Array` | built-ins | Transformer pipeline (see [Built-in transformers](#built-in-transformers)) |
 | *(fetch options)* | | | Any option accepted by the native [fetch API](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#Supplying_request_options) (e.g. `credentials`, `mode`, `cache`) |
@@ -184,11 +194,12 @@ export const widgetProperties = {
 getDefaultTransformers(widget) // returns Array<HttpTransformer>
 ```
 
-Returns the three built-in transformer instances in their default execution order:
+Returns the four built-in transformer instances in their default execution order:
 
-1. `transformBody` — serializes the request body and deserializes the response body
-2. `transformQuery` — builds the request URL from `baseUrl` + `path` and appends `query` parameters
-3. `transformTimeout` — sets up an `AbortController`-based request timeout
+1. `transformHeaders` — normalizes `request.headers` to a [`Headers`](https://developer.mozilla.org/en-US/docs/Web/API/Headers) instance
+2. `transformBody` — serializes the request body and deserializes the response body
+3. `transformQuery` — builds the request URL from `baseUrl` + `path` and appends `query` parameters
+4. `transformTimeout` — sets up an `AbortController`-based request timeout
 
 Spread the result into a custom `transformers` array to preserve default behaviour while adding your own transformers:
 
@@ -204,7 +215,7 @@ setDefaultConfig(widget, {
 });
 ```
 
-Omitting `getDefaultTransformers` (i.e. providing a `transformers` array that does not include them) means URL building, body serialization, and timeouts no longer happen automatically.
+Omitting `getDefaultTransformers` (i.e. providing a `transformers` array that does not include them) means header normalization, URL building, body serialization, and timeouts no longer happen automatically.
 
 ## Key behaviors
 
@@ -269,11 +280,37 @@ function transformCache(cache) {
 
 ## Built-in transformers
 
+### transformHeaders
+
+Normalizes `request.headers` to a [`Headers`](https://developer.mozilla.org/en-US/docs/Web/API/Headers) instance. Both plain objects and existing `Headers` instances are accepted as input. After this transformer runs, all subsequent transformers in the pipeline receive `request.headers` as a `Headers` instance and should use the `Headers` API (`.get()`, `.set()`, `.has()`) to read or modify headers.
+
+**`transformRequest`** — Converts `request.headers` to `new Headers(request.headers ?? {})`.
+
+```javascript
+// Both forms are accepted as input:
+await widget.http.request({ headers: { Authorization: 'Bearer token' } });
+await widget.http.request({ headers: new Headers({ Authorization: 'Bearer token' }) });
+
+// In a custom transformer placed after transformHeaders, use the Headers API:
+function transformAuth(getToken) {
+  return {
+    async transformRequest(widget, request, response) {
+      request.headers.set('Authorization', `Bearer ${getToken()}`);
+      return [request, response];
+    },
+  };
+}
+```
+
 ### transformBody
 
 Handles serialization of the request body and deserialization of the response body.
 
-**`transformRequest`** — When `body` is set and `Content-Type: application/json` is present in the request headers and the method is not `GET` or `HEAD`, the body is serialized with `JSON.stringify`.
+**`transformRequest`** — When `body` is set and the method is not `GET` or `HEAD`:
+- If no `Content-Type` header is present, `Content-Type: application/json` is added automatically.
+- If the effective `Content-Type` is `application/json`, the body is serialized with `JSON.stringify`.
+
+The default `Content-Type` can be overridden by explicitly setting a different value in the request `headers`.
 
 **`transformResponse`** — After a successful fetch, reads the response stream:
 - `application/json` content-type → parsed with `response.json()`
@@ -281,14 +318,21 @@ Handles serialization of the request body and deserialization of the response bo
 - HTTP 204 No Content → response is passed through unchanged (no body reading)
 
 ```javascript
-// Sending and receiving JSON:
+// Content-Type: application/json is set automatically — body is serialized:
 const { response } = await widget.http.request({
   method: 'POST',
   path: '/items',
-  headers: { 'Content-Type': 'application/json' },
-  body: { name: 'widget', count: 3 }, // automatically serialized
+  body: { name: 'widget', count: 3 },
 });
 console.log(response.body); // { id: 7, name: 'widget', count: 3 } — automatically parsed
+
+// Override to send a different content type:
+const { response: r } = await widget.http.request({
+  method: 'PUT',
+  path: '/blob',
+  headers: { 'Content-Type': 'application/octet-stream' },
+  body: buffer,
+});
 ```
 
 ### transformQuery
@@ -346,16 +390,13 @@ Called before the fetch is made. Receives `(widget, request, response)` and must
 
 ```javascript
 // Inject an Authorization header into every request:
+// request.headers is a Headers instance after transformHeaders runs (first in the default pipeline).
 function transformAuth(getToken) {
   return {
     async transformRequest(widget, request, response) {
-      return [
-        {
-          ...request,
-          headers: { ...request.headers, Authorization: `Bearer ${getToken()}` },
-        },
-        response,
-      ];
+      const headers = new Headers(request.headers);
+      headers.set('Authorization', `Bearer ${getToken()}`);
+      return [{ ...request, headers }, response];
     },
   };
 }

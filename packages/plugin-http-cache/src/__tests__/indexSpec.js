@@ -108,6 +108,9 @@ describe('createWidget method with http client plugin', () => {
         "transformers": [
           {
             "transformRequest": [Function],
+          },
+          {
+            "transformRequest": [Function],
             "transformResponse": [Function],
           },
           {

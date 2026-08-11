@@ -1,5 +1,8 @@
 import { assignMissingKeys, bindWidgetToFunctions } from '@merkur/core';
 
+const CONTENT_TYPE_HEADER = 'Content-Type';
+const CONTENT_TYPE_JSON = 'application/json';
+
 export function setDefaultConfig(widget, newDefaultConfig) {
   widget.$in.httpClient.defaultConfig = {
     ...widget.$in.httpClient.defaultConfig,
@@ -9,6 +12,7 @@ export function setDefaultConfig(widget, newDefaultConfig) {
 
 export function getDefaultTransformers(widget) {
   return [
+    transformHeaders(widget),
     transformBody(widget),
     transformQuery(widget),
     transformTimeout(widget),
@@ -163,6 +167,17 @@ export function transformQuery() {
   };
 }
 
+export function transformHeaders() {
+  return {
+    async transformRequest(widget, request, response) {
+      return [
+        { ...request, headers: new Headers(request.headers ?? {}) },
+        response,
+      ];
+    },
+  };
+}
+
 export function transformBody() {
   return {
     async transformResponse(widget, request, response) {
@@ -170,7 +185,7 @@ export function transformBody() {
         const contentType = response.headers.get('content-type');
         let body = null;
 
-        if (contentType && contentType.includes('application/json')) {
+        if (contentType && contentType.includes(CONTENT_TYPE_JSON)) {
           body = await response.json();
         } else {
           body = await response.text();
@@ -185,20 +200,24 @@ export function transformBody() {
       return [request, response];
     },
     async transformRequest(widget, request, response) {
-      const { body, headers, method } = request;
+      const { body, method } = request;
+      const newHeaders = new Headers(request.headers);
+      const isBodyMethod = !['GET', 'HEAD'].includes(method);
 
-      if (
-        body &&
-        (headers['Content-Type'] || headers['content-type']) ===
-          'application/json' &&
-        !['GET', 'HEAD'].includes(method)
-      ) {
-        let newRequest = { ...request, body: JSON.stringify(body) };
+      if (body && isBodyMethod) {
+        if (!newHeaders.has(CONTENT_TYPE_HEADER)) {
+          newHeaders.set(CONTENT_TYPE_HEADER, CONTENT_TYPE_JSON);
+        }
 
-        return [newRequest, response];
+        if (newHeaders.get(CONTENT_TYPE_HEADER) === CONTENT_TYPE_JSON) {
+          return [
+            { ...request, headers: newHeaders, body: JSON.stringify(body) },
+            response,
+          ];
+        }
       }
 
-      return [request, response];
+      return [{ ...request, headers: newHeaders }, response];
     },
   };
 }
