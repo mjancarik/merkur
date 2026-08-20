@@ -48,10 +48,10 @@
   "devDependencies": {
     "@merkur/core": "^1.0.0",
     "@merkur/plugin-component": "^1.0.0",
-    "@merkur/plugin-http-client": "^2.0.0"
+    "@merkur/plugin-http-client": ">=2 <4"
   },
   "peerDependencies": {
-    "@merkur/core": "*",
-    "@merkur/plugin-http-client": "*"
+    "@merkur/core": "^1.0.0",
+    "@merkur/plugin-http-client": ">=2 <4"
   }
 }

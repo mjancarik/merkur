@@ -1,6 +1,9 @@
 {
   "dependencies": {
-    "@merkur/svelte": "1.0.3"
+    "@merkur/svelte": "^3.0.0",
+    "svelte": "3.59.2"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@merkur/tool-webpack": "^3.0.0"
+  }
 }

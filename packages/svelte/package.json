@@ -43,14 +43,25 @@
     "registry": "https://registry.npmjs.org/",
     "access": "public"
   },
+  "devDependencies": {
+    "@merkur/core": "^1.0.0",
+    "@merkur/plugin-component": "^1.0.0",
+    "@merkur/tool-webpack": "^1.0.0",
+    "svelte": "^3.59.2"
+  },
   "peerDependencies": {
-    "@merkur/core": ">=0.34",
-    "@merkur/plugin-component": ">=0.34",
-    "@merkur/tool-webpack": ">=0.28"
+    "@merkur/core": "^1.0.0",
+    "@merkur/plugin-component": "^1.0.0",
+    "@merkur/tool-webpack": "^1.0.0",
+    "svelte": "^3.59.2"
+  },
+  "peerDependenciesMeta": {
+    "@merkur/tool-webpack": {
+      "optional": true
+    }
   },
   "dependencies": {
-    "esbuild-svelte": "^0.8.0",
-    "svelte": "^3.59.2",
-    "svelte-loader": "^3.2.0"
+    "esbuild-svelte": "^0.8.2",
+    "svelte-loader": "^3.2.4"
   }
 }

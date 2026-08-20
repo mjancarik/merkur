@@ -16,24 +16,27 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@merkur/cli": "2.0.1",
-    "@merkur/core": "1.0.3",
-    "@merkur/integration": "1.1.0",
-    "@merkur/plugin-component": "1.2.0",
-    "@merkur/plugin-error": "1.0.3",
-    "@merkur/plugin-event-emitter": "1.0.4",
-    "compression": "^1.7.4",
-    "config": "^3.3.7",
-    "cors": "^2.8.5",
-    "cross-env": "^7.0.3",
-    "express": "^4.17.3",
-    "express-static-gzip": "^2.1.5",
-    "helmet": "^5.0.2",
-    "morgan": "^1.10.0"
+    "@merkur/cli": "^3.0.0",
+    "@merkur/core": "^3.0.0",
+    "@merkur/integration": "^3.0.0",
+    "@merkur/plugin-component": "^3.0.0",
+    "@merkur/plugin-error": "^3.0.0",
+    "@merkur/plugin-event-emitter": "^3.0.0",
+    "compression": "^1.8.1",
+    "config": "^3.3.12",
+    "cors": "^2.8.6",
+    "express": "^4.22.2",
+    "express-static-gzip": "^2.2.0",
+    "helmet": "^5.1.1",
+    "morgan": "^1.11.0"
   },
   "devDependencies": {
-    "@merkur/tools": "1.0.3",
-    "es-jest": "^2.1.0"
+    "@merkur/tools": "^3.0.0",
+    "cross-env": "^7.0.3",
+    "eslint": "8.57.1",
+    "es-jest": "^2.1.0",
+    "jest": "29.7.0",
+    "supertest": "7.2.2"
   },
   "engines": {
     "node": ">=20.0.0"

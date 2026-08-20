@@ -43,11 +43,16 @@
     "access": "public"
   },
   "dependencies": {
-    "preact": "^10.27.2",
-    "preact-render-to-string": "^6.6.3"
+    "preact-render-to-string": "^6.7.0"
+  },
+  "devDependencies": {
+    "@merkur/core": "^1.0.0",
+    "@merkur/plugin-component": "^1.0.0",
+    "preact": "^10.29.8"
   },
   "peerDependencies": {
-    "@merkur/core": ">=0.34",
-    "@merkur/plugin-component": ">=0.34"
+    "@merkur/core": "^1.0.0",
+    "@merkur/plugin-component": "^1.0.0",
+    "preact": "^10.0.0"
   }
 }

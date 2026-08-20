@@ -52,15 +52,16 @@
     "@merkur/core": "^1.0.0",
     "@merkur/plugin-component": "^1.0.0",
     "@merkur/plugin-error": "^1.0.0",
-    "@merkur/plugin-http-client": "^2.0.0"
+    "@merkur/plugin-http-client": ">=2 <4",
+    "graphql": "^16.14.2"
   },
   "peerDependencies": {
-    "@merkur/core": "*",
-    "@merkur/plugin-error": "*",
-    "@merkur/plugin-http-client": "*"
+    "@merkur/core": "^1.0.0",
+    "@merkur/plugin-error": "^1.0.0",
+    "@merkur/plugin-http-client": ">=2 <4",
+    "graphql": "^16.0.0"
   },
   "dependencies": {
-    "graphql": "^16.6.0",
-    "graphql-tag": "^2.12.6"
+    "graphql-tag": "^2.12.7"
   }
 }
