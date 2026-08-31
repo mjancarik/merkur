@@ -131,6 +131,10 @@ function componentAPI() {
       return callLifeCycleMethod(widget, 'update', args);
     },
     async setState(widget, stateSetter) {
+      if (!widget.$in.component.isMounted) {
+        return;
+      }
+
       while (widget.$in.component.loadingPromise) {
         await widget.$in.component.loadingPromise;
       }
