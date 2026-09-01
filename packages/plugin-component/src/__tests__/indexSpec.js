@@ -446,6 +446,31 @@ describe('component plugin API', () => {
 
       expect(widget.update).toHaveBeenCalled();
     });
+
+    it('should not change state when widget is unmounted while setState is waiting for an in-flight load', async () => {
+      await widget.mount();
+
+      let resolveLoad;
+      widget.$in.component.lifeCycle.load = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            resolveLoad = resolve;
+          }),
+      );
+
+      const loadPromise = widget.load();
+      const setStatePromise = widget.setState({ name: 'suspended' });
+
+      // widget gets unmounted while setState is still waiting for load to finish
+      await widget.unmount();
+
+      resolveLoad({ name: 'fromLoad' });
+      await loadPromise;
+      await setStatePromise;
+
+      expect(widget.state.name).toEqual('fromLoad');
+      expect(widget.state.name).not.toEqual('suspended');
+    });
   });
 
   describe('setProps method', () => {
