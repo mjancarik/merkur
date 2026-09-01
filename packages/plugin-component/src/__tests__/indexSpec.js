@@ -211,7 +211,9 @@ describe('component plugin API', () => {
       expect(widget.$in.component.loadingPromise).toBeNull();
     });
 
-    it('should apply setState calls that were made during load', async () => {
+    it('should apply setState calls that were made during a subsequent load while widget is mounted', async () => {
+      await widget.mount();
+
       let resolveLoad;
       widget.$in.component.lifeCycle.load = jest.fn(
         () =>
@@ -234,7 +236,9 @@ describe('component plugin API', () => {
       expect(widget.$in.component.loadingPromise).toBeNull();
     });
 
-    it('should apply setState calls in correct order after load', async () => {
+    it('should apply setState calls in correct order during a subsequent load while widget is mounted', async () => {
+      await widget.mount();
+
       let resolveLoad;
       widget.$in.component.lifeCycle.load = jest.fn(
         () =>
@@ -256,6 +260,8 @@ describe('component plugin API', () => {
     });
 
     it('should not replay setState calls on subsequent load', async () => {
+      await widget.mount();
+
       let resolveLoad;
       widget.$in.component.lifeCycle.load = jest.fn(
         () =>
@@ -276,7 +282,6 @@ describe('component plugin API', () => {
       widget.$in.component.lifeCycle.load = jest.fn(() => ({
         name: 'fromSecondLoad',
       }));
-      widget.$in.component.isMounted = true;
       const updateSpy = jest.fn();
       widget.$in.component.lifeCycle.update = updateSpy;
 
@@ -320,7 +325,9 @@ describe('component plugin API', () => {
       expect(widget.$in.component.loadingPromise).toBeNull();
     });
 
-    it('should await latest loadingPromise when setState is called during two concurrent loads', async () => {
+    it('should await latest loadingPromise when setState is called during two concurrent loads while widget is mounted', async () => {
+      await widget.mount();
+
       let resolveLoad1;
       let resolveLoad2;
       let callCount = 0;
@@ -356,7 +363,9 @@ describe('component plugin API', () => {
       expect(widget.$in.component.loadingPromise).toBeNull();
     });
 
-    it('should wait for load that starts after setState already began waiting', async () => {
+    it('should wait for load that starts after setState already began waiting, while widget is mounted', async () => {
+      await widget.mount();
+
       let resolveLoad1;
       let resolveLoad2;
       let callCount = 0;
@@ -398,6 +407,22 @@ describe('component plugin API', () => {
   });
 
   describe('setState method', () => {
+    it('should not change state when widget is not mounted', async () => {
+      expect(widget.$in.component.isMounted).toBe(false);
+
+      await widget.setState({ name: 'black' });
+
+      expect(widget.state.name).toBeUndefined();
+    });
+
+    it('should not call life cycle update method when widget is not mounted', async () => {
+      widget.update = jest.fn();
+
+      await widget.setState({ name: 'black' });
+
+      expect(widget.update).not.toHaveBeenCalled();
+    });
+
     it('should set new state to widget', async () => {
       await widget.mount();
       await widget.setState({ name: 'black' });
@@ -423,6 +448,31 @@ describe('component plugin API', () => {
       await widget.setState({ name: 'black' });
 
       expect(widget.update).toHaveBeenCalled();
+    });
+
+    it('should not change state when widget is unmounted while setState is waiting for an in-flight load', async () => {
+      await widget.mount();
+
+      let resolveLoad;
+      widget.$in.component.lifeCycle.load = jest.fn(
+        () =>
+          new Promise((resolve) => {
+            resolveLoad = resolve;
+          }),
+      );
+
+      const loadPromise = widget.load();
+      const setStatePromise = widget.setState({ name: 'suspended' });
+
+      // widget gets unmounted while setState is still waiting for load to finish
+      await widget.unmount();
+
+      resolveLoad({ name: 'fromLoad' });
+      await loadPromise;
+      await setStatePromise;
+
+      expect(widget.state.name).toEqual('fromLoad');
+      expect(widget.state.name).not.toEqual('suspended');
     });
   });
 
