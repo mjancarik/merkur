@@ -161,7 +161,7 @@ emitter.on(
         {
           protocol: 'http:',
           hostname: 'localhost',
-          port: 4445,
+          port: cliConfig.devServerPort,
         },
       ),
       staticPath: cliConfig.staticPath,
