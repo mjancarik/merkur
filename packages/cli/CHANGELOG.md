@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.0.1
+
+### Patch Changes
+
+- 378736f: fix: use cliConfig.devServerPort instead of hardcoded 4445
+
 ## 1.1.0
 
 ### Minor Changes

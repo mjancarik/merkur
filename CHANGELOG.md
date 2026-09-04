@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/mjancarik/merkur/compare/v2.0.0...v2.0.1) (2026-09-04)
+
+### Patch Changes
+
+- 378736f: fix: use cliConfig.devServerPort instead of hardcoded 4445
+
+
 ## [2.0.0](https://github.com/mjancarik/merkur/compare/v1.2.1...v2.0.0) (2026-08-13)
 
 ### Major Changes
