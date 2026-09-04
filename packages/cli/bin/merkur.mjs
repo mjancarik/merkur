@@ -11,6 +11,7 @@ import { userDefinedCommandsPaths } from '../src/commands/userDefined.mjs';
 import { createCommandConfig } from '../src/commandConfig.mjs';
 
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 // eslint-disable-next-line
 import packageFile from '../package.json' with { type: 'json' };
@@ -187,7 +188,7 @@ for (const { command, dir } of userDefinedCommandsPaths) {
   let commandName = '';
 
   try {
-    const commandModule = await import(path.join(dir, command));
+    const commandModule = await import(pathToFileURL(path.join(dir, command)).href);
     commandName = commandModule.default(({ program: programCustom, createCommandConfig })).name();
   } catch (error) {
     console.error(`Error loading command from ${dir}/${command} package:`, error);
