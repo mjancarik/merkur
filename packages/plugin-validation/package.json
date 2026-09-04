@@ -52,12 +52,12 @@
   },
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
-    "@esmj/schema": "^0.7.2",
+    "@esmj/schema": "^0.7.4",
     "@merkur/core": "^1.0.0",
     "@merkur/plugin-component": "^1.0.0"
   },
   "peerDependencies": {
-    "@merkur/core": "*",
-    "@merkur/plugin-component": "*"
+    "@merkur/core": "^1.0.0",
+    "@merkur/plugin-component": "^1.0.0"
   }
 }
