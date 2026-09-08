@@ -49,6 +49,6 @@
     "@merkur/core": "^1.0.0"
   },
   "peerDependencies": {
-    "@merkur/core": "*"
+    "@merkur/core": "^1.0.0"
   }
 }
