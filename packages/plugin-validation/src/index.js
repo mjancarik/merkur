@@ -127,9 +127,37 @@ function handleValidationError(widget, result) {
 }
 
 /**
+ * Builds the next props object from the validated data. Props that were set
+ * by the current setProps call use the validated/transformed value, props that
+ * were not touched keep their previous reference. Schemas rebuild the whole
+ * object tree in safeParse(), so without this every setProps call would hand
+ * out new references for all props and trigger unwanted rerenders in
+ * consumers comparing props by reference.
+ * @param {Object} previousProps - Current (already validated) widget props
+ * @param {Object} newPropsPartial - Props passed to the current setProps call
+ * @param {Object} validatedProps - Validated/transformed merged props
+ * @returns {Object} Next props
+ */
+function keepUntouchedProps(previousProps, newPropsPartial, validatedProps) {
+  const nextProps = { ...validatedProps };
+
+  for (const key of Object.keys(previousProps)) {
+    if (
+      !Object.prototype.hasOwnProperty.call(newPropsPartial, key) &&
+      Object.prototype.hasOwnProperty.call(validatedProps, key)
+    ) {
+      nextProps[key] = previousProps[key];
+    }
+  }
+
+  return nextProps;
+}
+
+/**
  * Hook for setProps - validates new props before applying.
  * Skips validation if widget is not yet mounted.
  * On successful validation, passes transformed data to original setProps.
+ * Props not touched by the call keep their previous reference.
  * @param {Object} widget - Merkur widget instance
  * @param {Function} originalSetProps - Original setProps method
  * @param {Object|Function} propsSetter - New props or function returning new props
@@ -142,7 +170,9 @@ async function setPropsHook(widget, originalSetProps, propsSetter) {
 
   // Calculate the new props
   const newPropsPartial =
-    typeof propsSetter === 'function' ? propsSetter(widget.props) : propsSetter;
+    (typeof propsSetter === 'function'
+      ? propsSetter(widget.props)
+      : propsSetter) ?? {};
 
   // Merge with existing props (same as original setProps behavior)
   const mergedProps = {
@@ -156,10 +186,17 @@ async function setPropsHook(widget, originalSetProps, propsSetter) {
   if (!result.success) {
     handleValidationError(widget, result);
   } else {
-    widget.props = result.data; // Update widget.props with validated/transformed data
+    // Use validated/transformed data only for props set by this call,
+    // keep references of the untouched ones
+    const nextProps = keepUntouchedProps(
+      widget.props ?? {},
+      newPropsPartial,
+      result.data,
+    );
 
-    // Call original setProps with result.data which is the validated and potentially transformed props
-    return originalSetProps(result.data);
+    widget.props = nextProps;
+
+    return originalSetProps(nextProps);
   }
 }
 
