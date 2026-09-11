@@ -159,6 +159,90 @@ describe('validationPlugin', () => {
     });
   });
 
+  describe('props reference stability on setProps', () => {
+    let widget;
+    let initialConfig;
+    let initialItems;
+
+    beforeEach(async () => {
+      const propsSchema = s.object({
+        name: s.string(),
+        config: s.object({
+          url: s.string(),
+          retries: s.number().optional(),
+        }),
+        items: s.array(s.string()),
+      });
+
+      initialConfig = { url: 'https://example.com', retries: 3 };
+      initialItems = ['a', 'b'];
+
+      widget = await createMerkurWidget({
+        $plugins: [
+          componentPlugin,
+          validationPlugin({ props: propsSchema, onError: null }),
+        ],
+        name: 'test-widget',
+        version: '1.0.0',
+        props: { name: 'initial', config: initialConfig, items: initialItems },
+        load() {
+          return {};
+        },
+        mount() {
+          return {};
+        },
+        update() {
+          return {};
+        },
+      });
+
+      await widget.mount();
+    });
+
+    it('should keep references of props not touched by setProps', async () => {
+      const configBefore = widget.props.config;
+      const itemsBefore = widget.props.items;
+
+      await widget.setProps({ name: 'updated' });
+
+      expect(widget.props.name).toBe('updated');
+      expect(widget.props.config).toBe(configBefore);
+      expect(widget.props.items).toBe(itemsBefore);
+    });
+
+    it('should keep references of props not returned by setter function', async () => {
+      const configBefore = widget.props.config;
+      const itemsBefore = widget.props.items;
+
+      await widget.setProps((props) => ({ name: props.name + '-modified' }));
+
+      expect(widget.props.name).toBe('initial-modified');
+      expect(widget.props.config).toBe(configBefore);
+      expect(widget.props.items).toBe(itemsBefore);
+    });
+
+    it('should use validated data for props touched by setProps', async () => {
+      const configBefore = widget.props.config;
+      const itemsBefore = widget.props.items;
+      const newConfig = { url: 'https://changed.example.com' };
+
+      await widget.setProps({ config: newConfig });
+
+      expect(widget.props.config).toEqual(newConfig);
+      expect(widget.props.config).not.toBe(configBefore);
+      expect(widget.props.items).toBe(itemsBefore);
+    });
+
+    it('should leave props untouched after failed validation', async () => {
+      const configBefore = widget.props.config;
+
+      await expect(widget.setProps({ name: 123 })).rejects.toThrow();
+
+      expect(widget.props.name).toBe('initial');
+      expect(widget.props.config).toBe(configBefore);
+    });
+  });
+
   describe('validation on mount', () => {
     let propsSchema;
 
