@@ -142,6 +142,10 @@ function componentAPI() {
         await widget.$in.component.loadingPromise;
       }
 
+      if (!widget.$in.component.isMounted) {
+        return;
+      }
+
       widget.state = {
         ...widget.state,
         ...(typeof stateSetter === 'function'
