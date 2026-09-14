@@ -1,3 +1,13 @@
+## [2.0.3](https://github.com/mjancarik/merkur/compare/v2.0.2...v2.0.3) (2026-09-14)
+
+### Patch Changes
+
+- 6e1027e: Fix `setState` is not executed if the widget is not mounted.
+  - **What** `setState` method is not executed if the widget is not mounted.
+  - **Why** The `setState` method should only be called on a mounted widget. If the widget is not yet mounted, and we want to change the state, we change it using the return value of the `load` method instead.
+  - **How** Nothing.
+
+
 ## [2.0.2](https://github.com/mjancarik/merkur/compare/v2.0.1...v2.0.2) (2026-09-11)
 
 ### Patch Changes

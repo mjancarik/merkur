@@ -47,7 +47,7 @@
   "homepage": "https://merkur.js.org/",
   "devDependencies": {
     "@merkur/core": "^1.0.0",
-    "@merkur/plugin-component": "^1.0.0",
+    "@merkur/plugin-component": "^2.0.3",
     "@merkur/plugin-http-client": "^2.0.0"
   },
   "peerDependencies": {
