@@ -16,7 +16,7 @@ To easily register a Merkur widget as a custom element, use the `@merkur/integra
 npm i @merkur/integration-custom-element --save
 ```
 
-## How to modify the default Merkur template
+## Modify the default Merkur template
 
 The default Merkur template is prepared for SSR. In the following sections, we will remove unnecessary parts and files to reconfigure the template for client-side usage only. First, create a new Merkur widget as described in [Getting started](/docs/getting-started).
 
@@ -120,6 +120,98 @@ import { registerCustomElement } from '@merkur/integration-custom-element';
 registerCustomElement({ widgetDefinition });
 ```
 
+## Configure the custom element
+
+The `registerCustomElement` method accepts several options for configuring the custom element.
+
+```js
+registerCustomElement({
+  widgetDefinition,
+  observedAttributes: ['title', 'theme', 'long-name', 'config'], // Attributes to observe
+  callbacks: {
+    connectedCallback: (widget, shadowRoot, element) => {
+      // Your custom logic here
+    },
+  },
+  methods: {
+    myCustomMethod(widget, shadowRoot, element) {
+      // Your custom logic here
+    }
+  }
+});
+
+```
+
+### Attributes
+
+Once registered through `observedAttributes`, the custom element attributes are automatically observed for changes and propagated to the widget's `props` object.
+
+#### How it works
+
+1. The `observedAttributes` property in the `registerCustomElement` options specifies which attributes the custom element observes. These attributes are automatically monitored for changes.
+2. When an observed attribute changes, the `attributeChangedCallback` is triggered. This callback updates the corresponding property in the widget's `props` object using a **batching mechanism** (see below).
+3. Attribute names are automatically converted to camelCase.
+4. For type coercion and validation, use the `@merkur/plugin-validation` with `@esmj/schema` (recommended) or the legacy `attributesParser` option of the config object.
+
+
+#### Recommended: Using @merkur/plugin-validation
+
+The recommended approach for parsing and validating attributes is to use `@merkur/plugin-validation` with `@esmj/schema`. This provides automatic type coercion, validation, and better error handling.
+
+For more details, see the [Validation Plugin documentation](/docs/validation-plugin).
+
+#### Batching mechanism
+
+To optimize performance, attribute changes are batched when multiple attributes are updated simultaneously. This prevents multiple unnecessary re-renders and ensures that `widget.setProps()` is called only once with all accumulated changes.
+
+**How batching works:**
+
+- When an attribute changes after widget initialization, the change is accumulated in a pending props object.
+- Multiple rapid attribute changes are debounced using `setTimeout(0)`.
+- After all synchronous attribute changes complete, `widget.setProps()` is called once with all batched props.
+- **During initialization:** `setProps()` is NOT called for default attribute values. Instead, props are set directly via the internal `_setDefaultProps()` method to avoid unnecessary updates during widget creation.
+
+**Example:**
+
+```javascript
+// Multiple rapid attribute changes
+element.setAttribute('title', 'New Title');
+element.setAttribute('theme', 'dark');
+element.setAttribute('count', '5');
+
+// Result: widget.setProps() is called ONCE with:
+// { title: 'New Title', theme: 'dark', count: 5 }
+```
+
+This batching significantly improves performance when multiple attributes are updated at once, which is common in frameworks like React or when initializing elements with multiple attributes.
+
+#### Legacy: Using attributesParser
+
+For simple cases or backward compatibility, you can use the `attributesParser` option to define custom parsing functions for individual attributes:
+
+```javascript
+import { registerCustomElement } from '@merkur/integration-custom-element';
+import widgetDefinition from './widget';
+
+registerCustomElement({
+  widgetDefinition,
+  observedAttributes: ['title', 'theme', 'long-name', 'config'], // Attributes to observe
+  attributesParser: {
+    config: (value) => JSON.parse(value); 
+  }
+});
+```
+
+In this example:
+- The `observedAttributes` property specifies the attributes to observe (`title`, `theme`, `long-name` and `config`).
+- The widget's `props` are automatically updated when the observed attributes change.
+- The `config` attribute is parsed from a JSON string into an object.
+- The `long-name` attribute is automatically transformed into `longName` in the widget's `props`.
+
+:::note
+While `attributesParser` still works, using `@merkur/plugin-validation` with `@esmj/schema` is the recommended approach for new projects as it provides validation, better type safety, and more consistent error handling.
+:::
+
 ### Callbacks
 
 The `registerCustomElement` method accepts a `callbacks` object that allows you to hook into the lifecycle of the custom element. These callbacks include:
@@ -189,78 +281,39 @@ registerCustomElement({
 
 This example demonstrates how to log messages during each lifecycle event of the custom element. You can replace the `console.log` statements with your own logic to handle these events.
 
+### Methods
+
+Through the `methods` configuration, it's possible to define own methods on the custom element. These can then be called directly on the custom element instance, providing a way to interact with the widget programmatically.
+
+#### Example
+
+```js
+// in widget.js
+registerCustomElement({
+  widgetDefinition,
+  methods: {
+    doAThing(widget, { foo }) {
+      console.log('Executing doAThing method');
+      // Example: perform some action based on the foo parameter
+      if (foo) {
+        console.log('Foo is provided:', foo);
+      }
+    },
+  },
+});
+```
+
+```js
+// Usage:
+const element = document.querySelector('my-custom-element');
+element.doAThing({ foo: 'bar' }); // Calls the custom method defined above
+
+```
+
 ### `widget.root` and `widget.customElement`
+
+These properties are automatically set when the widget is registered as a custom element and can be used to manage the widget's lifecycle or interact with the DOM.
 
 - `widget.root`: Refers to the root DOM node where the widget is rendered. For custom elements, this is typically the shadow DOM of the element.
 - `widget.customElement`: Refers to the custom element instance itself. This allows you to interact with the custom element directly from the widget.
 
-These properties are automatically set when the widget is registered as a custom element and can be used to manage the widget's lifecycle or interact with the DOM.
-
-### Default propagation of attributes to widget props
-
-When a custom element is registered, its attributes are automatically propagated to the widget's `props` object.
-
-#### How it works
-
-1. The `observedAttributes` property in the `registerCustomElement` options specifies which attributes the custom element observes. These attributes are automatically monitored for changes.
-2. When an observed attribute changes, the `attributeChangedCallback` is triggered. This callback updates the corresponding property in the widget's `props` object using a **batching mechanism** (see below).
-3. Attribute names are automatically converted to camelCase.
-4. For type coercion and validation, use the `@merkur/plugin-validation` with `@esmj/schema` (recommended) or the legacy `attributesParser` option.
-
-#### Recommended: Using @merkur/plugin-validation
-
-The recommended approach for parsing and validating attributes is to use `@merkur/plugin-validation` with `@esmj/schema`. This provides automatic type coercion, validation, and better error handling.
-
-For more details, see the [Validation Plugin documentation](/docs/validation-plugin).
-
-#### Batching mechanism
-
-To optimize performance, attribute changes are batched when multiple attributes are updated simultaneously. This prevents multiple unnecessary re-renders and ensures that `widget.setProps()` is called only once with all accumulated changes.
-
-**How batching works:**
-
-- When an attribute changes after widget initialization, the change is accumulated in a pending props object.
-- Multiple rapid attribute changes are debounced using `setTimeout(0)`.
-- After all synchronous attribute changes complete, `widget.setProps()` is called once with all batched props.
-- **During initialization:** `setProps()` is NOT called for default attribute values. Instead, props are set directly via the internal `_setDefaultProps()` method to avoid unnecessary updates during widget creation.
-
-**Example:**
-
-```javascript
-// Multiple rapid attribute changes
-element.setAttribute('title', 'New Title');
-element.setAttribute('theme', 'dark');
-element.setAttribute('count', '5');
-
-// Result: widget.setProps() is called ONCE with:
-// { title: 'New Title', theme: 'dark', count: 5 }
-```
-
-This batching significantly improves performance when multiple attributes are updated at once, which is common in frameworks like React or when initializing elements with multiple attributes.
-
-#### Legacy: Using attributesParser
-
-For simple cases or backward compatibility, you can use the `attributesParser` option to define custom parsing functions for individual attributes:
-
-```javascript
-import { registerCustomElement } from '@merkur/integration-custom-element';
-import widgetDefinition from './widget';
-
-registerCustomElement({
-  widgetDefinition,
-  observedAttributes: ['title', 'theme', 'long-name', 'config'], // Attributes to observe
-  attributesParser: {
-    config: (value) => JSON.parse(value); 
-  }
-});
-```
-
-In this example:
-- The `observedAttributes` property specifies the attributes to observe (`title`, `theme`, `long-name` and `config`).
-- The widget's `props` are automatically updated when the observed attributes change.
-- The `config` attribute is parsed from a JSON string into an object.
-- The `long-name` attribute is automatically transformed into `longName` in the widget's `props`.
-
-:::note
-While `attributesParser` still works, using `@merkur/plugin-validation` with `@esmj/schema` is the recommended approach for new projects as it provides validation, better type safety, and more consistent error handling.
-:::
