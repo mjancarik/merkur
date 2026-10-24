@@ -49,7 +49,7 @@
   "devDependencies": {
     "@merkur/core": "^1.0.0",
     "@merkur/plugin-component": "^2.0.3",
-    "storybook": ">=10"
+    "storybook": "^10.6.2"
   },
   "peerDependencies": {
     "@merkur/core": "*",
